@@ -1,0 +1,84 @@
+\documentclass[12pt,a4paper,openright,parskip,final,twoside,en]{csee_msc_thesis} % English, twosided
+
+%%==================================================================
+%% PACKAGES
+%%==================================================================
+
+\usepackage[T1]{fontenc}
+\usepackage{fancybox}
+\usepackage{verbatim}
+\usepackage{multirow}
+\usepackage{xcolor}
+\usepackage{parskip}
+
+
+% \usepackage[acronym]{glossaries}
+\loadglsentries{glossaries}
+
+\begin{document}
+
+
+%%==================================================================
+%% VARIABLES
+%%==================================================================
+
+\def\thesistitle{An Example Master's Thesis}
+\def\theauthor{Andr\'e Danielsson}
+\def\theaddress{KTH Royal Institute of Technology\\
+    \vspace{3mm}
+    Master's Thesis in Computer Science\\
+    \vspace{4cm}
+    Supervisor:\\
+    \vspace{5mm}
+    Examiner:\\
+}
+\def\theabstract{\input{Abstract/abstract.tex}}
+\def\thedate{\today}
+\def\thepreface{\input{Preface/preface.tex}}
+\def\thesweabstract{\input{SweAbstract/sweabstract.tex}}
+
+%%==================================================================
+%% PREAMBLES
+%%==================================================================
+\startpreamble
+  {\thesistitle}
+  {\theauthor}
+  {\thedate}
+  {\theabstract}
+  {\thepreface}
+  {\theaddress}
+  {\thesweabstract}
+
+%%==================================================================
+%% REPORT
+%%==================================================================
+\makechapter{Introduction}{Introduction\label{ch:introduction}}
+\input{Chapters/introduction.tex}
+
+\glsadd{android}\glsadd{gcd}\glsadd{ios}
+
+\makechapter{Background}{Background\label{ch:background}}
+\input{Chapters/background.tex}
+
+\makechapter{Methodology}{Methodology\label{ch:methodology}}
+\input{Chapters/methodology.tex}
+
+\appendix
+
+\makeappendix{Appendix A}{Example appendix}
+\input{Appendices/appendixA.tex}
+
+
+%%==================================================================
+%% BIBLIOGRAPHY
+%%==================================================================
+\bibliographystyle{ieeetr}
+
+\fancyhead[LO]{}%
+\fancyhead[RE]{}%
+\fancyhead[LE]{\thepage}%
+\fancyhead[RO]{\thepage}
+
+\bibliography{references}
+
+\end{document}

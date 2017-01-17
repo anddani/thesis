@@ -1,0 +1,26 @@
+Proposal
+SweAbstract
+notes
+
+# Vim
+*.swp
+*.swo
+
+# Latex
+*.zip
+*.dvi
+*.pdf
+*.gz
+*.ldf
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.toc
+*.acn
+*.glg
+*.glo
+*.gls
+*.ist
