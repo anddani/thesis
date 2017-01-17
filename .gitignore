@@ -23,3 +23,5 @@ notes
 *.glo
 *.gls
 *.ist
+
+!template.pdf
