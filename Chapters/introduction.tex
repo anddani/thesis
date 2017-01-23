@@ -13,18 +13,21 @@
 % Introduce company and what they do/why mobile phone technology is relevant today. Lead to the problem.
 \section{Background}
 % Android History
-\gls{android} applications are written in Java to ensure portability and architecture independence. The applications have traditionally been run on the Dalvik virtual machine. With newer android versions, Dalvik has been replaced by an alternative called Android Runtime. Android Runtime, or ART for short, differs from Dalvik in that it compiles to native code when the user installs the app. This is called Ahead-Of-Time (AOT) compilation. Dalvik uses a concept called Just-In-Time (JIT) compilation which means that code is compiled to native code during runtime when needed.
+\gls{android} applications are written in Java to ensure portability and architecture independence. The applications have traditionally been run on the Dalvik virtual machine. With newer android versions, Dalvik has been replaced by an alternative called Android Runtime. Android Runtime, ART for short, differs from Dalvik in that it adopts the Ahead-Of-Time (AOT) concept when it compiles during installation of the app. Dalvik only uses a concept called Just-In-Time (JIT) compilation which means that code is compiled to native code during runtime, when needed.
 
 %%==================================================================
 %% PROBLEM
 %%==================================================================
 % Describe problem and form the hypothesis
 \section{Problem}
-To ensure that resources are spent in an efficient matter, this report has investigated whether the performance boost from writing the Fast Fourier Transform in C or C++ instead of Java is significant.
+% Research questions
+To ensure that resources are spent in an efficient manner, this report has investigated whether the performance boost from writing the Fast Fourier Transform in C or C++ instead of Java is significant. The following research questions were formed on the basis of the requirements:
+
+
 %\hilight{calculation heavy tasks} in C or C++ instead of Java is significant.
 
 \begin{center}
-    \textit{HYPOTHESIS HERE}
+    \textit{Is there a performance difference is the implementation of an \gls{fft} in Java compared to native C or C++ code on an Android platform using ART?}
 \end{center}
 
 
@@ -35,8 +38,10 @@ To ensure that resources are spent in an efficient matter, this report has inves
 % Purpose with the work
 % What the report shows
 \section{Purpose}
-This report is a study that evaluates when and where there is a gain in writing a part of an Android application in C or C++. The purpose of this report is to educate the reader about the process of porting parts of an app to native code using the Native Development Kit (\gls{ndk}) and explore the topic of performance differences between native code compiled with \gls{cmake} and ART.
+This report is a study that evaluates when and where there is a gain in writing a part of an Android application in C or C++. The purpose of this report is to educate the reader about the process of porting parts of an app to native code using the Native Development Kit (\gls{ndk}) and explore the topic of performance differences between native code compiled with \gls{cmake} and ART.\\
 % if there is a gain in spending resources to implement some part of an Android app in C or C++.
+
+The result of the report can be used to value the decision of implementing a given algorithm or other solutions in native code instead of Java. The FFT is frequently used for audio processing, image processing, polynomial multiplication and many other areas. It is therefore valuable to know how efficient an implementation in native code is, depending on the size of the data.
 
 %%==================================================================
 %% GOAL
@@ -44,7 +49,7 @@ This report is a study that evaluates when and where there is a gain in writing 
 % More general than purpose
 % 
 \section{Goal}
-
+The goal of this report is to examine the effect ART and how it compares to natively written code using the NDK. This report presents a study that investigates the relevance of using the NDK to produce efficient code. A discussion about to what extent the simplicity of the code outweighs the performance of the code is also present. For people who are interested to know about the impacts of implementing algorithms in C or C++ on Android, this report might be of some use.
 
 %%==================================================================
 %% METHOD
@@ -62,19 +67,37 @@ This report is a study that evaluates when and where there is a gain in writing 
 %% NDK, Android, Benchmark*, Java, C, C++, Dalvik, Runtime, ART, efficien*, JNI,
 %% FFT, Fast Fourier Transform, Fourier Transform, 
 
+% How I gathered data.
+The method used to find the relevant literature and previous studies was to search through databases using boolean expressions. By specifying synonyms and required keywords, more literature could be found. Figure~\ref{fig:db:search} contains the expression that was used to filter out relevant articles. For each article found, the liability was assessed by looking at the amount of times it has been referenced (for articles) and if it has been through a peer-review.
+
+\begin{figure}
+    \centering
+    \begin{align*}
+        (\text{NDK OR JNI})               & \text{ AND } \\
+        \text{Android}                    & \text{ AND } \\
+        (\text{benchmark* OR efficien*})  & \text{ AND } \\
+        (\text{Java OR C OR C++})         & \text{ AND } \\
+        (\text{Dalvik OR Runtime OR ART}) &
+    \end{align*}
+    \caption{Expression used to filter out relevant articles}
+    \label{fig:db:search}
+\end{figure}
+
 
 %%==================================================================
 %% DELIMITATIONS
 %%==================================================================
 \section{Delimitations}
-
+This report does only cover a performance evaluation of the FFT algorithm and does not go into detail on other related algorithms. The decision of choosing the FFT was due to it being a common algorithm to use for signal analysis, data compression and other fields.
 
 %%==================================================================
 %% ETHICS AND SUSTAINABILITY
 %%==================================================================
 % Environment, economics, society
 \section{Ethics and Sustainability}
+An ethical aspect of this report is ...\\
 
+Environmental sustainability is fulfilled in this report because there is an aspect of battery usage in different implementations of algorithms. The less number of instructions an algorithm require, the faster will the CPU lower its frequency, saving power. This will also have an influence on the users' experience and can therefore have an impact on the society aspect of sustainability. If this report is used as a basis on a decision that have an economical impact, this report would fulfil the economical sustainability goal.
 
 %%==================================================================
 %% OUTLINE
