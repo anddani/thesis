@@ -1,13 +1,90 @@
 \textit{Summary of the chapter}
-\section{Objectives}
 
-Lorem\cite{c:programming:language} ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+% Introduce the area (background)?
+% What needs to be done (problem)?
+% What is supposed to be done (purpose)?
+% What is the result of the work (goal)?
+% How will the thesis and work be carried out (methods)?
+% How will the work be presented (outline)?
 
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+%%==================================================================
+%% BACKGROUND
+%%==================================================================
+% Introduce company and what they do/why mobile phone technology is relevant today. Lead to the problem.
+\section{Background}
+% Android History
+\gls{android} applications are written in Java to ensure portability and architecture independence. The applications have traditionally been run on the Dalvik virtual machine. With newer android versions, Dalvik has been replaced by an alternative called Android Runtime. Android Runtime, or ART for short, differs from Dalvik in that it compiles to native code when the user installs the app. This is called Ahead-Of-Time (AOT) compilation. Dalvik uses a concept called Just-In-Time (JIT) compilation which means that code is compiled to native code during runtime when needed.
 
+%%==================================================================
+%% PROBLEM
+%%==================================================================
+% Describe problem and form the hypothesis
+\section{Problem}
+To ensure that resources are spent in an efficient matter, this report has investigated whether the performance boost from writing the Fast Fourier Transform in C or C++ instead of Java is significant.
+%\hilight{calculation heavy tasks} in C or C++ instead of Java is significant.
+
+\begin{center}
+    \textit{HYPOTHESIS HERE}
+\end{center}
+
+
+%%==================================================================
+%% PURPOSE
+%%==================================================================
+% Purpose with the thesis
+% Purpose with the work
+% What the report shows
+\section{Purpose}
+This report is a study that evaluates when and where there is a gain in writing a part of an Android application in C or C++. The purpose of this report is to educate the reader about the process of porting parts of an app to native code using the Native Development Kit (\gls{ndk}) and explore the topic of performance differences between native code compiled with \gls{cmake} and ART.
+% if there is a gain in spending resources to implement some part of an Android app in C or C++.
+
+%%==================================================================
+%% GOAL
+%%==================================================================
+% More general than purpose
+% 
+\section{Goal}
+
+
+%%==================================================================
+%% METHOD
+%%==================================================================
+% Research - Scientific
+% Material (literature), about literature study
+% Thesis (to find material/data and reach results), concerns thesis
+% The work
+% Summarize the methods used and describe them in detail in method chapter.
+% Motivate using Quantitative or Qualitative research methodology
+% Philosophical assumption
+% How did I search databases for information?
+\section{Method}
+%% KEYWORDS
+%% NDK, Android, Benchmark*, Java, C, C++, Dalvik, Runtime, ART, efficien*, JNI,
+%% FFT, Fast Fourier Transform, Fourier Transform, 
+
+
+%%==================================================================
+%% DELIMITATIONS
+%%==================================================================
 \section{Delimitations}
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
+%%==================================================================
+%% ETHICS AND SUSTAINABILITY
+%%==================================================================
+% Environment, economics, society
+\section{Ethics and Sustainability}
+
+
+%%==================================================================
+%% OUTLINE
+%%==================================================================
 \section{Outline}
+\begin{itemize}
+    \item \textbf{Chapter \ref{ch:introduction} - Introduction --}
+    \item \textbf{Chapter \ref{ch:background} - Background --}
+    \item \textbf{Chapter \ref{ch:methodology} - Methodology --}
+    \item \textbf{Chapter \ref{ch:experiments} - Experiments --}
+    \item \textbf{Chapter \ref{ch:discussion} - Discussion --}
+    \item \textbf{Chapter \ref{ch:conclusion} - Conclusion --}
+\end{itemize}
