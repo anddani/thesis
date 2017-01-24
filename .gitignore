@@ -10,7 +10,6 @@ Figures
 # Latex
 *.zip
 *.dvi
-*.pdf
 *.gz
 *.ldf
 *.aux
