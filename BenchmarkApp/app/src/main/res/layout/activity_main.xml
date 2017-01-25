@@ -26,6 +26,8 @@
         android:layout_height="wrap_content" />
 
     <TextView
+        android:padding="5dp"
+        android:background="@drawable/border"
         android:id="@+id/log_text"
         android:layout_alignParentBottom="true"
         android:text="@string/log_title"
