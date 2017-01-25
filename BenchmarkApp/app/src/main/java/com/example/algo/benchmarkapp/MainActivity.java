@@ -2,9 +2,14 @@ package com.example.algo.benchmarkapp;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
+
+    private TextView logTextView;
 
     // Used to load the 'native-lib' library on application startup.
     static {
@@ -15,6 +20,26 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Set TextView as scrollable
+        logTextView = (TextView) findViewById(R.id.log_text);
+        logTextView.setMovementMethod(new ScrollingMovementMethod());
+        logTextView.append("\n");
+
+        Button btn = (Button) findViewById(R.id.run_button);
+
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                logTextView.append("LOG TEXT\n");
+                int scrollAmount = logTextView.getLayout().getLineTop(logTextView.getLineCount())- logTextView.getHeight();
+                // Scroll number of added lines outside of bottom
+                if (scrollAmount > 0)
+                    logTextView.scrollTo(0, scrollAmount);
+                else
+                    logTextView.scrollTo(0, 0);
+            }
+        });
 
         // Example of a call to a native method
         TextView tv = (TextView) findViewById(R.id.sample_text);

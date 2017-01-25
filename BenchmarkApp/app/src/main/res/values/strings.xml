@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">BenchmarkApp</string>
+    <string name="title_text">FFT Benchmarking</string>
+    <string name="run_button_text">Run Benchmarks!</string>
+    <string name="scrollable_text">Initial text</string>
+    <string name="log_title">LOG</string>
 </resources>
