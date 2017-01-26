@@ -1,5 +1,5 @@
 Proposal
-Specification
+Specification/*
 notes
 Figures
 
@@ -26,3 +26,5 @@ Figures
 *.ist
 *.bcf
 *.run.xml
+
+!Specification/specification.pdf
