@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [[ -z "$EXJOBB_HOME" ]]; then
-    echo "EXJOBB_HOME variable does not exist!"
+    echo "EXJOBB_HOME not set"
     exit 1
 fi
 
@@ -12,4 +12,4 @@ DATA_PATH=$EXJOBB_HOME/Data
 
 echo $DATA_PATH
 
-# adb shell ls /sdcard/gps*.trace | tr '\r' ' ' | xargs -n1 adb pull  
+# adb shell ls /path/to/folder/bla.* | tr '\r' ' ' | xargs -n1 adb pull  
