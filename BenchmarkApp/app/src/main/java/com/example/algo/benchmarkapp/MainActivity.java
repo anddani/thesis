@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Benchmark.FFTCpp(1);
 
         // Set TextView as scrollable
         logTextView = (TextView) findViewById(R.id.log_text);

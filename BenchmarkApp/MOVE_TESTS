@@ -1,0 +1,15 @@
+#!/bin/bash
+
+if [[ -z "$EXJOBB_HOME" ]]; then
+    echo "EXJOBB_HOME variable does not exist!"
+    exit 1
+fi
+
+# Get current date and time to create
+# unique folder
+TIME=$(date +"%y%m%d_%H%M%S")
+DATA_PATH=$EXJOBB_HOME/Data
+
+echo $DATA_PATH
+
+# adb shell ls /sdcard/gps*.trace | tr '\r' ' ' | xargs -n1 adb pull  
