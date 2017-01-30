@@ -1,15 +1,21 @@
 package com.example.algo.benchmarkapp;
 
+import android.os.AsyncTask;
+import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 public class MainActivity extends AppCompatActivity {
 
     private TextView logTextView;
+    private EditText edtText;
 
     // Used to load the 'native-lib' library on application startup.
     static {
@@ -27,18 +33,17 @@ public class MainActivity extends AppCompatActivity {
         logTextView.setMovementMethod(new ScrollingMovementMethod());
         logTextView.append("\n");
 
+        // To get content of edittext
+        edtText = (EditText)  findViewById(R.id.edt_field);
+
         Button btn = (Button) findViewById(R.id.run_button);
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                logTextView.append("LOG TEXT\n");
-                int scrollAmount = logTextView.getLayout().getLineTop(logTextView.getLineCount()) - logTextView.getHeight();
-                // Scroll number of added lines outside of bottom
-                if (scrollAmount > 0)
-                    logTextView.scrollTo(0, scrollAmount);
-                else
-                    logTextView.scrollTo(0, 0);
+                MyAsyncTask myAsyncTask = new MyAsyncTask(MainActivity.this);
+                int fromUser = Integer.parseInt(edtText.getText().toString());
+                myAsyncTask.execute(fromUser);
             }
         });
 

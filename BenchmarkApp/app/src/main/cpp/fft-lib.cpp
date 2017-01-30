@@ -1,6 +1,12 @@
 #include <jni.h>
 #include <string>
+#include <math.h>
+//#include <fftw3.h>
+#include <stdlib.h>
+#include <android/log.h>
 #include "fft-lib.h"
+
+#define LOGTAG "FFTLIB"
 
 jint JNI_OnLoad(JavaVM* vm, void* reserved) {
     std::string bla = "";
@@ -14,6 +20,29 @@ jint JNI_OnLoad(JavaVM* vm, void* reserved) {
     return JNI_VERSION_1_6;
 }
 
-jlong fft(JNIEnv* env, jobject) {
-    return 17;
+inline float frand( void ) { return (float) rand() / RAND_MAX; }
+
+jlong fft(JNIEnv* env, jobject obj, jint a) {
+//    int dataSize = 10;
+//    int init_exp = 17;
+//    int n = (int) pow(2, init_exp);
+//    fftwf_complex *in = (fftwf_complex*) fftwf_malloc(sizeof(fftwf_complex) * dataSize);
+//    fftwf_plan plan;
+//
+//    // Initialize input for fft
+//    for (int i = 0; i < n; i++) {
+//        in[i][0] = frand();
+//        in[i][1] = frand();
+//    }
+//
+//    __android_log_print(ANDROID_LOG_VERBOSE, LOGTAG, "-- Forward FFT 1d 2^%d", n);
+//
+//    plan = fftwf_plan_dft_1d(n, in, in, FFTW_FORWARD, FFTW_ESTIMATE);
+//    fftwf_execute(plan);
+//    fftwf_destroy_plan(plan);
+//    fftwf_free(in);
+//    __android_log_print(ANDROID_LOG_VERBOSE, LOGTAG, "-- Done with FFT");
+
+
+    return (jlong)a;
 }

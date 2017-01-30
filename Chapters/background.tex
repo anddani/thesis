@@ -1,8 +1,11 @@
 \textit{Summarizing the chapter}
 
-% REMOVE?
 \section{Android SDK}
-To allow developers to build Android apps, Google developed a Standard Development Kit (SDK) to facilitate the process of writing Android applications. The Android SDK software stack is described in Figure~\ref{fig:sdk}.
+To allow developers to build Android apps, Google developed a Standard Development Kit (SDK) to facilitate the process of writing Android applications. The Android SDK software stack is described in Figure~\ref{fig:sdk}. The Linux kernel is at the base of the stack, handling the core functionality of the device. Detecting hardware interaction, process scheduling and memory allocation are examples of services provided by the kernel. The Hardware Abstraction Layer (HAL) is an abstraction layer above the device drivers. This allows the developer to interact with hardware independent on the type of device\cite{android:hal}.\\
+
+The native libraries are low level libraries, written in C or C++, that handle functionality such as the Secure Sockets Layer (SSL) and Open GL\cite{komatineni2012pro}. Android Runtime (ART) features Ahead-Of-Time (AOT) compilation and Just-In-Time (JIT) compilation, garbage collection and debugging support\cite{android:sdk:stack}. This is where the Java code is being run and because of the debugging and garbage collection support, it is also beneficial for the developer to write applications against this layer.\\
+
+The Java API Framework is the Java library you use when controlling the Android UI. It is the reusable code for managing activities, implementing data structures and designing the application. The System Application layer represents the functionality that allows a third-party app to communicate with other apps. Example of usable applications are email, calendar and contacts\cite{android:sdk:stack}.
 
 \begin{figure}
     \centering
@@ -18,28 +21,29 @@ To allow developers to build Android apps, Google developed a Standard Developme
                 text height=12pt,
             text depth=9pt},
             greenb/.style={blueb,fill=mygreen},
+            darkgreenb/.style={blueb,fill=mydarkgreen},
             redb/.style={blueb,fill=myred},
             greyb/.style={blueb,fill=mygrey},
             yellowb/.style={blueb,fill=myyellow},
         ]
 
-        \node[label=center:{\sffamily\bfseries\color{white}System Applications},greenb,minimum width=15.9cm] (SysApps) {};
+        \node[label=center:{\sffamily\bfseries\color{white}System Applications},darkgreenb,minimum width=15.9cm] (SysApps) {};
 
-        \node[label=center:{\sffamily\bfseries\color{white}Java API},greenb,minimum width=15.9cm,below=of SysApps] (JAPI) {};
+        \node[label=center:{\sffamily\bfseries\color{white}Java API Framework},greenb,minimum width=15.9cm,below=of SysApps] (JAPI) {};
 
         \node[label=center:{\sffamily\bfseries\color{white}Native Libraries},greyb,below=of JAPI,minimum width=13cm,xshift=-1.45cm] (Nat) {};
         \node[label=center:{\sffamily\bfseries\color{white}ART},yellowb,right=of Nat] (Art) {};
 
         \widernode{Nat}{Art}{Hardware Abstraction Layer (HAL)}{Hal}
 
-        \widernode[redb]{Hal}{Hal}{Linux Kernel (Device Drivers)}{RCP}
+        \widernode[redb]{Hal}{Hal}{Linux Kernel}{RCP}
         \begin{pgfonlayer}{background}
             \draw[blueb,draw=black,fill=mybluei!40] 
                 ([xshift=-\myframesep,yshift=3\myframesep]current bounding box.north west) 
                 rectangle 
                 ([xshift=\myframesep,yshift=-\myframesep]current bounding box.south east);
         \end{pgfonlayer}
-        \node[font=\sffamily\itshape\color{Black},above=of SysApps] {Android SDK Software Stack};
+        \node[font=\sffamily\itshape\color{black},above=of SysApps] {Android SDK Software Stack};
     \end{tikzpicture}
     \caption{Android SDK Software Stack\cite{android:sdk:stack}}
     \label{fig:sdk}

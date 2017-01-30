@@ -7,10 +7,10 @@
 
 #include <jni.h>
 
-jlong fft(JNIEnv* env, jobject);
+jlong fft(JNIEnv* env, jobject, jint a);
 
 static JNINativeMethod s_methods[] {
-        {"fft", "()J", (void*)fft}
+        {"fft", "(I)J", (void*)fft}
 };
 
 #endif //BENCHMARKAPP_FFT_LIB_H
