@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 logTextView.append("LOG TEXT\n");
-                int scrollAmount = logTextView.getLayout().getLineTop(logTextView.getLineCount())- logTextView.getHeight();
+                int scrollAmount = logTextView.getLayout().getLineTop(logTextView.getLineCount()) - logTextView.getHeight();
                 // Scroll number of added lines outside of bottom
                 if (scrollAmount > 0)
                     logTextView.scrollTo(0, scrollAmount);

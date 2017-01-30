@@ -1,9 +1,5 @@
 package com.example.algo.benchmarkapp;
 
-/**
- *
- */
-
 public class Benchmark {
 
     public static void FFTJava(int maxN) {
