@@ -12,6 +12,43 @@
 \usepackage{parskip}
 \usepackage{amsmath}
 \usepackage{url}
+\usepackage{tikz}
+
+
+
+\usetikzlibrary{positioning,calc,fit}
+
+\definecolor{mybluei}{RGB}{124,156,205}
+\definecolor{myblueii}{RGB}{73,121,193}
+\definecolor{mygreen}{RGB}{202,217,126}
+\definecolor{myred}{RGB}{255,23,23}
+\definecolor{mypink}{RGB}{233,198,235}
+\definecolor{mygrey}{RGB}{191,193,192}
+\definecolor{myyellow}{RGB}{215,226,0}
+
+% this length is used to control the width of the light blue frame
+% for the upper part of the diagram
+\newlength\myframesep
+\setlength\myframesep{8pt}
+
+\pgfdeclarelayer{background}
+\pgfsetlayers{background,main}
+
+\pgfkeys{
+    /tikz/node distance/.append code={
+        \pgfkeyssetvalue{/tikz/node distance value}{#1}
+    }
+}
+
+\newcommand\widernode[5][blueb]{
+    \node[
+        #1,
+        inner sep=0pt,
+        shift=($(#2.south)-(#2.north)$),
+        yshift=-\pgfkeysvalueof{/tikz/node distance value},
+        fit={(#2) (#3)},
+    label=center:{\sffamily\bfseries\color{white}#4}] (#5) {};
+}
 
 \newcommand{\hilight}[1]{\colorbox{yellow}{#1}}
 

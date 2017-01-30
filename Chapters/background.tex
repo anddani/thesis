@@ -1,7 +1,50 @@
 \textit{Summarizing the chapter}
 
 % REMOVE?
-\section{Android Development Kit}
+\section{Android SDK}
+To allow developers to build Android apps, Google developed a Standard Development Kit (SDK) to facilitate the process of writing Android applications. The Android SDK software stack is described in Figure~\ref{fig:sdk}.
+
+\begin{figure}
+    \centering
+
+    \begin{tikzpicture}[node distance=3pt,outer sep=0pt,
+            blueb/.style={
+                draw=white,
+                fill=mybluei,
+                rounded corners,
+                text width=2.5cm,
+                font={\sffamily\bfseries\color{white}},
+                align=center,
+                text height=12pt,
+            text depth=9pt},
+            greenb/.style={blueb,fill=mygreen},
+            redb/.style={blueb,fill=myred},
+            greyb/.style={blueb,fill=mygrey},
+            yellowb/.style={blueb,fill=myyellow},
+        ]
+
+        \node[label=center:{\sffamily\bfseries\color{white}System Applications},greenb,minimum width=15.9cm] (SysApps) {};
+
+        \node[label=center:{\sffamily\bfseries\color{white}Java API},greenb,minimum width=15.9cm,below=of SysApps] (JAPI) {};
+
+        \node[label=center:{\sffamily\bfseries\color{white}Native Libraries},greyb,below=of JAPI,minimum width=13cm,xshift=-1.45cm] (Nat) {};
+        \node[label=center:{\sffamily\bfseries\color{white}ART},yellowb,right=of Nat] (Art) {};
+
+        \widernode{Nat}{Art}{Hardware Abstraction Layer (HAL)}{Hal}
+
+        \widernode[redb]{Hal}{Hal}{Linux Kernel (Device Drivers)}{RCP}
+        \begin{pgfonlayer}{background}
+            \draw[blueb,draw=black,fill=mybluei!40] 
+                ([xshift=-\myframesep,yshift=3\myframesep]current bounding box.north west) 
+                rectangle 
+                ([xshift=\myframesep,yshift=-\myframesep]current bounding box.south east);
+        \end{pgfonlayer}
+        \node[font=\sffamily\itshape\color{Black},above=of SysApps] {Android SDK Software Stack};
+    \end{tikzpicture}
+    \caption{Android SDK Software Stack\cite{android:sdk:stack}}
+    \label{fig:sdk}
+\end{figure}
+
 
 \section{Dalvik Virtual Machine}
 % What is Dalvik Virtual Machine?
