@@ -2,10 +2,14 @@ package com.example.algo.benchmarkapp;
 
 import com.example.algo.benchmarkapp.algorithms.Complex;
 import com.example.algo.benchmarkapp.algorithms.InplaceFFT;
+import com.example.algo.benchmarkapp.algorithms.FFT;
+
+import java.io.File;
+import java.io.PrintWriter;
 
 public class Benchmark {
 
-    public static void FFTJava(int N) {
+    public static void FFTJavaIterative(int N) {
         Complex[] x = new Complex[N];
 
         // original data
@@ -13,15 +17,35 @@ public class Benchmark {
 //            x[i] = new Complex(i, 0);
             x[i] = new Complex(-2*Math.random() + 1, 0);
         }
-        for (int i = 0; i < N; i++)
-            System.out.println(x[i]);
-        System.out.println();
+//        for (int i = 0; i < N; i++)
+//            System.out.println(x[i]);
+//        System.out.println();
 
         // FFT of original data
         InplaceFFT.fft(x);
-        for (int i = 0; i < N; i++)
-            System.out.println(x[i]);
-        System.out.println();
+//        for (int i = 0; i < N; i++)
+//            System.out.println(x[i]);
+//        System.out.println();
+
+    }
+    public static void FFTJavaRecursive(int N) {
+        Complex[] x = new Complex[N];
+
+        // original data
+        for (int i = 0; i < N; i++) {
+//            x[i] = new Complex(i, 0);
+            x[i] = new Complex(-2*Math.random() + 1, 0);
+        }
+//        for (int i = 0; i < N; i++)
+//            System.out.println(x[i]);
+//        System.out.println();
+
+        // FFT of original data
+        InplaceFFT.fft(x);
+//        for (int i = 0; i < N; i++)
+//            System.out.println(x[i]);
+//        System.out.println();
+
     }
 
     public static long FFTCpp(int maxN) {

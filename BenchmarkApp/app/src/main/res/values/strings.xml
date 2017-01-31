@@ -3,5 +3,7 @@
     <string name="title_text">FFT Benchmarking</string>
     <string name="run_button_text">Run Benchmarks!</string>
     <string name="scrollable_text">Initial text</string>
+    <string name="num_iter_text">#Iterations</string>
+    <string name="data_size_text">N</string>
     <string name="log_title">LOG</string>
 </resources>

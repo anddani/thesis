@@ -15,19 +15,30 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:textSize="20sp"
+        android:textSize="18sp"
         android:text="@string/title_text" />
 
     <EditText
-        android:id="@+id/edt_field"
+        android:hint="@string/num_iter_text"
+        android:id="@+id/num_iter"
         android:layout_below="@+id/sample_text"
-        android:layout_width="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_width="150dp"
+        android:inputType="number"
+        android:layout_height="60dp" />
+
+    <EditText
+        android:hint="@string/data_size_text"
+        android:id="@+id/data_size"
+        android:layout_toRightOf="@+id/num_iter"
+        android:layout_width="200dp"
         android:inputType="number"
         android:layout_height="60dp" />
 
     <Button
         android:id="@+id/run_button"
-        android:layout_below="@+id/edt_field"
+        android:layout_below="@+id/num_iter"
         android:text="@string/run_button_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
@@ -40,6 +51,6 @@
         android:layout_below="@+id/run_button"
         android:scrollbars="vertical"
         android:layout_width="match_parent"
-        android:layout_height="300dp" />
+        android:layout_height="match_parent" />
 
 </RelativeLayout>

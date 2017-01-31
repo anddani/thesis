@@ -12,4 +12,5 @@ DATA_PATH=$EXJOBB_HOME/Data
 
 echo $DATA_PATH
 
-# adb shell ls /path/to/folder/bla.* | tr '\r' ' ' | xargs -n1 adb pull  
+# adb shell 'run-as $PACKAGE ls /path/to/folder/bla.* | tr '\r' ' ' | xargs -n1 adb pull  
+# adb shell 'run-as $PACKAGE cat /data/data/$PACKAGE/files/data.out' > $DATA_PATH/$TIME.out
