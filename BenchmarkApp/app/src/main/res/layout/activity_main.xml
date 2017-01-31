@@ -10,18 +10,9 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.algo.benchmarkapp.MainActivity">
 
-    <TextView
-        android:id="@+id/sample_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:textSize="18sp"
-        android:text="@string/title_text" />
-
     <EditText
         android:hint="@string/num_iter_text"
         android:id="@+id/num_iter"
-        android:layout_below="@+id/sample_text"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_width="150dp"

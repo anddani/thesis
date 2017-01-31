@@ -1,8 +1,5 @@
 package com.example.algo.benchmarkapp;
 
-import android.content.Context;
-import android.os.AsyncTask;
-import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
@@ -13,8 +10,6 @@ import android.widget.TextView;
 
 import com.example.algo.benchmarkapp.algorithms.Constants;
 
-import org.w3c.dom.Text;
-
 import java.io.File;
 import java.io.FileOutputStream;
 
@@ -24,27 +19,54 @@ public class MainActivity extends AppCompatActivity implements OnTaskCompleted {
     private EditText numIter;
     private EditText dataSize;
 
+    private double[] fftInitialData;
+
     private int currentAlgorithm;
 
-    // Used to load the 'native-lib' library on application startup.
-    static {
-        System.loadLibrary("native-lib");
-    }
-
+    /**
+     * Runs a new test in a new thread.
+     */
     @Override
     public void startNextTest() {
-        MyAsyncTask myAsyncTask = new MyAsyncTask(MainActivity.this);
+        MyAsyncTask myAsyncTask = new MyAsyncTask(MainActivity.this, fftInitialData);
         int iter = Integer.parseInt(numIter.getText().toString());
-        int N = Integer.parseInt(dataSize.getText().toString());
+        int N = nextPowerOfTwo(Integer.parseInt(dataSize.getText().toString()));
         int algorithm = currentAlgorithm;
         if (currentAlgorithm < Constants.NUM_ALGORITHMS) {
-            myAsyncTask.execute(iter, algorithm, N);
-            saveResult("-- Running Algorithm " + Constants.ALGORITHM_NAMES[algorithm] + " for " + iter + " iterations\n");
+            myAsyncTask.execute(iter, algorithm);
+            saveResult("-- Running Algorithm " + Constants.ALGORITHM_NAMES[algorithm] + " N=" + N + " for " + iter + " iter\n");
         }
         currentAlgorithm++;
     }
+
+    private int nextPowerOfTwo(int v) {
+        v--;
+        v |= v >> 1;
+        v |= v >> 2;
+        v |= v >> 4;
+        v |= v >> 8;
+        v |= v >> 16;
+        v++;
+        return v;
+    }
+
+    /**
+     * Logs the result on the screen
+     *
+     * TODO: Print to file
+     *
+     * @param result Execution time
+     */
     @Override
     public void saveResult(String result) {
+//        FileOutputStream out;
+//        try {
+//            out = openFileOutput("test.out", Context.MODE_PRIVATE);
+//            out.write("TEST".getBytes());
+//            out.close();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
         logTextView.append(result + "\n");
         int scrollAmount = getScrollAmount(logTextView);
         // Scroll number of added lines outside of bottom
@@ -53,6 +75,7 @@ public class MainActivity extends AppCompatActivity implements OnTaskCompleted {
         else
             logTextView.scrollTo(0, 0);
     }
+
     private int getScrollAmount(TextView tv) {
         return tv.getLayout().getLineTop(tv.getLineCount()) - tv.getHeight();
     }
@@ -61,7 +84,6 @@ public class MainActivity extends AppCompatActivity implements OnTaskCompleted {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Benchmark.FFTCpp(1);
 
         // Set TextView as scrollable
         logTextView = (TextView) findViewById(R.id.log_text);
@@ -78,28 +100,12 @@ public class MainActivity extends AppCompatActivity implements OnTaskCompleted {
             @Override
             public void onClick(View v) {
                 currentAlgorithm = 0;
+                int N = nextPowerOfTwo(Integer.parseInt(dataSize.getText().toString()));
+                fftInitialData = Benchmark.randomInput(N);
                 // Clear screen between tests
                 logTextView.setText("");
                 startNextTest();
-//                FileOutputStream out;
-//                try {
-//                    out = openFileOutput("test.out", Context.MODE_PRIVATE);
-//                    out.write("TEST".getBytes());
-//                    out.close();
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
             }
         });
-
-        // Example of a call to a native method
-        TextView tv = (TextView) findViewById(R.id.sample_text);
-        tv.setText(stringFromJNI());
     }
-
-    /**
-     * A native method that is implemented by the 'native-lib' native library,
-     * which is packaged with this application.
-     */
-    public native String stringFromJNI();
 }

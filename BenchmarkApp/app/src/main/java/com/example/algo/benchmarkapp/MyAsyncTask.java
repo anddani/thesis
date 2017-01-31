@@ -8,32 +8,34 @@ import com.example.algo.benchmarkapp.algorithms.Constants;
 public class MyAsyncTask extends AsyncTask<Integer, String, String> {
 
     OnTaskCompleted listener;
+    double[] fftInitialData;
 
-    public MyAsyncTask(OnTaskCompleted l) {
+    public MyAsyncTask(OnTaskCompleted l, double[] d) {
         listener = l;
+        fftInitialData = d;
     }
 
     @Override
     protected String doInBackground(Integer... input) {
         int numIter = input[0];
         int algorithm = input[1];
-        int N = input[2];
-        System.out.println("next power: " + nextPowerOfTwo(numIter));
         StringBuilder sb = new StringBuilder();
         while (numIter-- > 0) {
-            long start = SystemClock.elapsedRealtimeNanos();
+            long time = 0;
             switch (Constants.ALGORITHMS.values()[algorithm]) {
                 case FFT_JAVA_ITERATIVE:
-                    Benchmark.FFTJavaIterative(N);
+                    time = Benchmark.FFTJavaIterative(fftInitialData);
                     break;
                 case FFT_JAVA_RECURSIVE:
-                    Benchmark.FFTJavaRecursive(N);
+                    time = Benchmark.FFTJavaRecursive(fftInitialData);
+                    break;
+                case FFT_CPP_ITERATIVE:
+                    time = Benchmark.FFTCppIterative(fftInitialData);
                     break;
                 default:
                     break;
             }
-            long diff = SystemClock.elapsedRealtimeNanos() - start;
-            sb.append(diff/1000000.0 + " ms\n");
+            sb.append(time/1000000.0 + " ms\n");
         }
         return String.valueOf(sb.toString());
     }
@@ -43,16 +45,5 @@ public class MyAsyncTask extends AsyncTask<Integer, String, String> {
     protected void onPostExecute(String s) {
         listener.saveResult(s);
         listener.startNextTest();
-    }
-
-    private int nextPowerOfTwo(int v) {
-        v--;
-        v |= v >> 1;
-        v |= v >> 2;
-        v |= v >> 4;
-        v |= v >> 8;
-        v |= v >> 16;
-        v++;
-        return v;
     }
 }
