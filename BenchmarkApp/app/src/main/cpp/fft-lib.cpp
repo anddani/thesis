@@ -1,22 +1,38 @@
 #include <jni.h>
 #include <string>
-#include <complex>
-#include <math.h>
-#include <stdlib.h>
 #include <android/log.h>
+#include "FFTPrincetonConverted.h"
 
 #define LOGTAG "FFTLIB"
 
-double pi = 4 * atan(1.0);
 typedef unsigned int uint;
 
-jlong fftIterativeNative(JNIEnv* env, jobject obj, jdoubleArray arr) {
+jdoubleArray fftIterativeNative(JNIEnv* env, jobject obj, jdoubleArray arr) {
     jsize size = (*env).GetArrayLength(arr);
-//    __android_log_print(ANDROID_LOG_INFO, LOGTAG, "-- Native - Size of array : %d", (int)size);
 
     jdouble* elements = (*env).GetDoubleArrayElements(arr, 0);
 
-    return (jlong)17;
+    std::vector<std::complex<double> > x;
+    int half = size/2;
+    for (int i = 0; i < half; ++i) {
+        x.push_back(std::complex<double>(elements[i], elements[i+half]));
+    }
+
+    FFTPrincetonConverted fpc = FFTPrincetonConverted();
+    if (fpc.fft(x) == -1) {
+        __android_log_print(ANDROID_LOG_INFO, LOGTAG, "-- Native - Size of array : %d", (int)size);
+    }
+
+    // place in return array
+    // [x[0].real, x[1].real, ... x[n-1].real, x[0].imag, ...]
+    for (int i = 0; i < half; ++i) {
+        elements[i] = x[i].real();
+        elements[i+half] = x[i].imag();
+    }
+
+    // Return a double[]
+    (*env).SetDoubleArrayRegion(arr, 0, size, elements);
+    return arr;
 }
 
 jlong fftRecursiveNative(JNIEnv* env, jobject obj, jdoubleArray arr) {
@@ -25,8 +41,8 @@ jlong fftRecursiveNative(JNIEnv* env, jobject obj, jdoubleArray arr) {
 }
 
 static JNINativeMethod s_methods[] {
-        {"FFTCppIterative", "([D)J", (void*)fftIterativeNative},
-        {"FFTCppRecursive", "([D)J", (void*)fftRecursiveNative}
+        {"fft_iterative_native", "([D)[D", (void*)fftIterativeNative},
+        {"fft_recursive_native", "([D)J", (void*)fftRecursiveNative}
 };
 
 jint JNI_OnLoad(JavaVM* vm, void* reserved) {

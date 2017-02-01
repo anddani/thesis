@@ -49,8 +49,8 @@ public class InplaceFFT {
                 Complex w = new Complex(Math.cos(kth), Math.sin(kth));
                 for (int j = 0; j < N/L; j++) {
                     Complex tao = w.times(x[j*L + k + L/2]);
-                    x[j*L + k + L/2] = x[j*L + k].minus(tao); 
-                    x[j*L + k]       = x[j*L + k].plus(tao); 
+                    x[j*L + k + L/2] = x[j*L + k].minus(tao);
+                    x[j*L + k]       = x[j*L + k].plus(tao);
                 }
             }
         }

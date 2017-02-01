@@ -4,8 +4,6 @@
 
 cmake_minimum_required(VERSION 3.4.1)
 
-include_directories(src/main/cpp/fftw/api/)
-
 # Creates and names a library, sets it as either STATIC
 # or SHARED, and provides the relative paths to its source code.
 # You can define multiple libraries, and CMake builds it for you.
@@ -22,7 +20,9 @@ add_library( # Sets the name of the library.
              # file are automatically included.
              src/main/cpp/native-lib.cpp )
 
-add_library(fft-lib SHARED src/main/cpp/fft-lib.cpp)
+
+add_library(fft-lib SHARED src/main/cpp/fft-lib.cpp
+                           src/main/cpp/FFTPrincetonConverted.cpp)
 
 # Searches for a specified prebuilt library and stores the path as a
 # variable. Because system libraries are included in the search path by
@@ -40,6 +40,9 @@ find_library( # Sets the name of the path variable.
 # Specifies libraries CMake should link to your target library. You
 # can link multiple libraries, such as libraries you define in the
 # build script, prebuilt third-party libraries, or system libraries.
+
+# add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/main/cpp/transform)
+
 
 target_link_libraries( # Specifies the target library.
                        native-lib

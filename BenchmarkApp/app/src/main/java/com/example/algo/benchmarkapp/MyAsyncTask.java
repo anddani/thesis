@@ -8,11 +8,13 @@ import com.example.algo.benchmarkapp.algorithms.Constants;
 public class MyAsyncTask extends AsyncTask<Integer, String, String> {
 
     OnTaskCompleted listener;
-    double[] fftInitialData;
+    double[] fftInitialRe;
+    double[] fftInitialIm;
 
-    public MyAsyncTask(OnTaskCompleted l, double[] d) {
+    public MyAsyncTask(OnTaskCompleted l, double[] re, double[] im) {
         listener = l;
-        fftInitialData = d;
+        fftInitialRe = re;
+        fftInitialIm = im;
     }
 
     @Override
@@ -24,13 +26,13 @@ public class MyAsyncTask extends AsyncTask<Integer, String, String> {
             long time = 0;
             switch (Constants.ALGORITHMS.values()[algorithm]) {
                 case FFT_JAVA_ITERATIVE:
-                    time = Benchmark.FFTJavaIterative(fftInitialData);
+                    time = Benchmark.FFTJavaIterative(fftInitialRe, fftInitialIm);
                     break;
                 case FFT_JAVA_RECURSIVE:
-                    time = Benchmark.FFTJavaRecursive(fftInitialData);
+                    time = Benchmark.FFTJavaRecursive(fftInitialRe, fftInitialIm);
                     break;
                 case FFT_CPP_ITERATIVE:
-                    time = Benchmark.FFTCppIterative(fftInitialData);
+                    time = Benchmark.FFTCppIterative(fftInitialRe, fftInitialIm);
                     break;
                 default:
                     break;
