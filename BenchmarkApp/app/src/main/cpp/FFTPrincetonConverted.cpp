@@ -1,12 +1,14 @@
 #include "FFTPrincetonConverted.h"
 
+using namespace std;
+
 FFTPrincetonConverted::FFTPrincetonConverted() {
 
 }
 FFTPrincetonConverted::~FFTPrincetonConverted() {
 
 }
-int FFTPrincetonConverted::fft(std::vector<std::complex<double> >& x) {
+int FFTPrincetonConverted::fftIterative(vector<complex<double> >& x) {
     int N = x.size();
 
     // N not power of 2
@@ -18,7 +20,7 @@ int FFTPrincetonConverted::fft(std::vector<std::complex<double> >& x) {
     for (unsigned int k = 0; k < N; k++) {
         int j = reverseInt(k) >> shift;
         if (j > k) {
-            std::complex<double> temp = x[j];
+            complex<double> temp = x[j];
             x[j] = x[k];
             x[k] = temp;
         }
@@ -28,15 +30,72 @@ int FFTPrincetonConverted::fft(std::vector<std::complex<double> >& x) {
     for (int L = 2; L <= N; L = L+L) {
         for (int k = 0; k < L/2; k++) {
             double kth = -2 * k * M_PI / L;
-            std::complex<double> w = std::complex<double>(cos(kth), sin(kth));
+//            complex<double> w = complex<double>(cos(kth), sin(kth));
+            complex<double> w(cos(kth), sin(kth));
             for (int j = 0; j < N/L; j++) {
-                std::complex<double> tao = w * (x[j*L + k + L/2]);
+                complex<double> tao = w * (x[j*L + k + L/2]);
                 x[j*L + k + L/2] = x[j*L + k] - tao;
                 x[j*L + k]       = x[j*L + k] + tao;
             }
         }
     }
     return 0;
+}
+
+vector<complex<double> > FFTPrincetonConverted::fftRecursive(vector<complex<double> > x) {
+    int n = x.size();
+    if (n == 1) {
+        vector<complex<double> > ret;
+        ret.push_back(x[0]);
+        return ret;
+    }
+    if (n % 2 != 0) {
+        return vector<complex<double> >();
+    }
+
+    vector<complex<double> > even(n/2);
+    for (int k = 0; k < n/2; ++k) {
+        even[k] = x[2 * k];
+    }
+    vector<complex<double> > q = fftRecursive(even);
+
+    vector<complex<double> > odd(n/2);
+    for (int k = 0; k < n/2; ++k) {
+        odd[k] = x[2 * k + 1];
+    }
+    vector<complex<double> > r = fftRecursive(odd);
+
+    // Combine
+    vector<complex<double> > y(n);
+    for (int k = 0; k < n/2; ++k) {
+        double kth = -2 * k * M_PI / n;
+        complex<double> wk(cos(kth), sin(kth));
+        y[k] = q[k] + (wk*r[k]);
+        y[k + n/2] = q[k] - (wk*r[k]);
+    }
+    return y;
+}
+vector<complex<double> > FFTPrincetonConverted::ifftRecursive(vector<complex<double> > x) {
+    int n = x.size();
+    vector<complex<double> > y(n);
+
+    // conjugate
+    for (int i = 0; i < n; ++i) {
+        y[i] = conj(x[i]);
+    }
+    // Forward FFT
+    y = fftRecursive(y);
+
+    // conjugate
+    for (int i = 0; i < n; ++i) {
+        y[i] = conj(y[i]);
+    }
+    for (int i = 0; i < n; ++i) {
+        double o = 1.0/n;
+        y[i].real(y[i].real() * o);
+        y[i].imag(y[i].imag() * o);
+    }
+    return y;
 }
 
 uint32_t FFTPrincetonConverted::reverseInt(uint32_t x)

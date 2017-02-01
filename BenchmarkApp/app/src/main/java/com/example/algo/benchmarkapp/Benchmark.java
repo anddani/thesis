@@ -66,11 +66,6 @@ public class Benchmark {
         System.arraycopy(re, 0, z, 0, re.length);
         System.arraycopy(im, 0, z, re.length, im.length);
 
-        // z[0,2,4,...] re, z[1,3,5,...] im
-//        for (int i = 0; i < N; i++) {
-//            z[i] = (i % 2 == 0) ? re[i/2] : im[i/2];
-//        }
-
         double[] nativeResult = fft_iterative_native(z);
 
         Complex[] result = new Complex[re.length];
@@ -87,13 +82,35 @@ public class Benchmark {
         return SystemClock.elapsedRealtimeNanos() - start;
     }
 
-    public static long FFTCppRecursive(double[] arr) {
+    public static long FFTCppRecursive(double[] re, double[] im) {
+        long start = SystemClock.elapsedRealtimeNanos();
+        int N = re.length*2;
 
-        return 17;
+        // Merge real and imaginary numbers
+        // z = re + im
+        double[] z = new double[N];
+        System.arraycopy(re, 0, z, 0, re.length);
+        System.arraycopy(im, 0, z, re.length, im.length);
+
+        double[] nativeResult = fft_recursive_native(z);
+
+        // Create Java complex numbers
+        Complex[] result = new Complex[re.length];
+        int half = N/2;
+        for (int i = 0; i < half; i++) {
+            result[i] = new Complex(nativeResult[i], nativeResult[i+half]);
+        }
+
+        System.out.println("************* FFT CPP REC ************");
+        for (Complex c : result) {
+            System.out.println(c);
+        }
+
+        return SystemClock.elapsedRealtimeNanos() - start;
     }
 
     public static native double[] fft_iterative_native(double[] arr);
-    public static native long fft_recursive_native(double[] arr);
+    public static native double[] fft_recursive_native(double[] arr);
 
     static {
         System.loadLibrary("fft-lib");

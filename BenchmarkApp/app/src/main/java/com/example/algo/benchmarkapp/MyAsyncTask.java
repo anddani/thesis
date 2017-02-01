@@ -34,6 +34,9 @@ public class MyAsyncTask extends AsyncTask<Integer, String, String> {
                 case FFT_CPP_ITERATIVE:
                     time = Benchmark.FFTCppIterative(fftInitialRe, fftInitialIm);
                     break;
+                case FFT_CPP_RECURSIVE:
+                    time = Benchmark.FFTCppRecursive(fftInitialRe, fftInitialIm);
+                    break;
                 default:
                     break;
             }

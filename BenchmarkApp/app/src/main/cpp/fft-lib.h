@@ -5,9 +5,6 @@
 #ifndef BENCHMARKAPP_FFT_LIB_H
 #define BENCHMARKAPP_FFT_LIB_H
 
-#include <jni.h>
-
-jlong fft(JNIEnv* env, jobject, jint a);
 
 
 #endif //BENCHMARKAPP_FFT_LIB_H

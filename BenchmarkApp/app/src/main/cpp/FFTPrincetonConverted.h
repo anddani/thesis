@@ -12,13 +12,12 @@ class FFTPrincetonConverted {
 public:
     FFTPrincetonConverted();
     ~FFTPrincetonConverted();
-    int fft(std::vector<std::complex<double> >& x);
+    int fftIterative(std::vector<std::complex<double> >& x);
+    std::vector<std::complex<double> > fftRecursive(std::vector<std::complex<double> > x);
+    std::vector<std::complex<double> > ifftRecursive(std::vector<std::complex<double> > x);
 
 private:
-    int leadingZeros(int num);
     uint32_t reverseInt(uint32_t num);
-    void swap(std::complex<double>& a, std::complex<double>& b);
-
 };
 
 #endif //BENCHMARKAPP_FFTPRINCETONCONVERTED_H
