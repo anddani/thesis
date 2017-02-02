@@ -22,6 +22,9 @@ public class MyAsyncTask extends AsyncTask<Integer, String, String> {
         int numIter = input[0];
         int algorithm = input[1];
         StringBuilder sb = new StringBuilder();
+
+        // Benckmark bm = new Benchmark(fftInitialRe, fftInitialIm);
+
         while (numIter-- > 0) {
             long time = 0;
             switch (Constants.ALGORITHMS.values()[algorithm]) {

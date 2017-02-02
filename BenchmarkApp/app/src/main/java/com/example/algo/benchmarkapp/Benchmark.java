@@ -6,10 +6,16 @@ import com.example.algo.benchmarkapp.algorithms.Complex;
 import com.example.algo.benchmarkapp.algorithms.InplaceFFT;
 import com.example.algo.benchmarkapp.algorithms.FFT;
 
-import java.util.Arrays;
 import java.util.Random;
 
+// TODO: Make non-static methods and save input as class variable.
 public class Benchmark {
+
+//    private Random rand;
+//
+//    public Benchmark() {
+//        rand = new Random(SystemClock.currentThreadTimeMillis());
+//    }
 
     public static double[] randomInput(int N) {
         double[] x = new double[N];
@@ -32,6 +38,8 @@ public class Benchmark {
         }
 
         InplaceFFT.fft(x);
+
+        // DEBUG
         System.out.println("************* FFT JAVA ITER ************");
         for (Complex c : x) {
             System.out.println(c);
@@ -50,6 +58,8 @@ public class Benchmark {
         }
 
         Complex[] result = FFT.fft(x);
+
+        // DEBUG
         System.out.println("************* FFT JAVA REC ************");
         for (Complex c : result) {
             System.out.println(c);
@@ -74,6 +84,7 @@ public class Benchmark {
             result[i] = new Complex(nativeResult[i], nativeResult[i+half]);
         }
 
+        // DEBUG
         System.out.println("************* FFT CPP ITER ************");
         for (Complex c : result) {
             System.out.println(c);
@@ -101,6 +112,7 @@ public class Benchmark {
             result[i] = new Complex(nativeResult[i], nativeResult[i+half]);
         }
 
+        // DEBUG
         System.out.println("************* FFT CPP REC ************");
         for (Complex c : result) {
             System.out.println(c);
