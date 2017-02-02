@@ -1,7 +1,7 @@
 % TODO:
 % Thus
 
-\textit{Summary of the chapter}
+\textit{This thesis explores how significant the performance differences between bytecode and native libraries are.}
 
 % Introduce the area (background)?
 % What needs to be done (problem)?
@@ -16,14 +16,17 @@
 % Introduce company and what they do/why mobile phone technology is relevant today. Lead to the problem.
 \section{Background}
 % Android History
-% Specific with time 
-\gls{android} applications are written in Java to ensure portability in form of architecture independence. Applications have been run on the Dalvik virtual machine until Android version 5\cite{android:dalvik} in November of 2014\cite{android:dalvik:release}. Since then, Dalvik has been replaced by Android Runtime. Android Runtime, ART for short, differs from Dalvik in that it uses the Ahead-Of-Time (AOT) concept when it compiles during installation of the app. Dalvik exclusively uses a concept called Just-In-Time (JIT) compilation which means that code is compiled to native code during runtime, when needed.
-
 % Market share
-% Linux kernel?
+Android is an operating system for smartphones and as of November 2016 it is the most used \cite{android:os:popularity}. One reason for this is because it was designed to be run on multiple different architectures \cite{android:os:devices}. Google states that they want to ensure that manufacturers and developers have an open platform to use and therefore releases Android as Open Source software \cite{android:os:opensource}. Android uses the Android kernel is based on the Linux kernel with some alterations to support the hardware on mobile devices.\\
+
+% Specific with time 
+
+\gls{android} applications are mainly written in Java to ensure portability in form of architecture independence. By using a virtual machine to run a Java app, you can use the same bytecode on multiple platforms. To ensure efficiency on low resources devices, a virtual machine called Dalvik was developed. Applications on Android have been using the Dalvik virtual machine until Android version 5 \cite{android:dalvik} in November of 2014 \cite{android:dalvik:release}. Since then, Dalvik has been replaced by Android Runtime. Android Runtime, ART for short, differs from Dalvik in that it uses Ahead-Of-Time (AOT) compilation. This means that it compiles during the installation of the app. Dalvik, however, exclusively uses a concept called Just-In-Time (JIT) compilation, meaning that code is compiled during runtime when needed.\\
+
 % Common architectures
 
 % Native code
+To allow developers to reuse libraries written in C or C++ or just to write low level code, a tool called Native Development Kit (NDK) was released. It was first released in June 2009 \cite{Lin2011} and has since then gotten improvements such as new build tools, compiler versions and support for additional Application Binary Interfaces (ABI). With the NDK, the developers can choose to write parts of an app in so called \emph{native code}. This is used when wanting to do compression, graphics and other performance heavy tasks.
 
 % Some of the findings in this report might help decide using a specific programming language for programming an application. For some problems, it is necessary to choose the appropriate programming language to ensure that an application is smooth and responsive. It is therefore important to know when and where it is necessary to optimize the code. There are multiple types of problems that occur when developing complex apps and it is relevant to know which problems that are worth solving in a given language.\\
 
@@ -33,13 +36,13 @@
 % Describe problem and form the hypothesis
 \section{Problem}
 % Research questions
-To ensure that resources are spent in an efficient manner, this report has investigated whether the performance boost from writing the Fast Fourier Transform (\gls{fft}) in C++ instead of Java is significant. The following research questions were formed on the basis of the requirements:
+To ensure that resources are spent in an efficient manner, this report has investigated whether the performance boost from having the Fast Fourier Transform (\gls{fft}) compiled by the NDK instead of by ART is significant. Multiple different implementations of FFTs will be evaluated as well as the effects of the Java Native Interface (JNI), a framework for communicating between Java code and native shared libraries. The following research questions were formed on the basis of the requirements:
 
 
 %\hilight{calculation heavy tasks} in C or C++ instead of Java is significant.
 
 \begin{center}
-    \textit{Is there a performance difference in the implementation of an \gls{fft} in Java compared to native C++ code on an Android platform using ART?}
+    \textit{How significant is the performance difference between implementing an FFT in native code, compiled with Clang, and bytecode, compiled by Android Runtime, on Android?}
 \end{center}
 
 
@@ -50,7 +53,7 @@ To ensure that resources are spent in an efficient manner, this report has inves
 % Purpose with the work
 % What the report shows
 \section{Purpose}
-This report is a study that evaluates when and where there is a gain in writing a part of an Android application in C++. The purpose of this report is to educate the reader about the process of porting parts of an app to native code using the Native Development Kit (\gls{ndk}) and explore the topic of performance differences between Android Runtime (ART) and native code compiled with \gls{clang}. Because ART is relatively new (Nov 2014)\cite{android:dalvik:release}, this report would contribute with more data related to the performance between ART and native.\\
+This thesis is a study that evaluates when and where there is a gain in writing a part of an Android application in C++. One purpose of this report is to educate the reader about the process of porting parts of an app to native code using the Native Development Kit (NDK). Another is to explore the topic of performance differences between Android Runtime (ART) and native code compiled with Clang/LLVM. Because ART is relatively new (Nov 2014) \cite{android:dalvik:release}, this report would contribute with more information related to the performance of ART and how it performs compared to native code compiled by the NDK.\\
 
 % if there is a gain in spending resources to implement some part of an Android app in C++.
 
@@ -119,10 +122,10 @@ Environmental sustainability is fulfilled in this report because there is an asp
 %%==================================================================
 \section{Outline}
 \begin{itemize}
-    \item \textbf{Chapter \ref{ch:introduction} - Introduction --}
-    \item \textbf{Chapter \ref{ch:background} - Background --}
-    \item \textbf{Chapter \ref{ch:methodology} - Methodology --}
-    \item \textbf{Chapter \ref{ch:experiments} - Experiments --}
-    \item \textbf{Chapter \ref{ch:discussion} - Discussion --}
-    \item \textbf{Chapter \ref{ch:conclusion} - Conclusion --}
+    \item \textit{\textbf{Chapter \ref{ch:introduction} - Introduction --}} Introduces the reader to the project. This chapter describes why this investigation is beneficial in its field and for whom it is useful.
+    \item \textit{\textbf{Chapter \ref{ch:background} - Background --}} Provides the reader with the necessary information to understand the content of the investigation.
+    \item \textit{\textbf{Chapter \ref{ch:methodology} - Methodology --}} Discusses the hardware, software and methods that are the basis of the experiment. Here, the different methods of measurement are compared and the most appropriate are chosen.
+    \item \textit{\textbf{Chapter \ref{ch:experiments} - Experiments --}} The result of the experiments are presented here.
+    \item \textit{\textbf{Chapter \ref{ch:discussion} - Discussion --}} Discussion regarding the results as well as the chosen methodology.
+    \item \textit{\textbf{Chapter \ref{ch:conclusion} - Conclusion --}} Presents what the experiments showed and future work.
 \end{itemize}

@@ -1,4 +1,4 @@
-\textit{Summarizing the chapter}
+\textit{The process of developing, how Android installs the app and how it runs it is explained in this chapter. Additionally, some basic knowledge of the Discrete Fourier Transform is required when discussing differences in FFT implementations.}
 
 \section{Android SDK}
 To allow developers to build Android apps, Google developed a Standard Development Kit (SDK) to facilitate the process of writing Android applications. The Android SDK software stack is described in Figure~\ref{fig:sdk}. The Linux kernel is at the base of the stack, handling the core functionality of the device. Detecting hardware interaction, process scheduling and memory allocation are examples of services provided by the kernel. The Hardware Abstraction Layer (HAL) is an abstraction layer above the device drivers. This allows the developer to interact with hardware independent on the type of device\cite{android:hal}.\\
@@ -51,7 +51,11 @@ The Java API Framework is the Java library you use when controlling the Android 
 
 
 \section{Dalvik Virtual Machine}
-% What is Dalvik Virtual Machine?
+% Why is Dalvik Virtual Machine used?
+Compiled Java code is executed on a virtual machine called the Java Virtual Machine (JVM). The reason for this is to allow compiled code to become portable. This way, every device, independent on architecture, with a JVM installed will be able to run the same code. The Android operating system is designed to be installed on many different devices\cite{android:os:devices}. Because of the many different devices, user applications would have to be compiled for all possible platforms it should work on. For this reason, Java byte code is a choice when wanting to distribute compiled applications.\\
+
+The Dalvik Virtual Machine (DVM) is a virtual machine optimized for devices where resources are limited \cite{android:dalvik:internals}. The main focus of the DVM is to lower memory consumption and space of executables at the cost of \cite{security2009analysis}. 
+% http://davidehringer.com/software/android/The_Dalvik_Virtual_Machine.pdf
 
 % Why was it used?
 
@@ -77,6 +81,103 @@ Applications for the Android operating system are mostly written in Java for eas
 \section{Native Development Kit}
 
 \subsection{Java Native Interface}
+
 \subsection{Clang and LLVM}
 
 \section{Discrete Fourier Transform}
+
+% \begin{figure}
+%     \centering
+%     \begin{tabular}{|c|}
+%         \hline\\
+%         \begin{tikzpicture}
+%             \begin{axis}[
+%                     trig format plots=rad,
+%                     axis lines = middle,
+%                     enlargelimits,
+%                     width=14cm,
+%                     height=5cm,
+%                     xlabel={f(x) = sin(x)},
+%                     clip=false
+%                 ]
+%                 \addplot[domain=-0.5*pi:2*pi,samples=200,red] {sin(x)};
+%             \end{axis}
+%         \end{tikzpicture}
+%         \\\hline
+%         \begin{tikzpicture}
+%             \begin{axis}[
+%                     trig format plots=rad,
+%                     axis lines = middle,
+%                     enlargelimits,
+%                     width=14cm,
+%                     height=5cm,
+%                     clip=false
+%                 ]
+%                 \addplot[domain=-0.5*pi:2*pi,samples=200,red] {sin(4*x)};
+%             \end{axis}
+%         \end{tikzpicture}
+%         \\\hline
+%         \begin{tikzpicture}
+%             \begin{axis}[
+%                     trig format plots=rad,
+%                     axis lines = middle,
+%                     enlargelimits,
+%                     width=14cm,
+%                     height=5cm,
+%                     xlabel={},
+%                     clip=false
+%                 ]
+%                 \addplot[domain=-0.5*pi:2*pi,samples=200,blue] {sin(4*x)};
+%             \end{axis}
+%         \end{tikzpicture}
+%         \\\hline
+%     \end{tabular}
+% \end{figure}
+
+
+
+
+\begin{figure}[h]
+    \renewcommand\thesubfigure{(\alph{subfigure})}
+    \centering
+    \caption{my plots}\label{fig:plots}
+    \begin{tikzpicture}
+        \begin{groupplot}[group style={group name=my plots,group size= 1 by 3,horizontal sep =1.5cm,vertical sep =2cm},width=6cm]
+            \nextgroupplot[legend pos=north east,
+                trig format plots=rad,
+                axis lines = middle,
+                enlargelimits,
+                width=14cm,
+                height=5cm,
+                xlabel={},
+                clip=false
+            ]
+            \addplot[domain=-0.5*pi:2*pi,samples=200,red] {sin(x)};
+                \nextgroupplot[legend pos=north east,
+                        trig format plots=rad,
+                        axis lines = middle,
+                        enlargelimits,
+                        width=14cm,
+                        height=5cm,
+                        xlabel={},
+                        clip=false
+                ]
+                \addlegendimage{empty legend}
+                \addplot[domain=-0.5*pi:2*pi,samples=200,red] {sin(4*x)};
+                    \nextgroupplot[
+                        trig format plots=rad,
+                        axis lines = middle,
+                        enlargelimits,
+                        width=14cm,
+                        height=5cm,
+                        xlabel={},
+                        clip=false
+                    ]
+                    \addlegendimage{empty legend}
+                    \addplot[domain=-0.5*pi:2*pi,samples=200,red] {0.5*sin(x) + 0.3*sin(4*x)};
+                    \end{groupplot}
+                    \node[text width=6cm,align=center,anchor=north] at ([yshift=-5mm]my plots c1r1.south) {sin(x)};
+                    \node[text width=6cm,align=center,anchor=north] at ([yshift=-5mm]my plots c1r2.south) {sin(4x)};
+                    \node[text width=6cm,align=center,anchor=north] at ([yshift=-5mm]my plots c1r3.south) {0.5*sin(x) + 0.3*sin(4x)};
+                \end{tikzpicture}
+            \end{figure}
