@@ -22,7 +22,8 @@ add_library( # Sets the name of the library.
 
 
 add_library(fft-lib SHARED src/main/cpp/fft-lib.cpp
-                           src/main/cpp/FFTPrincetonConverted.cpp)
+                           src/main/cpp/FFTPrincetonConverted.cpp
+                           src/main/cpp/kiss-fft/kiss_fft.c)
 
 # Searches for a specified prebuilt library and stores the path as a
 # variable. Because system libraries are included in the search path by

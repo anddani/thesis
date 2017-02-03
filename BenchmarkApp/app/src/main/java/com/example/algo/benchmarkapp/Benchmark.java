@@ -121,8 +121,17 @@ public class Benchmark {
         return SystemClock.elapsedRealtimeNanos() - start;
     }
 
+    public static long FFTCppKiss(double[] re, double[] im) {
+        long start = SystemClock.elapsedRealtimeNanos();
+
+//        double[] nativeResult = fft_kiss(x);
+
+        return SystemClock.elapsedRealtimeNanos() - start;
+    }
+
     public static native double[] fft_iterative_native(double[] arr);
     public static native double[] fft_recursive_native(double[] arr);
+    public static native double[] fft_kiss(double[] arr);
 
     static {
         System.loadLibrary("fft-lib");

@@ -2,6 +2,7 @@
 #include <string>
 #include <android/log.h>
 #include "FFTPrincetonConverted.h"
+#include "kiss-fft/_kiss_fft_guts.h"
 
 #define LOGTAG "FFTLIB"
 
@@ -59,9 +60,20 @@ jdoubleArray fftRecursiveNative(JNIEnv* env, jobject obj, jdoubleArray arr) {
     return arr;
 }
 
+jdoubleArray fftKiss(JNIEnv* env, jobject obj, jdoubleArray arr) {
+    jsize size = (*env).GetArrayLength(arr);
+    jdouble* elements = (*env).GetDoubleArrayElements(arr, 0);
+
+    // TODO: Convert elements[] to kissfft struct
+
+    // Return a double[]
+    (*env).SetDoubleArrayRegion(arr, 0, size, elements);
+    return arr;
+}
 static JNINativeMethod s_methods[] {
         {"fft_iterative_native", "([D)[D", (void*)fftIterativeNative},
-        {"fft_recursive_native", "([D)[D", (void*)fftRecursiveNative}
+        {"fft_recursive_native", "([D)[D", (void*)fftRecursiveNative},
+        {"fft_kiss", "([D)[D", (void*)fftKiss}
 };
 
 jint JNI_OnLoad(JavaVM* vm, void* reserved) {
