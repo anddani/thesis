@@ -52,28 +52,31 @@ The Java API Framework is the Java library you use when controlling the Android 
 
 \section{Dalvik Virtual Machine}
 % Why is Dalvik Virtual Machine used?
-Compiled Java code is executed on a virtual machine called the Java Virtual Machine (JVM). The reason for this is to allow compiled code to become portable. This way, every device, independent on architecture, with a JVM installed will be able to run the same code. The Android operating system is designed to be installed on many different devices\cite{android:os:devices}. Because of the many different devices, user applications would have to be compiled for all possible platforms it should work on. For this reason, Java byte code is a choice when wanting to distribute compiled applications.
-
-The Dalvik Virtual Machine (DVM) is a virtual machine optimized for devices where resources are limited \cite{android:dalvik:internals}. The main focus of the DVM is to lower memory consumption and space of executables at the cost of \cite{security2009analysis}. 
+Compiled Java code is executed on a virtual machine called the Java Virtual Machine (JVM). The reason for this is to allow compiled code to become portable. This way, every device, independent on architecture, with a JVM installed will be able to run the same code. The Android operating system is designed to be installed on many different devices\cite{android:os:devices}. Because of the many different devices, user applications would have to be compiled for all possible platforms it should work on. For this reason, Java bytecode is a choice when wanting to distribute compiled applications.
 
 % The DVM uses \cite{dalvik:vm:tech}
 
-One difference between DVM and JVM is that the DVM uses a register-based architecture while the JVM uses a stack-based architecture. The most common virtual machine architecture is the stack-based \cite[p.~158]{craig2010virtual}. A stack-based architecture evaluates each expression directly on the stack and always have the last evaluated value on top of the stack. Thus, only a stack pointer is needed to find the next instruction on the stack.
+The Dalvik Virtual Machine (DVM) is the VM initially used on Android. One difference between DVM and JVM is that the DVM uses a register-based architecture while the JVM uses a stack-based architecture. The most common virtual machine architecture is the stack-based \cite[p.~158]{craig2010virtual}. A stack-based architecture evaluates each expression directly on the stack and always have the last evaluated value on top of the stack. Thus, only a stack pointer is needed to find the next instruction on the stack.
 
 Contrary to this, a register based virtual machine works more like a CPU. It uses a set of registers where it will place operands by fetching them from memory. One advantage of using register-based architecture is that fetching data between registers is faster than fetching or storing data onto the hardware stack. The biggest disadvantage of using register-based architecture is that the compilers must be more complex than for stack-based architecture. This is because the code generators must take register management into consideration \cite[p.~159-160]{craig2010virtual}.
+
+The DVM is a virtual machine optimized for devices where resources are limited \cite{android:dalvik:internals}. The main focus of the DVM is to lower memory consumption and lower the number of instructions needed to fulfil a task. Using register-based it is possible to execute more virtual machine instructions than for a stack-based architecture\cite{shi2008virtual}. 
+
 % http://davidehringer.com/software/android/The_Dalvik_Virtual_Machine.pdf
 
 % Why was it used?
 
 \subsection{Dalvik Executables}
-
 % What are dex files?
+Dalvik executables, or dex files, are the files that Dalvik bytecode is stored. They are created by converting a Java class file to the dex format. They are of a different structure than Java class files. Some differences are the header types that describes the data. One example of the differences is the string constant fields that are present in the dex-file. % FIND REFERENCE FROM GOOGLE IO ABOUT DALVIK??
 
 % How do they compare to class files
 
 \section{Android Runtime}
-
 % What is Android Runtime?
+
+% .oat file
+When an app is installed on the device, a program called \textbf{dex2oat} converts a dex-file to an executable \cite{android:art:dalvik}.
 
 % Why is it used instead of Dalvik?
 
@@ -82,7 +85,7 @@ Contrary to this, a register based virtual machine works more like a CPU. It use
 
 % PROS: information gathered from runtime, inlining
 
-Applications for the Android operating system are mostly written in Java for easier portability between \cite[p.~33]{nolan2012decompiling}
+% Applications for the Android operating system are mostly written in Java for easier portability between \cite[p.~33]{nolan2012decompiling}
 
 \section{Native Development Kit}
 
