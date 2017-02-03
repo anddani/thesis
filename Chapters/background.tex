@@ -55,6 +55,12 @@ The Java API Framework is the Java library you use when controlling the Android 
 Compiled Java code is executed on a virtual machine called the Java Virtual Machine (JVM). The reason for this is to allow compiled code to become portable. This way, every device, independent on architecture, with a JVM installed will be able to run the same code. The Android operating system is designed to be installed on many different devices\cite{android:os:devices}. Because of the many different devices, user applications would have to be compiled for all possible platforms it should work on. For this reason, Java byte code is a choice when wanting to distribute compiled applications.
 
 The Dalvik Virtual Machine (DVM) is a virtual machine optimized for devices where resources are limited \cite{android:dalvik:internals}. The main focus of the DVM is to lower memory consumption and space of executables at the cost of \cite{security2009analysis}. 
+
+% The DVM uses \cite{dalvik:vm:tech}
+
+One difference between DVM and JVM is that the DVM uses a register-based architecture while the JVM uses a stack-based architecture. The most common virtual machine architecture is the stack-based \cite[p.~158]{craig2010virtual}. A stack-based architecture evaluates each expression directly on the stack and always have the last evaluated value on top of the stack. Thus, only a stack pointer is needed to find the next instruction on the stack.
+
+Contrary to this, a register based virtual machine works more like a CPU. It uses a set of registers where it will place operands by fetching them from memory. One advantage of using register-based architecture is that fetching data between registers is faster than fetching or storing data onto the hardware stack. The biggest disadvantage of using register-based architecture is that the compilers must be more complex than for stack-based architecture. This is because the code generators must take register management into consideration \cite[p.~159-160]{craig2010virtual}.
 % http://davidehringer.com/software/android/The_Dalvik_Virtual_Machine.pdf
 
 % Why was it used?
