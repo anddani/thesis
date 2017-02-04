@@ -1,8 +1,8 @@
 package com.example.algo.benchmarkapp.algorithms;
 
 /******************************************************************************
- *  Compilation:  javac InplaceFFT.java
- *  Execution:    java InplaceFFT N
+ *  Compilation:  javac FFTPrincetonIterative.java
+ *  Execution:    java FFTPrincetonIterative N
  *  Dependencies: Complex.java
  *
  *  Compute the FFT of a length N complex sequence in-place.
@@ -20,7 +20,7 @@ package com.example.algo.benchmarkapp.algorithms;
  *  
  ******************************************************************************/
 
-public class InplaceFFT {
+public class FFTPrincetonIterative {
 
     // compute the FFT of x[], assuming its length is a power of 2
     public static void fft(Complex[] x) {

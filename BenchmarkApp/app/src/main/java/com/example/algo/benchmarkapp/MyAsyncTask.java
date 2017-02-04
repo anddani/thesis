@@ -28,17 +28,17 @@ public class MyAsyncTask extends AsyncTask<Integer, String, String> {
         while (numIter-- > 0) {
             long time = 0;
             switch (Constants.ALGORITHMS.values()[algorithm]) {
-                case FFT_JAVA_ITERATIVE:
-                    time = Benchmark.FFTJavaIterative(fftInitialRe, fftInitialIm);
+                case FFT_JAVA_ITERATIVE_PRINCETON:
+                    time = Benchmark.FFTJavaIterativePrinceton(fftInitialRe, fftInitialIm);
                     break;
-                case FFT_JAVA_RECURSIVE:
-                    time = Benchmark.FFTJavaRecursive(fftInitialRe, fftInitialIm);
+                case FFT_JAVA_RECURSIVE_PRINCETON:
+                    time = Benchmark.FFTJavaRecursivePrinceton(fftInitialRe, fftInitialIm);
                     break;
-                case FFT_CPP_ITERATIVE:
-                    time = Benchmark.FFTCppIterative(fftInitialRe, fftInitialIm);
+                case FFT_CPP_ITERATIVE_PRINCETON:
+                    time = Benchmark.FFTCppIterativePrinceton(fftInitialRe, fftInitialIm);
                     break;
-                case FFT_CPP_RECURSIVE:
-                    time = Benchmark.FFTCppRecursive(fftInitialRe, fftInitialIm);
+                case FFT_CPP_RECURSIVE_PRINCETON:
+                    time = Benchmark.FFTCppRecursivePrinceton(fftInitialRe, fftInitialIm);
                     break;
                 case FFT_CPP_KISS:
                     time = Benchmark.FFTCppKiss(fftInitialRe, fftInitialIm);

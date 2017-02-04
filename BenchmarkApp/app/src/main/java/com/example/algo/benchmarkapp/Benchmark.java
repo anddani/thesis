@@ -3,8 +3,9 @@ package com.example.algo.benchmarkapp;
 import android.os.SystemClock;
 
 import com.example.algo.benchmarkapp.algorithms.Complex;
-import com.example.algo.benchmarkapp.algorithms.InplaceFFT;
-import com.example.algo.benchmarkapp.algorithms.FFT;
+import com.example.algo.benchmarkapp.algorithms.FFTColumbiaIterative;
+import com.example.algo.benchmarkapp.algorithms.FFTPrincetonIterative;
+import com.example.algo.benchmarkapp.algorithms.FFTPrincetonRecursive;
 
 import java.util.Random;
 
@@ -27,7 +28,7 @@ public class Benchmark {
         return x;
     }
 
-    public static long FFTJavaIterative(double[] re, double[] im) {
+    public static long FFTJavaRecursivePrinceton(double[] re, double[] im) {
         long start = SystemClock.elapsedRealtimeNanos();
 
         // Initialize data
@@ -37,37 +38,37 @@ public class Benchmark {
             x[i] = new Complex(re[i], im[i]);
         }
 
-        InplaceFFT.fft(x);
+        Complex[] result = FFTPrincetonRecursive.fft(x);
 
         // DEBUG
-        System.out.println("************* FFT JAVA ITER ************");
-        for (Complex c : x) {
-            System.out.println(c);
-        }
-        return SystemClock.elapsedRealtimeNanos() - start;
-    }
-
-    public static long FFTJavaRecursive(double[] re, double[] im) {
-        long start = SystemClock.elapsedRealtimeNanos();
-
-        // Initialize data
-        int N = re.length;
-        Complex[] x = new Complex[N];
-        for (int i = 0; i < N; i++) {
-            x[i] = new Complex(re[i], im[i]);
-        }
-
-        Complex[] result = FFT.fft(x);
-
-        // DEBUG
-        System.out.println("************* FFT JAVA REC ************");
+        System.out.println("************* FFT JAVA REC PRINCETON ************");
         for (Complex c : result) {
             System.out.println(c);
         }
         return SystemClock.elapsedRealtimeNanos() - start;
     }
 
-    public static long FFTCppIterative(double[] re, double[] im) {
+    public static long FFTJavaIterativePrinceton(double[] re, double[] im) {
+        long start = SystemClock.elapsedRealtimeNanos();
+
+        // Initialize data
+        int N = re.length;
+        Complex[] x = new Complex[N];
+        for (int i = 0; i < N; i++) {
+            x[i] = new Complex(re[i], im[i]);
+        }
+
+        FFTPrincetonIterative.fft(x);
+
+        // DEBUG
+        System.out.println("************* FFT JAVA ITER PRINCETON ************");
+        for (Complex c : x) {
+            System.out.println(c);
+        }
+        return SystemClock.elapsedRealtimeNanos() - start;
+    }
+
+    public static long FFTCppIterativePrinceton(double[] re, double[] im) {
         long start = SystemClock.elapsedRealtimeNanos();
         int N = re.length*2;
 
@@ -85,7 +86,7 @@ public class Benchmark {
         }
 
         // DEBUG
-        System.out.println("************* FFT CPP ITER ************");
+        System.out.println("************* FFT CPP ITER PRINCETON ************");
         for (Complex c : result) {
             System.out.println(c);
         }
@@ -93,7 +94,7 @@ public class Benchmark {
         return SystemClock.elapsedRealtimeNanos() - start;
     }
 
-    public static long FFTCppRecursive(double[] re, double[] im) {
+    public static long FFTCppRecursivePrinceton(double[] re, double[] im) {
         long start = SystemClock.elapsedRealtimeNanos();
         int N = re.length*2;
 
@@ -113,11 +114,31 @@ public class Benchmark {
         }
 
         // DEBUG
-        System.out.println("************* FFT CPP REC ************");
+        System.out.println("************* FFT CPP REC PRINCETON ************");
         for (Complex c : result) {
             System.out.println(c);
         }
 
+        return SystemClock.elapsedRealtimeNanos() - start;
+    }
+
+    public static long FFTJavaIterativeColumbia(double[] re, double[] im) {
+        long start = SystemClock.elapsedRealtimeNanos();
+
+        // Initialize data
+        int N = re.length;
+        Complex[] x = new Complex[N];
+        for (int i = 0; i < N; i++) {
+            x[i] = new Complex(re[i], im[i]);
+        }
+
+        FFTColumbiaIterative.fft(x);
+
+        // DEBUG
+        System.out.println("************* FFT JAVA ITER PRINCETON ************");
+        for (Complex c : x) {
+            System.out.println(c);
+        }
         return SystemClock.elapsedRealtimeNanos() - start;
     }
 
@@ -126,6 +147,7 @@ public class Benchmark {
 
 //        double[] nativeResult = fft_kiss(x);
 
+        System.out.println("************* FFT CPP ITER KISS ************");
         return SystemClock.elapsedRealtimeNanos() - start;
     }
 

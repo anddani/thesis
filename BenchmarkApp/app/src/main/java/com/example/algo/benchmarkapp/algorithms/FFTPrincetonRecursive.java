@@ -1,8 +1,8 @@
 package com.example.algo.benchmarkapp.algorithms;
 
 /******************************************************************************
- *  Compilation:  javac FFT.java
- *  Execution:    java FFT n
+ *  Compilation:  javac FFTPrincetonRecursive.java
+ *  Execution:    java FFTPrincetonRecursive n
  *  Dependencies: Complex.java
  *
  *  Compute the FFT and inverse FFT of a length n complex sequence.
@@ -20,7 +20,7 @@ package com.example.algo.benchmarkapp.algorithms;
  *
  ******************************************************************************/
 
-public class FFT {
+public class FFTPrincetonRecursive {
 
     // compute the FFT of x[], assuming its length is a power of 2
     public static Complex[] fft(Complex[] x) {

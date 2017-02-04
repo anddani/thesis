@@ -23,7 +23,7 @@
 package com.example.algo.benchmarkapp.algorithms;
 
 
-public class FFTColumbia {
+public class FFTColumbiaIterative {
 
     int n, m;
 
@@ -33,7 +33,7 @@ public class FFTColumbia {
 
     double[] window;
 
-    public FFTColumbia(int n) {
+    public FFTColumbiaIterative(int n) {
         this.n = n;
         this.m = (int)(Math.log(n) / Math.log(2));
 
@@ -88,7 +88,7 @@ public class FFTColumbia {
      *   fft: in-place radix-2 DIT DFT of a complex input 
      * 
      *   input: 
-     * n: length of FFT: must be a power of two 
+     * n: length of FFT: must be a power of two
      * m: n = 2**m 
      *   input/output 
      * x: double array of length n with real part of data 
@@ -198,23 +198,23 @@ public class FFTColumbia {
     //     System.out.println("Averaged " + (time/iter) + "ms per iteration");
     // }
 
-    protected static void beforeAfter(FFTColumbia fft, double[] re, double[] im) {
-        System.out.println("Before: ");
-        printReIm(re, im);
-        fft.fft(re, im);
-        System.out.println("After: ");
-        printReIm(re, im);
-    }
+//    protected static void beforeAfter(FFTColumbia fft, double[] re, double[] im) {
+//        System.out.println("Before: ");
+//        printReIm(re, im);
+//        fft.fft(re, im);
+//        System.out.println("After: ");
+//        printReIm(re, im);
+//    }
 
-    protected static void printReIm(double[] re, double[] im) {
-        System.out.print("Re: [");
-        for(int i=0; i<re.length; i++)
-            System.out.print(((int)(re[i]*1000)/1000.0) + " ");
-
-        System.out.print("]\nIm: [");
-        for(int i=0; i<im.length; i++)
-            System.out.print(((int)(im[i]*1000)/1000.0) + " ");
-
-        System.out.println("]");
-    }
+//    protected static void printReIm(double[] re, double[] im) {
+//        System.out.print("Re: [");
+//        for(int i=0; i<re.length; i++)
+//            System.out.print(((int)(re[i]*1000)/1000.0) + " ");
+//
+//        System.out.print("]\nIm: [");
+//        for(int i=0; i<im.length; i++)
+//            System.out.print(((int)(im[i]*1000)/1000.0) + " ");
+//
+//        System.out.println("]");
+//    }
 }
