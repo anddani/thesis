@@ -19,8 +19,7 @@ public class MainActivity extends AppCompatActivity implements OnTaskCompleted {
     private EditText numIter;
     private EditText dataSize;
 
-    private double[] fftInitialRe;
-    private double[] fftInitialIm;
+    private Benchmark bm;
 
     private int currentAlgorithm;
 
@@ -29,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements OnTaskCompleted {
      */
     @Override
     public void startNextTest() {
-        MyAsyncTask myAsyncTask = new MyAsyncTask(MainActivity.this, fftInitialRe, fftInitialIm);
+        MyAsyncTask myAsyncTask = new MyAsyncTask(MainActivity.this, bm);
         int iter = Integer.parseInt(numIter.getText().toString());
         int N = nextPowerOfTwo(Integer.parseInt(dataSize.getText().toString()));
         int algorithm = currentAlgorithm;
@@ -102,8 +101,7 @@ public class MainActivity extends AppCompatActivity implements OnTaskCompleted {
             public void onClick(View v) {
                 currentAlgorithm = 0;
                 int N = nextPowerOfTwo(Integer.parseInt(dataSize.getText().toString()));
-                fftInitialRe = Benchmark.randomInput(N);
-                fftInitialIm = new double[N];
+                bm = new Benchmark(N);
                 // Clear screen between tests
                 logTextView.setText("");
                 startNextTest();

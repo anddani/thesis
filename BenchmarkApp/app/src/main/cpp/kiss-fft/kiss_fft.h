@@ -10,6 +10,8 @@
 extern "C" {
 #endif
 
+#define kiss_fft_scalar double
+
 /*
  ATTENTION!
  If you would like a :

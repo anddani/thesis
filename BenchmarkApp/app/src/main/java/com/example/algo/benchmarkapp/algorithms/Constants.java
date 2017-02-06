@@ -4,9 +4,9 @@ public class Constants {
     public enum ALGORITHMS {
         FFT_JAVA_ITERATIVE_PRINCETON,
         FFT_JAVA_RECURSIVE_PRINCETON,
+        FFT_JAVA_ITERATIVE_COLUMBIA,
         FFT_CPP_ITERATIVE_PRINCETON,
         FFT_CPP_RECURSIVE_PRINCETON,
-        FFT_CPP_ITERATIVE_COLUMBIA,
         FFT_CPP_KISS,
     }
     public static String[] ALGORITHM_NAMES = {

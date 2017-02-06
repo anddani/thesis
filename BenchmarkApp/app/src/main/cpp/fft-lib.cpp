@@ -3,6 +3,7 @@
 #include <android/log.h>
 #include "FFTPrincetonConverted.h"
 #include "kiss-fft/_kiss_fft_guts.h"
+#include "kiss-fft/kiss_fft.h"
 
 #define LOGTAG "FFTLIB"
 
@@ -64,7 +65,26 @@ jdoubleArray fftKiss(JNIEnv* env, jobject obj, jdoubleArray arr) {
     jsize size = (*env).GetArrayLength(arr);
     jdouble* elements = (*env).GetDoubleArrayElements(arr, 0);
 
-    // TODO: Convert elements[] to kissfft struct
+    int half = size/2;
+    std::vector<kiss_fft_cpx> in(half);
+    std::vector<kiss_fft_cpx> out(half);
+
+    // Allocate memory
+    kiss_fft_cfg fwd = kiss_fft_alloc(half, 0, 0, 0);
+
+    for (int i = 0; i < half; ++i) {
+        in[i].r = elements[i];
+        in[i].i = elements[i+half];
+        out[i].r = 0.0;
+        out[i].i = 0.0;
+    }
+    kiss_fft(fwd, &in[0], &out[0]);
+
+    for (int i = 0; i < half; ++i) {
+        elements[i] = out[i].r;
+        elements[i+half] = out[i].i;
+    }
+    kiss_fft_free(fwd);
 
     // Return a double[]
     (*env).SetDoubleArrayRegion(arr, 0, size, elements);
