@@ -20,6 +20,7 @@ public class MyAsyncTask extends AsyncTask<Integer, String, String> {
         int numIter = input[0];
         int algorithm = input[1];
         StringBuilder sb = new StringBuilder();
+        double[] results = new double[numIter];
 
         while (numIter-- > 0) {
             long time = 0;
@@ -49,8 +50,14 @@ public class MyAsyncTask extends AsyncTask<Integer, String, String> {
                     break;
             }
             sb.append(time/1000000.0 + " ms\n");
+            results[numIter] = time/1000000.0;
         }
-        return String.valueOf(sb.toString());
+        double sum = 0.0;
+        for (double r : results) {
+            sum += r;
+        }
+        return String.valueOf(sb.toString() + "average: " + sum/results.length + " ms\n");
+
     }
 
     // Executes on UI thread

@@ -9,16 +9,19 @@ import com.example.algo.benchmarkapp.algorithms.FFTPrincetonRecursive;
 
 import org.jtransforms.fft.DoubleFFT_1D;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Random;
 
 // TODO: Make non-static methods and save input as class variable.
 public class Benchmark {
 
+    private static final boolean DEBUG = false;
+    private static final double EPSILON = 0.000000001;
     private Random rand;
     private double[] re;
     private double[] im;
+
+    private Complex[] correctOut;
 
     public Benchmark(int N) {
         rand = new Random(SystemClock.currentThreadTimeMillis());
@@ -76,6 +79,20 @@ public class Benchmark {
         }
     }
 
+    private boolean correct(Complex[] c) {
+        if (correctOut == null) {
+            correctOut = c;
+            return true;
+        }
+        for (int i = 0; i < c.length; i++) {
+            if (Math.abs(c[i].im() - correctOut[i].im()) > EPSILON ||
+                Math.abs(c[i].re() - correctOut[i].re()) > EPSILON) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public long FFTJavaRecursivePrinceton() {
         long start = SystemClock.elapsedRealtimeNanos();
 
@@ -84,11 +101,19 @@ public class Benchmark {
 
         Complex[] result = FFTPrincetonRecursive.fft(x);
 
-        // DEBUG
-        System.out.println("************* FFT JAVA REC PRINCETON ************");
-        printComplex(result);
+        if (DEBUG) {
+            System.out.println("************* FFT JAVA REC PRINCETON ************");
+            printComplex(result);
+        }
 
-        return SystemClock.elapsedRealtimeNanos() - start;
+        long stop = SystemClock.elapsedRealtimeNanos() - start;
+        if (!correct(result)) {
+            System.out.println("FFT JAVA REC PRINCETON GIVES INCORRECT OUTPUT");
+            printComplex(result);
+            System.out.println("CORRECT: ");
+            printComplex(correctOut);
+        }
+        return stop;
     }
 
     public long FFTJavaIterativePrinceton() {
@@ -99,11 +124,19 @@ public class Benchmark {
 
         FFTPrincetonIterative.fft(x);
 
-        // DEBUG
-        System.out.println("************* FFT JAVA ITER PRINCETON ************");
-        printComplex(x);
+        if (DEBUG) {
+            System.out.println("************* FFT JAVA ITER PRINCETON ************");
+            printComplex(x);
+        }
 
-        return SystemClock.elapsedRealtimeNanos() - start;
+        long stop = SystemClock.elapsedRealtimeNanos() - start;
+        if (!correct(x)) {
+            System.out.println("FFT JAVA ITER PRINCETON GIVES INCORRECT OUTPUT");
+            printComplex(x);
+            System.out.println("CORRECT: ");
+            printComplex(correctOut);
+        }
+        return stop;
     }
 
     public long FFTCppIterativePrinceton() {
@@ -117,11 +150,19 @@ public class Benchmark {
 
         Complex[] x = toComplex(nativeResult);
 
-        // DEBUG
-        System.out.println("************* FFT CPP ITER PRINCETON ************");
-        printComplex(x);
+        if (DEBUG) {
+            System.out.println("************* FFT CPP ITER PRINCETON ************");
+            printComplex(x);
+        }
 
-        return SystemClock.elapsedRealtimeNanos() - start;
+        long stop = SystemClock.elapsedRealtimeNanos() - start;
+        if (!correct(x)) {
+            System.out.println("FFT JAVA ITER PRINCETON GIVES INCORRECT OUTPUT");
+            printComplex(x);
+            System.out.println("CORRECT: ");
+            printComplex(correctOut);
+        }
+        return stop;
     }
 
     public long FFTCppRecursivePrinceton() {
@@ -136,11 +177,19 @@ public class Benchmark {
         // Create Java complex numbers
         Complex[] x = toComplex(nativeResult);
 
-        // DEBUG
-        System.out.println("************* FFT CPP REC PRINCETON ************");
-        printComplex(x);
+        if (DEBUG) {
+            System.out.println("************* FFT CPP REC PRINCETON ************");
+            printComplex(x);
+        }
 
-        return SystemClock.elapsedRealtimeNanos() - start;
+        long stop = SystemClock.elapsedRealtimeNanos() - start;
+        if (!correct(x)) {
+            System.out.println("FFT JAVA REC PRINCETON GIVES INCORRECT OUTPUT");
+            printComplex(x);
+            System.out.println("CORRECT: ");
+            printComplex(correctOut);
+        }
+        return stop;
     }
 
     public long FFTJavaIterativeColumbia() {
@@ -156,11 +205,19 @@ public class Benchmark {
 
         Complex[] x = toComplex(tempRe, tempIm);
 
-        // DEBUG
-        System.out.println("************* FFT JAVA ITER COLUMBIA ************");
-        printComplex(x);
+        if (DEBUG) {
+            System.out.println("************* FFT JAVA ITER COLUMBIA ************");
+            printComplex(x);
+        }
 
-        return SystemClock.elapsedRealtimeNanos() - start;
+        long stop = SystemClock.elapsedRealtimeNanos() - start;
+        if (!correct(x)) {
+            System.out.println("FFT JAVA ITER COLUMBIA GIVES INCORRECT OUTPUT");
+            printComplex(x);
+            System.out.println("CORRECT: ");
+            printComplex(correctOut);
+        }
+        return stop;
     }
 
     public long FFTCppKiss() {
@@ -173,11 +230,19 @@ public class Benchmark {
 
         Complex[] x = toComplex(nativeResult);
 
-        // DEBUG
-        System.out.println("************* FFT CPP ITER KISS ************");
-        printComplex(x);
+        if (DEBUG) {
+            System.out.println("************* FFT CPP ITER KISS ************");
+            printComplex(x);
+        }
 
-        return SystemClock.elapsedRealtimeNanos() - start;
+        long stop = SystemClock.elapsedRealtimeNanos() - start;
+        if (!correct(x)) {
+            System.out.println("FFT CPP ITER KISS GIVES INCORRECT OUTPUT");
+            printComplex(x);
+            System.out.println("CORRECT: ");
+            printComplex(correctOut);
+        }
+        return stop;
     }
     public long FFTJavaJTransforms() {
         long start = SystemClock.elapsedRealtimeNanos();
@@ -187,11 +252,19 @@ public class Benchmark {
         fftDo.complexForward(z);
         Complex[] x = toComplex(z);
 
-        // DEBUG
-        System.out.println("************* FFT JAVA JTRANSFORMS ************");
-        printComplex(x);
+        if (DEBUG) {
+            System.out.println("************* FFT JAVA JTRANSFORMS ************");
+            printComplex(x);
+        }
 
-        return SystemClock.elapsedRealtimeNanos() - start;
+        long stop = SystemClock.elapsedRealtimeNanos() - start;
+        if (!correct(x)) {
+            System.out.println("FFT JAVA JTRANSFORMS GIVES INCORRECT OUTPUT");
+            printComplex(x);
+            System.out.println("CORRECT: ");
+            printComplex(correctOut);
+        }
+        return stop;
     }
 
     public native double[] fft_iterative_native(double[] arr);
