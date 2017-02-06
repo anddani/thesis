@@ -3,7 +3,6 @@
 #include <android/log.h>
 #include "FFTPrincetonConverted.h"
 #include "kiss-fft/_kiss_fft_guts.h"
-#include "kiss-fft/kiss_fft.h"
 
 #define LOGTAG "FFTLIB"
 
@@ -14,21 +13,21 @@ jdoubleArray fftIterativeNative(JNIEnv* env, jobject obj, jdoubleArray arr) {
     jdouble* elements = (*env).GetDoubleArrayElements(arr, 0);
 
     std::vector<std::complex<double> > x;
-    int half = size/2;
-    for (int i = 0; i < half; ++i) {
-        x.push_back(std::complex<double>(elements[i], elements[i+half]));
+    for (int i = 0; i < size; i+=2) {
+        x.push_back(std::complex<double>(elements[i], elements[i+1]));
     }
 
     FFTPrincetonConverted fpc = FFTPrincetonConverted();
-    if (fpc.fftIterative(x) == -1) {
+    int ret = fpc.fftIterative(x); // Run FFT
+    if (ret == -1) {
         __android_log_print(ANDROID_LOG_INFO, LOGTAG, "-- Size not power of 2");
     }
 
     // place in return array
-    // [x[0].real, x[1].real, ... x[n-1].real, x[0].imag, ...]
-    for (int i = 0; i < half; ++i) {
-        elements[i] = x[i].real();
-        elements[i+half] = x[i].imag();
+    // [x[0].real, x[0].imag, ... x[n-1].real, x[n-1].imag]
+    for (int i = 0; i < size; i+=2) {
+        elements[i] = x[i/2].real();
+        elements[i + 1] = x[i/2].imag();
     }
 
     // Return a double[]
@@ -41,19 +40,18 @@ jdoubleArray fftRecursiveNative(JNIEnv* env, jobject obj, jdoubleArray arr) {
     jdouble* elements = (*env).GetDoubleArrayElements(arr, 0);
 
     std::vector<std::complex<double> > x;
-    int half = size/2;
-    for (int i = 0; i < half; ++i) {
-        x.push_back(std::complex<double>(elements[i], elements[i+half]));
+    for (int i = 0; i < size; i+=2) {
+        x.push_back(std::complex<double>(elements[i], elements[i+1]));
     }
 
     FFTPrincetonConverted fpc = FFTPrincetonConverted();
     x = fpc.fftRecursive(x);
 
     // place in return array
-    // [x[0].real, x[1].real, ... x[n-1].real, x[0].imag, ...]
-    for (int i = 0; i < half; ++i) {
-        elements[i] = x[i].real();
-        elements[i+half] = x[i].imag();
+    // [x[0].real, x[0].imag, ... x[n-1].real, x[n-1].imag]
+    for (int i = 0; i < size; i+=2) {
+        elements[i] = x[i/2].real();
+        elements[i + 1] = x[i/2].imag();
     }
 
     // Return a double[]
@@ -72,18 +70,20 @@ jdoubleArray fftKiss(JNIEnv* env, jobject obj, jdoubleArray arr) {
     // Allocate memory
     kiss_fft_cfg fwd = kiss_fft_alloc(half, 0, 0, 0);
 
-    for (int i = 0; i < half; ++i) {
-        in[i].r = elements[i];
-        in[i].i = elements[i+half];
-        out[i].r = 0.0;
-        out[i].i = 0.0;
+    for (int i = 0; i < size; i+=2) {
+        in[i/2].r = elements[i];
+        in[i/2].i = elements[i+1];
+        out[i/2].r = 0.0;
+        out[i/2].i = 0.0;
     }
+
     kiss_fft(fwd, &in[0], &out[0]);
 
-    for (int i = 0; i < half; ++i) {
-        elements[i] = out[i].r;
-        elements[i+half] = out[i].i;
+    for (int i = 0; i < size; i+=2) {
+        elements[i] = out[i/2].r;
+        elements[i+1] = out[i/2].i;
     }
+
     kiss_fft_free(fwd);
 
     // Return a double[]

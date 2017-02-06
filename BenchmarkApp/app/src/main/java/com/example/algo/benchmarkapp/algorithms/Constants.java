@@ -5,6 +5,7 @@ public class Constants {
         FFT_JAVA_ITERATIVE_PRINCETON,
         FFT_JAVA_RECURSIVE_PRINCETON,
         FFT_JAVA_ITERATIVE_COLUMBIA,
+        FFT_JAVA_JTRANSFORMS,
         FFT_CPP_ITERATIVE_PRINCETON,
         FFT_CPP_RECURSIVE_PRINCETON,
         FFT_CPP_KISS,
@@ -12,9 +13,10 @@ public class Constants {
     public static String[] ALGORITHM_NAMES = {
             "FFT Princeton Java Iterative",
             "FFT Princeton Java Recursive",
-            "FFT Princeton converted C++ Iterative",
-            "FFT Princeton converted C++ Recursive",
             "FFT Columbia Java Iterative",
+            "FFT Java JTransforms",
+            "FFT C++ Princeton converted Iterative",
+            "FFT C++ Princeton converted Recursive",
             "FFT C++ KISS",
     };
 

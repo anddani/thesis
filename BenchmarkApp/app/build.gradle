@@ -35,5 +35,6 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile 'com.android.support:appcompat-v7:25.1.0'
+    compile 'com.github.wendykierp:JTransforms:3.1'
     testCompile 'junit:junit:4.12'
 }

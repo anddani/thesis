@@ -7,6 +7,9 @@ import com.example.algo.benchmarkapp.algorithms.FFTColumbiaIterative;
 import com.example.algo.benchmarkapp.algorithms.FFTPrincetonIterative;
 import com.example.algo.benchmarkapp.algorithms.FFTPrincetonRecursive;
 
+import org.jtransforms.fft.DoubleFFT_1D;
+
+import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -36,6 +39,17 @@ public class Benchmark {
         return x;
     }
 
+    // x = [Complex(c[0],c[1]),Complex(c[2],c[3])...]
+    private Complex[] toComplex(double[] c) {
+        int N = c.length;
+        Complex[] x = new Complex[N/2];
+        for (int i = 0; i < N; i+=2) {
+            x[i/2] = new Complex(c[i], c[i+1]);
+        }
+        return x;
+    }
+
+    // x = [Complex(real[0], imaginary[0]), Complex(real[1], imaginary[1]), ...]
     private Complex[] toComplex(double[] real, double[] imaginary) {
         int N = real.length;
         Complex[] x = new Complex[N];
@@ -43,6 +57,17 @@ public class Benchmark {
             x[i] = new Complex(real[i], imaginary[i]);
         }
         return x;
+    }
+
+    // [real[0], imaginary[0], real[1], imaginary[1], ...]
+    private double[] combineComplex(double[] real, double[] imaginary) {
+        int N = real.length*2;
+        double[] c = new double[N];
+        for (int i = 0; i < N; i+=2) {
+            c[i] = real[i/2];
+            c[i + 1] = imaginary[i/2];
+        }
+        return c;
     }
 
     private void printComplex(Complex[] in) {
@@ -85,24 +110,16 @@ public class Benchmark {
         long start = SystemClock.elapsedRealtimeNanos();
         int N = re.length*2;
 
-        // z = re + im
-        double[] z = new double[N];
-        System.arraycopy(re, 0, z, 0, re.length);
-        System.arraycopy(im, 0, z, re.length, im.length);
+        // Merge real and imaginary numbers
+        double[] z = combineComplex(re, im);
 
         double[] nativeResult = fft_iterative_native(z);
 
-        Complex[] result = new Complex[re.length];
-        int half = N/2;
-        for (int i = 0; i < half; i++) {
-            result[i] = new Complex(nativeResult[i], nativeResult[i+half]);
-        }
+        Complex[] x = toComplex(nativeResult);
 
         // DEBUG
         System.out.println("************* FFT CPP ITER PRINCETON ************");
-        for (Complex c : result) {
-            System.out.println(c);
-        }
+        printComplex(x);
 
         return SystemClock.elapsedRealtimeNanos() - start;
     }
@@ -112,23 +129,16 @@ public class Benchmark {
         int N = re.length*2;
 
         // Merge real and imaginary numbers
-        // z = re + im
-        double[] z = new double[N];
-        System.arraycopy(re, 0, z, 0, re.length);
-        System.arraycopy(im, 0, z, re.length, im.length);
+        double[] z = combineComplex(re, im);
 
         double[] nativeResult = fft_recursive_native(z);
 
         // Create Java complex numbers
-        Complex[] result = new Complex[re.length];
-        int half = N/2;
-        for (int i = 0; i < half; i++) {
-            result[i] = new Complex(nativeResult[i], nativeResult[i+half]);
-        }
+        Complex[] x = toComplex(nativeResult);
 
         // DEBUG
         System.out.println("************* FFT CPP REC PRINCETON ************");
-        printComplex(result);
+        printComplex(x);
 
         return SystemClock.elapsedRealtimeNanos() - start;
     }
@@ -155,26 +165,31 @@ public class Benchmark {
 
     public long FFTCppKiss() {
         long start = SystemClock.elapsedRealtimeNanos();
-        int N = re.length*2;
 
         // Merge real and imaginary numbers
-        // z = re + im
-        double[] z = new double[N];
-        System.arraycopy(re, 0, z, 0, re.length);
-        System.arraycopy(im, 0, z, re.length, im.length);
+        double[] z = combineComplex(re, im);
 
         double[] nativeResult = fft_kiss(z);
 
-        // Create Java complex numbers
-        Complex[] result = new Complex[re.length];
-        int half = N/2;
-        for (int i = 0; i < half; i++) {
-            result[i] = new Complex(nativeResult[i], nativeResult[i+half]);
-        }
+        Complex[] x = toComplex(nativeResult);
 
         // DEBUG
         System.out.println("************* FFT CPP ITER KISS ************");
-        printComplex(result);
+        printComplex(x);
+
+        return SystemClock.elapsedRealtimeNanos() - start;
+    }
+    public long FFTJavaJTransforms() {
+        long start = SystemClock.elapsedRealtimeNanos();
+
+        double[] z = combineComplex(re, im);
+        DoubleFFT_1D fftDo = new DoubleFFT_1D(re.length);
+        fftDo.complexForward(z);
+        Complex[] x = toComplex(z);
+
+        // DEBUG
+        System.out.println("************* FFT JAVA JTRANSFORMS ************");
+        printComplex(x);
 
         return SystemClock.elapsedRealtimeNanos() - start;
     }
