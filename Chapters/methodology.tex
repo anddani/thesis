@@ -13,7 +13,13 @@
 % Disable Instant Run??
 % Which operations should be included?
 % Should I Measure every operation in detail?
+% Garbage collection discussion (You cannot control it)
 \section{Experiment model}
+
+% http://lessthanoptimal.github.io/Java-Matrix-Benchmark/manual/MethodologyRuntimeBenchmark/
+% In java, we cannot control GC, which can lead to varying results
+% In java, do not use string concatenation (will ask for memory)
+% Measure first, optimize later
 
 \subsection{Hardware}
 \subsection{Benchmark Environment}
@@ -24,6 +30,7 @@
 % How will I interpret the results
 % How many times will the programs be executed
 % Statistical significance
+% What is included in the calculation, what is not (adding result to string etc)
 \section{Evaluation}
 
 \subsection{Data representation}

@@ -42,7 +42,7 @@ int FFTPrincetonConverted::fftIterative(vector<complex<double> >& x) {
     return 0;
 }
 
-vector<complex<double> > FFTPrincetonConverted::fftRecursive(vector<complex<double> > x) {
+vector<complex<double> > FFTPrincetonConverted::fftRecursive(vector<complex<double> > &x) {
     int n = x.size();
     if (n == 1) {
         vector<complex<double> > ret;

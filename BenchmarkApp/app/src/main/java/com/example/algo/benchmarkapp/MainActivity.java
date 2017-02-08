@@ -30,6 +30,8 @@ public class MainActivity extends AppCompatActivity implements OnTaskCompleted {
     public void startNextTest() {
         MyAsyncTask myAsyncTask = new MyAsyncTask(MainActivity.this, bm);
         int iter = Integer.parseInt(numIter.getText().toString());
+
+        // Input must be a power of two
         int N = nextPowerOfTwo(Integer.parseInt(dataSize.getText().toString()));
         int algorithm = currentAlgorithm;
         if (currentAlgorithm < Constants.NUM_ALGORITHMS) {
@@ -37,17 +39,6 @@ public class MainActivity extends AppCompatActivity implements OnTaskCompleted {
             saveResult("-- Running Algorithm " + Constants.ALGORITHM_NAMES[algorithm] + " N=" + N + " for " + iter + " iter\n");
         }
         currentAlgorithm++;
-    }
-
-    private int nextPowerOfTwo(int v) {
-        v--;
-        v |= v >> 1;
-        v |= v >> 2;
-        v |= v >> 4;
-        v |= v >> 8;
-        v |= v >> 16;
-        v++;
-        return v;
     }
 
     /**
@@ -101,11 +92,25 @@ public class MainActivity extends AppCompatActivity implements OnTaskCompleted {
             public void onClick(View v) {
                 currentAlgorithm = 0;
                 int N = nextPowerOfTwo(Integer.parseInt(dataSize.getText().toString()));
+
+                // Generates new input
                 bm = new Benchmark(N);
+
                 // Clear screen between tests
                 logTextView.setText("");
                 startNextTest();
             }
         });
+    }
+
+    private int nextPowerOfTwo(int v) {
+        v--;
+        v |= v >> 1;
+        v |= v >> 2;
+        v |= v >> 4;
+        v |= v >> 8;
+        v |= v >> 16;
+        v++;
+        return v;
     }
 }

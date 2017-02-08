@@ -1,11 +1,13 @@
 \textit{The process of developing, how Android installs the app and how it runs it is explained in this chapter. Additionally, some basic knowledge of the Discrete Fourier Transform is required when discussing differences in FFT implementations.}
 
 \section{Android SDK}
-To allow developers to build Android apps, Google developed a Standard Development Kit (SDK) to facilitate the process of writing Android applications. The Android SDK software stack is described in Figure~\ref{fig:sdk}. The Linux kernel is at the base of the stack, handling the core functionality of the device. Detecting hardware interaction, process scheduling and memory allocation are examples of services provided by the kernel. The Hardware Abstraction Layer (HAL) is an abstraction layer above the device drivers. This allows the developer to interact with hardware independent on the type of device\cite{android:hal}.
+To allow developers to build Android apps, Google developed a Standard Development Kit (SDK) to facilitate the process of writing Android applications. The Android SDK software stack is described in Figure~\ref{fig:sdk}. The Linux kernel is at the base of the stack, handling the core functionality of the device. Detecting hardware interaction, process scheduling and memory allocation are examples of services provided by the kernel. The Hardware Abstraction Layer (HAL) is an abstraction layer above the device drivers. This allows the developer to interact with hardware independent on the type of device \cite{android:hal}.
 
-The native libraries are low level libraries, written in C or C++, that handle functionality such as the Secure Sockets Layer (SSL) and Open GL\cite{komatineni2012pro}. Android Runtime (ART) features Ahead-Of-Time (AOT) compilation and Just-In-Time (JIT) compilation, garbage collection and debugging support\cite{android:sdk:stack}. This is where the Java code is being run and because of the debugging and garbage collection support, it is also beneficial for the developer to write applications against this layer.
+The native libraries are low level libraries, written in C or C++, that handle functionality such as the Secure Sockets Layer (SSL) and Open GL \cite{komatineni2012pro}. Android Runtime (ART) features Ahead-Of-Time (AOT) compilation and Just-In-Time (JIT) compilation, garbage collection and debugging support \cite{android:sdk:stack}. This is where the Java code is being run and because of the debugging and garbage collection support, it is also beneficial for the developer to write applications against this layer.
 
-The Java API Framework is the Java library you use when controlling the Android UI. It is the reusable code for managing activities, implementing data structures and designing the application. The System Application layer represents the functionality that allows a third-party app to communicate with other apps. Example of usable applications are email, calendar and contacts\cite{android:sdk:stack}.
+The Java API Framework is the Java library you use when controlling the Android UI. It is the reusable code for managing activities, implementing data structures and designing the application. The System Application layer represents the functionality that allows a third-party app to communicate with other apps. Example of usable applications are email, calendar and contacts \cite{android:sdk:stack}.
+
+All applications for Android are packaged in so called Android Packages (APK). These APKs are zipped archives that contain all the necessary resources required to run the app. Examples of such resources are the AndroidManifest.xml file, Dalvik executables, native libraries and other files the application depends on.
 
 \begin{figure}
     \centering
@@ -45,14 +47,14 @@ The Java API Framework is the Java library you use when controlling the Android 
         \end{pgfonlayer}
         \node[font=\sffamily\itshape\color{black},above=of SysApps] {Android SDK Software Stack};
     \end{tikzpicture}
-    \caption{Android SDK Software Stack\cite{android:sdk:stack}}
+    \caption{Android SDK Software Stack \cite{android:sdk:stack}}
     \label{fig:sdk}
 \end{figure}
 
 
 \section{Dalvik Virtual Machine}
 % Why is Dalvik Virtual Machine used?
-Compiled Java code is executed on a virtual machine called the Java Virtual Machine (JVM). The reason for this is to allow compiled code to become portable. This way, every device, independent on architecture, with a JVM installed will be able to run the same code. The Android operating system is designed to be installed on many different devices\cite{android:os:devices}. Because of the many different devices, user applications would have to be compiled for all possible platforms it should work on. For this reason, Java bytecode is a choice when wanting to distribute compiled applications.
+Compiled Java code is executed on a virtual machine called the Java Virtual Machine (JVM). The reason for this is to allow compiled code to become portable. This way, every device, independent on architecture, with a JVM installed will be able to run the same code. The Android operating system is designed to be installed on many different devices \cite{android:os:devices}. Because of the many different devices, user applications would have to be compiled for all possible platforms it should work on. For this reason, Java bytecode is a choice when wanting to distribute compiled applications.
 
 % The DVM uses \cite{dalvik:vm:tech}
 
@@ -60,7 +62,7 @@ The Dalvik Virtual Machine (DVM) is the VM initially used on Android. One differ
 
 Contrary to this, a register based virtual machine works more like a CPU. It uses a set of registers where it will place operands by fetching them from memory. One advantage of using register-based architecture is that fetching data between registers is faster than fetching or storing data onto the hardware stack. The biggest disadvantage of using register-based architecture is that the compilers must be more complex than for stack-based architecture. This is because the code generators must take register management into consideration \cite[p.~159-160]{craig2010virtual}.
 
-The DVM is a virtual machine optimized for devices where resources are limited \cite{android:dalvik:internals}. The main focus of the DVM is to lower memory consumption and lower the number of instructions needed to fulfil a task. Using register-based it is possible to execute more virtual machine instructions than for a stack-based architecture\cite{shi2008virtual}. 
+The DVM is a virtual machine optimized for devices where resources are limited \cite{android:dalvik:internals}. The main focus of the DVM is to lower memory consumption and lower the number of instructions needed to fulfil a task. Using register-based architecture, it is possible to execute more virtual machine instructions compared to a stack-based architecture \cite{shi2008virtual}. 
 
 % http://davidehringer.com/software/android/The_Dalvik_Virtual_Machine.pdf
 
@@ -74,26 +76,45 @@ Dalvik executables, or dex files, are the files that Dalvik bytecode is stored. 
 
 \section{Android Runtime}
 % What is Android Runtime?
+Android Runtime is the new default runtime for Android as of version 5.0 \cite{android:dalvik}. The big improvement over Dalvik is the fact that applications compiled to binary when they are installed on the device, rather than during runtime of the app. This results in faster start-up \cite{li2016advanced} lets the compiler use more heavy optimization that is not otherwise possible during runtime. However, if the whole application is compiled ahead of time it is no longer possible to do any runtime optimizations. An example of a runtime optimization is to inline methods or functions that are called frequently.
 
 % .oat file
-When an app is installed on the device, a program called \textbf{dex2oat} converts a dex-file to an executable \cite{android:art:dalvik}.
+When an app is installed on the device, a program called \textbf{dex2oat} converts a dex-file to an executable file called an oat-file \cite{android:art:dalvik}. This oat-file is in the Executable and Linkable Format (ELF) and can be seen as a wrapper of multiple dex-files \cite{Dresel2016}.
 
 % Why is it used instead of Dalvik?
 
-\subsection{Installation Process}
-% How is it used
-
-% PROS: information gathered from runtime, inlining
-
-% Applications for the Android operating system are mostly written in Java for easier portability between \cite[p.~33]{nolan2012decompiling}
-
 \section{Native Development Kit}
+Native development kit (NDK) is a set of tools to help writing native apps for Android. It contains the necessary libraries, compiler, build tools and debugger for developing low level libraries. Google recommends using the NDK for two reasons: run computationally intensive tasks and usage of already written libraries \cite{android:ndk:guides}. Because Java is the supported language on Android, due to security and stability, native development is not recommended to use to build full apps, with exception of for example games.
+
+Historically, native libraries have been built using makefile. Makefile is a tool used to coordinate compilation of source files. Android makefiles, \texttt{Android.mk} and \texttt{Application.mk}, are used to set compiler flags, choose which architectures that should be compiled for, location of source files and more. With Android Studio 2.2 CMake was introduced as the default build tool \cite{android:studio:cmake}. CMake is a more advanced tool for generating and running build scripts.
 
 \subsection{Java Native Interface}
+To be able to call native libraries from Java code, a framework named Java Native Interface (JNI) is used. Using this interface, C/C++ functions are mapped as methods and primitive data types are converted between Java and C/C++. For this to work, special syntax is needed for JNI to recognize which method in which class a native function should correspond to.
 
-\subsection{Clang and LLVM}
+To mark a function as native in Java, a special keyword called \texttt{native} is used to define a method. The library which implements this method must also be included in the same class. By using the \texttt{System.loadLibrary("mylib")} call, we can specify the name of the shared object that should be loaded. Inside the native library we must follow a function naming convention to map a method to a function. The rules are that you must start the function with \texttt{Java} followed by the package, class and method name. Figure~\ref{fig:native} demonstrates how to map a method to a native function.
+
+\begin{figure}
+\begin{center}
+    \texttt{private native int myFun();}\\
+    $\Updownarrow$
+    \begin{verbatim}
+      JNIEXPORT jint JNICALL
+      Java_com_example_MainActivity_myFun (JNIEnv *env, jobject thisObj)
+    \end{verbatim}
+\end{center}
+\caption{Native method declaration to implementation.}
+\label{fig:native}
+\end{figure}
+
+The JNI also provides a library for C and C++ for handling the special JNI data types. They can be used to determine the size of a Java array, get position of elements of an array and handling Java objects. In C and C++ you are given a pointer to a struct with all the required functions to convert data back and forth between Java data and C/C++ data.
+
+\subsection{LLVM and Clang}
+LLVM (Low Level Virtual Machine) is a suite that contains a set of compiler optimizers and backends. It is used as a foundation for compiler frontends and supports many architectures. An example of a frontend tool that uses LLVM is Clang. Clang is used compile C, C++, Objective-C \cite{clang:comp}.
+
+Clang is as of March 2016 (NDK version 11) \cite{android:ndk:revision}, the only supported compiler in the NDK. Google has chosen to focus on a supporting the Clang compiler instead of the GNU GCC compiler. This means that there is a bigger chance that a specific architecture is supported in the NDK.
 
 \section{Discrete Fourier Transform}
+The Discrete Fourier Transform (DFT) is a method of converting a signal, described by sample values, from the time-domain to the frequency-domain. In other words, the DFT takes an observed signal and dissects each component that would form the observed signal. Every component of a periodic signal can each be described as a sinusoidal wave with a frequency, amplitude and phase.
 
 \begin{figure}[h]
     \renewcommand\thesubfigure{(\alph{subfigure})}
@@ -150,3 +171,135 @@ When an app is installed on the device, a program called \textbf{dex2oat} conver
     \end{tikzpicture}
     \caption{Sum of sinusoids}\label{fig:dft:ex1}
 \end{figure}
+
+\section{Code Optimization}
+
+There are many ways you can optimize your code before it is being compiled to binary or byte code. This chapter first present some general optimization measures and will then describe some language specific methods for optimization.
+
+% Inlining
+% Loop unrolling
+\subsubsection{Loop unrolling}
+Loop unrolling is a technique used to optimize loops. By explicitly coding multiple iterations in the body of the loop, it is possible to lower the amount of jump instructions in the produced code. Figure~\ref{fig:c:unroll} following example demonstrates how unrolling works. The loop unroll executes two iterations of the first code per iteration. It is therefore necessary to update the \texttt{i} variable accordingly. Figure~\ref{fig:assembly:unroll} describes how the change could be represented in assembly language.
+
+The gain in using loop unrolling is that you \enquote{save} the same amount of jump instructions as the amount of \enquote{hard coded} iterations you add. In theory, it is also possible to optimize even more by changing the offset of \texttt{LOAD WORD} instructions as shown in Figure~\ref{fig:assembly:optimized}.
+
+\begin{figure}
+    \centering
+    \begin{subfigure}{.5\textwidth}
+        \centering
+        \begin{verbatim}
+    for (int i = 0; i < 6; ++i) {
+        a[i] = a[i] + b[i];
+    }
+
+        \end{verbatim}
+        \caption{Normal}
+        \label{fig:c:unroll:normal}
+    \end{subfigure}%
+    \begin{subfigure}{.5\textwidth}
+        \centering
+        \begin{verbatim}
+    for (int i = 0; i < 6; i+=2) {
+        a[i] = a[i] + b[i];
+        a[i+1] = a[i+1] + b[i+1];
+    }
+        \end{verbatim}
+        \caption{One unroll}
+        \label{fig:c:unroll:unroll}
+    \end{subfigure}
+    \caption{Loop unrolling in C}
+    \label{fig:c:unroll}
+\end{figure}
+
+
+\begin{figure}
+    \centering
+    \begin{subfigure}{6cm}
+        \centering
+        \begin{verbatim}
+R1 - a[] address  R4 - value of a[x]
+R2 - b[] address  R5 - value of b[x]
+R3 - i            R6 - condition i < 6
+        \end{verbatim}
+    \end{subfigure}
+    \begin{subfigure}{.5\textwidth}
+        \centering
+        \begin{verbatim}
+      loop: LW   R4, 0(R1)  ; Load a[i]
+            LW   R5, 0(R2)  ; Load b[i]
+            ADD  R4, R4, R5 ; a[i] + b[i]
+            SW   R4, 0(R2)
+            ADDI R1, R1, #4 ; next element
+            ADDI R2, R2, #4 ; next element
+            ADDI R3, R3, #1 ; i++
+            SLTI R6, #6     ; i < 6
+            BNE  R3, R6, loop
+        \end{verbatim}
+        \caption{Normal}
+        \label{fig:sub1}
+    \end{subfigure}%
+    \begin{subfigure}{.5\textwidth}
+        \centering
+        \begin{verbatim}
+            TODO
+        \end{verbatim}
+        \caption{One unroll}
+        \label{fig:sub2}
+    \end{subfigure}
+    \caption{Loop unrolling in assembly}
+    % https://www.cs.umd.edu/class/fall2001/cmsc411/proj01/proja/why.html
+    \label{fig:assembly:unroll}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \begin{subfigure}{6cm}
+        \centering
+        \begin{verbatim}
+R1 - a[] address  R4 - value of a[x]
+R2 - b[] address  R5 - value of b[x]
+R3 - i            R6 - condition i < 6
+        \end{verbatim}
+    \end{subfigure}
+    \begin{subfigure}{.5\textwidth}
+        \centering
+        \begin{verbatim}
+            OPTIMIZED ASSEMBLY
+        \end{verbatim}
+        \caption{Normal}
+        \label{fig:sub1}
+    \end{subfigure}%
+    \begin{subfigure}{.5\textwidth}
+        \centering
+        \begin{verbatim}
+            TODO
+        \end{verbatim}
+        \caption{One unroll}
+        \label{fig:sub2}
+    \end{subfigure}
+    \caption{Loop unrolling in assembly}
+    \label{fig:assembly:optimized}
+    % https://www.eecis.udel.edu/~sunshine/courses/F05/CIS662/class17.pdf
+\end{figure}
+\subsection{Java}
+
+% Object allocation pool
+% CPU usage during runtime
+% Garbage collection
+% http://www.cubrid.org/blog/dev-platform/understanding-java-garbage-collection/
+% Java Performance: The Definitive Guide
+% http://www.gamasutra.com/view/news/128161/A_Low_Level_Curriculum_for_C_and_C.php
+% https://lwn.net/Articles/250967/
+% Hacker's Delight (2nd Edition)
+% https://en.wikibooks.org/wiki/C++_Programming/Optimization
+% http://www.slideshare.net/cdman83/performance-optimization-techniques-for-java-code
+% http://www.agner.org/optimize/optimizing_cpp.pdf
+% http://leto.net/docs/C-optimization.php
+% http://www.appperfect.com/support/java-coding-rules/optimization.php
+% https://developer.android.com/training/articles/perf-tips.html#UseFinal
+% http://blog.takipi.com/garbage-collectors-serial-vs-parallel-vs-cms-vs-the-g1-and-whats-new-in-java-8/
+% http://stackoverflow.com/questions/9546392/what-triggers-a-full-garbage-collection-in-java
+% https://www.itu.dk/people/sestoft/papers/benchmarking.pdf
+
+\subsection{C++}
+% Inlining

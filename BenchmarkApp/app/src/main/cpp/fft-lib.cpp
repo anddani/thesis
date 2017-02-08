@@ -6,9 +6,7 @@
 
 #define LOGTAG "FFTLIB"
 
-typedef unsigned int uint;
-
-jdoubleArray fftIterativeNative(JNIEnv* env, jobject obj, jdoubleArray arr) {
+jdoubleArray fftPrincetonIterative(JNIEnv* env, jobject obj, jdoubleArray arr) {
     jsize size = (*env).GetArrayLength(arr);
     jdouble* elements = (*env).GetDoubleArrayElements(arr, 0);
 
@@ -35,7 +33,7 @@ jdoubleArray fftIterativeNative(JNIEnv* env, jobject obj, jdoubleArray arr) {
     return arr;
 }
 
-jdoubleArray fftRecursiveNative(JNIEnv* env, jobject obj, jdoubleArray arr) {
+jdoubleArray fftPrincetonRecursive(JNIEnv* env, jobject obj, jdoubleArray arr) {
     jsize size = (*env).GetArrayLength(arr);
     jdouble* elements = (*env).GetDoubleArrayElements(arr, 0);
 
@@ -91,8 +89,8 @@ jdoubleArray fftKiss(JNIEnv* env, jobject obj, jdoubleArray arr) {
     return arr;
 }
 static JNINativeMethod s_methods[] {
-        {"fft_iterative_native", "([D)[D", (void*)fftIterativeNative},
-        {"fft_recursive_native", "([D)[D", (void*)fftRecursiveNative},
+        {"fft_princeton_iterative", "([D)[D", (void*)fftPrincetonIterative},
+        {"fft_princeton_recursive", "([D)[D", (void*)fftPrincetonRecursive},
         {"fft_kiss", "([D)[D", (void*)fftKiss}
 };
 

@@ -1,7 +1,6 @@
 package com.example.algo.benchmarkapp;
 
 import android.os.AsyncTask;
-import android.os.SystemClock;
 
 import com.example.algo.benchmarkapp.algorithms.Constants;
 
