@@ -114,63 +114,69 @@ LLVM (Low Level Virtual Machine) is a suite that contains a set of compiler opti
 Clang is as of March 2016 (NDK version 11) \cite{android:ndk:revision}, the only supported compiler in the NDK. Google has chosen to focus on a supporting the Clang compiler instead of the GNU GCC compiler. This means that there is a bigger chance that a specific architecture is supported in the NDK.
 
 \section{Discrete Fourier Transform}
-The Discrete Fourier Transform (DFT) is a method of converting a signal, described by sample values, from the time-domain to the frequency-domain. In other words, the DFT takes an observed signal and dissects each component that would form the observed signal. Every component of a periodic signal can each be described as a sinusoidal wave with a frequency, amplitude and phase.
+The Discrete Fourier Transform (DFT) is a method of converting a sampled signal from the time domain to the frequency domain. In other words, the DFT takes an observed signal and dissects each component that would form the observed signal. Every component of a signal can each be described as a sinusoidal wave with a frequency, amplitude and phase.
+
+If we observe Figure~\ref{fig:dft:ex1}, we can see how a signal in time domain looks like in frequency domain. Function displayed in the time domain consists of three sin components, each with its own amplitude and frequency. What the graph of the frequency domain shows, is the amplitude of each frequency. This can then be used to analyze the input signal.
+
+One important thing to note is that you must sample at twice the frequency you want to analyze. The Nyquist sampling theorem states that \cite{signal:aliasing}:
+\begin{center}
+    \textit{The sampling frequency should be at least twice the highest frequency contained in the signal.}
+\end{center}
+In other words, you have to be able to reconstruct the signal given the samples \cite[Ch~3]{smith1997scientist}. If you are given a signal that is constructed of signals that are at most 500 Hz, your sample frequency must be at least 1000 samples per second.
 
 \begin{figure}[h]
     \renewcommand\thesubfigure{(\alph{subfigure})}
     \centering
     \begin{tikzpicture}
-        \begin{groupplot}[group style={group name=my plots,group size= 2 by 1,horizontal sep =1.5cm,vertical sep =2cm},width=6cm]
-            \nextgroupplot[legend pos=north east,
+        \begin{groupplot}[group style={group name=my plots,group size= 1 by 2,horizontal sep =1.5cm,vertical sep =2cm},width=6cm]
+            \nextgroupplot[
+                legend pos=north east,
                 trig format plots=rad,
-                axis lines = middle,
-                enlargelimits,
-                width=8cm,
+                scaled ticks=false,
+                tick label style={/pgf/number format/fixed},
+                ymin=-4,
+                ymax=4,
+                xmin=0,
+                xmax=1,
+                ylabel={Amplitude},
+                xlabel={Time $\left[s\right]$},
+                width=14cm,
                 height=5cm,
-                ymin=-0.5,
-                ymax=0.5,
-                xlabel={},
-                clip=false
             ]
-            \addplot[domain=-0.5*pi:2*pi,samples=200,red] {0.5*sin(x + pi*1/4)};
-            \nextgroupplot[legend pos=north east,
-                    trig format plots=rad,
-                    axis lines = middle,
-                    enlargelimits,
-                    ymin=-0.5,
-                    ymax=0.5,
-                    width=8cm,
-                    height=5cm,
-                    xlabel={},
-                    clip=false
+            \addlegendentry{$f(x) = 0.5\sin(10x) + \sin(20x) + 1.5\sin(30x)$}
+            \addplot[domain=-0.5*pi:2*pi,samples=800,red] {0.5*sin(10*x) + sin(20*x) + 1.5*sin(30*x)};
+            \nextgroupplot[
+                legend pos=north east,
+                trig format plots=rad,
+                ymin=0,
+                ymax=2.0,
+                xmin=0,
+                xmax=50,
+                ylabel={Amplitude},
+                xlabel={Frequency $\left[Hz\right]$},
+                width=14cm,
+                height=5cm,
+                yshift=-0.5cm,
             ]
-            \addlegendimage{empty legend}
-            \addplot[domain=-0.5*pi:2*pi,samples=200,red] {0.3*sin(4*x)};
+            \addplot[fill=blue,ybar] coordinates {
+                    (10,0.5)
+                    (20,1.0)
+                    (30,1.5)
+                };
+            % \addplot[color=blue,mark=none] file {Data/frequencydomain.dat};
         \end{groupplot}
-        \begin{scope}[yshift=-6cm]
-            \begin{axis}[
-                    trig format plots=rad,
-                    axis lines = middle,
-                    enlargelimits,
-                    ymin=-0.5,
-                    ymax=0.5,
-                    width=16cm,
-                    height=5cm,
-                    x label style={at={(axis description cs:0.5,-0.6)},anchor=north},
-                    xlabel={c) $f(x) = 0.5\sin(x + 0.5\pi) + 0.3\sin(4x)$},
-                    clip=false
-                ]
-                \addplot[domain=-0.5*pi:2.6*pi,samples=200,blue] {0.5*sin(x + pi*1/2) + 0.3*sin(4*x)};
-                \draw[dotted,black] (axis cs: 0.5*pi,-1.1) -- (axis cs: 0.5*pi,0);
-                \draw[dotted,black] (axis cs: 2.5*pi,-1.1) -- (axis cs: 2.5*pi,0);
-                \draw[dashed,black,<->] (axis cs: 0.5*pi,-1.05) -- node[below,text=black,font=\footnotesize]{cycle}(axis cs: 2.5*pi,-1.05);
-            \end{axis}
-        \end{scope}
-        \node[text width=6cm,align=center,anchor=north] at ([yshift=-5mm]my plots c1r1.south) (cap1) {a) $f(x) = 0.5\sin(x + 0.5\pi)$};
-        \node[text width=6cm,align=center,anchor=north] at ([yshift=-5mm]my plots c2r1.south) (cap2) {b) $f(x) = 0.3\sin(4x)$};
+        \node[text width=12cm,align=center,anchor=north] at ([yshift=10mm]my plots c1r1.north) (cap1) {Time domain};
+        \node[text width=12cm,align=center,anchor=north] at ([yshift=10mm]my plots c1r2.north) (cap2) {Frequency domain};
     \end{tikzpicture}
-    \caption{Sum of sinusoids}\label{fig:dft:ex1}
+    \caption{Time domain $\Rightarrow$ Frequency domain}
+    \label{fig:dft:ex1}
 \end{figure}
+
+Equation \ref{eq:1} \cite[p.~92]{tan2013digital} describes the mathematical process of converting a signal $x$ to a spectrum $X$ of $x$ where $N$ is the number of samples, $n$ is the time step and $k$ is the frequency sample. When calculating $X\left(k\right) \forall\ k \in \{x \in \mathbb{R} \mid 0 \leq x \leq N - 1\}$ we clearly see that it will take $N^2$ multiplications. In 1965, Cooley and Tukey published a paper on an algorithm that could calculate the DFT in less than $2N\log(N)$ multiplications \cite{Cooley1964} called the Fast Fourier Transform (FFT).
+
+\begin{align}
+    X\left(k\right) = \sum\limits_{n=0}^{N-1}x\left(n\right)\cdot e^{-j2\pi kn/N},\ \ k = 0,1,2,\dots,N-1\label{eq:1}
+\end{align}
 
 \section{Code Optimization}
 
