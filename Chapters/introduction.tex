@@ -28,6 +28,7 @@ Android is an operating system for smartphones and as of November 2016 it is the
 % Native code
 To allow developers to reuse libraries written in C or C++ or just to write low level code, a tool called Native Development Kit (NDK) was released. It was first released in June 2009 \cite{Lin2011} and has since then gotten improvements such as new build tools, compiler versions and support for additional Application Binary Interfaces (ABI). With the NDK, the developers can choose to write parts of an app in so called \emph{native code}. This is used when wanting to do compression, graphics and other performance heavy tasks.
 
+
 % Some of the findings in this report might help decide using a specific programming language for programming an application. For some problems, it is necessary to choose the appropriate programming language to ensure that an application is smooth and responsive. It is therefore important to know when and where it is necessary to optimize the code. There are multiple types of problems that occur when developing complex apps and it is relevant to know which problems that are worth solving in a given language.\\
 
 %%==================================================================
@@ -36,7 +37,7 @@ To allow developers to reuse libraries written in C or C++ or just to write low 
 % Describe problem and form the hypothesis
 \section{Problem}
 % Research questions
-To ensure that resources are spent in an efficient manner, this report has investigated whether the performance boost from having the Fast Fourier Transform (\gls{fft}) compiled by the NDK instead of by ART is significant. Multiple different implementations of FFTs will be evaluated as well as the effects of the Java Native Interface (JNI), a framework for communicating between Java code and native shared libraries. The following research questions were formed on the basis of the requirements:
+Nowadays, mobile phones are fast enough to handle heavy calculations on the device itself. To ensure that resources are spent in an efficient manner, this study has investigated whether the performance boost from having the Fast Fourier Transform (\gls{fft}) compiled by the NDK instead of by ART is significant. Multiple different implementations of FFTs will be evaluated as well as the effects of the Java Native Interface (JNI), a framework for communicating between Java code and native shared libraries. The following research questions were formed on the basis of the requirements:
 
 
 %\hilight{calculation heavy tasks} in C or C++ instead of Java is significant.
@@ -53,11 +54,11 @@ To ensure that resources are spent in an efficient manner, this report has inves
 % Purpose with the work
 % What the report shows
 \section{Purpose}
-This thesis is a study that evaluates when and where there is a gain in writing a part of an Android application in C++. One purpose of this report is to educate the reader about the process of porting parts of an app to native code using the Native Development Kit (NDK). Another is to explore the topic of performance differences between Android Runtime (ART) and native code compiled with Clang/LLVM. Because ART is relatively new (Nov 2014) \cite{android:dalvik:release}, this report would contribute with more information related to the performance of ART and how it performs compared to native code compiled by the NDK.
+This thesis is a study that evaluates when and where there is a gain in writing a part of an Android application in C++. One purpose of this study is to educate the reader about the process of porting parts of an app to native code using the Native Development Kit (NDK). Another is to explore the topic of performance differences between Android Runtime (ART) and native code compiled with Clang/LLVM. Because ART is relatively new (Nov 2014) \cite{android:dalvik:release}, this study would contribute with more information related to the performance of ART and how it performs compared to native code compiled by the NDK.
 
 % if there is a gain in spending resources to implement some part of an Android app in C++.
 
-The result of the report can be used to value the decision of implementing a given algorithm or other solutions in native code instead of Java. The FFT is frequently used for signal processing when you want to analyse a signal in the frequency domain. It is therefore valuable to know how efficient an implementation in native code is, depending on the size of the data.
+The result of the study can be used to value the decision of implementing a given algorithm or other solutions in native code instead of Java. The FFT is frequently used for signal processing when you want to analyse a signal in the frequency domain. It is therefore valuable to know how efficient an implementation in native code is, depending on the size of the data.
 
 %%==================================================================
 %% GOAL
@@ -65,7 +66,7 @@ The result of the report can be used to value the decision of implementing a giv
 % More general than purpose
 % Titta på JNIkostnad
 \section{Goal}
-The goal of this report is to examine the efficiency of ART and how it compares to natively written code using the NDK in combination with the Java Native Interface (\gls{jni}). This report presents a study that investigates the relevance of using the NDK to produce efficient code. Further, the cost to pass through the JNI will also be a factor when analysing the code. A discussion about to what extent the simplicity of the code outweighs the performance of the code is also present. For people who are interested to know about the impacts of implementing algorithms in C++ for Android, this report might be of some use.
+The goal of this project is to examine the efficiency of ART and how it compares to natively written code using the NDK in combination with the Java Native Interface (\gls{jni}). This report presents a study that investigates the relevance of using the NDK to produce efficient code. Further, the cost to pass through the JNI will also be a factor when analysing the code. A discussion about to what extent the simplicity of the code outweighs the performance of the code is also present. For people who are interested to know about the impacts of implementing algorithms in C++ for Android, this study might be of some use.
 
 %%==================================================================
 %% METHOD
@@ -106,16 +107,16 @@ The method used to find the relevant literature and previous studies was to sear
 \section{Delimitations}
 % Fix contradicting statement
 % Skip multiple cores?
-This report does only cover a performance evaluation of the FFT algorithm and does not go into detail on other related algorithms. The decision of choosing the FFT was due to it being a common algorithm to use for signal analysis. This report will not investigate the performance differences for FFT in parallel due to the complexity of the Linux kernel used on Android. This would require more knowledge outside the scope of this report and would result in a more broad subject.
+This thesis does only cover a performance evaluation of the FFT algorithm and does not go into detail on other related algorithms. The decision of choosing the FFT was due to it being a common algorithm to use for signal analysis. This thesis will not investigate the performance differences for FFT in parallel due to the complexity of the Linux kernel used on Android. This would require more knowledge outside the scope of this project and would result in a more broad subject.
 
 %%==================================================================
 %% ETHICS AND SUSTAINABILITY
 %%==================================================================
 % Environment, economics, society
 \section{Ethics and Sustainability}
-An ethical aspect of this report is ...
+An ethical aspect of this thesis is ...
 
-Environmental sustainability is fulfilled in this report because there is an aspect of battery usage in different implementations of algorithms. The less number of instructions an algorithm require, the faster will the CPU lower its frequency, saving power. This will also have an influence on the user experience and can therefore have an impact on the society aspect of sustainability. If this report is used as a basis on a decision that have an economical impact, this report would fulfil the economical sustainability goal.
+Environmental sustainability is fulfilled in this investigation because there is an aspect of battery usage in different implementations of algorithms. The less number of instructions an algorithm require, the faster will the CPU lower its frequency, saving power. This will also have an influence on the user experience and can therefore have an impact on the society aspect of sustainability. If this study is used as a basis on a decision that have an economical impact, this thesis would fulfil the economical sustainability goal.
 
 %%==================================================================
 %% OUTLINE

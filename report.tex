@@ -17,6 +17,13 @@
 \usepackage{float}
 \usepackage{amssymb}
 \usepackage{csquotes}
+\usepackage{listings}
+
+\lstdefinelanguage
+[mips]{Assembler}
+{morekeywords={
+        lw,add,addi,sw,lw,bge
+}}
 
 \usepackage{caption,subcaption} % for tables and figures
 \usepgfplotslibrary{groupplots}
@@ -34,6 +41,11 @@
 \definecolor{mypink}{RGB}{233,198,235}
 \definecolor{mygrey}{RGB}{191,193,192}
 \definecolor{myyellow}{RGB}{215,226,0}
+
+\lstset{
+    commentstyle=\color{green},
+    keywordstyle=\color{blue},
+}
 
 % this length is used to control the width of the light blue frame
 % for the upper part of the diagram
@@ -67,7 +79,6 @@
 \loadglsentries{glossaries}
 
 \begin{document}
-
 
 %%==================================================================
 %% VARIABLES
@@ -127,7 +138,6 @@
 
 \makeappendix{Appendix A}{Example appendix}
 \input{Appendices/appendixA.tex}
-
 
 %%==================================================================
 %% BIBLIOGRAPHY

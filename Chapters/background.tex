@@ -187,9 +187,9 @@ There are many ways you can optimize your code before it is being compiled to bi
 \subsubsection{Loop unrolling}
 Loop unrolling is a technique used to optimize loops. By explicitly coding multiple iterations in the body of the loop, it is possible to lower the amount of jump instructions in the produced code. Figure~\ref{fig:c:unroll} following example demonstrates how unrolling works. The loop unroll executes two iterations of the first code per iteration. It is therefore necessary to update the \texttt{i} variable accordingly. Figure~\ref{fig:assembly:unroll} describes how the change could be represented in assembly language.
 
-The gain in using loop unrolling is that you \enquote{save} the same amount of jump instructions as the amount of \enquote{hard coded} iterations you add. In theory, it is also possible to optimize even more by changing the offset of \texttt{LOAD WORD} instructions as shown in Figure~\ref{fig:assembly:optimized}.
+The gain in using loop unrolling is that you \enquote{save} the same amount of jump instructions as the amount of \enquote{hard coded} iterations you add. In theory, it is also possible to optimize even more by changing the offset of \texttt{LOAD WORD} instructions as shown in Figure~\ref{fig:assembly:optimized}. Then you would not need to update the iterator as often.
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \begin{subfigure}{.5\textwidth}
         \centering
@@ -223,23 +223,22 @@ The gain in using loop unrolling is that you \enquote{save} the same amount of j
     \begin{subfigure}{6cm}
         \centering
         \begin{verbatim}
-R1 - a[] address  R4 - value of a[x]
-R2 - b[] address  R5 - value of b[x]
-R3 - i            R6 - condition i < 6
+$s1 - a[] address  $s4 - value of a[x]
+$s2 - b[] address  $s5 - value of b[x]
+$s3 - i            $s6 - value 6
         \end{verbatim}
     \end{subfigure}
     \begin{subfigure}{.5\textwidth}
         \centering
         \begin{verbatim}
-      loop: LW   R4, 0(R1)  ; Load a[i]
-            LW   R5, 0(R2)  ; Load b[i]
-            ADD  R4, R4, R5 ; a[i] + b[i]
-            SW   R4, 0(R2)
-            ADDI R1, R1, #4 ; next element
-            ADDI R2, R2, #4 ; next element
-            ADDI R3, R3, #1 ; i++
-            SLTI R6, #6     ; i < 6
-            BNE  R3, R6, loop
+loop: lw   $s4, 0($s1)   ; Load a[i]
+      lw   $s5, 0($s2)   ; Load b[i]
+      add  $s4, $s4, $s5 ; a[i] + b[i]
+      sw   $s4, 0($s2)
+      addi $s1, $s1, #4  ; next element
+      addi $s2, $s2, #4  ; next element
+      addi $s3, $s3, #1  ; i++
+      bge  $s3, $s6, loop
         \end{verbatim}
         \caption{Normal}
         \label{fig:sub1}
@@ -247,7 +246,14 @@ R3 - i            R6 - condition i < 6
     \begin{subfigure}{.5\textwidth}
         \centering
         \begin{verbatim}
-            TODO
+      loop: lw   $s4, 0($s1)   ; Load a[i]
+            lw   $s5, 0($s2)   ; Load b[i]
+            add  $s4, $s4, $s5 ; a[i] + b[i]
+            sw   $s4, 0($s2)
+            addi $s1, $s1, #4  ; next element
+            addi $s2, $s2, #4  ; next element
+            addi $s3, $s3, #1  ; i++
+            bge  $s3, $s6, loop
         \end{verbatim}
         \caption{One unroll}
         \label{fig:sub2}
@@ -256,6 +262,20 @@ R3 - i            R6 - condition i < 6
     % https://www.cs.umd.edu/class/fall2001/cmsc411/proj01/proja/why.html
     \label{fig:assembly:unroll}
 \end{figure}
+
+% TODO: Set side by side
+\begin{lstlisting}[
+    language={[mips]Assembler}
+    ]
+loop: lw   $s4, 0($s1)   ; Load a[i]
+      lw   $s5, 0($s2)   ; Load b[i]
+      add  $s4, $s4, $s5 ; a[i] + b[i]
+      sw   $s4, 0($s2)
+      addi $s1, $s1, #4  ; next element
+      addi $s2, $s2, #4  ; next element
+      addi $s3, $s3, #1  ; i++
+      bge  $s3, $s6, loop
+\end{lstlisting}
 
 \begin{figure}
     \centering
