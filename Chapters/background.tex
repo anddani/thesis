@@ -187,8 +187,6 @@ There are many ways you can optimize your code before it is being compiled to bi
 \subsubsection{Loop unrolling}
 Loop unrolling is a technique used to optimize loops. By explicitly coding multiple iterations in the body of the loop, it is possible to lower the amount of jump instructions in the produced code. Figure~\ref{fig:c:unroll} following example demonstrates how unrolling works. The loop unroll executes two iterations of the first code per iteration. It is therefore necessary to update the \texttt{i} variable accordingly. Figure~\ref{fig:assembly:unroll} describes how the change could be represented in assembly language.
 
-The gain in using loop unrolling is that you \enquote{save} the same amount of jump instructions as the amount of \enquote{hard coded} iterations you add. In theory, it is also possible to optimize even more by changing the offset of \texttt{LOAD WORD} instructions as shown in Figure~\ref{fig:assembly:optimized}. Then you would not need to update the iterator as often.
-
 \begin{figure}[H]
     \centering
     \begin{subfigure}{.5\textwidth}
@@ -217,10 +215,12 @@ The gain in using loop unrolling is that you \enquote{save} the same amount of j
     \label{fig:c:unroll}
 \end{figure}
 
+The gain in using loop unrolling is that you \enquote{save} the same amount of jump instructions as the amount of \enquote{hard coded} iterations you add. In theory, it is also possible to optimize even more by changing the offset of \texttt{LOAD WORD} instructions as shown in Figure~\ref{fig:assembly:optimized}. Then you would not need to update the iterator as often.
+
 
 \begin{figure}
     \centering
-    \begin{subfigure}{6cm}
+    \begin{subfigure}{7cm}
         \centering
         \begin{verbatim}
 $s1 - a[] address  $s4 - value of a[x]
@@ -228,35 +228,54 @@ $s2 - b[] address  $s5 - value of b[x]
 $s3 - i            $s6 - value 6
         \end{verbatim}
     \end{subfigure}
-    \begin{subfigure}{.5\textwidth}
+    \begin{subfigure}{.55\textwidth}
         \centering
-        \begin{verbatim}
-loop: lw   $s4, 0($s1)   ; Load a[i]
-      lw   $s5, 0($s2)   ; Load b[i]
-      add  $s4, $s4, $s5 ; a[i] + b[i]
-      sw   $s4, 0($s2)
-      addi $s1, $s1, #4  ; next element
-      addi $s2, $s2, #4  ; next element
-      addi $s3, $s3, #1  ; i++
-      bge  $s3, $s6, loop
-        \end{verbatim}
+        \begin{lstlisting}[
+                language={[mips]Assembler},
+                basicstyle=\footnotesize,
+                numbers=left,
+                firstnumber=1,
+                numberfirstline=true
+            ]
+loop: lw $s4, 0($s1) # Load a[i]
+      lw $s5, 0($s2) # Load b[i]
+      add $s4, $s4, $s5 # a[i] + b[i]
+      sw $s4, 0($s1)
+      addi $s1, $s1, 4 # next element
+      addi $s2, $s2, 4 # next element
+      addi $s3, $s3, 1 # i++
+      bge $s3, $s6, loop
+            \end{lstlisting}
         \caption{Normal}
-        \label{fig:sub1}
+        \label{fig:unroll:sub1}
     \end{subfigure}%
-    \begin{subfigure}{.5\textwidth}
+    \begin{subfigure}{.45\textwidth}
         \centering
-        \begin{verbatim}
-      loop: lw   $s4, 0($s1)   ; Load a[i]
-            lw   $s5, 0($s2)   ; Load b[i]
-            add  $s4, $s4, $s5 ; a[i] + b[i]
-            sw   $s4, 0($s2)
-            addi $s1, $s1, #4  ; next element
-            addi $s2, $s2, #4  ; next element
-            addi $s3, $s3, #1  ; i++
-            bge  $s3, $s6, loop
-        \end{verbatim}
+        \begin{lstlisting}[
+                language={[mips]Assembler},
+                basicstyle=\footnotesize,
+                numbers=left,
+                firstnumber=1,
+                numberfirstline=true
+            ]
+loop: lw $s4, 0($s1)
+      lw $s5, 0($s2)
+      add $s4, $s4, $s5
+      sw $s4, 0($s1)
+      addi $s1, $s1, 4
+      addi $s2, $s2, 4
+      addi $s3, $s3, 1
+      lw $s4, 0($s1)
+      lw $s5, 0($s2)
+      add $s4, $s4, $s5
+      sw $s4, 0($s1)
+      addi $s1, $s1, 4
+      addi $s2, $s2, 4
+      addi $s3, $s3, 1
+      bge $s3, $s6, loop
+            \end{lstlisting}
         \caption{One unroll}
-        \label{fig:sub2}
+        \label{fig:unroll:sub2}
     \end{subfigure}
     \caption{Loop unrolling in assembly}
     % https://www.cs.umd.edu/class/fall2001/cmsc411/proj01/proja/why.html
@@ -264,49 +283,123 @@ loop: lw   $s4, 0($s1)   ; Load a[i]
 \end{figure}
 
 % TODO: Set side by side
-\begin{lstlisting}[
-    language={[mips]Assembler}
-    ]
-loop: lw   $s4, 0($s1)   ; Load a[i]
-      lw   $s5, 0($s2)   ; Load b[i]
-      add  $s4, $s4, $s5 ; a[i] + b[i]
-      sw   $s4, 0($s2)
-      addi $s1, $s1, #4  ; next element
-      addi $s2, $s2, #4  ; next element
-      addi $s3, $s3, #1  ; i++
-      bge  $s3, $s6, loop
-\end{lstlisting}
+\begin{figure}
+    \centering
+    \begin{subfigure}{7cm}
+        \centering
+        \begin{verbatim}
+$s1 - a[] address  $s4 - value of a[x]
+$s2 - b[] address  $s5 - value of b[x]
+$s3 - i            $s6 - value 6
+        \end{verbatim}
+    \end{subfigure}
+    \begin{subfigure}{.55\textwidth}
+        \centering
+        \begin{lstlisting}[
+                language={[mips]Assembler},
+                basicstyle=\footnotesize,
+                numbers=left,
+                firstnumber=1,
+                numberfirstline=true
+            ]
+loop: lw $s4, 0($s1)
+      lw $s5, 0($s2)
+      add $s4, $s4, $s5
+      sw $s4, 0($s1)
+      addi $s1, $s1, 4
+      addi $s2, $s2, 4
+      addi $s3, $s3, 1
+      lw $s4, 0($s1)
+      lw $s5, 0($s2)
+      add $s4, $s4, $s5
+      sw $s4, 0($s1)
+      addi $s1, $s1, 4
+      addi $s2, $s2, 4
+      addi $s3, $s3, 1
+      bge $s3, $s6, loop
+            \end{lstlisting}
+        \caption{One unroll}
+        \label{fig:optimized:sub1}
+    \end{subfigure}%
+    \begin{subfigure}{.45\textwidth}
+        \centering
+        \begin{lstlisting}[
+                language={[mips]Assembler},
+                basicstyle=\footnotesize,
+                numbers=left,
+                firstnumber=1,
+                numberfirstline=true
+            ]
+loop: lw $s4, 0($s1)
+      lw $s5, 0($s2)
+      add $s4, $s4, $s5
+      sw $s4, 0($s1)
+      lw $s4, 4($s1)
+      lw $s5, 4($s2)
+      add $s4, $s4, $s5
+      sw $s4, 4($s1)
+      addi $s1, $s1, 8
+      addi $s2, $s2, 8
+      addi $s3, $s3, 2
+      bge $s3, $s6, loop
+            \end{lstlisting}
+        \caption{Optimized unroll}
+        \label{fig:optimized:sub2}
+    \end{subfigure}
+    \caption{Loop unrolling in assembly}
+    % https://www.cs.umd.edu/class/fall2001/cmsc411/proj01/proja/why.html
+    \label{fig:assembly:optimized}
+\end{figure}
+
+\subsubsection{Inlining}
+Inlining allows the compiler to swap all the calls to an inline function with the content of the function. This removes the need to do all the preparations for a function call such as saving values in registers, preparing parameters and return values. This comes at a cost of a larger program if there are many calls to this function in the code. It is very useful to have inline functions in loops that are run many times. This is an optimization that can be used manually in C and C++ using the \texttt{inline} keyword and can also be optimized by the compiler.
+
+% http://www.azillionmonkeys.com/qed/optimize.html
+% Optimizing compilers for modern architectures
+
+\subsubsection{Loop fission}
+When reading values from an array, caching 
 
 \begin{figure}
     \centering
-    \begin{subfigure}{6cm}
+    \begin{subfigure}{.55\textwidth}
         \centering
-        \begin{verbatim}
-R1 - a[] address  R4 - value of a[x]
-R2 - b[] address  R5 - value of b[x]
-R3 - i            R6 - condition i < 6
-        \end{verbatim}
-    \end{subfigure}
-    \begin{subfigure}{.5\textwidth}
-        \centering
-        \begin{verbatim}
-            OPTIMIZED ASSEMBLY
-        \end{verbatim}
-        \caption{Normal}
-        \label{fig:sub1}
+        \begin{lstlisting}[
+                language={C},
+                basicstyle=\footnotesize,
+                numbers=left,
+                firstnumber=1,
+                numberfirstline=true
+            ]
+for (i = 0; i < 10; ++i) {
+    a[i] = b[i];
+    b[i] = c[i];
+}
+            \end{lstlisting}
+        \caption{Before split}
+        \label{fig:fission:sub1}
     \end{subfigure}%
-    \begin{subfigure}{.5\textwidth}
+    \begin{subfigure}{.45\textwidth}
         \centering
-        \begin{verbatim}
-            TODO
-        \end{verbatim}
-        \caption{One unroll}
-        \label{fig:sub2}
+        \begin{lstlisting}[
+                language={C},
+                basicstyle=\footnotesize,
+                numbers=left,
+                firstnumber=1,
+                numberfirstline=true
+            ]
+for (i = 0; i < 10; ++i)
+    a[i] = b[i];
+for (i = 0; i < 10; ++i)
+    b[i] = c[i];
+        \end{lstlisting}
+        \caption{After split}
+        \label{fig:fission:sub2}
     \end{subfigure}
-    \caption{Loop unrolling in assembly}
-    \label{fig:assembly:optimized}
-    % https://www.eecis.udel.edu/~sunshine/courses/F05/CIS662/class17.pdf
+    \caption{Loop fission}
+    \label{fig:c:loopfission}
 \end{figure}
+
 \subsection{Java}
 
 % Object allocation pool

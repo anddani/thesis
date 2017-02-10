@@ -222,6 +222,45 @@ public class Benchmark {
         return stop;
     }
 
+    public long FFTCppIterativeColumbia() {
+        // Will hold the result from FFT
+
+        // Let first half be filled with real and second half with imaginary
+        double[] z = new double[re.length*2];
+        for (int i = 0; i < re.length; i++) {
+            z[i] = re[i];
+            z[i+re.length] = im[i];
+        }
+
+        long start = SystemClock.elapsedRealtimeNanos();
+
+        // Merge real and imaginary numbers
+//        double[] z = combineComplex(re, im);
+
+        double[] nativeResult = fft_columbia_iterative(z);
+
+//        Complex[] x = toComplex(nativeResult);
+        Complex[] x = new Complex[re.length];
+        for (int i = 0; i < re.length; i++) {
+            x[i] = new Complex(nativeResult[i], nativeResult[i+re.length]);
+        }
+
+        long stop = SystemClock.elapsedRealtimeNanos() - start;
+
+        if (DEBUG) {
+            System.out.println("************* FFT JAVA ITER COLUMBIA ************");
+            printComplex(x);
+        }
+
+        if (!isCorrect(x)) {
+            System.out.println("FFT JAVA ITER COLUMBIA GIVES INCORRECT OUTPUT");
+            printComplex(x);
+            System.out.println("CORRECT: ");
+            printComplex(correctOut);
+        }
+        return stop;
+    }
+
     public long FFTCppKiss() {
         long start = SystemClock.elapsedRealtimeNanos();
 
@@ -273,6 +312,7 @@ public class Benchmark {
 
     public native double[] fft_princeton_iterative(double[] arr);
     public native double[] fft_princeton_recursive(double[] arr);
+    public native double[] fft_columbia_iterative(double[] arr);
     public native double[] fft_kiss(double[] arr);
 
     static {

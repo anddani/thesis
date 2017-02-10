@@ -42,6 +42,9 @@ public class MyAsyncTask extends AsyncTask<Integer, String, String> {
                 case FFT_CPP_RECURSIVE_PRINCETON:
                     time = bm.FFTCppRecursivePrinceton();
                     break;
+                case FFT_CPP_ITERATIVE_COLUMBIA:
+                    time = bm.FFTCppIterativeColumbia();
+                    break;
                 case FFT_CPP_KISS:
                     time = bm.FFTCppKiss();
                     break;

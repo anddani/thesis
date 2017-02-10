@@ -18,12 +18,23 @@
 \usepackage{amssymb}
 \usepackage{csquotes}
 \usepackage{listings}
+\usepackage{parcolumns}
 
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+\definecolor{dkgreen}{rgb}{0,0.6,0}
 \lstdefinelanguage
 [mips]{Assembler}
-{morekeywords={
+{
+    morekeywords={loop},
+    keywordstyle=\color{mymauve},
+    classoffset=1,
+    morekeywords={
         lw,add,addi,sw,lw,bge
-}}
+    },
+    keywordstyle=\color{blue},
+    classoffset=0,
+    morecomment=[l][\color{dkgreen}]{\#},
+}
 
 \usepackage{caption,subcaption} % for tables and figures
 \usepgfplotslibrary{groupplots}
@@ -45,6 +56,7 @@
 \lstset{
     commentstyle=\color{green},
     keywordstyle=\color{blue},
+    morecomment=[l]{;}
 }
 
 % this length is used to control the width of the light blue frame

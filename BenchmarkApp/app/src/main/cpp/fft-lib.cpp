@@ -2,6 +2,7 @@
 #include <string>
 #include <android/log.h>
 #include "FFTPrincetonConverted.h"
+#include "FFTColumbiaConverted.h"
 #include "kiss-fft/_kiss_fft_guts.h"
 
 #define LOGTAG "FFTLIB"
@@ -57,6 +58,31 @@ jdoubleArray fftPrincetonRecursive(JNIEnv* env, jobject obj, jdoubleArray arr) {
     return arr;
 }
 
+jdoubleArray fftColumbiaIterative(JNIEnv* env, jobject obj, jdoubleArray arr) {
+    jsize size = (*env).GetArrayLength(arr);
+    jdouble* elements = (*env).GetDoubleArrayElements(arr, 0);
+    int N = size/2;
+
+//    std::vector<std::complex<double> > x;
+//    for (int i = 0; i < size; i+=2) {
+//        x.push_back(std::complex<double>(elements[i], elements[i+1]));
+//    }
+
+    FFTColumbiaConverted fcc = FFTColumbiaConverted(N);
+    fcc.fftIterative(elements, elements+N); // Run FFT
+
+    // place in return array
+    // [x[0].real, x[0].imag, ... x[n-1].real, x[n-1].imag]
+//    for (int i = 0; i < size; i+=2) {
+//        elements[i] = x[i/2].real();
+//        elements[i + 1] = x[i/2].imag();
+//    }
+
+    // Return a double[]
+    (*env).SetDoubleArrayRegion(arr, 0, size, elements);
+    return arr;
+}
+
 jdoubleArray fftKiss(JNIEnv* env, jobject obj, jdoubleArray arr) {
     jsize size = (*env).GetArrayLength(arr);
     jdouble* elements = (*env).GetDoubleArrayElements(arr, 0);
@@ -91,6 +117,7 @@ jdoubleArray fftKiss(JNIEnv* env, jobject obj, jdoubleArray arr) {
 static JNINativeMethod s_methods[] {
         {"fft_princeton_iterative", "([D)[D", (void*)fftPrincetonIterative},
         {"fft_princeton_recursive", "([D)[D", (void*)fftPrincetonRecursive},
+        {"fft_columbia_iterative", "([D)[D", (void*)fftColumbiaIterative},
         {"fft_kiss", "([D)[D", (void*)fftKiss}
 };
 
