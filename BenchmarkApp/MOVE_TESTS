@@ -1,16 +1,41 @@
 #!/bin/bash
 
+# TODO:
+#   - Control this program using arguments
+#   - Use folders for each day in DATA_PATH?
+#   - Ensure only raw data is stored
+#   - Calculate statistics with AWK
+#   - Format if needed in sed
+
 if [[ -z "$EXJOBB_HOME" ]]; then
     echo "EXJOBB_HOME not set"
     exit 1
 fi
 
+OPTIND=1
+while getopts "v" opt; do
+    case "$opt" in
+        v)  VIEW=1
+            ;;
+    esac
+done
+
 # Get current date and time to create
 # unique folder
 TIME=$(date +"%y%m%d_%H%M%S")
 DATA_PATH=$EXJOBB_HOME/Data
+PACKAGE="com.example.algo.benchmarkapp"
+FILENAME="/data/data/$PACKAGE/files/data.out"
 
-echo $DATA_PATH
+echo "-- moving data from phone to $DATA_PATH/$TIME"
+if [[ $VIEW -eq 1 ]] ; then
+    eval adb shell "'run-as $PACKAGE cat $FILENAME'" | less
+else
+    eval adb shell "'run-as $PACKAGE cat $FILENAME'" > $DATA_PATH/$TIME.out
+fi
 
-# adb shell 'run-as $PACKAGE ls /path/to/folder/bla.* | tr '\r' ' ' | xargs -n1 adb pull  
-# adb shell 'run-as $PACKAGE cat /data/data/$PACKAGE/files/data.out' > $DATA_PATH/$TIME.out
+if [[ $? -ne 0 ]] ; then
+    echo "!! ERROR - no such file: $FILENAME"
+    exit 1
+fi
+echo "-- done"

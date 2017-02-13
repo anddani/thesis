@@ -1,5 +1,6 @@
 package com.example.algo.benchmarkapp;
 
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
@@ -29,10 +30,19 @@ public class MainActivity extends AppCompatActivity implements OnTaskCompleted {
     @Override
     public void startNextTest() {
         MyAsyncTask myAsyncTask = new MyAsyncTask(MainActivity.this, bm);
-        int iter = Integer.parseInt(numIter.getText().toString());
 
-        // Input must be a power of two
-        int N = nextPowerOfTwo(Integer.parseInt(dataSize.getText().toString()));
+        String iterText = numIter.getText().toString();
+        // If not specified, set to 5
+        if (iterText.isEmpty()) {
+            iterText = "5";
+        }
+        int iter = Integer.parseInt(iterText);
+        String dataSizeText = dataSize.getText().toString();
+        // If not specified, set to 100000
+        if (dataSizeText.isEmpty()) {
+            dataSizeText = "100000";
+        }
+        int N = nextPowerOfTwo(Integer.parseInt(dataSizeText));
         int algorithm = currentAlgorithm;
         if (currentAlgorithm < Constants.NUM_ALGORITHMS) {
             myAsyncTask.execute(iter, algorithm);
@@ -50,14 +60,15 @@ public class MainActivity extends AppCompatActivity implements OnTaskCompleted {
      */
     @Override
     public void saveResult(String result) {
-//        FileOutputStream out;
-//        try {
-//            out = openFileOutput("test.out", Context.MODE_PRIVATE);
-//            out.write("TEST".getBytes());
-//            out.close();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+        FileOutputStream out;
+        try {
+            out = openFileOutput("data.out", MODE_APPEND);
+            result = result + "\n";
+            out.write(result.getBytes());
+            out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         logTextView.append(result + "\n");
         int scrollAmount = getScrollAmount(logTextView);
         // Scroll number of added lines outside of bottom
@@ -91,7 +102,18 @@ public class MainActivity extends AppCompatActivity implements OnTaskCompleted {
             @Override
             public void onClick(View v) {
                 currentAlgorithm = 0;
-                int N = nextPowerOfTwo(Integer.parseInt(dataSize.getText().toString()));
+                String dataSizeText = dataSize.getText().toString();
+                if (dataSizeText.isEmpty()) {
+                    dataSizeText = "100000";
+                }
+                int N = nextPowerOfTwo(Integer.parseInt(dataSizeText));
+
+                // Reset file content for each run
+                File file = new File(getFilesDir(), "data.out");
+                boolean deleted = file.delete();
+                if (!deleted) {
+                    System.out.println("DID NOT GET DELETED");
+                }
 
                 // Generates new input
                 bm = new Benchmark(N);

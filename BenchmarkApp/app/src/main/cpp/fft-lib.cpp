@@ -63,20 +63,8 @@ jdoubleArray fftColumbiaIterative(JNIEnv* env, jobject obj, jdoubleArray arr) {
     jdouble* elements = (*env).GetDoubleArrayElements(arr, 0);
     int N = size/2;
 
-//    std::vector<std::complex<double> > x;
-//    for (int i = 0; i < size; i+=2) {
-//        x.push_back(std::complex<double>(elements[i], elements[i+1]));
-//    }
-
     FFTColumbiaConverted fcc = FFTColumbiaConverted(N);
     fcc.fftIterative(elements, elements+N); // Run FFT
-
-    // place in return array
-    // [x[0].real, x[0].imag, ... x[n-1].real, x[n-1].imag]
-//    for (int i = 0; i < size; i+=2) {
-//        elements[i] = x[i/2].real();
-//        elements[i + 1] = x[i/2].imag();
-//    }
 
     // Return a double[]
     (*env).SetDoubleArrayRegion(arr, 0, size, elements);
