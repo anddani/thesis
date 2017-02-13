@@ -12,7 +12,6 @@ import org.jtransforms.fft.DoubleFFT_1D;
 import java.util.Arrays;
 import java.util.Random;
 
-// TODO: Convert Columbia FFT into C++
 public class Benchmark {
 
     private static final boolean DEBUG = false;

@@ -84,9 +84,9 @@ When an app is installed on the device, a program called \textbf{dex2oat} conver
 % Why is it used instead of Dalvik?
 
 \section{Native Development Kit}
-Native development kit (NDK) is a set of tools to help writing native apps for Android. It contains the necessary libraries, compiler, build tools and debugger for developing low level libraries. Google recommends using the NDK for two reasons: run computationally intensive tasks and usage of already written libraries \cite{android:ndk:guides}. Because Java is the supported language on Android, due to security and stability, native development is not recommended to use to build full apps, with exception of for example games.
+Native development kit (\gls{ndk}) is a set of tools to help writing native apps for Android. It contains the necessary libraries, compiler, build tools and debugger for developing low level libraries. Google recommends using the NDK for two reasons: run computationally intensive tasks and usage of already written libraries \cite{android:ndk:guides}. Because Java is the supported language on Android, due to security and stability, native development is not recommended to use to build full apps, with exception of for example games.
 
-Historically, native libraries have been built using makefile. Makefile is a tool used to coordinate compilation of source files. Android makefiles, \texttt{Android.mk} and \texttt{Application.mk}, are used to set compiler flags, choose which architectures that should be compiled for, location of source files and more. With Android Studio 2.2 CMake was introduced as the default build tool \cite{android:studio:cmake}. CMake is a more advanced tool for generating and running build scripts.
+Historically, native libraries have been built using makefile. Makefile is a tool used to coordinate compilation of source files. Android makefiles, \texttt{Android.mk} and \texttt{Application.mk}, are used to set compiler flags, choose which architectures that should be compiled for, location of source files and more. With Android Studio 2.2 \gls{cmake} was introduced as the default build tool \cite{android:studio:cmake}. CMake is a more advanced tool for generating and running build scripts.
 
 \subsection{Java Native Interface}
 To be able to call native libraries from Java code, a framework named Java Native Interface (JNI) is used. Using this interface, C/C++ functions are mapped as methods and primitive data types are converted between Java and C/C++. For this to work, special syntax is needed for JNI to recognize which method in which class a native function should correspond to.
@@ -109,12 +109,12 @@ To mark a function as native in Java, a special keyword called \texttt{native} i
 The JNI also provides a library for C and C++ for handling the special JNI data types. They can be used to determine the size of a Java array, get position of elements of an array and handling Java objects. In C and C++ you are given a pointer to a struct with all the required functions to convert data back and forth between Java data and C/C++ data.
 
 \subsection{LLVM and Clang}
-LLVM (Low Level Virtual Machine) is a suite that contains a set of compiler optimizers and backends. It is used as a foundation for compiler frontends and supports many architectures. An example of a frontend tool that uses LLVM is Clang. Clang is used compile C, C++, Objective-C \cite{clang:comp}.
+LLVM (Low Level Virtual Machine) is a suite that contains a set of compiler optimizers and backends. It is used as a foundation for compiler frontends and supports many architectures. An example of a frontend tool that uses LLVM is \gls{clang}. Clang is used compile C, C++, Objective-C \cite{clang:comp}.
 
 Clang is as of March 2016 (NDK version 11) \cite{android:ndk:revision}, the only supported compiler in the NDK. Google has chosen to focus on a supporting the Clang compiler instead of the GNU GCC compiler. This means that there is a bigger chance that a specific architecture is supported in the NDK.
 
 \section{Discrete Fourier Transform}
-The Discrete Fourier Transform (DFT) is a method of converting a sampled signal from the time domain to the frequency domain. In other words, the DFT takes an observed signal and dissects each component that would form the observed signal. Every component of a signal can each be described as a sinusoidal wave with a frequency, amplitude and phase.
+The Discrete Fourier Transform (\gls{dft}) is a method of converting a sampled signal from the time domain to the frequency domain. In other words, the DFT takes an observed signal and dissects each component that would form the observed signal. Every component of a signal can each be described as a sinusoidal wave with a frequency, amplitude and phase.
 
 If we observe Figure~\ref{fig:dft:ex1}, we can see how a signal in time domain looks like in frequency domain. Function displayed in the time domain consists of three sin components, each with its own amplitude and frequency. What the graph of the frequency domain shows, is the amplitude of each frequency. This can then be used to analyze the input signal.
 
@@ -180,7 +180,7 @@ Equation \ref{eq:1} \cite[p.~92]{tan2013digital} describes the mathematical proc
 
 \section{Code Optimization}
 
-There are many ways you can optimize your code before it is being compiled to binary or byte code. This chapter first present some general optimization measures and will then describe some language specific methods for optimization.
+There are many ways your compiler can optimize your code during compilation This chapter first present some general optimization measures taken by the optimizer and will then describe some language specific methods for optimization.
 
 % Inlining
 % Loop unrolling
@@ -223,9 +223,9 @@ The gain in using loop unrolling is that you \enquote{save} the same amount of j
     \begin{subfigure}{7cm}
         \centering
         \begin{verbatim}
-$s1 - a[] address  $s4 - value of a[x]
-$s2 - b[] address  $s5 - value of b[x]
-$s3 - i            $s6 - value 6
+$s1 - a[] address | $s4 - value of a[x]
+$s2 - b[] address | $s5 - value of b[x]
+$s3 - i           | $s6 - value 6
         \end{verbatim}
     \end{subfigure}
     \begin{subfigure}{.55\textwidth}
@@ -249,7 +249,7 @@ loop: lw $s4, 0($s1) # Load a[i]
         \caption{Normal}
         \label{fig:unroll:sub1}
     \end{subfigure}%
-    \begin{subfigure}{.45\textwidth}
+    \begin{subfigure}{.3\textwidth}
         \centering
         \begin{lstlisting}[
                 language={[mips]Assembler},
@@ -282,15 +282,19 @@ loop: lw $s4, 0($s1)
     \label{fig:assembly:unroll}
 \end{figure}
 
+
+\subsubsection{Inlining}
+Inlining allows the compiler to swap all the calls to an inline function with the content of the function. This removes the need to do all the preparations for a function call such as saving values in registers, preparing parameters and return values. This comes at a 
+
 % TODO: Set side by side
-\begin{figure}
+\begin{figure}[H]
     \centering
     \begin{subfigure}{7cm}
         \centering
         \begin{verbatim}
-$s1 - a[] address  $s4 - value of a[x]
-$s2 - b[] address  $s5 - value of b[x]
-$s3 - i            $s6 - value 6
+$s1 - a[] address | $s4 - value of a[x]
+$s2 - b[] address | $s5 - value of b[x]
+$s3 - i           | $s6 - value 6
         \end{verbatim}
     \end{subfigure}
     \begin{subfigure}{.55\textwidth}
@@ -321,7 +325,7 @@ loop: lw $s4, 0($s1)
         \caption{One unroll}
         \label{fig:optimized:sub1}
     \end{subfigure}%
-    \begin{subfigure}{.45\textwidth}
+    \begin{subfigure}{.3\textwidth}
         \centering
         \begin{lstlisting}[
                 language={[mips]Assembler},
@@ -346,23 +350,22 @@ loop: lw $s4, 0($s1)
         \caption{Optimized unroll}
         \label{fig:optimized:sub2}
     \end{subfigure}
-    \caption{Loop unrolling in assembly}
+    \caption{Optimized loop unrolling in assembly}
     % https://www.cs.umd.edu/class/fall2001/cmsc411/proj01/proja/why.html
     \label{fig:assembly:optimized}
 \end{figure}
 
-\subsubsection{Inlining}
-Inlining allows the compiler to swap all the calls to an inline function with the content of the function. This removes the need to do all the preparations for a function call such as saving values in registers, preparing parameters and return values. This comes at a cost of a larger program if there are many calls to this function in the code. It is very useful to have inline functions in loops that are run many times. This is an optimization that can be used manually in C and C++ using the \texttt{inline} keyword and can also be optimized by the compiler.
+cost of a larger program if there are many calls to this function in the code. It is very useful to have inline functions in loops that are run many times. This is an optimization that can be used manually in C and C++ using the \texttt{inline} keyword and can also be optimized by the compiler.
 
 % http://www.azillionmonkeys.com/qed/optimize.html
-% Optimizing compilers for modern architectures
+% => Optimizing compilers for modern architectures <=
 
-\subsubsection{Loop fission}
-When reading values from an array, caching 
+\subsubsection{Loop fission and loop fusion}
+There are two ways of changing how loops are executed called \emph{Loop Fission} and \emph{Loop Fusion}. They are the opposites of themselves and are used based on instructions in the loop. The purpose of \emph{Loop Fission} is to separate a statement or statements from each other and have multiple loops. This increases the loop overhead but can become more efficient if the separated loop has good cache locality. As we see in Figure~\ref{fig:fission:sub1}, we read from two arrays, \texttt{b} and \texttt{c}. We cannot know if they are close to each other in memory which can lead to many cache misses every iteration of the loop. If we split the loop as in Figure~\ref{fig:fission:sub2}, we can utilize memory locality to get more efficient code.
 
-\begin{figure}
+\begin{figure}[H]
     \centering
-    \begin{subfigure}{.55\textwidth}
+    \begin{subfigure}{.45\textwidth}
         \centering
         \begin{lstlisting}[
                 language={C},
@@ -379,7 +382,7 @@ for (i = 0; i < 10; ++i) {
         \caption{Before split}
         \label{fig:fission:sub1}
     \end{subfigure}%
-    \begin{subfigure}{.45\textwidth}
+    \begin{subfigure}{.35\textwidth}
         \centering
         \begin{lstlisting}[
                 language={C},
@@ -398,6 +401,48 @@ for (i = 0; i < 10; ++i)
     \end{subfigure}
     \caption{Loop fission}
     \label{fig:c:loopfission}
+\end{figure}
+
+On the other hand, \emph{Loop Fusion} merges two loops into one because memory locality is possible in one loop. This removes the overhead of having two loops. Because both assignments require reads from the \texttt{a} array that are close to each other, cache locality is possible.
+
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}{.45\textwidth}
+        \centering
+        \begin{lstlisting}[
+                language={C},
+                basicstyle=\footnotesize,
+                numbers=left,
+                firstnumber=1,
+                numberfirstline=true
+            ]
+for (i = 1; i < 10; ++i)
+    a[i] = a[i-1];
+for (i = 1; i < 10; ++i)
+    b[i] = a[i];
+            \end{lstlisting}
+        \caption{Before fusion}
+        \label{fig:fusion:sub1}
+    \end{subfigure}%
+    \begin{subfigure}{.35\textwidth}
+        \centering
+        \begin{lstlisting}[
+                language={C},
+                basicstyle=\footnotesize,
+                numbers=left,
+                firstnumber=1,
+                numberfirstline=true
+            ]
+for (i = 1; i < 10; ++i) {
+    a[i] = a[i-1];
+    b[i] = a[i];
+}
+        \end{lstlisting}
+        \caption{After fusion}
+        \label{fig:fusion:sub2}
+    \end{subfigure}
+    \caption{Loop fusion}
+    \label{fig:c:loopfusion}
 \end{figure}
 
 \subsection{Java}
@@ -421,4 +466,3 @@ for (i = 0; i < 10; ++i)
 % https://www.itu.dk/people/sestoft/papers/benchmarking.pdf
 
 \subsection{C++}
-% Inlining

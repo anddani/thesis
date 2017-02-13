@@ -54,8 +54,6 @@ public class MainActivity extends AppCompatActivity implements OnTaskCompleted {
     /**
      * Logs the result on the screen
      *
-     * TODO: Print to file
-     *
      * @param result Execution time
      */
     @Override
