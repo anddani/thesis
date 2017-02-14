@@ -1,0 +1,17 @@
+Princeton Java Iterative average: 1138.260082 ms
+Princeton Java Recursive average: 1424.0354438 ms
+Columbia  Java Iterative average: 533.7492198 ms
+JTransforms average:              130.4885964 ms
+Princeton C++  Iterative average: 797.4478918000001 ms
+Princeton C++  Recursive average: 1571.665136 ms
+Columbia  C++  Iterative average: 721.0274678 ms
+KISS FFT average:                 312.2759480000001 ms
+
+1. JTransforms
+2. KISS FFT
+3. Java Columbia Iterative
+4. C++ Columbia Iterative
+5. C++ Princeton Iterative
+6. Java Princeton Iterative
+7. Java Princeton Recursive
+8. C++ Princeton Recursive

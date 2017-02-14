@@ -16,6 +16,7 @@ int FFTPrincetonConverted::fftIterative(vector<complex<double> >& x) {
         return -1;
     }
 
+    // Bit reversal permutation
     int shift = 1 + __builtin_clz(N);
     for (unsigned int k = 0; k < N; k++) {
         int j = reverseInt(k) >> shift;
@@ -30,7 +31,6 @@ int FFTPrincetonConverted::fftIterative(vector<complex<double> >& x) {
     for (int L = 2; L <= N; L = L+L) {
         for (int k = 0; k < L/2; k++) {
             double kth = -2 * k * M_PI / L;
-//            complex<double> w = complex<double>(cos(kth), sin(kth));
             complex<double> w(cos(kth), sin(kth));
             for (int j = 0; j < N/L; j++) {
                 complex<double> tao = w * (x[j*L + k + L/2]);
