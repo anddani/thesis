@@ -1,0 +1,72 @@
+-- Running Algorithm FFT Princeton Java Iterative N=131072 for 5 iter
+
+1116.160163 ms
+1085.363911 ms
+1140.377197 ms
+1163.9022 ms
+1158.16949 ms
+average: 1132.7945922 ms
+
+-- Running Algorithm FFT Princeton Java Recursive N=131072 for 5 iter
+
+1507.643379 ms
+1386.515086 ms
+1433.29181 ms
+1387.103523 ms
+1405.255348 ms
+average: 1423.9618292 ms
+
+-- Running Algorithm FFT Columbia Java Iterative N=131072 for 5 iter
+
+716.815175 ms
+633.234958 ms
+542.843647 ms
+620.918291 ms
+536.330314 ms
+average: 610.0284770000001 ms
+
+-- Running Algorithm FFT Java JTransforms N=131072 for 5 iter
+
+311.126437 ms
+157.876786 ms
+84.681883 ms
+75.664695 ms
+66.9211 ms
+average: 139.2541802 ms
+
+-- Running Algorithm FFT C++ Princeton converted Iterative N=131072 for 5 iter
+
+826.961697 ms
+800.515809 ms
+795.575704 ms
+797.918257 ms
+789.177892 ms
+average: 802.0298718 ms
+
+-- Running Algorithm FFT C++ Princeton converted Recursive N=131072 for 5 iter
+
+1573.382396 ms
+1564.371926 ms
+1567.769531 ms
+1574.14573 ms
+1578.472293 ms
+average: 1571.6283752 ms
+
+-- Running Algorithm FFT C++ Columbia converted Iterative N=131072 for 5 iter
+
+743.718407 ms
+711.067831 ms
+684.187464 ms
+703.278351 ms
+700.571111 ms
+average: 708.5646328 ms
+
+-- Running Algorithm FFT C++ KISS N=131072 for 5 iter
+
+319.457115 ms
+358.947692 ms
+302.303259 ms
+313.94576 ms
+297.651436 ms
+average: 318.46105239999997 ms
+

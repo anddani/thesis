@@ -1,19 +1,19 @@
 #include "FFTColumbiaConverted.h"
 
 FFTColumbiaConverted::FFTColumbiaConverted(int n) {
-        this->n = n;
-        this->m = (int)(log(n) / log(2));
+    this->n = n;
+    this->m = (int)(log(n) / log(2));
 
-        // precompute tables
-        cos_v = new double[n/2];
-        sin_v = new double[n/2];
+    // precompute tables
+    cos_v = new double[n/2];
+    sin_v = new double[n/2];
 
-        for(int i=0; i<n/2; i++) {
-            cos_v[i] = cos(-2*M_PI*i/n);
-            sin_v[i] = sin(-2*M_PI*i/n);
-        }
+    for(int i=0; i<n/2; i++) {
+        cos_v[i] = cos(-2*M_PI*i/n);
+        sin_v[i] = sin(-2*M_PI*i/n);
+    }
 
-        makeWindow();
+    makeWindow();
 }
 
 FFTColumbiaConverted::~FFTColumbiaConverted() {
@@ -23,10 +23,10 @@ FFTColumbiaConverted::~FFTColumbiaConverted() {
 }
 
 void FFTColumbiaConverted::makeWindow() {
-        window = new double[n];
-        for(int i = 0; i < n; i++)
-            window[i] = 0.42 - 0.5 * cos(2*M_PI*i/(n-1)) 
-                + 0.08 * cos(4*M_PI*i/(n-1));
+    window = new double[n];
+    for(int i = 0; i < n; i++)
+        window[i] = 0.42 - 0.5 * cos(2*M_PI*i/(n-1))
+                    + 0.08 * cos(4*M_PI*i/(n-1));
 }
 
 void FFTColumbiaConverted::fftIterative(double* x, double* y) {

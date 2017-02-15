@@ -173,7 +173,7 @@ In other words, you have to be able to reconstruct the signal given the samples 
     \label{fig:dft:ex1}
 \end{figure}
 
-Equation \ref{eq:1} \cite[p.~92]{tan2013digital} describes the mathematical process of converting a signal $x$ to a spectrum $X$ of $x$ where $N$ is the number of samples, $n$ is the time step and $k$ is the frequency sample. When calculating $X\left(k\right) \forall\ k \in \{x \in \mathbb{R} \mid 0 \leq x \leq N - 1\}$ we clearly see that it will take $N^2$ multiplications. In 1965, Cooley and Tukey published a paper on an algorithm that could calculate the DFT in less than $2N\log(N)$ multiplications \cite{Cooley1964} called the Fast Fourier Transform (FFT).
+Equation \ref{eq:1} \cite[p.~92]{tan2013digital} describes the mathematical process of converting a signal $x$ to a spectrum $X$ of $x$ where $N$ is the number of samples, $n$ is the time step and $k$ is the frequency sample. When calculating $X\left(k\right) \forall\ k \in \{x \in \mathbb{N} \mid 0 \leq x \leq N - 1\}$ we clearly see that it will take $N^2$ multiplications. In 1965, Cooley and Tukey published a paper on an algorithm that could calculate the DFT in less than $2N\log(N)$ multiplications \cite{Cooley1964} called the Fast Fourier Transform (FFT).
 
 \begin{align}
     X\left(k\right) = \sum\limits_{n=0}^{N-1}x\left(n\right)\cdot e^{-j2\pi kn/N},\ \ k = 0,1,2,\dots,N-1\label{eq:1}
@@ -446,6 +446,7 @@ for (i = 1; i < 10; ++i) {
 \end{figure}
 
 \subsection{Java}
+In Java, an array is created during runtime and cannot change its size after it is created. This means that it will always be placed on the heap and the garbage collector will handle the memory it resides on should be released. By keeping an array reference in scope and reusing the same array, we can circumvent this behaviour and save some instructions by not needing to ask for more memory from the heap.
 
 % Object allocation pool
 % CPU usage during runtime
@@ -466,7 +467,7 @@ for (i = 1; i < 10; ++i) {
 % https://www.itu.dk/people/sestoft/papers/benchmarking.pdf
 
 \subsection{C++}
-One strategy for optimizing
+In C and C++, arrays with predefined sizes are located on the program stack. This makes the program run faster because it does not need to call malloc or new and ask for more memory on the heap. This require that the programmer knows the required size of the array in advance and is not always possible or memory efficient.
 
 \subsubsection{NEON}
 % https://www.kernel.org/pub/linux/kernel/people/geoff/cell/ps3-linux-docs/CellProgrammingTutorial/BasicsOfSIMDProgramming.html
@@ -474,7 +475,7 @@ One strategy for optimizing
 % http://www.crickettechnology.com/blog/?p=691
 % http://wanderingcoder.net/2010/07/19/ought-arm/
 % http://wanderingcoder.net/2010/06/02/intro-neon/
-Android NDK includes a library called NEON containing functions that enable Single Instruction Multiple Data (SIMD). SIMD is an efficient way of executing the same type of operation on multiple operands at the same time. Figure~\ref{fig:simd} describes this concept where instead of operating on one piece of data at the time, a larger set of data that uses the same operation can be processed with one operation.
+Android NDK includes a tool called NEON, containing functions that enable Single Instruction Multiple Data (SIMD). SIMD is an efficient way of executing the same type of operation on multiple operands at the same time. Figure~\ref{fig:simd} describes this concept where instead of operating on one piece of data at the time, a larger set of data that uses the same operation can be processed with one operation.
 
 NEON provides a set of functions compatible with the ARM architecture. These functions can perform operations on double word and quad word registers. The reason you would want to use SIMD because you can have instructions that loads blocks of multiple values and operates on these blocks.  The process starts by reading the data into larger vector registers, operate on these registers and storing the results as blocks \cite{simd:expl}. This way you will have less instructions than if you loaded one element at a time and operated on only that value.
 
