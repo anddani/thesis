@@ -113,64 +113,6 @@ LLVM (Low Level Virtual Machine) is a suite that contains a set of compiler opti
 
 Clang is as of March 2016 (NDK version 11) \cite{android:ndk:revision}, the only supported compiler in the NDK. Google has chosen to focus on a supporting the Clang compiler instead of the GNU GCC compiler. This means that there is a bigger chance that a specific architecture is supported in the NDK.
 
-\subsection{NEON}
-% https://www.kernel.org/pub/linux/kernel/people/geoff/cell/ps3-linux-docs/CellProgrammingTutorial/BasicsOfSIMDProgramming.html
-
-% http://www.crickettechnology.com/blog/?p=691
-% http://wanderingcoder.net/2010/07/19/ought-arm/
-% http://wanderingcoder.net/2010/06/02/intro-neon/
-Android supports a library called NEON containing functions that enable Single Instruction Multiple Data (SIMD). SIMD is an efficient way of executing the same type of operation on multiple operands at the same time. Figure~\ref{fig:simd} describes this concept where instead of operating on one piece of data at the time, a larger set of data that uses the same operation can be processed with one operation.
-
-NEON provides a set of functions compatible with the ARM architecture. These functions can perform operations on double word and quad word registers. The reason you would want to use SIMD is to minimize the number of reads you do as well as
-
-\begin{figure}
-    \centering
-    \begin{subfigure}{.45\textwidth}
-        \centering
-        \begin{tikzpicture}[
-                node distance = 0mm,
-                start chain=1 going {below=of \tikzchainprevious.south west}, 
-                box/.style = {draw, semithick, minimum size=1cm, every on chain/.style={anchor=north west}, outer sep = 0mm, on chain}
-            ]
-            \foreach \i in {1,...,4}
-            {
-                \pgfmathtruncatemacro{\y}{\i - 1};
-                \pgfmathtruncatemacro{\lab}{(\i - 4) * -1}
-                \node[fill=myeggshell,box] (A\lab) at (0, 1.5*\y) {A$_\lab$};
-                \node[fill=mylightgreen,box] (B\lab) at (1.6, 1.5*\y) {B$_\lab$};
-                \node[fill=mylightred,box] (C\lab) at (4, 1.5*\y) {C$_\lab$};
-                \node[fill=none,right of=A\lab,node distance=0.8cm] (plus\i) {+};
-                \node[fill=none,right of=B\lab,node distance=1.15cm] (equals\i) {=};
-            };
-        \end{tikzpicture}
-        \caption{Four separate instructions}
-        \label{fig:simd:simd1}
-    \end{subfigure}%
-    \begin{subfigure}{.35\textwidth}
-        \centering
-        \begin{tikzpicture}[
-                node distance = 0mm,
-                start chain=1 going {below=of \tikzchainprevious.south west}, 
-                box/.style = {draw, semithick, minimum size=1cm, every on chain/.style={anchor=north west}, outer sep = 0mm, on chain}
-            ]
-            \foreach \i in {1,...,4}
-            {
-                \pgfmathtruncatemacro{\y}{\i - 1};
-                \pgfmathtruncatemacro{\lab}{(\i - 4) * -1}
-                \node[fill=myeggshell,box] (A\lab) at (0, 1*\y) {A$_\lab$};
-                \node[fill=mylightgreen,box] (B\lab) at (1.6, 1*\y) {B$_\lab$};
-                \node[fill=mylightred,box] (C\lab) at (4, 1*\y) {C$_\lab$};
-            };
-            \node[fill=none] (plus) at (1.3, 0.95) {+};
-            \node[fill=none] (equals) at (3.3, 0.95) {=};
-        \end{tikzpicture}
-        \caption{One instruction with SIMD}
-        \label{fig:simd:simd2}
-    \end{subfigure}
-    \caption{Single Instruction Multiple Data\cite{kernel:simd}}
-    \label{fig:simd}
-\end{figure}
-
 
 \section{Discrete Fourier Transform}
 The Discrete Fourier Transform (\gls{dft}) is a method of converting a sampled signal from the time domain to the frequency domain. In other words, the DFT takes an observed signal and dissects each component that would form the observed signal. Every component of a signal can each be described as a sinusoidal wave with a frequency, amplitude and phase.
@@ -279,23 +221,21 @@ The gain in using loop unrolling is that you \enquote{save} the same amount of j
 
 \begin{figure}
     \centering
-    \begin{subfigure}{7cm}
-        \centering
+    \begin{adjustbox}{minipage=\linewidth,scale=0.8}
         \begin{verbatim}
-$s1 - a[] address | $s4 - value of a[x]
-$s2 - b[] address | $s5 - value of b[x]
-$s3 - i           | $s6 - value 6
+                $s1 - a[] address | $s4 - value of a[x]
+                $s2 - b[] address | $s5 - value of b[x]
+                $s3 - i           | $s6 - value 6
         \end{verbatim}
-    \end{subfigure}
-    \begin{subfigure}{.55\textwidth}
-        \centering
-        \begin{lstlisting}[
-                language={[mips]Assembler},
-                basicstyle=\footnotesize,
-                numbers=left,
-                firstnumber=1,
-                numberfirstline=true
-            ]
+        \begin{subfigure}{.55\textwidth}
+            \centering
+            \begin{lstlisting}[
+                    language={[mips]Assembler},
+                    basicstyle=\footnotesize,
+                    numbers=left,
+                    firstnumber=1,
+                    numberfirstline=true
+                ]
 loop: lw $s4, 0($s1) # Load a[i]
       lw $s5, 0($s2) # Load b[i]
       add $s4, $s4, $s5 # a[i] + b[i]
@@ -304,19 +244,19 @@ loop: lw $s4, 0($s1) # Load a[i]
       addi $s2, $s2, 4 # next element
       addi $s3, $s3, 1 # i++
       bge $s3, $s6, loop
-            \end{lstlisting}
-        \caption{Normal}
-        \label{fig:unroll:sub1}
-    \end{subfigure}%
-    \begin{subfigure}{.3\textwidth}
-        \centering
-        \begin{lstlisting}[
-                language={[mips]Assembler},
-                basicstyle=\footnotesize,
-                numbers=left,
-                firstnumber=1,
-                numberfirstline=true
-            ]
+                \end{lstlisting}
+            \caption{Normal}
+            \label{fig:unroll:sub1}
+        \end{subfigure}%
+        \begin{subfigure}{.3\textwidth}
+            \centering
+            \begin{lstlisting}[
+                    language={[mips]Assembler},
+                    basicstyle=\footnotesize,
+                    numbers=left,
+                    firstnumber=1,
+                    numberfirstline=true
+                ]
 loop: lw $s4, 0($s1)
       lw $s5, 0($s2)
       add $s4, $s4, $s5
@@ -332,10 +272,11 @@ loop: lw $s4, 0($s1)
       addi $s2, $s2, 4
       addi $s3, $s3, 1
       bge $s3, $s6, loop
-            \end{lstlisting}
-        \caption{One unroll}
-        \label{fig:unroll:sub2}
-    \end{subfigure}
+                \end{lstlisting}
+            \caption{One unroll}
+            \label{fig:unroll:sub2}
+        \end{subfigure}
+    \end{adjustbox}
     \caption{Loop unrolling in assembly}
     % https://www.cs.umd.edu/class/fall2001/cmsc411/proj01/proja/why.html
     \label{fig:assembly:unroll}
@@ -346,25 +287,24 @@ loop: lw $s4, 0($s1)
 Inlining allows the compiler to swap all the calls to an inline function with the content of the function. This removes the need to do all the preparations for a function call such as saving values in registers, preparing parameters and return values. This comes at a 
 
 % TODO: Set side by side
-\begin{figure}[H]
+\begin{figure}[h]
     \centering
-    \begin{subfigure}{7cm}
+    \begin{adjustbox}{minipage=\linewidth,scale=0.8}
         \centering
         \begin{verbatim}
-$s1 - a[] address | $s4 - value of a[x]
-$s2 - b[] address | $s5 - value of b[x]
-$s3 - i           | $s6 - value 6
+                  $s1 - a[] address | $s4 - value of a[x]
+                  $s2 - b[] address | $s5 - value of b[x]
+                  $s3 - i           | $s6 - value 6
         \end{verbatim}
-    \end{subfigure}
-    \begin{subfigure}{.55\textwidth}
-        \centering
-        \begin{lstlisting}[
-                language={[mips]Assembler},
-                basicstyle=\footnotesize,
-                numbers=left,
-                firstnumber=1,
-                numberfirstline=true
-            ]
+        \begin{subfigure}{.55\textwidth}
+            \centering
+            \begin{lstlisting}[
+                    language={[mips]Assembler},
+                    basicstyle=\footnotesize,
+                    numbers=left,
+                    firstnumber=1,
+                    numberfirstline=true
+                ]
 loop: lw $s4, 0($s1)
       lw $s5, 0($s2)
       add $s4, $s4, $s5
@@ -380,19 +320,19 @@ loop: lw $s4, 0($s1)
       addi $s2, $s2, 4
       addi $s3, $s3, 1
       bge $s3, $s6, loop
-            \end{lstlisting}
-        \caption{One unroll}
-        \label{fig:optimized:sub1}
-    \end{subfigure}%
-    \begin{subfigure}{.3\textwidth}
-        \centering
-        \begin{lstlisting}[
-                language={[mips]Assembler},
-                basicstyle=\footnotesize,
-                numbers=left,
-                firstnumber=1,
-                numberfirstline=true
-            ]
+                \end{lstlisting}
+            \caption{One unroll}
+            \label{fig:optimized:sub1}
+        \end{subfigure}%
+        \begin{subfigure}{.3\textwidth}
+            \centering
+            \begin{lstlisting}[
+                    language={[mips]Assembler},
+                    basicstyle=\footnotesize,
+                    numbers=left,
+                    firstnumber=1,
+                    numberfirstline=true
+                ]
 loop: lw $s4, 0($s1)
       lw $s5, 0($s2)
       add $s4, $s4, $s5
@@ -405,10 +345,11 @@ loop: lw $s4, 0($s1)
       addi $s2, $s2, 8
       addi $s3, $s3, 2
       bge $s3, $s6, loop
-            \end{lstlisting}
-        \caption{Optimized unroll}
-        \label{fig:optimized:sub2}
-    \end{subfigure}
+                \end{lstlisting}
+            \caption{Optimized unroll}
+            \label{fig:optimized:sub2}
+        \end{subfigure}
+    \end{adjustbox}
     \caption{Optimized loop unrolling in assembly}
     % https://www.cs.umd.edu/class/fall2001/cmsc411/proj01/proja/why.html
     \label{fig:assembly:optimized}
@@ -422,7 +363,7 @@ cost of a larger program if there are many calls to this function in the code. I
 \subsubsection{Loop fission and loop fusion}
 There are two ways of changing how loops are executed called \emph{Loop Fission} and \emph{Loop Fusion}. They are the opposites of themselves and are used based on instructions in the loop. The purpose of \emph{Loop Fission} is to separate a statement or statements from each other and have multiple loops. This increases the loop overhead but can become more efficient if the separated loop has good cache locality. As we see in Figure~\ref{fig:fission:sub1}, we read from two arrays, \texttt{b} and \texttt{c}. We cannot know if they are close to each other in memory which can lead to many cache misses every iteration of the loop. If we split the loop as in Figure~\ref{fig:fission:sub2}, we can utilize memory locality to get more efficient code.
 
-\begin{figure}[H]
+\begin{figure}[h]
     \centering
     \begin{subfigure}{.45\textwidth}
         \centering
@@ -525,3 +466,66 @@ for (i = 1; i < 10; ++i) {
 % https://www.itu.dk/people/sestoft/papers/benchmarking.pdf
 
 \subsection{C++}
+One strategy for optimizing
+
+\subsubsection{NEON}
+% https://www.kernel.org/pub/linux/kernel/people/geoff/cell/ps3-linux-docs/CellProgrammingTutorial/BasicsOfSIMDProgramming.html
+
+% http://www.crickettechnology.com/blog/?p=691
+% http://wanderingcoder.net/2010/07/19/ought-arm/
+% http://wanderingcoder.net/2010/06/02/intro-neon/
+Android NDK includes a library called NEON containing functions that enable Single Instruction Multiple Data (SIMD). SIMD is an efficient way of executing the same type of operation on multiple operands at the same time. Figure~\ref{fig:simd} describes this concept where instead of operating on one piece of data at the time, a larger set of data that uses the same operation can be processed with one operation.
+
+NEON provides a set of functions compatible with the ARM architecture. These functions can perform operations on double word and quad word registers. The reason you would want to use SIMD because you can have instructions that loads blocks of multiple values and operates on these blocks.  The process starts by reading the data into larger vector registers, operate on these registers and storing the results as blocks \cite{simd:expl}. This way you will have less instructions than if you loaded one element at a time and operated on only that value.
+
+SIMD has some prerequisites on the data that is being processed. Firstly, the data blocks must line up meaning that you cannot operate between two operands that are not in the same area of the block. Secondly, all the operands of a block must be of the same type.
+
+\begin{figure}
+    \centering
+    \begin{subfigure}{.45\textwidth}
+        \centering
+        \begin{tikzpicture}[
+                node distance = 0mm,
+                start chain=1 going {below=of \tikzchainprevious.south west}, 
+                box/.style = {draw, semithick, minimum size=1cm, every on chain/.style={anchor=north west}, outer sep = 0mm, on chain}
+            ]
+            \foreach \i in {1,...,4}
+            {
+                \pgfmathtruncatemacro{\y}{\i - 1};
+                \pgfmathtruncatemacro{\lab}{(\i - 4) * -1}
+                \node[fill=myeggshell,box] (A\lab) at (0, 1.5*\y) {A$_\lab$};
+                \node[fill=mylightgreen,box] (B\lab) at (1.6, 1.5*\y) {B$_\lab$};
+                \node[fill=mylightred,box] (C\lab) at (4, 1.5*\y) {C$_\lab$};
+                \node[fill=none,right of=A\lab,node distance=0.8cm] (plus\i) {+};
+                \node[fill=none,right of=B\lab,node distance=1.15cm] (equals\i) {=};
+            };
+        \end{tikzpicture}
+        \caption{Four separate instructions}
+        \label{fig:simd:simd1}
+    \end{subfigure}%
+    \begin{subfigure}{.35\textwidth}
+        \centering
+        \begin{tikzpicture}[
+                node distance = 0mm,
+                start chain=1 going {below=of \tikzchainprevious.south west}, 
+                box/.style = {draw, semithick, minimum size=1cm, every on chain/.style={anchor=north west}, outer sep = 0mm, on chain}
+            ]
+            \foreach \i in {1,...,4}
+            {
+                \pgfmathtruncatemacro{\y}{\i - 1};
+                \pgfmathtruncatemacro{\lab}{(\i - 4) * -1}
+                \node[fill=myeggshell,box] (A\lab) at (0, 1*\y) {A$_\lab$};
+                \node[fill=mylightgreen,box] (B\lab) at (1.6, 1*\y) {B$_\lab$};
+                \node[fill=mylightred,box] (C\lab) at (4, 1*\y) {C$_\lab$};
+            };
+            \node[fill=none] (plus) at (1.3, 0.95) {+};
+            \node[fill=none] (equals) at (3.3, 0.95) {=};
+        \end{tikzpicture}
+        \caption{One instruction with SIMD}
+        \label{fig:simd:simd2}
+    \end{subfigure}
+    \caption{Single Instruction Multiple Data\cite{kernel:simd}}
+    \label{fig:simd}
+\end{figure}
+
+\section{Related work}
