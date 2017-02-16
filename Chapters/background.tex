@@ -68,6 +68,11 @@ The DVM is a virtual machine optimized for devices where resources are limited \
 
 % Why was it used?
 
+% READ:
+% http://www.android-app-developer.co.uk/android-app-development-docs/android-jit-compiler-androids-dalvik-vm.pdf
+% https://developer.android.com/about/versions/nougat/android-7.0.html
+
+
 \subsection{Dalvik Executables}
 % What are dex files?
 Dalvik executables, or dex files, are the files that Dalvik bytecode is stored. They are created by converting a Java class file to the dex format. They are of a different structure than Java class files. Some differences are the header types that describes the data. One example of the differences is the string constant fields that are present in the dex-file. % FIND REFERENCE FROM GOOGLE IO ABOUT DALVIK??
@@ -530,3 +535,8 @@ SIMD has some prerequisites on the data that is being processed. Firstly, the da
 \end{figure}
 
 \section{Related work}
+A study called \emph{FFT benchmark on Android devices: Java versus JNI} \cite{Jr2013} was carried out in 2013 and investigated how two implementations of FFT performed on different Android devices. The main point of the study was to compare how a pure Java implementation would perform compared to a library written in C called FFTW. This library supports multi-threaded computation and this aspect is also covered in this study. Their benchmark application was run on 35 different devices with different versions to get a wide picture of how the algorithms ran on different phones.
+
+\emph{Evaluating Performance of Android Platform Using Native C for Embedded Systems} \cite{Lee2010} explored how JNI overhead, arithmetic operations, memory access and heap allocation affected an application written in Java and native C. It was written in 2010 when the Android NDK was relatively new. Since then, many patches has been released, improving performance of code written in native C/C++. In this study, Dalvik VM was the virtual machine that executed the Dalvik bytecode. This study found that the JNI overhead was insignificant and took 0.15 ms to run in their testing environment. Their test results indicated that C was faster than Java in every case. The performance difference was largest in the memory access test and smallest in floating point calculations.
+
+In 2016, \emph{Android App Energy Efficiency: The Impact of Language, Runtime, Compiler, and Implementation} \cite{Chen2016} presented a performance comparison between ART and native on Android. The main focus of the report was to find how much more efficient one of them were in terms of energy consumption. Their tests consisted of measuring battery drainage in power as well as execution time of different algorithms. It also compares performance differences between ART and Dalvik. The conclusion states that native performs much better than code running on the Dalvik VM. However, code compiled by ART improves greatly from Dalvik and is comparable with code compiled in Android NDK.

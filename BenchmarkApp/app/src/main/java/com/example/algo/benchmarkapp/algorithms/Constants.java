@@ -11,6 +11,8 @@ public class Constants {
         FFT_CPP_ITERATIVE_COLUMBIA,
         FFT_CPP_KISS,
 //        JNI_BENCHMARK,
+//        FFT_JAVA_ITERATIVE_COLUMBIA_OPTIMIZED,
+//        FFT_CPP_ITERATIVE_COLUMBIA_OPTIMIZED,
     }
     public static String[] ALGORITHM_NAMES = {
             "FFT Princeton Java Iterative",
@@ -22,6 +24,8 @@ public class Constants {
             "FFT C++ Columbia converted Iterative",
             "FFT C++ KISS",
 //            "JNI Benchmark",
+//            "FFT Java Princeton optimized Iterative",
+//            "FFT C++ Princeton optimized Iterative",
     };
 
     public static final int NUM_ALGORITHMS = ALGORITHMS.values().length;
