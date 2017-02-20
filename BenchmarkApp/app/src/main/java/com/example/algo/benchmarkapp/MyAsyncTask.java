@@ -48,11 +48,14 @@ public class MyAsyncTask extends AsyncTask<Integer, String, String> {
                 case FFT_CPP_KISS:
                     time = bm.FFTCppKiss();
                     break;
-                case JNI_BENCHMARK:
-                    time = bm.JNIBenchmark();
+                case JNI_EMPTY:
+                    time = bm.JNIBenchmarkEmpty();
                     break;
-                case JNI_BENCHMARK_SMALL:
-                    time = bm.JNIBenchmarkSmall();
+                case JNI_PARAMS:
+                    time = bm.JNIBenchmarkParams();
+                    break;
+                case JNI_VECTOR_CONVERSION:
+                    time = bm.JNIBenchmarkVectorConversion();
                     break;
                 default:
                     break;

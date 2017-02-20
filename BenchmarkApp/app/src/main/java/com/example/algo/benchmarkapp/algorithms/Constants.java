@@ -10,8 +10,9 @@ public class Constants {
         FFT_CPP_RECURSIVE_PRINCETON,
         FFT_CPP_ITERATIVE_COLUMBIA,
         FFT_CPP_KISS,
-        JNI_BENCHMARK,
-        JNI_BENCHMARK_SMALL,
+        JNI_EMPTY,
+        JNI_PARAMS,
+        JNI_VECTOR_CONVERSION
 //        FFT_JAVA_ITERATIVE_COLUMBIA_OPTIMIZED,
 //        FFT_CPP_ITERATIVE_COLUMBIA_OPTIMIZED,
     }
@@ -24,8 +25,9 @@ public class Constants {
             "FFT C++ Princeton converted Recursive",
             "FFT C++ Columbia converted Iterative",
             "FFT C++ KISS",
-            "JNI Benchmark",
-            "JNI Benchmark Small",
+            "JNI Benchmark with no params",
+            "JNI Benchmark with vector as param",
+            "JNI Benchmark convert param to vector",
 //            "FFT Java Princeton optimized Iterative",
 //            "FFT C++ Princeton optimized Iterative",
     };

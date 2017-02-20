@@ -103,17 +103,21 @@ jdoubleArray fftKiss(JNIEnv* env, jobject obj, jdoubleArray arr) {
     return arr;
 }
 
-jdoubleArray jniEmpty(JNIEnv* env, jobject obj, jdoubleArray arr) {
-//    jsize size = (*env).GetArrayLength(arr);
-//    jdouble* elements = (*env).GetDoubleArrayElements(arr, 0);
-//
-//    // Return a double[]
-//    (*env).SetDoubleArrayRegion(arr, 0, size, elements);
+void jniEmpty(JNIEnv* env, jobject obj) {
+    return;
+}
+
+jdoubleArray jniParams(JNIEnv* env, jobject obj, jdoubleArray arr) {
     return arr;
 }
 
-void jniSmallEmpty(JNIEnv* env, jobject obj) {
-    return;
+jdoubleArray jniVectorConversion(JNIEnv* env, jobject obj, jdoubleArray arr) {
+    jsize size = (*env).GetArrayLength(arr);
+    jdouble* elements = (*env).GetDoubleArrayElements(arr, 0);
+
+    // Return a double[]
+    (*env).SetDoubleArrayRegion(arr, 0, size, elements);
+    return arr;
 }
 
 static JNINativeMethod s_methods[] {
@@ -121,8 +125,9 @@ static JNINativeMethod s_methods[] {
         {"fft_princeton_recursive", "([D)[D", (void*)fftPrincetonRecursive},
         {"fft_columbia_iterative", "([D)[D", (void*)fftColumbiaIterative},
         {"fft_kiss", "([D)[D", (void*)fftKiss},
-        {"jni_empty", "([D)[D", (void*)jniEmpty},
-        {"jni_small_empty", "()V", (void*)jniSmallEmpty}
+        {"jni_empty", "()V", (void*)jniEmpty},
+        {"jni_params", "([D)[D", (void*)jniParams},
+        {"jni_vector_conversion", "([D)[D", (void*)jniVectorConversion},
 };
 
 jint JNI_OnLoad(JavaVM* vm, void* reserved) {

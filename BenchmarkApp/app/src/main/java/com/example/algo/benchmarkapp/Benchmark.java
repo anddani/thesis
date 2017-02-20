@@ -309,19 +309,28 @@ public class Benchmark {
         return stop;
     }
 
-    public long JNIBenchmark() {
-        double[] z = combineComplex(re, im);
-
+    public long JNIBenchmarkEmpty() {
         long start = SystemClock.elapsedRealtimeNanos();
-        jni_empty(z);
+        jni_empty();
         long stop = SystemClock.elapsedRealtimeNanos() - start;
 
         return stop;
     }
 
-    public long JNIBenchmarkSmall() {
+    public long JNIBenchmarkParams() {
+        double[] z = combineComplex(re, im);
+
         long start = SystemClock.elapsedRealtimeNanos();
-        jni_small_empty();
+        jni_params(z);
+        long stop = SystemClock.elapsedRealtimeNanos() - start;
+        return stop;
+    }
+
+    public long JNIBenchmarkVectorConversion() {
+        double[] z = combineComplex(re, im);
+
+        long start = SystemClock.elapsedRealtimeNanos();
+        jni_vector_conversion(z);
         long stop = SystemClock.elapsedRealtimeNanos() - start;
         return stop;
     }
@@ -330,8 +339,9 @@ public class Benchmark {
     public native double[] fft_princeton_recursive(double[] arr);
     public native double[] fft_columbia_iterative(double[] arr);
     public native double[] fft_kiss(double[] arr);
-    public native double[] jni_empty(double[] arr);
-    public native void jni_small_empty();
+    public native void jni_empty();
+    public native double[] jni_params(double[] arr);
+    public native double[] jni_vector_conversion(double[] arr);
 
     static {
         System.loadLibrary("fft-lib");
