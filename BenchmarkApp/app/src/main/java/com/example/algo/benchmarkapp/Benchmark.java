@@ -309,10 +309,29 @@ public class Benchmark {
         return stop;
     }
 
+    public long JNIBenchmark() {
+        double[] z = combineComplex(re, im);
+
+        long start = SystemClock.elapsedRealtimeNanos();
+        jni_empty(z);
+        long stop = SystemClock.elapsedRealtimeNanos() - start;
+
+        return stop;
+    }
+
+    public long JNIBenchmarkSmall() {
+        long start = SystemClock.elapsedRealtimeNanos();
+        jni_small_empty();
+        long stop = SystemClock.elapsedRealtimeNanos() - start;
+        return stop;
+    }
+
     public native double[] fft_princeton_iterative(double[] arr);
     public native double[] fft_princeton_recursive(double[] arr);
     public native double[] fft_columbia_iterative(double[] arr);
     public native double[] fft_kiss(double[] arr);
+    public native double[] jni_empty(double[] arr);
+    public native void jni_small_empty();
 
     static {
         System.loadLibrary("fft-lib");
