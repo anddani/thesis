@@ -38,19 +38,40 @@ Finally, comparing optimization techniques for small libraries is a good way of 
 % Phone model
 % Screen Brightness
 % Battery percentage?
-The Google Nexus 6P was used throughout all experiments to get comparable results.
+% The Google Nexus 6P was used throughout all experiments to get comparable results. The screen brightness was set to medium to prevent heat from affecting the CPU frequency.
+The setup used for performing the experiments were the following:
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|l|l|}
+        \hline
+        \textbf{Phone model} & Google Nexus 6P\\
+        \hline
+        \textbf{Processor model} & Qualcomm MSM8994 Snapdragon 810\\
+        \hline
+        \textbf{Core frequency} & 4x2.0 GHz GHz and 4x1.55\\
+        \hline
+        \textbf{Total RAM} & 3 GB\\
+        \hline
+        \textbf{Available RAM} & 1.5 GB\\
+        \hline
+    \end{tabular}
+\end{table}
 
 \subsection{Benchmark Environment}
 % Android version
 % Cellular on?
 % Wifi on?
 % Which apps were in background?
+All the tests were executed on Android version 7.1.1. Cellular was switched off and wifi was connected. No other background apps were present while performing the tests during the experiments.
+
 
 \subsection{Time measurement}
 % SystemClock.elapsedRealtime
 % SystemClock.elapsedRealtimeNanos
 % SystemClock.uptimeMillis
 % System.currentTimeMillis
+There are multiple methods of measuring time in Java. It is possible to measure the wall-clock time using the \texttt{System.currentTimeMillis()} method. There are drawback of using wall-clock time for measuring time. Because it can be changed at any time, it could result in too small or too large runtime depending on seemingly random factors. What is more preferable is to measure elapsed cpu time. This do not depend on a changeable wall clock but rather use hardware to interpret time. It is possible to use both \texttt{System.nanoTime()} and \texttt{SystemClock.elapsedRealtimeNanos()} for this purpose.
 
 \subsection{Memory measurement}
 
