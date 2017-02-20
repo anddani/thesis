@@ -362,93 +362,171 @@ loop: lw $s4, 0($s1)
 
 cost of a larger program if there are many calls to this function in the code. It is very useful to have inline functions in loops that are run many times. This is an optimization that can be used manually in C and C++ using the \texttt{inline} keyword and can also be optimized by the compiler.
 
+\subsubsection{Constant folding}
+\emph{Constant folding} is a technique used to reduce the time it takes to evaluate an expression in runtime \cite[p.~329]{muchnick1997advanced}. By finding which variables that already have a value, the compiler can calculate and assign constants in compile time instead of runtime. This method of analyzing the code to find expressions consisting of variables that are possible to calculate is called \emph{Constant Propagation} as seen in Figure~\ref{fig:constant:propagation}.
+
+\begin{figure}[h]
+    \centering
+    \begin{adjustbox}{minipage=\linewidth,scale=1.0}
+        \begin{subfigure}{.40\textwidth}
+            \centering
+            \begin{lstlisting}[
+                    language={C},
+                    basicstyle=\footnotesize,
+                ]
+      int x = 10;
+      int y = x * 5 + 3;
+                \end{lstlisting}
+            \caption{Before optimization}
+            \label{fig:propagation:sub1}
+        \end{subfigure}%
+        \begin{subfigure}{.50\textwidth}
+            \centering
+            \begin{lstlisting}[
+                    language={C},
+                    basicstyle=\footnotesize,
+                ]
+              int x = 10;
+              int y = 53;
+                \end{lstlisting}
+            \caption{Constant propagation optimization}
+            \label{fig:propagation:sub2}
+        \end{subfigure}
+    \end{adjustbox}
+    \caption{Constant Propagation}
+    \label{fig:constant:propagation}
+\end{figure}
+
+\subsubsection{Loop Tiling}
+When processing elements in a large array multiple times it is beneficial to utilize as many reads from cache as possible. If the array is larger than the cache, it will kick out earlier elements for the next pass through the array. By processing partitions of the array multiple times before going on to next partition, temporal cache locality can help the program run faster. Temporal locality means that you can find a previously referenced value in the cache if you are trying to access it again. As Figure~\ref{fig:loop:tiling} shows, by introducing a new loop that operate over a small enough partition of the array such that every element is in cache, we will reduce the number of cache misses.
+
+\begin{figure}[h]
+    \begin{adjustbox}{minipage=\linewidth,scale=0.8}
+        \begin{subfigure}{.50\textwidth}
+            \centering
+            \begin{lstlisting}[
+                    language={C},
+                    basicstyle=\footnotesize,
+                ]
+for (i = 0; i < NUM_REPS; ++i) {
+    for (j = 0; j < ARR_SIZE; ++j) {
+        a[j] = a[j] * 17;
+    }
+}
+                \end{lstlisting}
+            \caption{Before loop tiling}
+            \label{fig:tiling:sub1}
+        \end{subfigure}%
+        \begin{subfigure}{.50\textwidth}
+            \centering
+            \begin{lstlisting}[
+                    language={C},
+                    basicstyle=\footnotesize,
+                ]
+    for (j = 0; j < ARR_SIZE; j += 1024) {
+        for (i = 0; i < NUM_REPS; ++i) {
+            for (k = j; k < (j + 1024); ++k) {
+                a[k] = a[k] * 17;
+            }
+        }
+    }
+                \end{lstlisting}
+            \caption{After loop tiling}
+            \label{fig:tiling:sub2}
+        \end{subfigure}
+    \end{adjustbox}
+    \caption{Loop Tiling}
+    \label{fig:loop:tiling}
+\end{figure}
+
+
 % http://www.azillionmonkeys.com/qed/optimize.html
 % => Optimizing compilers for modern architectures <=
 
-\subsubsection{Loop fission and loop fusion}
-There are two ways of changing how loops are executed called \emph{Loop Fission} and \emph{Loop Fusion}. They are the opposites of themselves and are used based on instructions in the loop. The purpose of \emph{Loop Fission} is to separate a statement or statements from each other and have multiple loops. This increases the loop overhead but can become more efficient if the separated loop has good cache locality. As we see in Figure~\ref{fig:fission:sub1}, we read from two arrays, \texttt{b} and \texttt{c}. We cannot know if they are close to each other in memory which can lead to many cache misses every iteration of the loop. If we split the loop as in Figure~\ref{fig:fission:sub2}, we can utilize memory locality to get more efficient code.
-
-\begin{figure}[h]
-    \centering
-    \begin{subfigure}{.45\textwidth}
-        \centering
-        \begin{lstlisting}[
-                language={C},
-                basicstyle=\footnotesize,
-                numbers=left,
-                firstnumber=1,
-                numberfirstline=true
-            ]
-for (i = 0; i < 10; ++i) {
-    a[i] = b[i];
-    b[i] = c[i];
-}
-            \end{lstlisting}
-        \caption{Before split}
-        \label{fig:fission:sub1}
-    \end{subfigure}%
-    \begin{subfigure}{.35\textwidth}
-        \centering
-        \begin{lstlisting}[
-                language={C},
-                basicstyle=\footnotesize,
-                numbers=left,
-                firstnumber=1,
-                numberfirstline=true
-            ]
-for (i = 0; i < 10; ++i)
-    a[i] = b[i];
-for (i = 0; i < 10; ++i)
-    b[i] = c[i];
-        \end{lstlisting}
-        \caption{After split}
-        \label{fig:fission:sub2}
-    \end{subfigure}
-    \caption{Loop fission}
-    \label{fig:c:loopfission}
-\end{figure}
-
-On the other hand, \emph{Loop Fusion} merges two loops into one because memory locality is possible in one loop. This removes the overhead of having two loops. Because both assignments require reads from the \texttt{a} array that are close to each other, cache locality is possible.
-
-\begin{figure}[h]
-    \centering
-    \begin{subfigure}{.45\textwidth}
-        \centering
-        \begin{lstlisting}[
-                language={C},
-                basicstyle=\footnotesize,
-                numbers=left,
-                firstnumber=1,
-                numberfirstline=true
-            ]
-for (i = 1; i < 10; ++i)
-    a[i] = a[i-1];
-for (i = 1; i < 10; ++i)
-    b[i] = a[i];
-            \end{lstlisting}
-        \caption{Before fusion}
-        \label{fig:fusion:sub1}
-    \end{subfigure}%
-    \begin{subfigure}{.35\textwidth}
-        \centering
-        \begin{lstlisting}[
-                language={C},
-                basicstyle=\footnotesize,
-                numbers=left,
-                firstnumber=1,
-                numberfirstline=true
-            ]
-for (i = 1; i < 10; ++i) {
-    a[i] = a[i-1];
-    b[i] = a[i];
-}
-        \end{lstlisting}
-        \caption{After fusion}
-        \label{fig:fusion:sub2}
-    \end{subfigure}
-    \caption{Loop fusion}
-    \label{fig:c:loopfusion}
-\end{figure}
+% \subsubsection{Loop fission and loop fusion}
+% \emph{Loop Fusion} and \emph{Loop Fission} are two ways of changing how loops are executed. They are the opposites of themselves and are used based on the instructions in the loop. The purpose of \emph{Loop Fission} is to separate a statement or statements from each other and have multiple loops. This increases the loop overhead but can become more efficient if the separated loop has good cache locality. As we see in Figure~\ref{fig:fission:sub1}, we read from two arrays, \texttt{b} and \texttt{c}. We cannot know if they are close to each other in memory which can lead to many cache misses every iteration of the loop. If we split the loop as in Figure~\ref{fig:fission:sub2}, we can utilize memory locality to get more efficient code.
+%
+% \begin{figure}[h]
+%     \centering
+%     \begin{subfigure}{.45\textwidth}
+%         \centering
+%         \begin{lstlisting}[
+%                 language={C},
+%                 basicstyle=\footnotesize,
+%                 numbers=left,
+%                 firstnumber=1,
+%                 numberfirstline=true
+%             ]
+% for (i = 0; i < 10; ++i) {
+%     a[i] = b[i];
+%     b[i] = c[i];
+% }
+%             \end{lstlisting}
+%         \caption{Before split}
+%         \label{fig:fission:sub1}
+%     \end{subfigure}%
+%     \begin{subfigure}{.35\textwidth}
+%         \centering
+%         \begin{lstlisting}[
+%                 language={C},
+%                 basicstyle=\footnotesize,
+%                 numbers=left,
+%                 firstnumber=1,
+%                 numberfirstline=true
+%             ]
+% for (i = 0; i < 10; ++i)
+%     a[i] = b[i];
+% for (i = 0; i < 10; ++i)
+%     b[i] = c[i];
+%         \end{lstlisting}
+%         \caption{After split}
+%         \label{fig:fission:sub2}
+%     \end{subfigure}
+%     \caption{Loop fission}
+%     \label{fig:c:loopfission}
+% \end{figure}
+%
+% On the other hand, \emph{Loop Fusion} merges two loops into one because memory locality is possible in one loop. This removes the overhead of having two loops. Because both assignments require reads from the \texttt{a} array that are close to each other, cache locality is possible. Both of these techniques are commonly used by the optimizer in the compiler.
+%
+% \begin{figure}[h]
+%     \centering
+%     \begin{subfigure}{.45\textwidth}
+%         \centering
+%         \begin{lstlisting}[
+%                 language={C},
+%                 basicstyle=\footnotesize,
+%                 numbers=left,
+%                 firstnumber=1,
+%                 numberfirstline=true
+%             ]
+% for (i = 1; i < 10; ++i)
+%     a[i] = a[i-1];
+% for (i = 1; i < 10; ++i)
+%     b[i] = a[i];
+%             \end{lstlisting}
+%         \caption{Before fusion}
+%         \label{fig:fusion:sub1}
+%     \end{subfigure}%
+%     \begin{subfigure}{.35\textwidth}
+%         \centering
+%         \begin{lstlisting}[
+%                 language={C},
+%                 basicstyle=\footnotesize,
+%                 numbers=left,
+%                 firstnumber=1,
+%                 numberfirstline=true
+%             ]
+% for (i = 1; i < 10; ++i) {
+%     a[i] = a[i-1];
+%     b[i] = a[i];
+% }
+%         \end{lstlisting}
+%         \caption{After fusion}
+%         \label{fig:fusion:sub2}
+%     \end{subfigure}
+%     \caption{Loop fusion}
+%     \label{fig:c:loopfusion}
+% \end{figure}
 
 \subsection{Java}
 In Java, an array is created during runtime and cannot change its size after it is created. This means that it will always be placed on the heap and the garbage collector will handle the memory it resides on should be released. By keeping an array reference in scope and reusing the same array, we can circumvent this behaviour and save some instructions by not needing to ask for more memory from the heap.
@@ -473,6 +551,8 @@ In Java, an array is created during runtime and cannot change its size after it 
 
 \subsection{C++}
 In C and C++, arrays with predefined sizes are located on the program stack. This makes the program run faster because it does not need to call malloc or new and ask for more memory on the heap. This require that the programmer knows the required size of the array in advance and is not always possible or memory efficient.
+
+% agner.org/optimize
 
 \subsubsection{NEON}
 % https://www.kernel.org/pub/linux/kernel/people/geoff/cell/ps3-linux-docs/CellProgrammingTutorial/BasicsOfSIMDProgramming.html
