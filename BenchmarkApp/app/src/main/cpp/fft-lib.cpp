@@ -117,11 +117,11 @@ jdoubleArray jniVectorConversion(JNIEnv* env, jobject, jdoubleArray arr) {
 static JNINativeMethod s_methods[] {
         {"fft_princeton_iterative", "([D)[D", (void*)fftPrincetonIterative},
         {"fft_princeton_recursive", "([D)[D", (void*)fftPrincetonRecursive},
-        {"fft_columbia_iterative", "([D)[D", (void*)fftColumbiaIterative},
-        {"fft_kiss", "([D)[D", (void*)fftKiss},
-        {"jni_empty", "()V", (void*)jniEmpty},
-        {"jni_params", "([D)[D", (void*)jniParams},
-        {"jni_vector_conversion", "([D)[D", (void*)jniVectorConversion},
+        {"fft_columbia_iterative",  "([D)[D", (void*)fftColumbiaIterative},
+        {"fft_kiss",                "([D)[D", (void*)fftKiss},
+        {"jni_empty",               "()V",    (void*)jniEmpty},
+        {"jni_params",              "([D)[D", (void*)jniParams},
+        {"jni_vector_conversion",   "([D)[D", (void*)jniVectorConversion},
 };
 
 jint JNI_OnLoad(JavaVM* vm, void* reserved) {

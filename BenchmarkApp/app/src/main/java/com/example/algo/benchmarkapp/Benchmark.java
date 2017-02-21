@@ -233,12 +233,8 @@ public class Benchmark {
 
         long start = SystemClock.elapsedRealtimeNanos();
 
-        // Merge real and imaginary numbers
-//        double[] z = combineComplex(re, im);
-
         double[] nativeResult = fft_columbia_iterative(z);
 
-//        Complex[] x = toComplex(nativeResult);
         Complex[] x = new Complex[re.length];
         for (int i = 0; i < re.length; i++) {
             x[i] = new Complex(nativeResult[i], nativeResult[i+re.length]);

@@ -20,6 +20,9 @@ public class MainActivity extends AppCompatActivity implements OnTaskCompleted {
     private EditText numIter;
     private EditText dataSize;
 
+    private static final String DEFAULT_ITER = "5";
+    private static final String DEFAULT_N = "44000";
+
     private Benchmark bm;
 
     private int currentAlgorithm;
@@ -32,15 +35,15 @@ public class MainActivity extends AppCompatActivity implements OnTaskCompleted {
         MyAsyncTask myAsyncTask = new MyAsyncTask(MainActivity.this, bm);
 
         String iterText = numIter.getText().toString();
-        // If not specified, set to 5
+        // If not specified, set to DEFAULT_ITER
         if (iterText.isEmpty()) {
-            iterText = "5";
+            iterText = DEFAULT_ITER;
         }
         int iter = Integer.parseInt(iterText);
         String dataSizeText = dataSize.getText().toString();
-        // If not specified, set to 100000
+        // If not specified, set to DEFAULT_N
         if (dataSizeText.isEmpty()) {
-            dataSizeText = "100000";
+            dataSizeText = DEFAULT_N;
         }
         int N = nextPowerOfTwo(Integer.parseInt(dataSizeText));
         int algorithm = currentAlgorithm;
@@ -102,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements OnTaskCompleted {
                 currentAlgorithm = 0;
                 String dataSizeText = dataSize.getText().toString();
                 if (dataSizeText.isEmpty()) {
-                    dataSizeText = "100000";
+                    dataSizeText = DEFAULT_N;
                 }
                 int N = nextPowerOfTwo(Integer.parseInt(dataSizeText));
 
