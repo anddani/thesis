@@ -47,7 +47,7 @@ The setup used for performing the experiments were the following:
         \hline
         \textbf{Phone model} & Google Nexus 6P\\
         \hline
-        \textbf{Processor model} & Qualcomm MSM8994 Snapdragon 810\\
+        \textbf{CPU model} & Qualcomm MSM8994 Snapdragon 810\\
         \hline
         \textbf{Core frequency} & 4x2.0 GHz GHz and 4x1.55\\
         \hline
@@ -63,24 +63,39 @@ The setup used for performing the experiments were the following:
 % Cellular on?
 % Wifi on?
 % Which apps were in background?
-All the tests were executed on Android version 7.1.1. Cellular was switched off and wifi was connected. No other background apps were present while performing the tests during the experiments.
+During the tests, cellular was switched off and wifi was enabled and connected. There were no applications running in the background while performing the tests during the experiments. The tests were executed and compiled with the following versions:
+
+% All the tests were executed/compiled using . Cellular was switched off and wifi was connected. No other background apps were present while performing the tests during the experiments.
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|l|l|}
+        \hline
+        \textbf{Android version} & 7.1.1\\
+        \hline
+        \textbf{Clang/LLVM version} & 3.8.256229\\
+        \hline
+        \textbf{Java version} & 1.8.0\_76\\
+        \hline
+    \end{tabular}
+\end{table}
 
 
 \subsection{Time measurement}
-% SystemClock.elapsedRealtime
-% SystemClock.elapsedRealtimeNanos
-% SystemClock.uptimeMillis
-% System.currentTimeMillis
 There are multiple methods of measuring time in Java. It is possible to measure the wall-clock time using the \texttt{System.currentTimeMillis()} method. There are drawback of using wall-clock time for measuring time. Because it can be changed at any time, it could result in too small or too large runtime depending on seemingly random factors. What is more preferable is to measure elapsed cpu time. This do not depend on a changeable wall clock but rather use hardware to interpret time. It is possible to use both \texttt{System.nanoTime()} and \texttt{SystemClock.elapsedRealtimeNanos()} for this purpose.
 
 \subsection{Memory measurement}
 
+\section{Evaluation}
 % How will the results be represented?
 % How will I interpret the results
 % How many times will the programs be executed
 % Statistical significance
 % What is included in the calculation, what is not (adding result to string etc)
-\section{Evaluation}
+The unit of the resulting data will be in milliseconds. To be able to have 100 executions run in reasonable time, the maximum size of the input data was limited to $2^{16} = 65536$. 
+
+% INCORRECT?
+% This size is also appropriate because a typical sample size in human audible sound processing is 44.1~kHz if you want to have a maximum frequency output of $\sim22$ kHz.
+
 
 \subsection{Data representation}
 \subsection{Data interpretation}
@@ -93,13 +108,70 @@ There are multiple methods of measuring time in Java. It is possible to measure 
 % Test data: sizes of data, datatypes (long vs int vs float vs double)
 
 \section{JNI Tests}
+For testing the JNI overhead, three different tests were constructed. The first test had no parameters, returned void and did no calculations. The purpose of this test was to see how long it would take to call the smallest function possible. The function shown in Figure~\ref{fig:jni:empty} was used to test this.
 
+\begin{figure}
+\begin{lstlisting}[
+        language={C++},
+        basicstyle=\ttfamily\footnotesize,
+        keywordstyle=\color{blue}\ttfamily,
+        stringstyle=\color{red}\ttfamily,
+        commentstyle=\color{green!70!black}\ttfamily,
+    ]
+                 void jniEmpty(JNIEnv*, jobject) {
+                     return;
+                 }
+\end{lstlisting}
+\caption{JNI test function with no parameters and no return value}
+\label{fig:jni:empty}
+\end{figure}
+
+% TODO: JNI test with only params
+For the second test, a function was written (see Figure~\ref{fig:jni:params}) that took a jdoubleArray as input and output. The reason this test was made was to see if JNI introduced some extra overhead for passing an argument and having a return value.
+
+\begin{figure}
+\begin{lstlisting}[
+        language={C++},
+        basicstyle=\ttfamily\footnotesize,
+        keywordstyle=\color{blue}\ttfamily,
+        stringstyle=\color{red}\ttfamily,
+        commentstyle=\color{green!70!black}\ttfamily,
+    ]
+     jdoubleArray jniParams(JNIEnv*, jobject, jdoubleArray arr) {
+         return arr;
+     }
+\end{lstlisting}
+\caption{JNI test function with a double array as input parameter and return value}
+\label{fig:jni:params}
+\end{figure}
+
+% TODO: JNI tests for making an array accessible in C++
+In Figure~\ref{fig:jni:conversion}, the third test started by calling the \texttt{GetDoubleArrayElements} function to be able to access the elements stored in \texttt{arr}. When all the calculations are done, the function will return \texttt{arr}. To overwrite the changes made on \texttt{elements}, a function called \texttt{ReleaseDoubleArrayElements} must be called.
+
+\begin{figure}
+\begin{lstlisting}[
+        language={C++},
+        basicstyle=\ttfamily\footnotesize,
+        keywordstyle=\color{blue}\ttfamily,
+        stringstyle=\color{red}\ttfamily,
+        commentstyle=\color{green!70!black}\ttfamily,
+    ]
+jdoubleArray jniVectorConversion(JNIEnv* env, jobject, jdoubleArray arr) {
+    jdouble* elements = (*env).GetDoubleArrayElements(arr, 0);
+    (*env).ReleaseDoubleArrayElements(arr, elements, 0);
+    return arr;
+}
+\end{lstlisting}
+\caption{Get and release elements}
+\label{fig:jni:conversion}
+\end{figure}
+
+\section{Fast Fourier Transform Algorithms}
 % Small block size
 % Large block size
-\section{Fast Fourier Transform Algorithms}
 
 \subsection{Java libraries}
-JTransforms\cite{jtransforms:benchmark}
+JTransforms \cite{jtransforms:benchmark}
 
 \subsection{C++ libraries}
 % Flags: -funroll-loops
