@@ -319,7 +319,6 @@ public class Benchmark {
 
     public long JNIBenchmarkParams() {
         double[] z = combineComplex(re, im);
-
         long start = SystemClock.elapsedRealtimeNanos();
         jni_params(z);
         long stop = SystemClock.elapsedRealtimeNanos() - start;
@@ -327,10 +326,12 @@ public class Benchmark {
     }
 
     public long JNIBenchmarkVectorConversion() {
+//        double[] z = {1, 17, 33, 4711};
         double[] z = combineComplex(re, im);
 
         long start = SystemClock.elapsedRealtimeNanos();
         jni_vector_conversion(z);
+//        System.out.println("After native call z[1]: " + z[1]);
         long stop = SystemClock.elapsedRealtimeNanos() - start;
         return stop;
     }

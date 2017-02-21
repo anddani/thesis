@@ -29,8 +29,7 @@ jdoubleArray fftPrincetonIterative(JNIEnv* env, jobject obj, jdoubleArray arr) {
         elements[i + 1] = x[i/2].imag();
     }
 
-    // Return a double[]
-    (*env).SetDoubleArrayRegion(arr, 0, size, elements);
+    (*env).ReleaseDoubleArrayElements(arr, elements, 0);
     return arr;
 }
 
@@ -53,8 +52,7 @@ jdoubleArray fftPrincetonRecursive(JNIEnv* env, jobject obj, jdoubleArray arr) {
         elements[i + 1] = x[i/2].imag();
     }
 
-    // Return a double[]
-    (*env).SetDoubleArrayRegion(arr, 0, size, elements);
+    (*env).ReleaseDoubleArrayElements(arr, elements, 0);
     return arr;
 }
 
@@ -66,8 +64,7 @@ jdoubleArray fftColumbiaIterative(JNIEnv* env, jobject obj, jdoubleArray arr) {
     FFTColumbiaConverted fcc = FFTColumbiaConverted(N);
     fcc.fftIterative(elements, elements+N); // Run FFT
 
-    // Return a double[]
-    (*env).SetDoubleArrayRegion(arr, 0, size, elements);
+    (*env).ReleaseDoubleArrayElements(arr, elements, 0);
     return arr;
 }
 
@@ -99,24 +96,21 @@ jdoubleArray fftKiss(JNIEnv* env, jobject obj, jdoubleArray arr) {
     kiss_fft_free(fwd);
 
     // Return a double[]
-    (*env).SetDoubleArrayRegion(arr, 0, size, elements);
+    (*env).ReleaseDoubleArrayElements(arr, elements, 0);
     return arr;
 }
 
-void jniEmpty(JNIEnv* env, jobject obj) {
+void jniEmpty(JNIEnv*, jobject) {
     return;
 }
 
-jdoubleArray jniParams(JNIEnv* env, jobject obj, jdoubleArray arr) {
+jdoubleArray jniParams(JNIEnv*, jobject, jdoubleArray arr) {
     return arr;
 }
 
-jdoubleArray jniVectorConversion(JNIEnv* env, jobject obj, jdoubleArray arr) {
-    jsize size = (*env).GetArrayLength(arr);
+jdoubleArray jniVectorConversion(JNIEnv* env, jobject, jdoubleArray arr) {
     jdouble* elements = (*env).GetDoubleArrayElements(arr, 0);
-
-    // Return a double[]
-    (*env).SetDoubleArrayRegion(arr, 0, size, elements);
+    (*env).ReleaseDoubleArrayElements(arr, elements, 0);
     return arr;
 }
 
