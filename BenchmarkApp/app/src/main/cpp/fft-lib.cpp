@@ -3,6 +3,7 @@
 #include <android/log.h>
 #include "FFTPrincetonConverted.h"
 #include "FFTColumbiaConverted.h"
+#include "FFTColumbiaConvertedOptimized.h"
 #include "kiss-fft/_kiss_fft_guts.h"
 
 #define LOGTAG "FFTLIB"
@@ -56,13 +57,27 @@ jdoubleArray fftPrincetonRecursive(JNIEnv* env, jobject obj, jdoubleArray arr) {
     return arr;
 }
 
-jdoubleArray fftColumbiaIterative(JNIEnv* env, jobject obj, jdoubleArray arr) {
+jdoubleArray fftColumbiaIterative(JNIEnv* env, jobject obj, jdoubleArray arr, jdoubleArray cos, jdoubleArray sin) {
+    jsize size = (*env).GetArrayLength(arr);
+    jdouble* elements = (*env).GetDoubleArrayElements(arr, 0);
+    jdouble* sin_v = (*env).GetDoubleArrayElements(sin, 0);
+    jdouble* cos_v = (*env).GetDoubleArrayElements(cos, 0);
+    int N = size/2;
+
+//    FFTColumbiaConverted fcc = FFTColumbiaConverted(N);
+//    fcc.fftIterative(elements, elements+N); // Run FFT
+    fftCI(elements, elements+N, N, cos_v, sin_v);
+
+    (*env).ReleaseDoubleArrayElements(arr, elements, 0);
+    return arr;
+}
+
+jdoubleArray fftCIO(JNIEnv* env, jobject obj, jdoubleArray arr) {
     jsize size = (*env).GetArrayLength(arr);
     jdouble* elements = (*env).GetDoubleArrayElements(arr, 0);
     int N = size/2;
 
-    FFTColumbiaConverted fcc = FFTColumbiaConverted(N);
-    fcc.fftIterative(elements, elements+N); // Run FFT
+    fftColumbiaIterativeOptimized(elements, elements+N, N); // Run FFT
 
     (*env).ReleaseDoubleArrayElements(arr, elements, 0);
     return arr;
@@ -115,13 +130,14 @@ jdoubleArray jniVectorConversion(JNIEnv* env, jobject, jdoubleArray arr) {
 }
 
 static JNINativeMethod s_methods[] {
-        {"fft_princeton_iterative", "([D)[D", (void*)fftPrincetonIterative},
-        {"fft_princeton_recursive", "([D)[D", (void*)fftPrincetonRecursive},
-        {"fft_columbia_iterative",  "([D)[D", (void*)fftColumbiaIterative},
-        {"fft_kiss",                "([D)[D", (void*)fftKiss},
-        {"jni_empty",               "()V",    (void*)jniEmpty},
-        {"jni_params",              "([D)[D", (void*)jniParams},
-        {"jni_vector_conversion",   "([D)[D", (void*)jniVectorConversion},
+        {"fft_princeton_iterative",           "([D)[D",     (void*)fftPrincetonIterative},
+        {"fft_princeton_recursive",           "([D)[D",     (void*)fftPrincetonRecursive},
+        {"fft_columbia_iterative",            "([D[D[D)[D", (void*)fftColumbiaIterative},
+        {"fft_columbia_iterative_optimized",  "([D)[D",     (void*)fftCIO},
+        {"fft_kiss",                          "([D)[D",     (void*)fftKiss},
+        {"jni_empty",                         "()V",        (void*)jniEmpty},
+        {"jni_params",                        "([D)[D",     (void*)jniParams},
+        {"jni_vector_conversion",             "([D)[D",     (void*)jniVectorConversion},
 };
 
 jint JNI_OnLoad(JavaVM* vm, void* reserved) {

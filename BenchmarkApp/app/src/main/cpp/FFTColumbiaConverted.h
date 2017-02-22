@@ -8,9 +8,12 @@
 const double M_PI = 3.14159265358979323846;
 #endif
 
+void fftCI(double* x, double* y, int n, double* cos_v, double* sin_v);
+
 class FFTColumbiaConverted {
 public:
-    void fftIterative(double* x, double* y);
+//    void fftIterative(double* x, double* y);
+    void fftIterative(double* x, double* y, int n, double* cos_v, double* sin_v);
     FFTColumbiaConverted(int n);
     ~FFTColumbiaConverted();
 private:

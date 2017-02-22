@@ -45,6 +45,9 @@ public class MyAsyncTask extends AsyncTask<Integer, String, String> {
                 case FFT_CPP_ITERATIVE_COLUMBIA:
                     time = bm.FFTCppIterativeColumbia();
                     break;
+                case FFT_CPP_ITERATIVE_COLUMBIA_OPTIMIZED:
+                    time = bm.FFTCppIterativeColumbiaOptimized();
+                    break;
                 case FFT_CPP_KISS:
                     time = bm.FFTCppKiss();
                     break;

@@ -23,13 +23,15 @@
 package com.example.algo.benchmarkapp.algorithms;
 
 
+import android.os.SystemClock;
+
 public class FFTColumbiaIterative {
 
     int n, m;
 
     // Lookup tables.  Only need to recompute when size of FFT changes.
-    double[] cos;
-    double[] sin;
+    public double[] cos;
+    public double[] sin;
 
     double[] window;
 
@@ -102,7 +104,7 @@ public class FFTColumbiaIterative {
         int i,j,k,n1,n2,a;
         double c,s,e,t1,t2;
 
-
+        long time1 = SystemClock.elapsedRealtimeNanos();
         // Bit-reverse
         j = 0;
         n2 = n/2;
@@ -124,6 +126,7 @@ public class FFTColumbiaIterative {
             }
         }
 
+        long time2 = SystemClock.elapsedRealtimeNanos();
         // FFT
         n1 = 0;
         n2 = 1;
@@ -148,7 +151,10 @@ public class FFTColumbiaIterative {
                 }
             }
         }
-    }                          
+        long time3 = SystemClock.elapsedRealtimeNanos();
+        System.out.println("Java Bit reversal: " + (time2 - time1)/1000000);
+        System.out.println("Java FFT: " + (time3 - time2)/1000000);
+    }
 
 
 

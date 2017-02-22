@@ -197,10 +197,11 @@ public class Benchmark {
         double[] tempRe = re.clone();
         double[] tempIm = im.clone();
 
-        long start = SystemClock.elapsedRealtimeNanos();
-
         // Initialize cos and sin tables
         FFTColumbiaIterative fftci = new FFTColumbiaIterative(tempRe.length);
+
+        long start = SystemClock.elapsedRealtimeNanos();
+
         fftci.fft(tempRe, tempIm);
 
         Complex[] x = toComplex(tempRe, tempIm);
@@ -231,9 +232,45 @@ public class Benchmark {
             z[i+re.length] = im[i];
         }
 
+        FFTColumbiaIterative fftci = new FFTColumbiaIterative(re.length);
         long start = SystemClock.elapsedRealtimeNanos();
 
-        double[] nativeResult = fft_columbia_iterative(z);
+        double[] nativeResult = fft_columbia_iterative(z, fftci.cos, fftci.sin);
+
+        Complex[] x = new Complex[re.length];
+        for (int i = 0; i < re.length; i++) {
+            x[i] = new Complex(nativeResult[i], nativeResult[i+re.length]);
+        }
+
+        long stop = SystemClock.elapsedRealtimeNanos() - start;
+
+        if (DEBUG) {
+            System.out.println("************* FFT JAVA ITER COLUMBIA ************");
+            printComplex(x);
+        }
+
+        if (!isCorrect(x)) {
+            System.out.println("FFT JAVA ITER COLUMBIA GIVES INCORRECT OUTPUT");
+            printComplex(x);
+            System.out.println("CORRECT: ");
+            printComplex(correctOut);
+        }
+        return stop;
+    }
+
+    public long FFTCppIterativeColumbiaOptimized() {
+        // Will hold the result from FFT
+
+        // Let first half be filled with real and second half with imaginary
+        double[] z = new double[re.length*2];
+        for (int i = 0; i < re.length; i++) {
+            z[i] = re[i];
+            z[i+re.length] = im[i];
+        }
+
+        long start = SystemClock.elapsedRealtimeNanos();
+
+        double[] nativeResult = fft_columbia_iterative_optimized(z);
 
         Complex[] x = new Complex[re.length];
         for (int i = 0; i < re.length; i++) {
@@ -334,7 +371,8 @@ public class Benchmark {
 
     public native double[] fft_princeton_iterative(double[] arr);
     public native double[] fft_princeton_recursive(double[] arr);
-    public native double[] fft_columbia_iterative(double[] arr);
+    public native double[] fft_columbia_iterative(double[] arr, double[] cos, double[] sin);
+    public native double[] fft_columbia_iterative_optimized(double[] arr);
     public native double[] fft_kiss(double[] arr);
     public native void jni_empty();
     public native double[] jni_params(double[] arr);
