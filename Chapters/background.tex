@@ -1,7 +1,7 @@
 \textit{The process of developing, how Android installs the app and how it runs it is explained in this chapter. Additionally, some basic knowledge of the Discrete Fourier Transform is required when discussing differences in FFT implementations.}
 
 \section{Android SDK}
-To allow developers to build Android apps, Google developed a Standard Development Kit (SDK) to facilitate the process of writing Android applications. The Android SDK software stack is described in Figure~\ref{fig:sdk}. The Linux kernel is at the base of the stack, handling the core functionality of the device. Detecting hardware interaction, process scheduling and memory allocation are examples of services provided by the kernel. The Hardware Abstraction Layer (HAL) is an abstraction layer above the device drivers. This allows the developer to interact with hardware independent on the type of device \cite{android:hal}.
+To allow developers to build Android apps, Google developed a Software Development Kit (SDK) to facilitate the process of writing Android applications. The Android SDK software stack is described in Figure~\ref{fig:sdk}. The Linux kernel is at the base of the stack, handling the core functionality of the device. Detecting hardware interaction, process scheduling and memory allocation are examples of services provided by the kernel. The Hardware Abstraction Layer (HAL) is an abstraction layer above the device drivers. This allows the developer to interact with hardware independent on the type of device \cite{android:hal}.
 
 The native libraries are low level libraries, written in C or C++, that handle functionality such as the Secure Sockets Layer (SSL) and Open GL \cite{komatineni2012pro}. Android Runtime (ART) features Ahead-Of-Time (AOT) compilation and Just-In-Time (JIT) compilation, garbage collection and debugging support \cite{android:sdk:stack}. This is where the Java code is being run and because of the debugging and garbage collection support, it is also beneficial for the developer to write applications against this layer.
 
@@ -178,7 +178,7 @@ In other words, you have to be able to reconstruct the signal given the samples 
     \label{fig:dft:ex1}
 \end{figure}
 
-Equation \ref{eq:1} \cite[p.~92]{tan2013digital} describes the mathematical process of converting a signal $x$ to a spectrum $X$ of $x$ where $N$ is the number of samples, $n$ is the time step and $k$ is the frequency sample. When calculating $X\left(k\right) \forall\ k \in \{x \in \mathbb{N} \mid 0 \leq x \leq N - 1\}$ we clearly see that it will take $N^2$ multiplications. In 1965, Cooley and Tukey published a paper on an algorithm that could calculate the DFT in less than $2N\log(N)$ multiplications \cite{Cooley1964} called the Fast Fourier Transform (FFT).
+Equation \ref{eq:1} \cite[p.~92]{tan2013digital} describes the mathematical process of converting a signal $x$ to a spectrum $X$ of $x$ where $N$ is the number of samples, $n$ is the time step and $k$ is the frequency sample. When calculating $X\left(k\right) \forall\ k \in \left[0, N - 1\right]$ we clearly see that it will take $N^2$ multiplications. In 1965, Cooley and Tukey published a paper on an algorithm that could calculate the DFT in less than $2N\log(N)$ multiplications \cite{Cooley1964} called the Fast Fourier Transform (FFT).
 
 \begin{align}
     X\left(k\right) = \sum\limits_{n=0}^{N-1}x\left(n\right)\cdot e^{-j2\pi kn/N},\ \ k = 0,1,2,\dots,N-1\label{eq:1}
@@ -550,7 +550,7 @@ In Java, an array is created during runtime and cannot change its size after it 
 % https://www.itu.dk/people/sestoft/papers/benchmarking.pdf
 
 \subsection{C++}
-In C and C++, arrays with predefined sizes are located on the program stack. This makes the program run faster because it does not need to call malloc or new and ask for more memory on the heap. This require that the programmer knows the required size of the array in advance and is not always possible or memory efficient.
+C and C++ arrays have predefined sizes and are located on the program stack. This makes the program run faster because it does not need to call malloc or new and ask for more memory on the heap. This require that the programmer knows the required size of the array in advance and is not always possible or memory efficient.
 
 % agner.org/optimize
 
@@ -615,7 +615,7 @@ SIMD has some prerequisites on the data that is being processed. Firstly, the da
 \end{figure}
 
 \section{Related work}
-A study called \emph{FFT benchmark on Android devices: Java versus JNI} \cite{Jr2013} was carried out in 2013 and investigated how two implementations of FFT performed on different Android devices. The main point of the study was to compare how a pure Java implementation would perform compared to a library written in C called FFTW. This library supports multi-threaded computation and this aspect is also covered in this study. Their benchmark application was run on 35 different devices with different versions to get a wide picture of how the algorithms ran on different phones.
+A study called \emph{FFT benchmark on Android devices: Java versus JNI} \cite{Jr2013} was published in 2013 and investigated how two implementations of FFT performed on different Android devices. The main point of the study was to compare how a pure Java implementation would perform compared to a library written in C called FFTW. This library supports multi-threaded computation and this aspect is also covered in this study. Their benchmark application was run on 35 different devices with different versions to get a wide picture of how the algorithms ran on different phones.
 
 \emph{Evaluating Performance of Android Platform Using Native C for Embedded Systems} \cite{Lee2010} explored how JNI overhead, arithmetic operations, memory access and heap allocation affected an application written in Java and native C. It was written in 2010 when the Android NDK was relatively new. Since then, many patches has been released, improving performance of code written in native C/C++. In this study, Dalvik VM was the virtual machine that executed the Dalvik bytecode. This study found that the JNI overhead was insignificant and took 0.15 ms to run in their testing environment. Their test results indicated that C was faster than Java in every case. The performance difference was largest in the memory access test and smallest in floating point calculations.
 
