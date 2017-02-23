@@ -11,7 +11,8 @@ import android.util.Log;
 public class ReadMic extends Thread {
     public static final int SAMPLING_RATE = 44100;
     public static final int TARGET_FREQUENCY = 1000;
-    public static final int MIN_MAG = 5000;
+    public static final int FREQ_MAX = 1500; // Filter out frequencies lower than this
+    public static final int MIN_MAG = 2000;
     private static final String AUDIO_TAG = "Audio";
     private Handler handler;
 
@@ -26,7 +27,8 @@ public class ReadMic extends Thread {
         AudioRecord recorder = null;
 
         try {
-            int bufferSize = AudioRecord.getMinBufferSize(SAMPLING_RATE, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT);
+            int minBufferSize = AudioRecord.getMinBufferSize(SAMPLING_RATE, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT);
+            int bufferSize = Math.max(FREQ_MAX*2, minBufferSize);
             recorder = new AudioRecord(MediaRecorder.AudioSource.MIC, SAMPLING_RATE, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT, bufferSize);
             short[] buffer = new short[bufferSize];
             FFTColumbiaIterative fftci = new FFTColumbiaIterative(SignalDetector.nextPowerOfTwo(bufferSize));
@@ -54,8 +56,8 @@ public class ReadMic extends Thread {
                     doubleBuffer[floatIndex] = sample32;
                 }
 
-                // Run FFT and get highest magnitude frequency
-                int[] freq = SignalDetector.getHighestMagnitude(doubleBuffer, fftci);
+                // Run FFT and get highest amplitude frequency
+                int[] freq = SignalDetector.getHighestAmplitude(doubleBuffer, fftci);
 
                 // If loudest frequency is within range and louder than minimum loudness,
                 // send a message to update view

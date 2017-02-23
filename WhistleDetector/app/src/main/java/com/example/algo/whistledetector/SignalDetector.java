@@ -2,13 +2,11 @@ package com.example.algo.whistledetector;
 
 public class SignalDetector {
 
-    public static int FREQ_MAX = 1500; // Filter out frequencies lower than this
-
     static {
         System.loadLibrary("native-lib");
     }
 
-    static int[] getHighestMagnitude(double[] samples, FFTColumbiaIterative fftci) {
+    static int[] getHighestAmplitude(double[] samples, FFTColumbiaIterative fftci) {
 
         // Compute FFT
         System.out.println("samples length: " + samples.length);
@@ -26,28 +24,22 @@ public class SignalDetector {
             x[i] = new Complex(nativeResult[i], nativeResult[i+samples.length]);
         }
 
-        // Extract amplitudes
-        double[] magnitudes = new double[x.length];
-        for (int i = 0; i < x.length; i++) {
-            magnitudes[i] = x[i].abs();
-        }
-
-        // Get frequency with highest magnitude within allowed frequency range
-        double maxVal = -1.0;
-        int maxIndex = 1;
-        double maxFrequency = 0.0;
+        // Get frequency with max amplitude
+        double maxAmplitude = 0.0;
+        double bestFrequency = 0.0;
         double frequencyFactor = (1.0 * ReadMic.SAMPLING_RATE) / (1.0 * z.length);
         for (int i = 0; i < x.length/2; i++) {
-            double freq = i * frequencyFactor;
-            if (magnitudes[i] > maxVal && freq < FREQ_MAX) {
-                maxVal = magnitudes[i];
-                maxIndex = i;
-                maxFrequency = freq;
+            double frequency = i * frequencyFactor;
+            double amplitude = x[i].abs();
+            if (frequency > ReadMic.FREQ_MAX) {
+                break;
+            }
+            if (amplitude > maxAmplitude) {
+                maxAmplitude = amplitude;
+                bestFrequency = frequency;
             }
         }
-
-        System.out.println("Max Frequency of samples: " + maxFrequency + " mag: " + magnitudes[maxIndex] + " maxVal: " + maxVal + " maxIndex: " + maxIndex);
-        return new int[] {(int)maxFrequency, (int)magnitudes[maxIndex]};
+        return new int[] {(int)bestFrequency, (int)maxAmplitude};
     }
 
     public static int nextPowerOfTwo(int v) {
