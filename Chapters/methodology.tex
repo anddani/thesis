@@ -88,12 +88,12 @@ There are multiple methods of measuring time in Java. It is possible to measure 
 \subsection{Memory measurement}
 
 \section{Evaluation}
-% How will the results be represented?
+% How will the results be represented? 
 % How will I interpret the results
 % How many times will the programs be executed
 % Statistical significance
 % What is included in the calculation, what is not (adding result to string etc)
-The unit of the resulting data will be in milliseconds. To be able to have 100 executions run in reasonable time, the maximum size of the input data was limited to $2^{16} = 65536$. 
+The unit of the resulting data will be in milliseconds. To be able to have 100 executions run in reasonable time, the maximum size of the input data was limited to $2^{16} = 65536$. The sampling rate is what determines the highest frequency that could be found in the result. In this thesis, only the frequency range perceivable by the human ear ($\sim$ 20-22,000 Hz) is covered by the tests. Because the FFT is limited to sample sizes of powers of 2, the next power of 2 for a sampling rate of 44,100 is $2^{16}$.
 
 % INCORRECT?
 % This size is also appropriate because a typical sample size in human audible sound processing is 44.1~kHz if you want to have a maximum frequency output of $\sim22$ kHz.
@@ -102,6 +102,26 @@ The unit of the resulting data will be in milliseconds. To be able to have 100 e
 \subsection{Data representation}
 \subsection{Data interpretation}
 \subsection{Statistical significance}
+Because the execution times differ between runs, it is important to calculate the sample mean. This way we have an expected value to use in our results. To get an accurate sample mean, we must have a large sample size which is the number of runs we execute for each test. The following formula calculates the sample mean \cite[p.263]{olofsson2012probability}:
+
+\begin{equation*}
+    \bar{X} = \frac{1}{N} \sum\limits_{k = 1}^{N} X_k
+\end{equation*}
+
+We cannot say anything about how close to our mean the samples are with only the sample mean. Therefore, the standard deviation is needed to find the dispersion of the data for each test. The standard deviation for a set of random samples $X_1, \dots, X_N$ is calculated using the following formula \cite[p.~302]{olofsson2012probability}:
+\begin{equation*}
+    s = \sqrt{\frac{1}{N - 1} \sum\limits_{k = 1}^{N}\left(X_k - \bar{X}\right)^2}
+\end{equation*}
+
+When comparing results, we need to find a confidence interval for a given test and choose a confidence level. For the data gathered in this study, a 95\% two-sided confidence level was chosen when comparing the data. The confidence interval is calculated by taking the standard error of the mean which is found by using the following formula \cite[p.~304]{olofsson2012probability}:
+\begin{equation*}
+    SE_{\bar{X}} = \frac{s}{\sqrt{N}}
+\end{equation*}
+
+When finding the confidence interval by taking the appropriate $z^*$-value for a confidence level and multiplying it with the standard error. For a confidence level of 95\%, we get an interval as follows:
+\begin{equation*}
+    \bar{X} \pm SE_{\bar{X}} \cdot 1.96
+\end{equation*}
 
 % Description of which algorithms that are available, which one that is used and why
 % Detailed description/comparison between the code.
