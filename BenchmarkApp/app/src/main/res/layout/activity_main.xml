@@ -42,6 +42,62 @@
         android:layout_below="@+id/run_button"
         android:scrollbars="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="200dp" />
+
+    <Button
+        android:layout_below="@+id/log_text"
+        android:id="@+id/fft1"
+        android:layout_width="200dp"
+        android:layout_height="50dp" />
+    <Button
+        android:layout_below="@+id/log_text"
+        android:layout_toRightOf="@+id/fft1"
+        android:id="@+id/fft2"
+        android:layout_width="200dp"
+        android:layout_height="50dp" />
+    <Button
+        android:layout_below="@+id/fft1"
+        android:id="@+id/fft3"
+        android:layout_width="200dp"
+        android:layout_height="50dp" />
+    <Button
+        android:layout_below="@+id/fft1"
+        android:layout_toRightOf="@+id/fft3"
+        android:id="@+id/fft4"
+        android:layout_width="200dp"
+        android:layout_height="50dp" />
+    <Button
+        android:layout_below="@+id/fft3"
+        android:id="@+id/fft5"
+        android:layout_width="200dp"
+        android:layout_height="50dp" />
+    <Button
+        android:layout_below="@+id/fft3"
+        android:layout_toRightOf="@+id/fft5"
+        android:id="@+id/fft6"
+        android:layout_width="200dp"
+        android:layout_height="50dp" />
+    <Button
+        android:layout_below="@+id/fft5"
+        android:id="@+id/fft7"
+        android:layout_width="200dp"
+        android:layout_height="50dp" />
+    <Button
+        android:layout_below="@+id/fft5"
+        android:layout_toRightOf="@+id/fft7"
+        android:id="@+id/fft8"
+        android:layout_width="200dp"
+        android:layout_height="50dp" />
+    <Button
+        android:layout_below="@+id/fft7"
+        android:id="@+id/fft9"
+        android:layout_width="200dp"
+        android:layout_height="50dp" />
+    <Button
+        android:layout_below="@+id/fft7"
+        android:layout_toRightOf="@+id/fft9"
+        android:id="@+id/fft10"
+        android:layout_width="200dp"
+        android:layout_height="50dp" />
 
 </RelativeLayout>

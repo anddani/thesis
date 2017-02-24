@@ -61,8 +61,10 @@ The setup used for performing the experiments were the following:
 \subsection{Benchmark Environment}
 % Android version
 % Cellular on?
-% Wifi on?
+% Wifi OFF!
+% Location OFF
 % Which apps were in background?
+% Foreground services OFF
 During the tests, cellular was switched off and wifi was enabled and connected. There were no applications running in the background while performing the tests during the experiments. The tests were executed and compiled with the following versions:
 
 % All the tests were executed/compiled using . Cellular was switched off and wifi was connected. No other background apps were present while performing the tests during the experiments.
@@ -85,7 +87,10 @@ During the tests, cellular was switched off and wifi was enabled and connected. 
 \subsection{Time measurement}
 There are multiple methods of measuring time in Java. It is possible to measure the wall-clock time using the \texttt{System.currentTimeMillis()} method. There are drawback of using wall-clock time for measuring time. Because it can be changed at any time, it could result in too small or too large runtime depending on seemingly random factors. What is more preferable is to measure elapsed cpu time. This do not depend on a changeable wall clock but rather use hardware to interpret time. It is possible to use both \texttt{System.nanoTime()} and \texttt{SystemClock.elapsedRealtimeNanos()} for this purpose.
 
+To get comparable results, matching work between algorithms were included in the time measurements. Each test was given the formatted data it needed because . Although every test had to return a complex representation of the results. They all described this using the same class called \emph{Complex} found in Appendix~\ref{appendix:code} Listing~\ref{lst:complex}. This class was written by Robert Sedgewick and Kevin Wayne \cite{princeton:complex}.
+
 \subsection{Memory measurement}
+The profiling tool provided by Android Studio was used to measure the amount of memory each test required. The method used was to attach the debugger to the app and measure using the profiler. To measure each test separately and equally, the app was launched freshly between tests and the garbage collector was forced before each test. After this, the memory allocation tracker was activated and then followed by starting a test. When the test had been done executing, the tracker was stopped and the results saved.
 
 \section{Evaluation}
 % How will the results be represented? 

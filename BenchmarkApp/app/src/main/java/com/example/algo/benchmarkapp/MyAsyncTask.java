@@ -70,6 +70,7 @@ public class MyAsyncTask extends AsyncTask<Integer, String, String> {
         for (double r : results) {
             sum += r;
         }
+        System.out.println("Done with algorithm nr: " + algorithm);
         return String.valueOf(sb.toString() + "average: " + sum/results.length + " ms\n");
 
     }
@@ -77,7 +78,9 @@ public class MyAsyncTask extends AsyncTask<Integer, String, String> {
     // Executes on UI thread
     @Override
     protected void onPostExecute(String s) {
-        listener.saveResult(s);
-        listener.startNextTest();
+        if (listener != null) {
+            listener.saveResult(s);
+            listener.startNextTest();
+        }
     }
 }

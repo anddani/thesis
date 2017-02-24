@@ -7,6 +7,8 @@ import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridLayout;
+import android.widget.GridView;
 import android.widget.TextView;
 
 import com.example.algo.benchmarkapp.algorithms.Constants;
@@ -24,8 +26,37 @@ public class MainActivity extends AppCompatActivity implements OnTaskCompleted {
     private static final String DEFAULT_N = "44000";
 
     private Benchmark bm;
+    private Benchmark bmMemory;
 
     private int currentAlgorithm;
+
+    private static final int[] buttonIds = {
+            R.id.fft1,
+            R.id.fft2,
+            R.id.fft3,
+            R.id.fft4,
+            R.id.fft5,
+            R.id.fft6,
+            R.id.fft7,
+            R.id.fft8,
+            R.id.fft9,
+            R.id.fft10,
+    };
+
+    private static final String[] buttonLabels = {
+            "Princeton Java Iterative",
+            "Princeton Java Recursive",
+            "Columbia Java Iterative",
+            "Java JTransforms",
+            "C++ Princeton converted Iterative",
+            "C++ Princeton converted Recursive",
+            "C++ Columbia converted Iterative",
+            "C++ KISS",
+            "C++ Columbia optimized Iterative",
+            "Java Columbia optimized Iterative"
+    };
+
+    private Button[] buttons = new Button[buttonIds.length];
 
     /**
      * Runs a new test in a new thread.
@@ -122,6 +153,26 @@ public class MainActivity extends AppCompatActivity implements OnTaskCompleted {
                 // Clear screen between tests
                 logTextView.setText("");
                 startNextTest();
+            }
+        });
+
+        bmMemory = new Benchmark(nextPowerOfTwo(Integer.parseInt(DEFAULT_N)));
+        for (int i = 0; i < buttonIds.length; i++) {
+            buttons[i] = (Button) findViewById(buttonIds[i]);
+            buttons[i].setText(buttonLabels[i]);
+            buttons[i].setTextSize(10);
+            System.out.println("Setting up onClick for button nr: " + i);
+            setOnClick(buttons[i], i);
+        }
+    }
+
+    private void setOnClick(final Button btn, final int n) {
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("Button pressed with n: " + n);
+                MyAsyncTask myAsyncTask = new MyAsyncTask(null, bmMemory);
+                myAsyncTask.execute(1, n);
             }
         });
     }

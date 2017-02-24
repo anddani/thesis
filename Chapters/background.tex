@@ -88,10 +88,13 @@ When an app is installed on the device, a program called \textbf{dex2oat} conver
 
 % Why is it used instead of Dalvik?
 
+% (.dex) file in text
+
 \section{Native Development Kit}
 Native Development Kit (\gls{ndk}) is a set of tools to help writing native apps for Android. It contains the necessary libraries, compilers, build tools and debugger for developing low level libraries. Google recommends using the NDK for two reasons: run computationally intensive tasks and usage of already written libraries \cite{android:ndk:guides}. Because Java is the supported language on Android, due to security and stability, native development is not recommended to use to build full apps, with an exception when developing games.
 
-Historically, native libraries have been built using makefile. Makefile is a tool used to coordinate compilation of source files. Android makefiles, \texttt{Android.mk} and \texttt{Application.mk}, are used to set compiler flags, choose which architectures that a project should be compiled for, location of source files and more. With Android Studio 2.2 \gls{cmake} was introduced as the default build tool \cite{android:studio:cmake}. CMake is a more advanced tool for generating and running build scripts.
+Historically, native libraries have been built using Make. Make is a tool used to coordinate compilation of source files. Android makefiles, \texttt{Android.mk} and \texttt{Application.mk}, are used to set compiler flags, choose which architectures that a project should be compiled for, location of source files and more. With Android Studio 2.2 \gls{cmake} was introduced as the default build tool \cite{android:studio:cmake}. CMake is a more advanced tool for generating and running build scripts.
+
 
 \subsection{Java Native Interface}
 To be able to call native libraries from Java code, a framework named Java Native Interface (JNI) is used. Using this interface, C/C++ functions are mapped as methods and primitive data types are converted between Java and C/C++. For this to work, special syntax is needed for JNI to recognize which method in which class a native function should correspond to.
@@ -112,6 +115,11 @@ To mark a function as native in Java, a special keyword called \texttt{native} i
 \end{figure}
 
 The JNI also provides a library for C and C++ for handling the special JNI data types. They can be used to determine the size of a Java array, get position of elements of an array and handling Java objects. In C and C++ you are given a pointer to a struct with all the required functions to convert data back and forth between Java data and C/C++ data.
+
+% ndk-build
+% Process vid anrop, allokering?, allokera i java och skicka pekare till native?
+% Mer om JNI
+% http://docs.oracle.com/javase/7/docs/technotes/guides/jni/spec/intro.html
 
 \subsection{LLVM and Clang}
 LLVM (Low Level Virtual Machine) is a suite that contains a set of compiler optimizers and backends. It is used as a foundation for compiler frontends and supports many architectures. An example of a frontend tool that uses LLVM is \gls{clang}. Clang is used compile C, C++ and Objective-C source code \cite{clang:comp}.
