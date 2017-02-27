@@ -20,8 +20,8 @@ import android.widget.TextView;
 public class MainActivity extends AppCompatActivity {
 
     public static final int SAMPLING_RATE = 44100;
-    public static final int TARGET_FREQUENCY = 200;
-    public static final int MIN_AMPLITUDE = 3;
+    public static final int TARGET_FREQUENCY = 1000;
+    public static final int MIN_AMPLITUDE = 5;
 
     RelativeLayout rl;
     TextView tv_freq, tv_mag;

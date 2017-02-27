@@ -11,9 +11,7 @@ jdoubleArray fft(JNIEnv* env, jobject obj, jdoubleArray arr, jdoubleArray sin, j
 
     int N = size/2;
 
-//    __android_log_print(ANDROID_LOG_INFO, "FFT", "-- Before fft");
     fftColumbiaIterativeOptimized(elements, elements+N, N, sin_v, cos_v); // Run FFT
-//    __android_log_print(ANDROID_LOG_INFO, "FFT", "-- After fft");
 
     (*env).ReleaseDoubleArrayElements(arr, elements, 0);
     return arr;

@@ -1,4 +1,4 @@
-\textit{The process of developing, how Android installs the app and how it runs it is explained in this chapter. Additionally, some basic knowledge of the Discrete Fourier Transform is required when discussing differences in FFT implementations. Lastly, common optimization techniques are described so that we can reason about the results.}
+\textit{The process of developing for Android, how an app is installed and how it is being run is explained in this chapter. Additionally, some basic knowledge of the Discrete Fourier Transform is required when discussing differences in FFT implementations. Lastly, common optimization techniques are described so that we can reason about the results.}
 
 \section{Android SDK}
 To allow developers to build Android apps, Google developed a Software Development Kit (SDK) to facilitate the process of writing Android applications. The Android SDK software stack is described in Figure~\ref{fig:sdk}. The Linux kernel is at the base of the stack, handling the core functionality of the device. Detecting hardware interaction, process scheduling and memory allocation are examples of services provided by the kernel. The Hardware Abstraction Layer (HAL) is an abstraction layer above the device drivers. This allows the developer to interact with hardware independent on the type of device \cite{android:hal}.
@@ -7,7 +7,7 @@ The native libraries are low level libraries, written in C or C++, that handle f
 
 The Java API Framework is the Java library you use when controlling the Android UI. It is the reusable code for managing activities, implementing data structures and designing the application. The System Application layer represents the functionality that allows a third-party app to communicate with other apps. Example of usable applications are email, calendar and contacts \cite{android:sdk:stack}.
 
-All applications for Android are packaged in so called Android Packages (APK). These APKs are zipped archives that contain all the necessary resources required to run the app. Such resources are the AndroidManifest.xml file, Dalvik executables, native libraries and other files the application depends on.
+All applications for Android are packaged in so called Android Packages (APK). These APKs are zipped archives that contain all the necessary resources required to run the app. Such resources are the AndroidManifest.xml file, Dalvik executables (.dex files), native libraries and other files the application depends on.
 
 \begin{figure}
     \centering
@@ -77,16 +77,14 @@ The DVM is a virtual machine optimized for devices where resources are limited \
 % What are dex files?
 Dalvik executables, or dex files, are the files where Dalvik bytecode is stored. They are created by converting a Java class file to the dex format. They are of a different structure than Java class files. Some differences are the header types that describes the data. One example of the differences is the string constant fields that are present in the dex-file. % FIND REFERENCE FROM GOOGLE IO ABOUT DALVIK??
 
-% How do they compare to class files
-
 \section{Android Runtime}
 % What is Android Runtime?
 Android Runtime is the new default runtime for Android as of version 5.0 \cite{android:dalvik}. The big improvement over Dalvik is the fact that applications are compiled to binary when they are installed on the device, rather than during runtime of the app. This results in faster start-up \cite{li2016advanced} and lets the compiler use more heavy optimization that is not otherwise possible during runtime. However, if the whole application is compiled ahead of time it is no longer possible to do any runtime optimizations. An example of a runtime optimization is to inline methods or functions that are called frequently.
 
 % .oat file
 When an app is installed on the device, a program called \textbf{dex2oat} converts a dex-file to an executable file called an oat-file \cite{android:art:dalvik}. This oat-file is in the Executable and Linkable Format (ELF) and can be seen as a wrapper of multiple dex-files \cite{Dresel2016}.
-
-% Why is it used instead of Dalvik?
+% ndk-build
+% Process vid anrop, allokering?, allokera i java och skicka pekare till native?
 
 % (.dex) file in text
 
@@ -95,13 +93,24 @@ Native Development Kit (\gls{ndk}) is a set of tools to help writing native apps
 
 Historically, native libraries have been built using Make. Make is a tool used to coordinate compilation of source files. Android makefiles, \texttt{Android.mk} and \texttt{Application.mk}, are used to set compiler flags, choose which architectures that a project should be compiled for, location of source files and more. With Android Studio 2.2 \gls{cmake} was introduced as the default build tool \cite{android:studio:cmake}. CMake is a more advanced tool for generating and running build scripts.
 
+At each compilation, the architectures the source files will be built against must be specified. The source file(s) generated will be placed in a folder structure where the source file is located in a folder that determines the architecture. Each architecture-folder is located in a folder called \texttt{lib}. This folder will be placed at the root of the APK.
+
+\begin{verbatim}
+lib/
+|--armeabi-v7a/
+|  |--lib[libname].so
+|--x86/
+   |--lib[libname].so
+\end{verbatim}
+
+% ndk-build
 
 \subsection{Java Native Interface}
 To be able to call native libraries from Java code, a framework named Java Native Interface (JNI) is used. Using this interface, C/C++ functions are mapped as methods and primitive data types are converted between Java and C/C++. For this to work, special syntax is needed for JNI to recognize which method in which class a native function should correspond to.
 
 To mark a function as native in Java, a special keyword called \texttt{native} is used to define a method. The library which implements this method must also be included in the same class. By using the \texttt{System.loadLibrary("mylib")} call, we can specify the name of the shared object that should be loaded. Inside the native library we must follow a function naming convention to map a method to a function. The rules are that you must start the function name with \texttt{Java} followed by the package, class and method name. Figure~\ref{fig:native} demonstrates how to map a method to a native function.
 
-\begin{figure}
+\begin{figure}[H]
 \begin{center}
     \texttt{private native int myFun();}\\
     $\Updownarrow$
@@ -114,12 +123,14 @@ To mark a function as native in Java, a special keyword called \texttt{native} i
 \label{fig:native}
 \end{figure}
 
-The JNI also provides a library for C and C++ for handling the special JNI data types. They can be used to determine the size of a Java array, get position of elements of an array and handling Java objects. In C and C++ you are given a pointer to a struct with all the required functions to convert data back and forth between Java data and C/C++ data.
+The JNI also provides a library for C and C++ for handling the special JNI data types. They can be used to determine the size of a Java array, get position of elements of an array and handling Java objects. In C and C++ you are given a pointer to a list of JNI functions (\texttt{JNIEnv*}). With this pointer, you can communicate with the JVM \cite[p.~22]{liang1999java}. You typically use the JNI functions to fetch data from handled by the JVM, call methods and create objects.
 
-% ndk-build
-% Process vid anrop, allokering?, allokera i java och skicka pekare till native?
-% Mer om JNI
-% http://docs.oracle.com/javase/7/docs/technotes/guides/jni/spec/intro.html
+The second parameter to a JNI function is of the \texttt{jobject} type. This is the current Java object that has called this specific JNI function. It can be seen as an equivalent to the \texttt{this} keyword in Java and C++ \cite[p.~23]{liang1999java}. There is a function-pair available in the \texttt{JNIEnv} pointer called \texttt{GetDoubleArrayElements()} and \texttt{ReleaseDoubleArrayElements()}. There are also functions for other primitive types such as \texttt{GetIntArrayElements()}, \texttt{GetShortArrayElements()} and others. \texttt{GetDoubleArrayElements()} is used to convert a Java array to a native memory buffer \cite[p.~159]{liang1999java}. This call also tries to \enquote{pin} the elements of the array.
+
+\emph{Pinning} allows JNI to provide the reference to an array directly instead of allocating new memory and copying the whole array. This is used to make the call more efficient although not always possible. Some implementations of the virtual machine does not allow this because it requires that the behaviour of the garbage collector must be changed to support this \cite[p.~158]{liang1999java}. There are two other functions, \texttt{GetPrimitiveArrayCritical()} and \texttt{ReleasePrimitiveArrayCritical()}, that can be used to avoid garbage collection in native code. Between these function calls, no calls to any of the JNI functions are allowed and they are prohibited to block the current thread.
+
+% Mer om JNI X
+% GOOD => https://www.fer.unizg.hr/_download/repository/jni.pdf <=
 
 \subsection{LLVM and Clang}
 LLVM (Low Level Virtual Machine) is a suite that contains a set of compiler optimizers and backends. It is used as a foundation for compiler frontends and supports many architectures. An example of a frontend tool that uses LLVM is \gls{clang}. Clang is used compile C, C++ and Objective-C source code \cite{clang:comp}.
@@ -136,7 +147,7 @@ One important thing to note is that you must sample at twice the frequency you w
 \begin{center}
     \textit{The sampling frequency should be at least twice the highest frequency contained in the signal.}
 \end{center}
-In other words, you have to be able to reconstruct the signal given the samples \cite[Ch~3]{smith1997scientist}. If you are given a signal that is constructed of frequencies that are at most 500 Hz, your sample frequency must be at least 1000 samples per second to be able to analyze them all.
+In other words, you have to be able to reconstruct the signal given the samples \cite[Ch~3]{smith1997scientist}. If you are given a signal that is constructed of frequencies that are at most 500~Hz, your sample frequency must be at least 1000 samples per second to be able to find the amplitude for each frequency.
 
 \begin{figure}[h]
     \renewcommand\thesubfigure{(\alph{subfigure})}
@@ -182,7 +193,7 @@ In other words, you have to be able to reconstruct the signal given the samples 
         \node[text width=12cm,align=center,anchor=north] at ([yshift=10mm]my plots c1r1.north) (cap1) {Time domain};
         \node[text width=12cm,align=center,anchor=north] at ([yshift=10mm]my plots c1r2.north) (cap2) {Frequency domain};
     \end{tikzpicture}
-    \caption{Time domain $\Rightarrow$ Frequency domain}
+    \caption{Time domain and frequency domain of a signal}
     \label{fig:dft:ex1}
 \end{figure}
 
@@ -562,8 +573,6 @@ C and C++ arrays have predefined sizes and are located on the program stack. Thi
 % agner.org/optimize
 
 \subsubsection{NEON}
-% https://www.kernel.org/pub/linux/kernel/people/geoff/cell/ps3-linux-docs/CellProgrammingTutorial/BasicsOfSIMDProgramming.html
-
 % http://www.crickettechnology.com/blog/?p=691
 % http://wanderingcoder.net/2010/07/19/ought-arm/
 % http://wanderingcoder.net/2010/06/02/intro-neon/

@@ -10,7 +10,6 @@ public class SignalDetector {
         double[] z = new double[samples.length*2];
         for (int i = 0; i < samples.length; i++) {
             z[i] = samples[i];
-            z[i+samples.length] = 0.0;
         }
 
         double[] nativeResult = fft(z, fftci.sin, fftci.cos);
