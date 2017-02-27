@@ -53,11 +53,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        tv_freq = (TextView)findViewById(R.id.frequency);
-        tv_freq.setText("Frequency: ");
 
+        tv_freq = (TextView)findViewById(R.id.frequency);
         tv_mag = (TextView)findViewById(R.id.magnitude);
-        tv_mag.setText("Magnitude: ");
 
         rl = (RelativeLayout)findViewById(R.id.activity_main);
         rl.setBackgroundColor(Color.RED);
@@ -65,9 +63,9 @@ public class MainActivity extends AppCompatActivity {
         requestRecordAudioPermission();
 
         bufferSize = AudioRecord.getMinBufferSize(SAMPLING_RATE, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT);
-        System.out.println("Buffer size before " + bufferSize);
+
+        // Ensure that we take 2^N numbers of samples from mic
         bufferSize = SignalDetector.nextPowerOfTwo(bufferSize);
-        System.out.println("Buffer size after " + bufferSize);
         recorder = new AudioRecord(MediaRecorder.AudioSource.MIC, SAMPLING_RATE, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT, bufferSize);
         buffer = new short[bufferSize];
 
@@ -79,11 +77,10 @@ public class MainActivity extends AppCompatActivity {
     class SampleFromMic extends Thread {
         @Override
         public void run() {
+            // Pre-compute sin and cos tables
             FFTColumbiaIterative fftci = new FFTColumbiaIterative(bufferSize);
 
             while (true) {
-                System.out.println("Min buffer size: " + bufferSize);
-
                 recorder.read(buffer, 0, buffer.length);
                 Complex[] freqDomain = ConvertDomain.timeToFrequency(buffer, fftci);
 
@@ -100,7 +97,10 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
 
+                // Display frequency 0 if amplitude is 0
                 bestFrequency = ((int)maxAmplitude == 0) ? 0.0 : bestFrequency;
+
+                // Change color  of screen when target frequency is present
                 if (bestFrequency > TARGET_FREQUENCY - 100 && bestFrequency < TARGET_FREQUENCY + 100 && maxAmplitude > MIN_MAG) {
                     mHandler.obtainMessage(1, (int)bestFrequency, (int)maxAmplitude).sendToTarget();
                 } else {
