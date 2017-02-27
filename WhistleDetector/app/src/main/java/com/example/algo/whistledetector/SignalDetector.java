@@ -6,6 +6,26 @@ public class SignalDetector {
         System.loadLibrary("native-lib");
     }
 
+    static Complex[] getFrequencyDomain(double[] samples, FFTColumbiaIterative fftci) {
+        // Compute FFT
+        System.out.println("samples length: " + samples.length);
+        double[] z = new double[samples.length*2];
+        System.out.println("z length: " + z.length);
+        for (int i = 0; i < samples.length; i++) {
+            z[i] = samples[i];
+            z[i+samples.length] = 0.0;
+        }
+
+        double[] nativeResult = fft(z, fftci.sin, fftci.cos);
+
+        Complex[] x = new Complex[z.length/2];
+        for (int i = 0; i < z.length/2; i++) {
+            x[i] = new Complex(nativeResult[i], nativeResult[i+samples.length]);
+        }
+
+        return x;
+    }
+
     static int[] getHighestAmplitude(double[] samples, FFTColumbiaIterative fftci) {
 
         // Compute FFT
