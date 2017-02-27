@@ -4,7 +4,7 @@ public class ConvertDomain {
 
     public static void hanningWindow(double[] samples) {
         for (int i = 1; i < samples.length; i++) {
-            samples[i] *= 0.5 * (1 - Math.cos((2 * Math.PI * i) / (samples.length-1)));
+            samples[i] *= 0.5 * (1 - Math.cos((2 * Math.PI * i) / (samples.length-1f)));
         }
     }
 

@@ -1,7 +1,9 @@
 package com.example.algo.whistledetector;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
@@ -19,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static final int SAMPLING_RATE = 44100;
     public static final int TARGET_FREQUENCY = 1000;
-    public static final int MIN_MAG = 10;
+    public static final int MIN_MAG = 5;
 
     RelativeLayout rl;
     TextView tv_freq, tv_mag;
@@ -54,13 +56,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        tv_freq = (TextView)findViewById(R.id.frequency);
-        tv_mag = (TextView)findViewById(R.id.magnitude);
-
         rl = (RelativeLayout)findViewById(R.id.activity_main);
-        rl.setBackgroundColor(Color.RED);
-
-        requestRecordAudioPermission();
 
         bufferSize = AudioRecord.getMinBufferSize(SAMPLING_RATE, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT);
 
@@ -71,7 +67,26 @@ public class MainActivity extends AppCompatActivity {
 
         recorder.startRecording();
 
-        new SampleFromMic().start();
+        switch (this.getResources().getConfiguration().orientation) {
+            case Configuration.ORIENTATION_PORTRAIT:
+
+                tv_freq = (TextView)findViewById(R.id.frequency);
+                tv_mag = (TextView)findViewById(R.id.magnitude);
+
+                rl.setBackgroundColor(Color.RED);
+                requestRecordAudioPermission();
+
+                new SampleFromMic().start();
+
+                System.out.println("Orientation: Portrait");
+                break;
+            case Configuration.ORIENTATION_LANDSCAPE:
+
+                rl.setBackgroundColor(Color.BLACK);
+
+                System.out.println("Orientation: Landscape");
+                break;
+        }
     }
 
     class SampleFromMic extends Thread {
@@ -87,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
                 // Get frequency with max amplitude
                 double maxAmplitude = 0.0;
                 double bestFrequency = 0.0;
-                double frequencyFactor = (1.0 * ReadMic.SAMPLING_RATE) / (1.0 * bufferSize);
+                double frequencyFactor = (1.0 * SAMPLING_RATE) / (1.0 * bufferSize);
                 for (int i = 0; i < freqDomain.length/2; i++) {
                     double frequency = i * frequencyFactor;
                     double amplitude = freqDomain[i].abs();
@@ -118,5 +133,13 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        System.out.println("onDestroy is called");
+        recorder.stop();
+        recorder.release();
     }
 }
