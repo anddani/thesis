@@ -20,34 +20,27 @@ import android.widget.TextView;
 public class MainActivity extends AppCompatActivity {
 
     public static final int SAMPLING_RATE = 44100;
-    public static final int TARGET_FREQUENCY = 1000;
-    public static final int MIN_MAG = 5;
+    public static final int TARGET_FREQUENCY = 200;
+    public static final int MIN_AMPLITUDE = 3;
 
     RelativeLayout rl;
     TextView tv_freq, tv_mag;
 
     AudioRecord recorder;
-    int minBufferSize;
     int bufferSize;
     short[] buffer;
 
-    int counter = 0;
-
+    // Notify UI thread to change background color
     private final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == 1) {
                 rl.setBackgroundColor(Color.GREEN);
-                tv_freq.setText("Frequency: " + msg.arg1);
-                tv_mag.setText("Magnitude: " + msg.arg2);
             } else if (msg.what == 2) {
                 rl.setBackgroundColor(Color.RED);
-                tv_freq.setText("Frequency: " + msg.arg1);
-                tv_mag.setText("Magnitude: " + msg.arg2);
-            } else if (msg.what == 3) {
-                System.out.println("Updating tv_freq");
-                tv_freq.setText("" + counter);
             }
+            tv_freq.setText("Frequency: " + msg.arg1);
+            tv_mag.setText("Amplitude: " + msg.arg2);
         }
     };
 
@@ -58,10 +51,11 @@ public class MainActivity extends AppCompatActivity {
 
         rl = (RelativeLayout)findViewById(R.id.activity_main);
 
-        bufferSize = AudioRecord.getMinBufferSize(SAMPLING_RATE, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT);
+        int minBufferSize = AudioRecord.getMinBufferSize(SAMPLING_RATE, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT);
 
         // Ensure that we take 2^N numbers of samples from mic
-        bufferSize = SignalDetector.nextPowerOfTwo(bufferSize);
+        bufferSize = SignalDetector.nextPowerOfTwo(minBufferSize);
+
         recorder = new AudioRecord(MediaRecorder.AudioSource.MIC, SAMPLING_RATE, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT, bufferSize);
         buffer = new short[bufferSize];
 
@@ -97,32 +91,30 @@ public class MainActivity extends AppCompatActivity {
 
             while (true) {
                 recorder.read(buffer, 0, buffer.length);
+
+                // Run FFT
                 Complex[] freqDomain = ConvertDomain.timeToFrequency(buffer, fftci);
 
-                // Get frequency with max amplitude
-                double maxAmplitude = 0.0;
-                double bestFrequency = 0.0;
-                double frequencyFactor = (1.0 * SAMPLING_RATE) / (1.0 * bufferSize);
-                for (int i = 0; i < freqDomain.length/2; i++) {
-                    double frequency = i * frequencyFactor;
-                    double amplitude = freqDomain[i].abs();
-                    if (amplitude > maxAmplitude) {
-                        maxAmplitude = amplitude;
-                        bestFrequency = frequency;
-                    }
-                }
-
-                // Display frequency 0 if amplitude is 0
-                bestFrequency = ((int)maxAmplitude == 0) ? 0.0 : bestFrequency;
+                // Get frequency with highest amplitude
+                int[] freq = ConvertDomain.maxAmplitude(freqDomain, bufferSize);
 
                 // Change color  of screen when target frequency is present
-                if (bestFrequency > TARGET_FREQUENCY - 100 && bestFrequency < TARGET_FREQUENCY + 100 && maxAmplitude > MIN_MAG) {
-                    mHandler.obtainMessage(1, (int)bestFrequency, (int)maxAmplitude).sendToTarget();
+                if (freq[0] > TARGET_FREQUENCY - 100 && freq[0] < TARGET_FREQUENCY + 100 && freq[1] > MIN_AMPLITUDE) {
+                    mHandler.obtainMessage(1, (int)freq[0], (int)freq[1]).sendToTarget();
                 } else {
-                    mHandler.obtainMessage(2, (int)bestFrequency, (int)maxAmplitude).sendToTarget();
+                    mHandler.obtainMessage(2, (int)freq[0], (int)freq[1]).sendToTarget();
                 }
             }
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        // Stop recorder when activity is removed
+        recorder.stop();
+        recorder.release();
     }
 
     private void requestRecordAudioPermission() {
@@ -133,13 +125,5 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        System.out.println("onDestroy is called");
-        recorder.stop();
-        recorder.release();
     }
 }

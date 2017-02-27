@@ -7,7 +7,6 @@ public class SignalDetector {
     }
 
     static Complex[] getFrequencyDomain(double[] samples, FFTColumbiaIterative fftci) {
-        // Compute FFT
         double[] z = new double[samples.length*2];
         for (int i = 0; i < samples.length; i++) {
             z[i] = samples[i];
