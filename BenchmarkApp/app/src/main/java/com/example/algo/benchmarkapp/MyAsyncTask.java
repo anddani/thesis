@@ -33,9 +33,9 @@ public class MyAsyncTask extends AsyncTask<Integer, String, String> {
                 case FFT_JAVA_ITERATIVE_COLUMBIA:
                     time = bm.FFTJavaIterativeColumbia();
                     break;
-                case FFT_JAVA_JTRANSFORMS:
-                    time = bm.FFTJavaJTransforms();
-                    break;
+//                case FFT_JAVA_JTRANSFORMS:
+//                    time = bm.FFTJavaJTransforms();
+//                    break;
                 case FFT_CPP_ITERATIVE_PRINCETON:
                     time = bm.FFTCppIterativePrinceton();
                     break;

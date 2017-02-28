@@ -27,7 +27,7 @@ public class Benchmark {
 
         // Generate test data
         re = randomInput(N);
-        System.out.println("initial real[]: " + Arrays.toString(re));
+//        System.out.println("initial real[]: " + Arrays.toString(re));
         im = new double[N];
     }
 
@@ -223,7 +223,6 @@ public class Benchmark {
     }
 
     public long FFTCppIterativeColumbia() {
-        // Will hold the result from FFT
 
         // Let first half be filled with real and second half with imaginary
         double[] z = new double[re.length*2];
@@ -233,6 +232,7 @@ public class Benchmark {
         }
 
         FFTColumbiaIterative fftci = new FFTColumbiaIterative(re.length);
+
         long start = SystemClock.elapsedRealtimeNanos();
 
         double[] nativeResult = fft_columbia_iterative(z, fftci.cos, fftci.sin);
@@ -284,12 +284,12 @@ public class Benchmark {
             printComplex(x);
         }
 
-        if (!isCorrect(x)) {
-            System.out.println("FFT JAVA ITER COLUMBIA GIVES INCORRECT OUTPUT");
-            printComplex(x);
-            System.out.println("CORRECT: ");
-            printComplex(correctOut);
-        }
+//        if (!isCorrect(x)) {
+//            System.out.println("FFT JAVA ITER COLUMBIA GIVES INCORRECT OUTPUT");
+//            printComplex(x);
+//            System.out.println("CORRECT: ");
+//            printComplex(correctOut);
+//        }
         return stop;
     }
 
