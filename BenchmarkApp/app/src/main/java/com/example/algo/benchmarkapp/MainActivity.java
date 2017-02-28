@@ -16,26 +16,15 @@ import com.example.algo.benchmarkapp.algorithms.Constants;
 import java.io.File;
 import java.io.FileOutputStream;
 
-//public class MainActivity extends AppCompatActivity implements OnTaskCompleted {
 public class MainActivity extends AppCompatActivity {
 
     private TextView logTextView;
-    private EditText numIter;
     private EditText dataSize;
 
-    private static final String DEFAULT_ITER = "5";
     private static final String DEFAULT_N = "44000";
 
-//    private Benchmark bm;
     private Benchmark[] benchmarks = new Benchmark[Constants.BLOCK_SIZES.length];
-    private Benchmark bmMemory;
 
-//    private MyTaskHandler mth;
-
-    private int currentAlgorithm;
-
-//    private MyTaskHandler myTaskHandler;
-//    private Handler mTaskHandler;
     private Handler mUIHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -54,15 +43,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        System.out.println(Arrays.toString(Constants.BLOCK_SIZES));
-
         // Set TextView as scrollable
         logTextView = (TextView) findViewById(R.id.log_text);
         logTextView.setMovementMethod(new ScrollingMovementMethod());
         logTextView.append("\n");
 
         // To get content of edittext
-        numIter = (EditText) findViewById(R.id.num_iter);
         dataSize = (EditText) findViewById(R.id.data_size);
 
         Button btn = (Button) findViewById(R.id.run_button);
@@ -70,12 +56,6 @@ public class MainActivity extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                currentAlgorithm = 0;
-                String dataSizeText = dataSize.getText().toString();
-                if (dataSizeText.isEmpty()) {
-                    dataSizeText = DEFAULT_N;
-                }
-                int N = nextPowerOfTwo(Integer.parseInt(dataSizeText));
 
                 // Reset file content for each run
                 File file = new File(getFilesDir(), "data.out");
@@ -84,23 +64,13 @@ public class MainActivity extends AppCompatActivity {
                     System.out.println("DID NOT GET DELETED");
                 }
 
-                // Generates new input
-//                mth.newBenchmarks();
-//                bm = new Benchmark(N);
-
-//                generateBenchmarks(bm2);
-
-//                    mth.mTaskHandler.obtainMessage(Constants.NEW_BENCHMARKS_MESSAGE).sendToTarget();
                 mTaskHandler.obtainMessage(Constants.BENCHMARK_MESSAGE_NEW).sendToTarget();
 
                 // Clear screen between tests
                 logTextView.setText("");
-//                startNextTest();
-//                startBenchmarks();
             }
         });
 
-        bmMemory = new Benchmark(nextPowerOfTwo(Integer.parseInt(DEFAULT_N)));
         for (int i = 0; i < buttonIds.length; i++) {
             buttons[i] = (Button) findViewById(buttonIds[i]);
             buttons[i].setText(buttonLabels[i]);
@@ -108,42 +78,26 @@ public class MainActivity extends AppCompatActivity {
             System.out.println("Setting up onClick for button nr: " + i);
             setOnClick(buttons[i], i);
         }
-
-//        mth = new MyTaskHandler(mUIHandler);
-//        mth.start();
     }
 
+    private void setOnClick(final Button btn, final int n) {
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("Button pressed with n: " + n);
 
-    /**
-     * Runs a new test in a new thread.
-     */
-//    @Override
-//    public void startNextTest() {
-//        MyAsyncTask myAsyncTask = new MyAsyncTask(MainActivity.this, bm);
-//
-//        String iterText = numIter.getText().toString();
-//
-//        // If not specified, set to DEFAULT_ITER
-//        if (iterText.isEmpty()) {
-//            iterText = DEFAULT_ITER;
-//        }
-//        int iter = Integer.parseInt(iterText);
-//
-//        String dataSizeText = dataSize.getText().toString();
-//        // If not specified, set to DEFAULT_N
-//        if (dataSizeText.isEmpty()) {
-//            dataSizeText = DEFAULT_N;
-//        }
-//
-//        int N = nextPowerOfTwo(Integer.parseInt(dataSizeText));
-//
-//        int algorithm = currentAlgorithm;
-//        if (currentAlgorithm < Constants.NUM_ALGORITHMS) {
-//            myAsyncTask.execute(iter, algorithm);
-//            saveResult("-- Running Algorithm " + Constants.ALGORITHM_NAMES[algorithm] + " N=" + N + " for " + iter + " iter\n");
-//        }
-//        currentAlgorithm++;
-//    }
+                String dataSizeText = dataSize.getText().toString();
+                if (dataSizeText.isEmpty()) {
+                    dataSizeText = DEFAULT_N;
+                }
+                int d = nextPowerOfTwo(Integer.parseInt(dataSizeText));
+
+                BenchmarkMessage message = new BenchmarkMessage(Constants.BENCHMARK_ITER, n, d);
+                mTaskHandler.obtainMessage(0, message).sendToTarget();
+            }
+        });
+    }
+
 
     /**
      * Starts the benchmark by sending messages to the handler thread
@@ -164,7 +118,6 @@ public class MainActivity extends AppCompatActivity {
      *
      * @param result Execution time
      */
-//    @Override
     public void saveResult(String result) {
         FileOutputStream out;
         try {
@@ -177,6 +130,7 @@ public class MainActivity extends AppCompatActivity {
         }
         logTextView.append(result + "\n");
         int scrollAmount = getScrollAmount(logTextView);
+
         // Scroll number of added lines outside of bottom
         if (scrollAmount > 0)
             logTextView.scrollTo(0, scrollAmount);
@@ -186,17 +140,6 @@ public class MainActivity extends AppCompatActivity {
 
     private int getScrollAmount(TextView tv) {
         return tv.getLayout().getLineTop(tv.getLineCount()) - tv.getHeight();
-    }
-
-    private void setOnClick(final Button btn, final int n) {
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                System.out.println("Button pressed with n: " + n);
-                MyAsyncTask myAsyncTask = new MyAsyncTask(null, bmMemory);
-                myAsyncTask.execute(1, n);
-            }
-        });
     }
 
     private int nextPowerOfTwo(int v) {
@@ -224,8 +167,6 @@ public class MainActivity extends AppCompatActivity {
                 newBenchmarks();
                 mUIHandler.obtainMessage(msg.what).sendToTarget();
             } else {
-//                int algorithm = msg.arg1;
-//                int iterations = msg.arg2;
                 BenchmarkMessage message = (BenchmarkMessage) msg.obj;
                 int algorithm = message.algorithm;
                 int iterations = message.iterations;
@@ -245,9 +186,6 @@ public class MainActivity extends AppCompatActivity {
                         case FFT_JAVA_ITERATIVE_COLUMBIA:
                             time = bm.FFTJavaIterativeColumbia();
                             break;
-//                        case FFT_JAVA_JTRANSFORMS:
-//                            time = bm.FFTJavaJTransforms();
-//                            break;
                         case FFT_CPP_ITERATIVE_PRINCETON:
                             time = bm.FFTCppIterativePrinceton();
                             break;
@@ -308,14 +246,12 @@ public class MainActivity extends AppCompatActivity {
             R.id.fft7,
             R.id.fft8,
             R.id.fft9,
-            R.id.fft10,
     };
 
     private static final String[] buttonLabels = {
             "Princeton Java Iterative",
             "Princeton Java Recursive",
             "Columbia Java Iterative",
-            "Java JTransforms",
             "C++ Princeton converted Iterative",
             "C++ Princeton converted Recursive",
             "C++ Columbia converted Iterative",
