@@ -1,11 +1,47 @@
 #!/bin/bash
 
 # TODO:
-#   - Control this program using arguments
 #   - Use folders for each day in DATA_PATH?
-#   - Ensure only raw data is stored
-#   - Calculate statistics with AWK
-#   - Format if needed in sed
+
+function convert_test_results {
+    N=""
+    while read line ; do
+        TYPE=$(echo $line | cut -d' ' -f1)
+
+        # Only lines with text allowed
+        if [[ $TYPE == "" ]] ; then
+            continue
+        fi
+
+        if [[ $TYPE == "numTests" ]] ; then
+            N=$(echo $line | cut -d' ' -f2)
+        else
+            ALG=$(echo $line | cut -d' ' -f2)
+            BLOCK_SIZE=$(echo $line | cut -d' ' -f4)
+
+            FOLDER="$RESULTS_PATH/$TYPE"
+            EXEC_TIMES=$(echo $line | cut -d' ' -f6-)
+
+            # Average
+            AVG=$(echo $EXEC_TIMES | awk '{sum += $1;} END {print sum/NR;}' RS=" ")
+
+            # Standard deviation
+            SD=$(echo $EXEC_TIMES | awk '{sum += $1; array[NR] = $1;} END {for(i=1; i<=NR; i++){sumsq += ((array[i]-(sum/NR))^2);} print sqrt(sumsq/(NR-1))}' RS=" ")
+
+            # Standard error
+            SE=$(awk -v sd="$SD" -v n="$N" 'BEGIN{print sd/sqrt(n)}')
+
+            # Conficence interval
+            CONF=$(awk -v se="$SE" 'BEGIN{print se*1.96}')
+
+            if [[ ! -d "$FOLDER" ]] ; then
+                mkdir $FOLDER
+            fi
+
+            echo "$BLOCK_SIZE $AVG $SD $SE $CONF" >> "$FOLDER/${ALG}_N_${N}"
+        fi
+    done <$1
+}
 
 if [[ -z "$EXJOBB_HOME" ]]; then
     echo "EXJOBB_HOME not set"
@@ -13,8 +49,10 @@ if [[ -z "$EXJOBB_HOME" ]]; then
 fi
 
 OPTIND=1
-while getopts "v" opt; do
+while getopts "cv" opt; do
     case "$opt" in
+        c)  CONVERT=1
+            ;;
         v)  VIEW=1
             ;;
     esac
@@ -27,10 +65,24 @@ DATA_PATH=$EXJOBB_HOME/Data
 PACKAGE="com.example.algo.benchmarkapp"
 FILENAME="/data/data/$PACKAGE/files/data.out"
 
-echo "-- moving data from phone to $DATA_PATH/$TIME"
+RESULTS_PATH=$DATA_PATH/results
+
 if [[ $VIEW -eq 1 ]] ; then
     eval adb shell "'run-as $PACKAGE cat $FILENAME'" | less
+elif [[ $CONVERT -eq 1 ]] ; then
+    # Get path and filename of the latest fetched file
+    LATEST="$DATA_PATH/$(ls -l $DATA_PATH | grep '\.out' | tail -n 1 | awk -F ' ' '{print $9}')"
+
+    # Backup previous results
+    if [[ -d "$RESULTS_PATH" ]] ; then
+        echo "-- folder exists, backing up..."
+        mv $RESULTS_PATH $DATA_PATH/backup_$TIME
+    fi
+    mkdir $RESULTS_PATH
+
+    convert_test_results $LATEST
 else
+    echo "-- moving data from phone to $DATA_PATH/$TIME"
     eval adb shell "'run-as $PACKAGE cat $FILENAME'" > $DATA_PATH/$TIME.out
 fi
 

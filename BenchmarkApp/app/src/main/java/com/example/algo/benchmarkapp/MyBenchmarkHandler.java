@@ -34,7 +34,10 @@ public class MyBenchmarkHandler extends Handler {
             int sizeId = message.sizeId;
 
             StringBuilder sb = new StringBuilder();
-            double[] results = new double[iterations];
+            sb.append(Constants.ALGORITHM_NAMES[algorithm]);
+            sb.append(" blockSize: ");
+            sb.append(Constants.BLOCK_SIZES[message.sizeId]);
+            sb.append(" executionTime: ");
 
             if (benchmarks[sizeId] == null) {
                 benchmarks[sizeId] = new Benchmark(Constants.BLOCK_SIZES[sizeId]);
@@ -81,24 +84,12 @@ public class MyBenchmarkHandler extends Handler {
                     default:
                         break;
                 }
-                sb.append("Algorithm: ");
-                sb.append(Constants.ALGORITHM_NAMES[algorithm]);
-                sb.append(" block size: ");
-                sb.append(Constants.BLOCK_SIZES[message.sizeId]);
-                sb.append(" ");
                 sb.append(time / 1000000.0);
-                sb.append(" ms\n");
-                results[iterations] = time / 1000000.0;
+                sb.append(" ");
             }
+            sb.append("\n");
 
-            // Calculate average
-            double sum = 0.0;
-            for (double r : results) {
-                sum += r;
-            }
-
-            String returnString = String.valueOf(sb.toString() + "average: " + sum / results.length + " ms\n");
-            message.setMessageString(returnString);
+            message.setMessageString(sb.toString());
             mUIHandler.obtainMessage(Constants.BENCHMARK_MESSAGE_DONE, message).sendToTarget();
         }
     }

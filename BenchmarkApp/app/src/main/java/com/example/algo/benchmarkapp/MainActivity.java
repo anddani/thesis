@@ -69,6 +69,8 @@ public class MainActivity extends AppCompatActivity {
                     System.out.println("DID NOT GET DELETED");
                 }
 
+                saveResult("numTests " + Constants.BENCHMARK_ITER);
+
                 mTaskHandler.obtainMessage(Constants.BENCHMARK_MESSAGE_NEW).sendToTarget();
 
                 // Clear screen between tests
@@ -102,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
                 if (!new File(getFilesDir(), "data.out").delete()) {
                     System.out.println("DID NOT GET DELETED");
                 }
+                saveResult("numTests " + Constants.BENCHMARK_ITER);
 
                 // Clear screen between tests
                 logTextView.setText("");

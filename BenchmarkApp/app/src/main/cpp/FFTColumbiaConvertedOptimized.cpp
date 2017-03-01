@@ -4,7 +4,6 @@
 #define LOGTAG "FFTLIB"
 
 void fftColumbiaIterativeOptimized(double* x, double* y, int n) {
-    clock_t time1 = clock(); // DEBUG
     /* Precomputed tables */
     double* cos_v = cos_a;
     double* sin_v = sin_a;
@@ -14,7 +13,6 @@ void fftColumbiaIterativeOptimized(double* x, double* y, int n) {
     double c,s,e,t1,t2;
 
 
-    clock_t time2 = clock(); // DEBUG
     // Bit-reverse - 15-40 ms
     j = 0;
     n2 = n/2;
@@ -36,7 +34,6 @@ void fftColumbiaIterativeOptimized(double* x, double* y, int n) {
         }
     }
 
-    clock_t time3 = clock(); // DEBUG
     // FFT - 230-260 ms
     n1 = 0;
     n2 = 1;
@@ -61,12 +58,11 @@ void fftColumbiaIterativeOptimized(double* x, double* y, int n) {
             }
         }
     }
-    clock_t time4 = clock(); // DEBUG
 
-    float init = (float)(time2 - time1)/(CLOCKS_PER_SEC/1000); // DEBUG
-    float first_loop = (float)(time3 - time2)/(CLOCKS_PER_SEC/1000); // DEBUG
-    float second_loop = (float)(time4 - time3)/(CLOCKS_PER_SEC/1000); // DEBUG
-    __android_log_print(ANDROID_LOG_INFO, LOGTAG, "-- init time: %f", init); // DEBUG
-    __android_log_print(ANDROID_LOG_INFO, LOGTAG, "-- first loop time: %f", first_loop); // DEBUG
-    __android_log_print(ANDROID_LOG_INFO, LOGTAG, "-- second loop time: %f", second_loop); // DEBUG
+//    float init = (float)(time2 - time1)/(CLOCKS_PER_SEC/1000); // DEBUG
+//    float first_loop = (float)(time3 - time2)/(CLOCKS_PER_SEC/1000); // DEBUG
+//    float second_loop = (float)(time4 - time3)/(CLOCKS_PER_SEC/1000); // DEBUG
+//    __android_log_print(ANDROID_LOG_INFO, LOGTAG, "-- init time: %f", init); // DEBUG
+//    __android_log_print(ANDROID_LOG_INFO, LOGTAG, "-- first loop time: %f", first_loop); // DEBUG
+//    __android_log_print(ANDROID_LOG_INFO, LOGTAG, "-- second loop time: %f", second_loop); // DEBUG
 }
