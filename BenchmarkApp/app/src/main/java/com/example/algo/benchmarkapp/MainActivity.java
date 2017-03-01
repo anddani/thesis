@@ -1,6 +1,7 @@
 package com.example.algo.benchmarkapp;
 
 import android.os.Handler;
+import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
@@ -23,9 +24,9 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String DEFAULT_N = "44000";
 
-    private Benchmark[] benchmarks = new Benchmark[Constants.BLOCK_SIZES.length];
+    private MyBenchmarkHandler mTaskHandler;
 
-    private Handler mUIHandler = new Handler() {
+    private Handler mUIHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == Constants.BENCHMARK_MESSAGE_NEW) {
@@ -52,6 +53,10 @@ public class MainActivity extends AppCompatActivity {
         dataSize = (EditText) findViewById(R.id.data_size);
 
         Button btn = (Button) findViewById(R.id.run_button);
+
+        HandlerThread myThread = new HandlerThread("Worker Thread");
+        myThread.start();
+        mTaskHandler = new MyBenchmarkHandler(myThread.getLooper(), mUIHandler);
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -153,88 +158,88 @@ public class MainActivity extends AppCompatActivity {
         return v;
     }
 
-    public void newBenchmarks() {
-        for (int i = 0; i < Constants.BLOCK_SIZES.length; i++) {
-            benchmarks[i] = new Benchmark(Constants.BLOCK_SIZES[i]);
-        }
-    }
+//    public void newBenchmarks() {
+//        for (int i = 0; i < Constants.BLOCK_SIZES.length; i++) {
+//            benchmarks[i] = new Benchmark(Constants.BLOCK_SIZES[i]);
+//        }
+//    }
 
-    private Handler mTaskHandler = new Handler(Looper.getMainLooper()) {
-        @Override
-        public void handleMessage(Message msg) {
-
-            if (msg.what == Constants.BENCHMARK_MESSAGE_NEW) {
-                newBenchmarks();
-                mUIHandler.obtainMessage(msg.what).sendToTarget();
-            } else {
-                BenchmarkMessage message = (BenchmarkMessage) msg.obj;
-                int algorithm = message.algorithm;
-                int iterations = message.iterations;
-                StringBuilder sb = new StringBuilder();
-                double[] results = new double[iterations];
-                Benchmark bm = benchmarks[message.sizeId];
-
-                while (iterations-- > 0) {
-                    long time = 0L;
-                    switch (Constants.ALGORITHMS.values()[algorithm]) {
-                        case FFT_JAVA_ITERATIVE_PRINCETON:
-                            time = bm.FFTJavaIterativePrinceton();
-                            break;
-                        case FFT_JAVA_RECURSIVE_PRINCETON:
-                            time = bm.FFTJavaRecursivePrinceton();
-                            break;
-                        case FFT_JAVA_ITERATIVE_COLUMBIA:
-                            time = bm.FFTJavaIterativeColumbia();
-                            break;
-                        case FFT_CPP_ITERATIVE_PRINCETON:
-                            time = bm.FFTCppIterativePrinceton();
-                            break;
-                        case FFT_CPP_RECURSIVE_PRINCETON:
-                            time = bm.FFTCppRecursivePrinceton();
-                            break;
-                        case FFT_CPP_ITERATIVE_COLUMBIA:
-                            time = bm.FFTCppIterativeColumbia();
-                            break;
-                        case FFT_CPP_ITERATIVE_COLUMBIA_OPTIMIZED:
-                            time = bm.FFTCppIterativeColumbiaOptimized();
-                            break;
-                        case FFT_CPP_KISS:
-                            time = bm.FFTCppKiss();
-                            break;
-                        case JNI_EMPTY:
-                            time = bm.JNIBenchmarkEmpty();
-                            break;
-                        case JNI_PARAMS:
-                            time = bm.JNIBenchmarkParams();
-                            break;
-                        case JNI_VECTOR_CONVERSION:
-                            time = bm.JNIBenchmarkVectorConversion();
-                            break;
-                        default:
-                            break;
-                    }
-                    sb.append("Algorithm: ");
-                    sb.append(Constants.ALGORITHM_NAMES[algorithm]);
-                    sb.append(" block size: ");
-                    sb.append(Constants.BLOCK_SIZES[message.sizeId]);
-                    sb.append(" ");
-                    sb.append(time / 1000000.0);
-                    sb.append(" ms\n");
-                    results[iterations] = time / 1000000.0;
-                }
-
-                // Calculate average
-                double sum = 0.0;
-                for (double r : results) {
-                    sum += r;
-                }
-
-                String returnString = String.valueOf(sb.toString() + "average: " + sum / results.length + " ms\n");
-                message.setMessageString(returnString);
-                mUIHandler.obtainMessage(Constants.BENCHMARK_MESSAGE_DONE, message).sendToTarget();
-            }
-        }
-    };
+//    private Handler mTaskHandler = new Handler(Looper.getMainLooper()) {
+//        @Override
+//        public void handleMessage(Message msg) {
+//
+//            if (msg.what == Constants.BENCHMARK_MESSAGE_NEW) {
+//                newBenchmarks();
+//                mUIHandler.obtainMessage(msg.what).sendToTarget();
+//            } else {
+//                BenchmarkMessage message = (BenchmarkMessage) msg.obj;
+//                int algorithm = message.algorithm;
+//                int iterations = message.iterations;
+//                StringBuilder sb = new StringBuilder();
+//                double[] results = new double[iterations];
+//                Benchmark bm = benchmarks[message.sizeId];
+//
+//                while (iterations-- > 0) {
+//                    long time = 0L;
+//                    switch (Constants.ALGORITHMS.values()[algorithm]) {
+//                        case FFT_JAVA_ITERATIVE_PRINCETON:
+//                            time = bm.FFTJavaIterativePrinceton();
+//                            break;
+//                        case FFT_JAVA_RECURSIVE_PRINCETON:
+//                            time = bm.FFTJavaRecursivePrinceton();
+//                            break;
+//                        case FFT_JAVA_ITERATIVE_COLUMBIA:
+//                            time = bm.FFTJavaIterativeColumbia();
+//                            break;
+//                        case FFT_CPP_ITERATIVE_PRINCETON:
+//                            time = bm.FFTCppIterativePrinceton();
+//                            break;
+//                        case FFT_CPP_RECURSIVE_PRINCETON:
+//                            time = bm.FFTCppRecursivePrinceton();
+//                            break;
+//                        case FFT_CPP_ITERATIVE_COLUMBIA:
+//                            time = bm.FFTCppIterativeColumbia();
+//                            break;
+//                        case FFT_CPP_ITERATIVE_COLUMBIA_OPTIMIZED:
+//                            time = bm.FFTCppIterativeColumbiaOptimized();
+//                            break;
+//                        case FFT_CPP_KISS:
+//                            time = bm.FFTCppKiss();
+//                            break;
+//                        case JNI_EMPTY:
+//                            time = bm.JNIBenchmarkEmpty();
+//                            break;
+//                        case JNI_PARAMS:
+//                            time = bm.JNIBenchmarkParams();
+//                            break;
+//                        case JNI_VECTOR_CONVERSION:
+//                            time = bm.JNIBenchmarkVectorConversion();
+//                            break;
+//                        default:
+//                            break;
+//                    }
+//                    sb.append("Algorithm: ");
+//                    sb.append(Constants.ALGORITHM_NAMES[algorithm]);
+//                    sb.append(" block size: ");
+//                    sb.append(Constants.BLOCK_SIZES[message.sizeId]);
+//                    sb.append(" ");
+//                    sb.append(time / 1000000.0);
+//                    sb.append(" ms\n");
+//                    results[iterations] = time / 1000000.0;
+//                }
+//
+//                // Calculate average
+//                double sum = 0.0;
+//                for (double r : results) {
+//                    sum += r;
+//                }
+//
+//                String returnString = String.valueOf(sb.toString() + "average: " + sum / results.length + " ms\n");
+//                message.setMessageString(returnString);
+//                mUIHandler.obtainMessage(Constants.BENCHMARK_MESSAGE_DONE, message).sendToTarget();
+//            }
+//        }
+//    };
 
     private static final int[] buttonIds = {
             R.id.fft1,

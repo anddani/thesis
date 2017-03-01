@@ -259,8 +259,6 @@ public class Benchmark {
     }
 
     public long FFTCppIterativeColumbiaOptimized() {
-        // Will hold the result from FFT
-
         // Let first half be filled with real and second half with imaginary
         double[] z = new double[re.length*2];
         for (int i = 0; i < re.length; i++) {
@@ -280,7 +278,7 @@ public class Benchmark {
         long stop = SystemClock.elapsedRealtimeNanos() - start;
 
         if (DEBUG) {
-            System.out.println("************* FFT JAVA ITER COLUMBIA ************");
+            System.out.println("************* FFT CPP ITER COLUMBIA OPTIMIZED ************");
             printComplex(x);
         }
 
