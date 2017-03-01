@@ -123,9 +123,15 @@ When comparing results, we need to find a confidence interval for a given test a
     SE_{\bar{X}} = \frac{s}{\sqrt{N}}
 \end{equation*}
 
-When finding the confidence interval by taking the appropriate $z^*$-value for a confidence level and multiplying it with the standard error. For a confidence level of 95\%, we get an interval as follows:
+To find the confidence interval, we must calculate the margin of error by taking the appropriate $z^*$-value for a confidence level and multiplying it with the standard error. For a confidence level of 95\%, we get a margin of error as follows:
+
 \begin{equation*}
-    \bar{X} \pm SE_{\bar{X}} \cdot 1.96
+    ME_{\bar{X}} = SE_{\bar{X}} \cdot 1.96
+\end{equation*}
+
+Our confidence interval is as following:
+\begin{equation*}
+    \bar{X} \pm ME_{\bar{X}}
 \end{equation*}
 
 % Description of which algorithms that are available, which one that is used and why

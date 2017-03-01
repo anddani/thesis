@@ -3,6 +3,15 @@
 # TODO:
 #   - Use folders for each day in DATA_PATH?
 
+# Get current date and time to create
+# unique folder
+TIME=$(date +"%y%m%d_%H%M%S")
+DATA_PATH=$EXJOBB_HOME/Data
+PACKAGE="com.example.algo.benchmarkapp"
+FILENAME="/data/data/$PACKAGE/files/data.out"
+
+RESULTS_PATH=$DATA_PATH/results
+
 function convert_test_results {
     N=""
     while read line ; do
@@ -23,16 +32,16 @@ function convert_test_results {
             EXEC_TIMES=$(echo $line | cut -d' ' -f6-)
 
             # Average
-            AVG=$(echo $EXEC_TIMES | awk '{sum += $1;} END {print sum/NR;}' RS=" ")
+            AVG=$(echo $EXEC_TIMES | awk '{sum += $1;} END {printf "%.2f", sum/NR;}' RS=" ")
 
             # Standard deviation
-            SD=$(echo $EXEC_TIMES | awk '{sum += $1; array[NR] = $1;} END {for(i=1; i<=NR; i++){sumsq += ((array[i]-(sum/NR))^2);} print sqrt(sumsq/(NR-1))}' RS=" ")
+            SD=$(echo $EXEC_TIMES | awk '{sum += $1; array[NR] = $1;} END {for(i=1; i<=NR; i++){sumsq += ((array[i]-(sum/NR))^2);} printf "%.2f", sqrt(sumsq/(NR-1))}' RS=" ")
 
             # Standard error
-            SE=$(awk -v sd="$SD" -v n="$N" 'BEGIN{print sd/sqrt(n)}')
+            SE=$(awk -v sd="$SD" -v n="$N" 'BEGIN{printf "%.2f", sd/sqrt(n)}')
 
             # Conficence interval
-            CONF=$(awk -v se="$SE" 'BEGIN{print se*1.96}')
+            CONF=$(awk -v se="$SE" 'BEGIN{printf "%.2f", se*1.96}')
 
             if [[ ! -d "$FOLDER" ]] ; then
                 mkdir $FOLDER
@@ -43,29 +52,39 @@ function convert_test_results {
     done <$1
 }
 
+function to_latex {
+    CURRENT_DIR=$1
+    CONTENT=$(ls $CURRENT_DIR)
+
+    for c in $CONTENT ; do
+        CURRENT_FILE=$CURRENT_DIR/$c
+        if [[ -f "$CURRENT_FILE" ]] ; then
+            TEX_FILE="${CURRENT_FILE}.tex"
+            echo '\begin{tabular}{|r|r|r|r|r|}\hline' >> $TEX_FILE
+            echo '    FFT Size & $\bar{X}$ & $s$ & $SE_{\bar{X}}$ & $ME_{\bar{X}}$ \\ \hline' >> $TEX_FILE
+            cat $CURRENT_FILE | sed 's/ / \& /g' | sed -r 's/([0-9]*\.[0-9]*$)/\$\\pm\$ \1/g' | sed 's/$/ \\\\ \\hline/g' | sed 's/^/    /g' >> $TEX_FILE
+            echo '\end{tabular}' >> $TEX_FILE
+            ln -s $TEX_FILE $(echo $TEX_FILE | sed 's/_N_[0-9]*//g')
+        fi
+    done
+}
+
 if [[ -z "$EXJOBB_HOME" ]]; then
     echo "EXJOBB_HOME not set"
     exit 1
 fi
 
 OPTIND=1
-while getopts "cv" opt; do
+while getopts "clv" opt; do
     case "$opt" in
         c)  CONVERT=1
+            ;;
+        l)  LATEX=1
             ;;
         v)  VIEW=1
             ;;
     esac
 done
-
-# Get current date and time to create
-# unique folder
-TIME=$(date +"%y%m%d_%H%M%S")
-DATA_PATH=$EXJOBB_HOME/Data
-PACKAGE="com.example.algo.benchmarkapp"
-FILENAME="/data/data/$PACKAGE/files/data.out"
-
-RESULTS_PATH=$DATA_PATH/results
 
 if [[ $VIEW -eq 1 ]] ; then
     eval adb shell "'run-as $PACKAGE cat $FILENAME'" | less
@@ -81,6 +100,13 @@ elif [[ $CONVERT -eq 1 ]] ; then
     mkdir $RESULTS_PATH
 
     convert_test_results $LATEST
+
+    to_latex $RESULTS_PATH/FFT
+    to_latex $RESULTS_PATH/JNI
+elif [[ $LATEX -eq 1 ]] ; then
+    echo "TEST"
+    # to_latex $RESULTS_PATH/FFT
+    # to_latex $RESULTS_PATH/JNI
 else
     echo "-- moving data from phone to $DATA_PATH/$TIME"
     eval adb shell "'run-as $PACKAGE cat $FILENAME'" > $DATA_PATH/$TIME.out

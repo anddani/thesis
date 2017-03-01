@@ -84,7 +84,7 @@ public class MyBenchmarkHandler extends Handler {
                     default:
                         break;
                 }
-                sb.append(time / 1000000.0);
+                sb.append(time);
                 sb.append(" ");
             }
             sb.append("\n");
