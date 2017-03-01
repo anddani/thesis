@@ -5,6 +5,7 @@ public class Constants {
     public static final int BENCHMARK_ITER = 1;
 
     public static final int BENCHMARK_MESSAGE_NEW = 17;
+    public static final int BENCHMARK_MESSAGE_ONE_ALG = 3333;
     public static final int BENCHMARK_MESSAGE_DONE = 4711;
 
     public enum ALGORITHMS {

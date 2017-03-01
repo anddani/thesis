@@ -85,24 +85,32 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void setOnClick(final Button btn, final int n) {
+    private void setOnClick(final Button btn, final int alg) {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("Button pressed with n: " + n);
+                System.out.println("Button pressed with n: " + alg);
 
                 String dataSizeText = dataSize.getText().toString();
                 if (dataSizeText.isEmpty()) {
                     dataSizeText = DEFAULT_N;
                 }
-                int d = nextPowerOfTwo(Integer.parseInt(dataSizeText));
+                int data = nextPowerOfTwo(Integer.parseInt(dataSizeText));
+                int blockIndex = data == 0 ? 0 : 32 - Integer.numberOfLeadingZeros(data-1) - 4;
 
-                BenchmarkMessage message = new BenchmarkMessage(Constants.BENCHMARK_ITER, n, d);
+                // Delete output file each run
+                if (!new File(getFilesDir(), "data.out").delete()) {
+                    System.out.println("DID NOT GET DELETED");
+                }
+
+                // Clear screen between tests
+                logTextView.setText("");
+
+                BenchmarkMessage message = new BenchmarkMessage(Constants.BENCHMARK_ITER, alg, blockIndex);
                 mTaskHandler.obtainMessage(0, message).sendToTarget();
             }
         });
     }
-
 
     /**
      * Starts the benchmark by sending messages to the handler thread
@@ -111,7 +119,6 @@ public class MainActivity extends AppCompatActivity {
     private void startBenchmarks() {
         for (int a = 0; a < Constants.NUM_ALGORITHMS; a++) {
             for (int b = 0; b < Constants.BLOCK_SIZES.length; b++) {
-                System.out.println("Sending message alg: " + a + " blockId: " + b);
                 BenchmarkMessage message = new BenchmarkMessage(Constants.BENCHMARK_ITER, a, b);
                 mTaskHandler.obtainMessage(0, message).sendToTarget();
             }

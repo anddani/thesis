@@ -31,9 +31,16 @@ public class MyBenchmarkHandler extends Handler {
             BenchmarkMessage message = (BenchmarkMessage) msg.obj;
             int algorithm = message.algorithm;
             int iterations = message.iterations;
+            int sizeId = message.sizeId;
+
             StringBuilder sb = new StringBuilder();
             double[] results = new double[iterations];
-            Benchmark bm = benchmarks[message.sizeId];
+
+            if (benchmarks[sizeId] == null) {
+                benchmarks[sizeId] = new Benchmark(Constants.BLOCK_SIZES[sizeId]);
+            }
+
+            Benchmark bm = benchmarks[sizeId];
 
             while (iterations-- > 0) {
                 long time = 0L;

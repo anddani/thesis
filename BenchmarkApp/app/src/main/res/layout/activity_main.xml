@@ -93,11 +93,5 @@
         android:id="@+id/fft9"
         android:layout_width="200dp"
         android:layout_height="50dp" />
-    <Button
-        android:layout_below="@+id/fft7"
-        android:layout_toRightOf="@+id/fft9"
-        android:id="@+id/fft10"
-        android:layout_width="200dp"
-        android:layout_height="50dp" />
 
 </RelativeLayout>
