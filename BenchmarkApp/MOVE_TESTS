@@ -31,23 +31,23 @@ function convert_test_results {
             FOLDER="$RESULTS_PATH/$TYPE"
             EXEC_TIMES=$(echo $line | cut -d' ' -f6-)
 
-            # Average
-            AVG=$(echo $EXEC_TIMES | awk '{sum += $1;} END {printf "%.2f", sum/NR;}' RS=" ")
+            # Mean
+            MEAN=$(echo $EXEC_TIMES | awk '{sum += $1;} END {printf "%.4f", sum/NR;}' RS=" ")
 
             # Standard deviation
-            SD=$(echo $EXEC_TIMES | awk '{sum += $1; array[NR] = $1;} END {for(i=1; i<=NR; i++){sumsq += ((array[i]-(sum/NR))^2);} printf "%.2f", sqrt(sumsq/(NR-1))}' RS=" ")
+            SD=$(echo $EXEC_TIMES | awk '{sum += $1; array[NR] = $1;} END {for(i=1; i<=NR; i++){sumsq += ((array[i]-(sum/NR))^2);} printf "%.4f", sqrt(sumsq/(NR-1))}' RS=" ")
 
             # Standard error
-            SE=$(awk -v sd="$SD" -v n="$N" 'BEGIN{printf "%.2f", sd/sqrt(n)}')
+            SE=$(awk -v sd="$SD" -v n="$N" 'BEGIN{printf "%.4f", sd/sqrt(n)}')
 
-            # Conficence interval
-            CONF=$(awk -v se="$SE" 'BEGIN{printf "%.2f", se*1.96}')
+            # Margin of error
+            ME=$(awk -v se="$SE" 'BEGIN{printf "%.4f", se*1.96}')
 
             if [[ ! -d "$FOLDER" ]] ; then
                 mkdir $FOLDER
             fi
 
-            echo "$BLOCK_SIZE $AVG $SD $SE $CONF" >> "$FOLDER/${ALG}_N_${N}"
+            echo "$BLOCK_SIZE $MEAN $SD $SE $ME" >> "$FOLDER/${ALG}_N_${N}"
         fi
     done <$1
 }
@@ -59,12 +59,36 @@ function to_latex {
     for c in $CONTENT ; do
         CURRENT_FILE=$CURRENT_DIR/$c
         if [[ -f "$CURRENT_FILE" ]] ; then
-            TEX_FILE="${CURRENT_FILE}.tex"
-            echo '\begin{tabular}{|r|r|r|r|r|}\hline' >> $TEX_FILE
-            echo '    FFT Size & $\bar{X}$ & $s$ & $SE_{\bar{X}}$ & $ME_{\bar{X}}$ \\ \hline' >> $TEX_FILE
-            cat $CURRENT_FILE | sed 's/ / \& /g' | sed -r 's/([0-9]*\.[0-9]*$)/\$\\pm\$ \1/g' | sed 's/$/ \\\\ \\hline/g' | sed 's/^/    /g' >> $TEX_FILE
-            echo '\end{tabular}' >> $TEX_FILE
-            ln -s $TEX_FILE $(echo $TEX_FILE | sed 's/_N_[0-9]*//g')
+            TEX_TABLE="${CURRENT_FILE}.tex"
+            TEX_BAR_PLOT="${CURRENT_FILE}_barplot.tex"
+
+            ## Table
+            # Header
+            echo '\begin{tabular}{|r|r|r|r|r|}\hline' >> $TEX_TABLE
+
+            # Table content
+            echo '    FFT Size & $\bar{X}$ & $s$ & $SE_{\bar{X}}$ & $ME_{\bar{X}}$ \\ \hline' >> $TEX_TABLE
+            cat $CURRENT_FILE | sed 's/ / \& /g' | sed -r 's/([0-9]*\.[0-9]*$)/\$\\pm\$ \1/g' | sed 's/$/ \\\\ \\hline/g' | sed 's/^/    /g' >> $TEX_TABLE
+            # Footer
+            echo '\end{tabular}' >> $TEX_TABLE
+
+            ## Bar Plot
+            # Header
+            echo '\begin{tikzpicture}' >> $TEX_BAR_PLOT
+            echo '\begin{axis}[scale=1.5,ymin=0, ymax=500, ybar, symbolic x coords={16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536}]' >> $TEX_BAR_PLOT
+
+            # Plot content
+            echo '\addplot[error bars/.cd, y dir=both, y explicit] coordinates {' >> $TEX_BAR_PLOT
+            cat $CURRENT_FILE | awk '{print "(" $1 "," $2 ") +-(" $5 "," $5 ")" }' >> $TEX_BAR_PLOT
+            echo '};' >> $TEX_BAR_PLOT
+
+            # Footer
+            echo '\end{axis}' >> $TEX_BAR_PLOT
+            echo '\end{tikzpicture}' >> $TEX_BAR_PLOT
+
+            # Create symbolic link without number of tests in filename
+            ln -s $TEX_TABLE $(echo $TEX_TABLE | sed 's/_N_[0-9]*//g')
+            ln -s $TEX_BAR_PLOT $(echo $TEX_BAR_PLOT | sed 's/_N_[0-9]*//g')
         fi
     done
 }
@@ -75,11 +99,9 @@ if [[ -z "$EXJOBB_HOME" ]]; then
 fi
 
 OPTIND=1
-while getopts "clv" opt; do
+while getopts "cv" opt; do
     case "$opt" in
         c)  CONVERT=1
-            ;;
-        l)  LATEX=1
             ;;
         v)  VIEW=1
             ;;
@@ -103,10 +125,6 @@ elif [[ $CONVERT -eq 1 ]] ; then
 
     to_latex $RESULTS_PATH/FFT
     to_latex $RESULTS_PATH/JNI
-elif [[ $LATEX -eq 1 ]] ; then
-    echo "TEST"
-    # to_latex $RESULTS_PATH/FFT
-    # to_latex $RESULTS_PATH/JNI
 else
     echo "-- moving data from phone to $DATA_PATH/$TIME"
     eval adb shell "'run-as $PACKAGE cat $FILENAME'" > $DATA_PATH/$TIME.out

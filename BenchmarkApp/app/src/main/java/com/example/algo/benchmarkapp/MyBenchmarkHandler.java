@@ -33,6 +33,8 @@ public class MyBenchmarkHandler extends Handler {
             int iterations = message.iterations;
             int sizeId = message.sizeId;
 
+            boolean jniTests = false;
+
             StringBuilder sb = new StringBuilder();
             sb.append(Constants.ALGORITHM_NAMES[algorithm]);
             sb.append(" blockSize: ");
@@ -74,17 +76,21 @@ public class MyBenchmarkHandler extends Handler {
                         break;
                     case JNI_EMPTY:
                         time = bm.JNIBenchmarkEmpty();
+                        jniTests = true;
                         break;
                     case JNI_PARAMS:
                         time = bm.JNIBenchmarkParams();
+                        jniTests = true;
                         break;
                     case JNI_VECTOR_CONVERSION:
                         time = bm.JNIBenchmarkVectorConversion();
+                        jniTests = true;
                         break;
                     default:
                         break;
                 }
-                sb.append(time);
+                // Have JNI times in us, FFT in ms
+                sb.append(jniTests ? time/1000.0 : time/1000000.0);
                 sb.append(" ");
             }
             sb.append("\n");

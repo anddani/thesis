@@ -23,9 +23,9 @@ public class Constants {
     }
 
     public static final String[] ALGORITHM_NAMES = {
-            "FFT Princeton_Java_Iterative",
-            "FFT Princeton_Java_Recursive",
-            "FFT Columbia_Java_Iterative",
+            "FFT Java_Princeton_Iterative",
+            "FFT Java_Princeton_Recursive",
+            "FFT Java_Columbia_Iterative",
             "FFT CPP_Princeton_converted_Iterative",
             "FFT CPP_Princeton_converted_Recursive",
             "FFT CPP_Columbia_converted_Iterative",
