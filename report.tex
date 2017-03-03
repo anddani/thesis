@@ -77,6 +77,11 @@
 \pgfkeys{
     /tikz/node distance/.append code={
         \pgfkeyssetvalue{/tikz/node distance value}{#1}
+    },
+    /pgfplots/scale/.style={
+        x post scale=#1,
+        y post scale=#1,
+        z post scale=#1
     }
 }
 
