@@ -30,7 +30,7 @@ This experiment consisted of tests for three different aspects of implementing a
 
 The reason why it is relevant to know how significant the JNI is, is because we want to see for what size of the data the transition time for going between Java and native is irrelevant compared to the total execution time of the JNI call. This would also show how much repeated calls to native code would affect the performance of a program. By minimizing the number of calls to the JNI, a program would get potentially faster.
 
-There are many different implementations of the FFT publicly available that might be of interest for use in ones project. This test demonstrates how some different libraries compare. It is helpful to see how viable different implementations are on Android, for both C++ libraries and Java libraries. It can also be useful to know how a small implementation compares to a large and complex library.
+There are many different implementations of the FFT publicly available that could be of interest for use in ones project. This test demonstrates how some different libraries compare. It is helpful to see how viable different implementations are on Android, for both C++ libraries and Java libraries. It can also be useful to know how a small implementation compares to a large and complex library.
 
 Finally, comparing optimization techniques for small libraries is a good way of demonstrating how a developer can improve performance to fit the requirements while still retaining manageable source code. Having one single source file is valuable, especially for native libraries.
 
@@ -43,6 +43,8 @@ The setup used for performing the experiments were the following:
 
 \begin{table}[H]
     \centering
+    \label{tab:hardware}
+    \caption{Hardware used in the experiments}
     \begin{tabular}{|l|l|}
         \hline
         \textbf{Phone model} & Google Nexus 6P\\
@@ -70,6 +72,8 @@ During the tests, cellular was switched off and wifi was enabled and connected. 
 % All the tests were executed/compiled using . Cellular was switched off and wifi was connected. No other background apps were present while performing the tests during the experiments.
 \begin{table}[H]
     \centering
+    \label{tab:software}
+    \caption{Software used in the experiments}
     \begin{tabular}{|l|l|}
         \hline
         \textbf{Android version} & 7.1.1\\
@@ -106,6 +110,9 @@ The unit of the resulting data will be in milliseconds. To be able to have 100 e
 
 \subsection{Data representation}
 \subsection{Data interpretation}
+
+\subsection{Sources of error}
+% https://www2.southeastern.edu/Academics/Faculty/rallain/plab193/labinfo/Error_Analysis/06_Sources_of_Error.html
 \subsection{Statistical significance}
 Because the execution times differ between runs, it is important to calculate the sample mean. This way we have an expected value to use in our results. To get an accurate sample mean, we must have a large sample size which is the number of runs we execute for each test. The following formula calculates the sample mean \cite[p.263]{olofsson2012probability}:
 

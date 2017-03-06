@@ -1,4 +1,4 @@
-\textit{The process of developing for Android, how an app is installed and how it is being run is explained in this chapter. Additionally, some basic knowledge of the Discrete Fourier Transform is required when discussing differences in FFT implementations. Lastly, common optimization techniques are described so that we can reason about the results.}
+\textit{The process of developing for Android, how an app is installed and how it is being run is explained in this chapter. Additionally, common optimization techniques are described so that we can reason about the results. Lastly, some basic knowledge of the Discrete Fourier Transform is required when discussing differences in FFT implementations. }
 
 \section{Android SDK}
 To allow developers to build Android apps, Google developed a Software Development Kit (SDK) to facilitate the process of writing Android applications. The Android SDK software stack is described in Figure~\ref{fig:sdk}. The Linux kernel is at the base of the stack, handling the core functionality of the device. Detecting hardware interaction, process scheduling and memory allocation are examples of services provided by the kernel. The Hardware Abstraction Layer (HAL) is an abstraction layer above the device drivers. This allows the developer to interact with hardware independent on the type of device \cite{android:hal}.
@@ -47,7 +47,7 @@ All applications for Android are packaged in so called Android Packages (APK). T
         \end{pgfonlayer}
         \node[font=\sffamily\itshape\color{black},above=of SysApps] {Android SDK Software Stack};
     \end{tikzpicture}
-    \caption{Android SDK Software Stack \cite{android:sdk:stack}}
+    \caption[Android SDK Software Stack]{Android SDK Software Stack \cite{android:sdk:stack}}
     \label{fig:sdk}
 \end{figure}
 
@@ -72,9 +72,6 @@ The DVM is a virtual machine optimized for devices where resources are limited \
 % http://www.android-app-developer.co.uk/android-app-development-docs/android-jit-compiler-androids-dalvik-vm.pdf
 % https://developer.android.com/about/versions/nougat/android-7.0.html
 
-
-\subsection{Dalvik Executables}
-% What are dex files?
 Dalvik executables, or dex files, are the files where Dalvik bytecode is stored. They are created by converting a Java class file to the dex format. They are of a different structure than Java class files. Some differences are the header types that describes the data. One example of the differences is the string constant fields that are present in the dex-file. % FIND REFERENCE FROM GOOGLE IO ABOUT DALVIK??
 
 \section{Android Runtime}
@@ -138,70 +135,6 @@ LLVM (Low Level Virtual Machine) is a suite that contains a set of compiler opti
 Clang is as of March 2016 (NDK version 11) \cite{android:ndk:revision}, the only supported compiler in the NDK. Google has chosen to focus on supporting the Clang compiler instead of the GNU GCC compiler. This means that there is a bigger chance that a specific architecture used on an Android device is supported in the NDK. This also allows Google to focus on developing optimizations for these architectures with only one supported compiler.
 
 
-\section{Discrete Fourier Transform}
-The Discrete Fourier Transform (\gls{dft}) is a method of converting a sampled signal from the time domain to the frequency domain. In other words, the DFT takes an observed signal and dissects each component that would form the observed signal. Every component of a signal can each be described as a sinusoidal wave with a frequency, amplitude and phase.
-
-If we observe Figure~\ref{fig:dft:ex1}, we can see how a signal in time domain looks like in frequency domain. The function displayed in the time domain consists of three sine components, each with its own amplitude and frequency. What the graph of the frequency domain shows, is the amplitude of each frequency. This can then be used to analyze the input signal.
-
-One important thing to note is that you must sample at twice the frequency you want to analyze. The Nyquist sampling theorem states that \cite{signal:aliasing}:
-\begin{center}
-    \textit{The sampling frequency should be at least twice the highest frequency contained in the signal.}
-\end{center}
-In other words, you have to be able to reconstruct the signal given the samples \cite[Ch~3]{smith1997scientist}. If you are given a signal that is constructed of frequencies that are at most 500~Hz, your sample frequency must be at least 1000 samples per second to be able to find the amplitude for each frequency.
-
-\begin{figure}[h]
-    \renewcommand\thesubfigure{(\alph{subfigure})}
-    \centering
-    \begin{tikzpicture}
-        \begin{groupplot}[group style={group name=my plots,group size= 1 by 2,horizontal sep =1.5cm,vertical sep =2cm},width=6cm]
-            \nextgroupplot[
-                legend pos=north east,
-                trig format plots=rad,
-                scaled ticks=false,
-                tick label style={/pgf/number format/fixed},
-                ymin=-4,
-                ymax=4,
-                xmin=0,
-                xmax=1,
-                ylabel={Amplitude},
-                xlabel={Time $\left[s\right]$},
-                width=14cm,
-                height=5cm,
-            ]
-            \addlegendentry{$f(x) = 0.5\sin(10x) + \sin(20x) + 1.5\sin(30x)$}
-            \addplot[domain=-0.5*pi:2*pi,samples=800,red] {0.5*sin(10*x) + sin(20*x) + 1.5*sin(30*x)};
-            \nextgroupplot[
-                legend pos=north east,
-                trig format plots=rad,
-                ymin=0,
-                ymax=2.0,
-                xmin=0,
-                xmax=50,
-                ylabel={Amplitude},
-                xlabel={Frequency $\left[Hz\right]$},
-                width=14cm,
-                height=5cm,
-                yshift=-0.5cm,
-            ]
-            \addplot[fill=blue,ybar] coordinates {
-                    (10,0.5)
-                    (20,1.0)
-                    (30,1.5)
-                };
-            % \addplot[color=blue,mark=none] file {Data/frequencydomain.dat};
-        \end{groupplot}
-        \node[text width=12cm,align=center,anchor=north] at ([yshift=10mm]my plots c1r1.north) (cap1) {Time domain};
-        \node[text width=12cm,align=center,anchor=north] at ([yshift=10mm]my plots c1r2.north) (cap2) {Frequency domain};
-    \end{tikzpicture}
-    \caption{Time domain and frequency domain of a signal}
-    \label{fig:dft:ex1}
-\end{figure}
-
-Equation \ref{eq:1} \cite[p.~92]{tan2013digital} describes the mathematical process of converting a signal $x$ to a spectrum $X$ of $x$ where $N$ is the number of samples, $n$ is the time step and $k$ is the frequency sample. When calculating $X\left(k\right) \forall\ k \in \left[0, N - 1\right]$ we clearly see that it will take $N^2$ multiplications. In 1965, Cooley and Tukey published a paper on an algorithm that could calculate the DFT in less than $2N\log(N)$ multiplications \cite{Cooley1964} called the Fast Fourier Transform (FFT).
-
-\begin{align}
-    X\left(k\right) = \sum\limits_{n=0}^{N-1}x\left(n\right)\cdot e^{-j2\pi kn/N},\ \ k = 0,1,2,\dots,N-1\label{eq:1}
-\end{align}
 
 \section{Code Optimization}
 
@@ -212,7 +145,7 @@ There are many ways your compiler can optimize your code during compilation. Thi
 \subsubsection{Loop unrolling}
 Loop unrolling is a technique used to optimize loops. By explicitly coding multiple iterations in the body of the loop, it is possible to lower the amount of jump instructions in the produced code. Figure~\ref{fig:c:unroll} demonstrates how unrolling works by decreasing the number of iterations but adding lines in the loop body. The loop unroll executes two iterations of the first code per iteration. It is therefore necessary to update the \texttt{i} variable accordingly. Figure~\ref{fig:assembly:unroll} describes how the change could be represented in assembly language.
 
-\begin{figure}[H]
+\begin{figure}
     \centering
     \begin{subfigure}{.5\textwidth}
         \centering
@@ -626,9 +559,74 @@ SIMD has some prerequisites on the data that is being processed. Firstly, the da
         \caption{One instruction with SIMD}
         \label{fig:simd:simd2}
     \end{subfigure}
-    \caption{Single Instruction Multiple Data \cite{kernel:simd}}
+    \caption[Single Instruction Multiple Data]{Single Instruction Multiple Data \cite{kernel:simd}}
     \label{fig:simd}
 \end{figure}
+
+\section{Discrete Fourier Transform}
+The Discrete Fourier Transform (\gls{dft}) is a method of converting a sampled signal from the time domain to the frequency domain. In other words, the DFT takes an observed signal and dissects each component that would form the observed signal. Every component of a signal can each be described as a sinusoidal wave with a frequency, amplitude and phase.
+
+If we observe Figure~\ref{fig:dft:ex1}, we can see how a signal in time domain looks like in frequency domain. The function displayed in the time domain consists of three sine components, each with its own amplitude and frequency. What the graph of the frequency domain shows, is the amplitude of each frequency. This can then be used to analyze the input signal.
+
+One important thing to note is that you must sample at twice the frequency you want to analyze. The Nyquist sampling theorem states that \cite{signal:aliasing}:
+\begin{center}
+    \textit{The sampling frequency should be at least twice the highest frequency contained in the signal.}
+\end{center}
+In other words, you have to be able to reconstruct the signal given the samples \cite[Ch~3]{smith1997scientist}. If you are given a signal that is constructed of frequencies that are at most 500~Hz, your sample frequency must be at least 1000 samples per second to be able to find the amplitude for each frequency.
+
+\begin{figure}[h]
+    \renewcommand\thesubfigure{(\alph{subfigure})}
+    \centering
+    \begin{tikzpicture}
+        \begin{groupplot}[group style={group name=my plots,group size= 1 by 2,horizontal sep =1.5cm,vertical sep =2cm},width=6cm]
+            \nextgroupplot[
+                legend pos=north east,
+                trig format plots=rad,
+                scaled ticks=false,
+                tick label style={/pgf/number format/fixed},
+                ymin=-4,
+                ymax=4,
+                xmin=0,
+                xmax=1,
+                ylabel={Amplitude},
+                xlabel={Time $\left[s\right]$},
+                width=14cm,
+                height=5cm,
+            ]
+            \addlegendentry{$f(x) = 0.5\sin(10x) + \sin(20x) + 1.5\sin(30x)$}
+            \addplot[domain=-0.5*pi:2*pi,samples=800,red] {0.5*sin(10*x) + sin(20*x) + 1.5*sin(30*x)};
+            \nextgroupplot[
+                legend pos=north east,
+                trig format plots=rad,
+                ymin=0,
+                ymax=2.0,
+                xmin=0,
+                xmax=50,
+                ylabel={Amplitude},
+                xlabel={Frequency $\left[Hz\right]$},
+                width=14cm,
+                height=5cm,
+                yshift=-0.5cm,
+            ]
+            \addplot[fill=blue,ybar] coordinates {
+                    (10,0.5)
+                    (20,1.0)
+                    (30,1.5)
+                };
+            % \addplot[color=blue,mark=none] file {Data/frequencydomain.dat};
+        \end{groupplot}
+        \node[text width=12cm,align=center,anchor=north] at ([yshift=10mm]my plots c1r1.north) (cap1) {Time domain};
+        \node[text width=12cm,align=center,anchor=north] at ([yshift=10mm]my plots c1r2.north) (cap2) {Frequency domain};
+    \end{tikzpicture}
+    \caption{Time domain and frequency domain of a signal}
+    \label{fig:dft:ex1}
+\end{figure}
+
+Equation \ref{eq:1} \cite[p.~92]{tan2013digital} describes the mathematical process of converting a signal $x$ to a spectrum $X$ of $x$ where $N$ is the number of samples, $n$ is the time step and $k$ is the frequency sample. When calculating $X\left(k\right) \forall\ k \in \left[0, N - 1\right]$ we clearly see that it will take $N^2$ multiplications. In 1965, Cooley and Tukey published a paper on an algorithm that could calculate the DFT in less than $2N\log(N)$ multiplications \cite{Cooley1964} called the Fast Fourier Transform (FFT).
+
+\begin{align}
+    X\left(k\right) = \sum\limits_{n=0}^{N-1}x\left(n\right)\cdot e^{-j2\pi kn/N},\ \ k = 0,1,2,\dots,N-1\label{eq:1}
+\end{align}
 
 \section{Related work}
 A study called \emph{FFT benchmark on Android devices: Java versus JNI} \cite{Jr2013} was published in 2013 and investigated how two implementations of FFT performed on different Android devices. The main point of the study was to compare how a pure Java implementation would perform compared to a library written in C called FFTW. This library supports multi-threaded computation and this aspect is also covered in this study. Their benchmark application was run on 35 different devices with different versions to get a wide picture of how the algorithms ran on different phones.

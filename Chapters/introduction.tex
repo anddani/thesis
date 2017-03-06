@@ -17,12 +17,10 @@
 \section{Background}
 Android is an operating system for smartphones and as of November 2016 it is the most used \cite{android:os:popularity}. One reason for this is because it was designed to be run on multiple different architectures \cite{android:os:devices}. Google states that they want to ensure that manufacturers and developers have an open platform to use and therefore releases Android as Open Source software \cite{android:os:opensource}. The Android kernel is based on the Linux kernel although with some alterations to support the hardware of mobile devices.
 
-\gls{android} applications are mainly written in Java to ensure portability in form of architecture independence. By using a virtual machine to run a Java app, you can use the same bytecode on multiple platforms. To ensure efficiency on low resources devices, a virtual machine called Dalvik was developed. Applications on Android have been using the Dalvik Virtual Machine (DVM) until Android version 5 \cite{android:dalvik} in November of 2014 \cite{android:dalvik:release}. Since then, Dalvik has been replaced by Android Runtime. Android Runtime, ART for short, differs from Dalvik in that it uses Ahead-Of-Time (AOT) compilation. This means that the bytecode is compiled during the installation of the app. Dalvik, however, exclusively uses a concept called Just-In-Time (JIT) compilation, meaning that code is compiled during runtime when needed. ART uses Dalvik bytecode to compile an application, allowing most apps that are aimed at Dalvik Virtual Machine to work on devices running ART.
+\gls{android} applications are mainly written in Java to ensure portability in form of architecture independence. By using a virtual machine to run a Java app, you can use the same bytecode on multiple platforms. To ensure efficiency on low resources devices, a virtual machine called Dalvik was developed. Applications (apps) on Android have been using the Dalvik Virtual Machine (DVM) until Android version 5 \cite{android:dalvik} in November of 2014 \cite{android:dalvik:release}. Since then, Dalvik has been replaced by Android Runtime. Android Runtime, ART for short, differs from Dalvik in that it uses Ahead-Of-Time (AOT) compilation. This means that the bytecode is compiled during the installation of the app. Dalvik, however, exclusively uses a concept called Just-In-Time (JIT) compilation, meaning that code is compiled during runtime when needed. ART uses Dalvik bytecode to compile an application, allowing most apps that are aimed at Dalvik Virtual Machine to work on devices running ART.
 
 To allow developers to reuse libraries written in C or C++ or just to write low level code, a tool called Native Development Kit (NDK) was released. It was first released in June 2009 \cite{Lin2011} and has since gotten improvements such as new build tools, compiler versions and support for additional Application Binary Interfaces (ABI). ABIs are mechanisms that are used to allow binaries to communicate using specified rules. With the NDK, the developers can choose to write parts of an app in so called \emph{native code}. This is used when wanting to do compression, graphics and other performance heavy tasks.
 
-
-% Some of the findings in this report might help decide using a specific programming language for programming an application. For some problems, it is necessary to choose the appropriate programming language to ensure that an application is smooth and responsive. It is therefore important to know when and where it is necessary to optimize the code. There are multiple types of problems that occur when developing complex apps and it is relevant to know which problems that are worth solving in a given language.\\
 
 %%==================================================================
 %% PROBLEM
@@ -50,7 +48,7 @@ This thesis is a study that evaluates when and where there is a gain in writing 
 
 The reason you would want to write part of an application in native code is to potentially get better execution times of computational heavy tasks such as the Fast Fourier Transform (FFT). The FFT is an algorithm that computes the Discrete Fourier Transform (DFT) of a signal. It is primarily used to analyze the components of a signal. This algorithm is used in signal processing and has multiple purposes such as image compression (taking photos), voice recognition (Siri, Google Assistant), fingerprint scanning (unlocking device) to name a few. Another reason you would want to write native libraries is to reuse already written code in C or C++ and incorporate it into your project. This allows the app to become more platform independent. Shared code can be used in a computer app, Apple iOS app and more.
 
-Some of the findings in this thesis might help decide which method of programming for Android that should be used for a given problem. For some problems, it is necessary to choose the appropriate programming method to ensure that an application is smooth and responsive. It is therefore important to know when and where it is necessary to optimize code. Further, when developing for Android there are multiple types of problems that occur and it is relevant to know which problems are worth solving in NDK rather than the Software Development Kit (SDK).
+Some of the findings in this thesis can help decide which method of programming for Android that should be used for a given problem. For some problems, it is necessary to choose the appropriate programming method to ensure that an application is smooth and responsive. It is therefore important to know when and where it is necessary to optimize code. Further, when developing for Android there are multiple types of problems that occur and it is relevant to know which problems are worth solving in NDK rather than the Software Development Kit (SDK).
 
 % The objective of this project is to investigate when and where it would be beneficial to use the NDK instead of Java when developing for Android. This project will cover how an implementation of the FFT benefits from being compiled by the NDK with Clang compared to Java code compiled by Android Runtime. In Android development, you want to use Java when you control how the application should behave and call native functions when a lot of processing is needed. The overhead caused by calling a native function via the Java Native Interface (JNI) is something that must be taken into account when measuring the execution time of the programs.
 
@@ -60,7 +58,7 @@ Some of the findings in this thesis might help decide which method of programmin
 % More general than purpose
 % Titta på JNIkostnad
 \section{Goal}
-The goal of this project was to examine the efficiency of ART and how it compares to natively written code using the NDK in combination with the Java Native Interface (\gls{jni}). This report presents a study that investigates the relevance of using the NDK to produce efficient code. Further, the cost to pass through the JNI is also a factor when analysing the code. A discussion about to what extent the efficiency of the program reduces the simplicity of the code is also present. For people who are interested to know about the impacts of implementing algorithms in C++ for Android, this study might be of some use.
+The goal of this project was to examine the efficiency of ART and how it compares to natively written code using the NDK in combination with the Java Native Interface (\gls{jni}). This report presents a study that investigates the relevance of using the NDK to produce efficient code. Further, the cost to pass through the JNI is also a factor when analysing the code. A discussion about to what extent the efficiency of the program reduces the simplicity of the code is also present. For people who are interested to know about the impacts of implementing algorithms in C++ for Android, this study could be of some use.
 
 %%==================================================================
 %% METHOD
@@ -73,7 +71,7 @@ The goal of this project was to examine the efficiency of ART and how it compare
 % Motivate using Quantitative or Qualitative research methodology
 % Philosophical assumption
 % How did I search databases for information?
-\section{Method}
+\section{Procedure}
 %% KEYWORDS
 %% NDK, Android, Benchmark*, Java, C, C++, Dalvik, Runtime, ART, efficien*, JNI,
 %% FFT, Fast Fourier Transform, Fourier Transform, 
@@ -103,18 +101,19 @@ Three different tests were carried out to gather enough data to be able to make 
 %%==================================================================
 \section{Delimitations}
 % Skip multiple cores?
-This thesis does only cover a performance evaluation of the FFT algorithm and does not go into detail on other related algorithms. The decision of choosing the FFT was due to it being a common algorithm to use in signal analysis. This thesis does not investigate the performance differences for FFT in parallel due to the complexity of the Linux kernel used on Android. This would require more knowledge outside the scope of this project and would result in a too broad of a subject.
+This thesis does only cover a performance evaluation of the FFT algorithm and does not go into detail on other related algorithms. The decision of choosing the FFT was due to it being a common algorithm to use in signal analysis. This thesis does not investigate the performance differences for FFT in parallel due to the complexity of the Linux kernel used on Android. This would require more knowledge outside the scope of this project and would result in a too broad of a subject. The number of optimization methods covered in this thesis were also delimited to the scope of this degree project.
 
-The tests were carried out on the same phone under the same circumstances to reduce the number of affecting factors. By developing a benchmark program that run the tests during a single session, it was possible to reduce the varying factors that might affect the results. Because you cannot control the Garbage Collector in Java, it is important to have this in mind when constructing tests and analyzing the data. The number of optimization methods covered in this thesis were also delimited to the scope of the degree project.
+\section{Limitations}
+The tests were carried out on the same phone under the same circumstances to reduce the number of affecting factors. By developing a benchmark program that run the tests during a single session, it was possible to reduce the varying factors that could affect the results. Because you cannot control the Garbage Collector in Java, it is important to have this in mind when constructing tests and analyzing the data.
 
 %%==================================================================
 %% ETHICS AND SUSTAINABILITY
 %%==================================================================
 % Environment, economics, society
 \section{Ethics and Sustainability}
-An ethical aspect of this thesis is that because there might be people making decisions based on this report, it is important that the conclusions are presented together with its conditions so that there are no misunderstandings. Another important thing is that every detail of each test is explicitly stated so that every test can be recreated by someone else. Finally, it is necessary to be critical of the results and find how reasonable the results are.
+An ethical aspect of this thesis is that because there could be people making decisions based on this report, it is important that the conclusions are presented together with its conditions so that there are no misunderstandings. Another important thing is that every detail of each test is explicitly stated so that every test can be recreated by someone else. Finally, it is necessary to be critical of the results and find how reasonable the results are.
 
-Environmental sustainability is fulfilled in this investigation because there is an aspect of battery usage in different implementations of algorithms. The less number of instructions an algorithm require, the faster will the CPU lower its frequency, saving power. This will also have an influence on the user experience and can therefore have an impact on the society aspect of sustainability. If this study is used as a basis on a decision that have an economical impact, this thesis would fulfil the economical sustainability goal.
+Environmental sustainability is kept in mind in this investigation because there is an aspect of battery usage in different implementations of algorithms. The less number of instructions an algorithm require, the faster will the CPU lower its frequency, saving power. This will also have an influence on the user experience and can therefore have an impact on the society aspect of sustainability. If this study is used as a basis on a decision that have an economical impact, this thesis would fulfil the economical sustainability goal.
 
 %%==================================================================
 %% OUTLINE
@@ -123,8 +122,8 @@ Environmental sustainability is fulfilled in this investigation because there is
 \begin{itemize}
     \item \textit{\textbf{Chapter \ref{ch:introduction} - Introduction --}} Introduces the reader to the project. This chapter describes why this investigation is beneficial in its field and for whom it is useful.
     \item \textit{\textbf{Chapter \ref{ch:background} - Background --}} Provides the reader with the necessary information to understand the content of the investigation.
-    \item \textit{\textbf{Chapter \ref{ch:methodology} - Methodology --}} Discusses the hardware, software and methods that are the basis of the experiment. Here, the different methods of measurement are compared and the most appropriate are chosen.
+    \item \textit{\textbf{Chapter \ref{ch:method} - Method --}} Discusses the hardware, software and methods that are the basis of the experiment. Here, the different methods of measurement are compared and the most appropriate are chosen.
     \item \textit{\textbf{Chapter \ref{ch:experiments} - Experiments --}} The result of the experiments are presented here.
-    \item \textit{\textbf{Chapter \ref{ch:discussion} - Discussion --}} Discussion regarding the results as well as the chosen methodology.
+    \item \textit{\textbf{Chapter \ref{ch:discussion} - Discussion --}} Discussion regarding the results as well as the chosen method.
     \item \textit{\textbf{Chapter \ref{ch:conclusion} - Conclusion --}} Presents what the experiments showed and future work.
 \end{itemize}
