@@ -4,6 +4,8 @@ BackgroundPresentation
 notes
 Figures
 
+Data/backup*
+
 # Vim
 *.swp
 *.swo
