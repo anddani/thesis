@@ -26,6 +26,8 @@ Figures
 *.gls
 *.ist
 *.bcf
+*.lof
+*.lot
 *.run.xml
 
 !Specification/specification.pdf
