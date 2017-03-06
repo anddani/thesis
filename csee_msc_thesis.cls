@@ -227,7 +227,13 @@
 
  \printglossaries
 
+ % TABLES AND FIGURES
  \cleardoublepage
+ \listoffigures
+ \listoftables
+
+ \cleardoublepage
+
  \setcounter{page}{1}
  \pagenumbering{arabic}
 }
