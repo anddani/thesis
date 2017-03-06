@@ -120,6 +120,7 @@ function to_latex {
             cat tempfil > $TEX_COMMON_TABLE
         fi
     done
+    rm tempfil
 
     # Format common tables
     for c in $COMMON_TABLES ; do
@@ -170,6 +171,7 @@ elif [ "$CONVERT" == "1" ] ; then
 
     to_latex $RESULTS_PATH/FFT
     to_latex $RESULTS_PATH/JNI
+
 else
     echo "-- moving data from phone to $DATA_PATH/$TIME"
     eval adb shell "'run-as $PACKAGE cat $FILENAME'" > $DATA_PATH/$TIME.out
