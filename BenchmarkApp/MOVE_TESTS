@@ -12,17 +12,55 @@ FILENAME="/data/data/$PACKAGE/files/data.out"
 
 RESULTS_PATH=$DATA_PATH/results
 
+function tex_bar_plot {
+    CURRENT_FILE=$1
+    TEX_BAR_PLOT="${CURRENT_FILE}_barplot.tex"
+
+    ## Bar Plot ##
+    # Header
+    echo '\begin{tikzpicture}' >> $TEX_BAR_PLOT
+    echo '\begin{axis}[scale=1.5,ymin=0, ymax=500, ybar, symbolic x coords={16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536}]' >> $TEX_BAR_PLOT
+
+    # Plot content
+    echo '\addplot[error bars/.cd, y dir=both, y explicit] coordinates {' >> $TEX_BAR_PLOT
+    cat $CURRENT_FILE | awk '{print "(" $1 "," $2 ") +-(" $5 "," $5 ")" }' >> $TEX_BAR_PLOT
+    echo '};' >> $TEX_BAR_PLOT
+
+    # Footer
+    echo '\end{axis}' >> $TEX_BAR_PLOT
+    echo '\end{tikzpicture}' >> $TEX_BAR_PLOT
+
+    ln -s $TEX_BAR_PLOT $(echo $TEX_BAR_PLOT | sed 's/_N_[0-9]*//g')
+}
+
+function tex_table {
+    CURRENT_FILE=$1
+    TEX_TABLE="${CURRENT_FILE}.tex"
+
+    # Header
+    echo '\begin{tabular}{|r|r|r|r|r|}\hline' >> $TEX_TABLE
+
+    # Table content
+    echo '    FFT Size & $\bar{X}$ & $s$ & $SE_{\bar{X}}$ & $ME_{\bar{X}}$ \\ \hline' >> $TEX_TABLE
+    cat $CURRENT_FILE | sed 's/ / \& /g' | sed -r 's/([0-9]*\.[0-9]*$)/\$\\pm\$ \1/g' | sed 's/$/ \\\\ \\hline/g' | sed 's/^/    /g' >> $TEX_TABLE
+
+    # Footer
+    echo '\end{tabular}' >> $TEX_TABLE
+
+    ln -s $TEX_TABLE $(echo $TEX_TABLE | sed 's/_N_[0-9]*//g')
+}
+
 function convert_test_results {
     N=""
     while read line ; do
         TYPE=$(echo $line | cut -d' ' -f1)
 
         # Only lines with text allowed
-        if [[ $TYPE == "" ]] ; then
+        if [ "$TYPE" == "" ] ; then
             continue
         fi
 
-        if [[ $TYPE == "numTests" ]] ; then
+        if [ "$TYPE" == "numTests" ] ; then
             N=$(echo $line | cut -d' ' -f2)
         else
             ALG=$(echo $line | cut -d' ' -f2)
@@ -43,7 +81,7 @@ function convert_test_results {
             # Margin of error
             ME=$(awk -v se="$SE" 'BEGIN{printf "%.4f", se*1.96}')
 
-            if [[ ! -d "$FOLDER" ]] ; then
+            if [ ! -d "$FOLDER" ] ; then
                 mkdir $FOLDER
             fi
 
@@ -55,45 +93,52 @@ function convert_test_results {
 function to_latex {
     CURRENT_DIR=$1
     CONTENT=$(ls $CURRENT_DIR)
+    COMMON_TABLES=""
 
+    # For each file in folder
     for c in $CONTENT ; do
         CURRENT_FILE=$CURRENT_DIR/$c
-        if [[ -f "$CURRENT_FILE" ]] ; then
-            TEX_TABLE="${CURRENT_FILE}.tex"
-            TEX_BAR_PLOT="${CURRENT_FILE}_barplot.tex"
 
-            ## Table
-            # Header
-            echo '\begin{tabular}{|r|r|r|r|r|}\hline' >> $TEX_TABLE
+        # If CURRENT_FILE is a file
+        if [ -f "$CURRENT_FILE" ] ; then
+            LANGUAGE=$(echo $c | tr '_' ' ' | awk '{print $1}')
+            TEX_COMMON_TABLE="$CURRENT_DIR/${LANGUAGE}_common_table.tex"
 
-            # Table content
-            echo '    FFT Size & $\bar{X}$ & $s$ & $SE_{\bar{X}}$ & $ME_{\bar{X}}$ \\ \hline' >> $TEX_TABLE
-            cat $CURRENT_FILE | sed 's/ / \& /g' | sed -r 's/([0-9]*\.[0-9]*$)/\$\\pm\$ \1/g' | sed 's/$/ \\\\ \\hline/g' | sed 's/^/    /g' >> $TEX_TABLE
-            # Footer
-            echo '\end{tabular}' >> $TEX_TABLE
+            tex_table $CURRENT_FILE
+            tex_bar_plot $CURRENT_FILE
 
-            ## Bar Plot
-            # Header
-            echo '\begin{tikzpicture}' >> $TEX_BAR_PLOT
-            echo '\begin{axis}[scale=1.5,ymin=0, ymax=500, ybar, symbolic x coords={16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536}]' >> $TEX_BAR_PLOT
+            ## Common table ##
+            if [ ! -f "$TEX_COMMON_TABLE" ] ; then
+                # Header
+                echo $'\\textbf{Block size} \n\\textbf{16} \n\\textbf{32} \n\\textbf{64} \n\\textbf{128} \n\\textbf{256} \n\\textbf{512} \n\\textbf{1024} \n\\textbf{2048} \n\\textbf{4096} \n\\textbf{8192} \n\\textbf{16384} \n\\textbf{32768} \n\\textbf{65536}' > $TEX_COMMON_TABLE
+                COMMON_TABLES="$COMMON_TABLES $TEX_COMMON_TABLE"
+            fi
 
-            # Plot content
-            echo '\addplot[error bars/.cd, y dir=both, y explicit] coordinates {' >> $TEX_BAR_PLOT
-            cat $CURRENT_FILE | awk '{print "(" $1 "," $2 ") +-(" $5 "," $5 ")" }' >> $TEX_BAR_PLOT
-            echo '};' >> $TEX_BAR_PLOT
-
-            # Footer
-            echo '\end{axis}' >> $TEX_BAR_PLOT
-            echo '\end{tikzpicture}' >> $TEX_BAR_PLOT
-
-            # Create symbolic link without number of tests in filename
-            ln -s $TEX_TABLE $(echo $TEX_TABLE | sed 's/_N_[0-9]*//g')
-            ln -s $TEX_BAR_PLOT $(echo $TEX_BAR_PLOT | sed 's/_N_[0-9]*//g')
+            # Content
+            TEST_NAME="& \\\\textbf{$(echo $c | sed 's/\(Java\|CPP\)_//g' | sed 's/_N_.*//g' | tr '_' ' ')}"
+            cat $CURRENT_FILE | awk '{print "& " $2 " $\\pm$ " $5}' | sed "1i $TEST_NAME" | paste -d' ' $TEX_COMMON_TABLE - > tempfil
+            cat tempfil > $TEX_COMMON_TABLE
         fi
+    done
+
+    # Format common tables
+    for c in $COMMON_TABLES ; do
+
+        # Insert before first line
+        sed -i 's/$/\\\\\\hline/g' $c
+
+        # Get number of algorithms
+        NUM_COLS=$(cat $c | head -n 1 | grep -o '&' | wc -l)
+
+        # Tabular format
+        COLS=$(seq $NUM_COLS | xargs -I{} printf "c|")
+
+        sed -i "1i \\\\\\begin{tabular}{|l|$COLS}\\\\hline" $c
+        echo '\end{tabular}' >> $c
     done
 }
 
-if [[ -z "$EXJOBB_HOME" ]]; then
+if [ -z "$EXJOBB_HOME" ]; then
     echo "EXJOBB_HOME not set"
     exit 1
 fi
@@ -108,14 +153,14 @@ while getopts "cv" opt; do
     esac
 done
 
-if [[ $VIEW -eq 1 ]] ; then
+if [ "$VIEW" == "1" ] ; then
     eval adb shell "'run-as $PACKAGE cat $FILENAME'" | less
-elif [[ $CONVERT -eq 1 ]] ; then
+elif [ "$CONVERT" == "1" ] ; then
     # Get path and filename of the latest fetched file
     LATEST="$DATA_PATH/$(ls -l $DATA_PATH | grep '\.out' | tail -n 1 | awk -F ' ' '{print $9}')"
 
     # Backup previous results
-    if [[ -d "$RESULTS_PATH" ]] ; then
+    if [ -d "$RESULTS_PATH" ] ; then
         echo "-- folder exists, backing up..."
         mv $RESULTS_PATH $DATA_PATH/backup_$TIME
     fi
@@ -130,7 +175,7 @@ else
     eval adb shell "'run-as $PACKAGE cat $FILENAME'" > $DATA_PATH/$TIME.out
 fi
 
-if [[ $? -ne 0 ]] ; then
+if [ $? -ne 0 ] ; then
     echo "!! ERROR - no such file: $FILENAME"
     exit 1
 fi

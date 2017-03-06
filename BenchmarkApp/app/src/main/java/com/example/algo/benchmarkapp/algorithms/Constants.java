@@ -26,15 +26,15 @@ public class Constants {
             "FFT Java_Princeton_Iterative",
             "FFT Java_Princeton_Recursive",
             "FFT Java_Columbia_Iterative",
-            "FFT CPP_Princeton_converted_Iterative",
-            "FFT CPP_Princeton_converted_Recursive",
-            "FFT CPP_Columbia_converted_Iterative",
+            "FFT CPP_Princeton_Iterative",
+            "FFT CPP_Princeton_Recursive",
+            "FFT CPP_Columbia_Iterative",
             "FFT CPP_KISS",
-            "FFT CPP_Columbia_optimized_Iterative",
+            "FFT CPP_Columbia_optimized",
 //            "FFT Java_Princeton_optimized_Iterative",
-            "JNI Benchmark_with_no_params",
-            "JNI Benchmark_with_vector_as_param",
-            "JNI Benchmark_convert_param_to_vector",
+            "JNI Benchmark_no_params",
+            "JNI Benchmark_vector",
+            "JNI Benchmark_convert",
     };
 
     /**
