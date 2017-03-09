@@ -1,91 +1,20 @@
 % TODO: Rename as Result?
 \textit{Summarizing the chapter}
 
-% \begin{sidewaystable}
-%     \centering
-%     \label{tab:common:table}
-%     \caption{Common table}
-%     \resizebox{\columnwidth}{!}{
-%         \input{Data/results/FFT/common_table.tex}
-%     }
-% \end{sidewaystable}
+\section{JNI}
 
-\begin{table}
-    \centering
-    \label{tab:common:table:cpp}
-    \caption{Common table for C++ tests}
-    \resizebox{\columnwidth}{!}{
-        \input{Data/results/FFT/CPP_common_table.tex}
-    }
-\end{table}
-
-\begin{table}
-    \centering
-    \label{tab:common:table:java}
-    \caption{Common table for Java tests}
-    \resizebox{\columnwidth}{!}{
-        \input{Data/results/FFT/Java_common_table.tex}
-    }
-\end{table}
-
-\begin{table}
-    \centering
-    \label{tab:java:princeton:iterative}
-    \caption{Java Princeton Iterative, Time (ms)}
-    \input{Data/results/FFT/Java_Princeton_Iterative.tex}
-\end{table}
-\begin{table}
-    \centering
-    \label{tab:java:princeton:recursive}
-    \caption{Java Princeton Recursive, Time (ms)}
-    \input{Data/results/FFT/Java_Princeton_Recursive.tex}
-\end{table}
-\begin{table}
-    \centering
-    \label{tab:java:columbia:iterative}
-    \caption{Java Columbia Iterative, Time (ms)}
-    \input{Data/results/FFT/Java_Columbia_Iterative.tex}
-\end{table}
-\begin{table}
-    \centering
-    \label{tab:cpp:princeton:iterative}
-    \caption{C++ Princeton Iterative, Time (ms)}
-    \input{Data/results/FFT/CPP_Princeton_converted_Iterative.tex}
-\end{table}
-\begin{table}
-    \centering
-    \label{tab:cpp:princeton:recursive}
-    \caption{C++ Princeton Recursive, Time (ms)}
-    \input{Data/results/FFT/CPP_Princeton_converted_Recursive.tex}
-\end{table}
-\begin{table}
-    \centering
-    \label{tab:cpp:columbia:iterative}
-    \caption{C++ Columbia Iterative, Time (ms)}
-    \input{Data/results/FFT/CPP_Columbia_converted_Iterative.tex}
-\end{table}
-\begin{table}
-    \centering
-    \label{tab:cpp:kiss}
-    \caption{C++ KISS, Time (ms)}
-    \input{Data/results/FFT/CPP_KISS.tex}
-\end{table}
-\begin{table}
-    \centering
-    \label{tab:cpp:columbia:iterative:optimized}
-    \caption{C++ Columbia Iterative Optimized, Time (ms)}
-    \input{Data/results/FFT/CPP_Columbia_optimized_Iterative.tex}
-\end{table}
+\section{FFT Libraries}
 
 \begin{figure}
     \centering
-    \input{Data/results/FFT/Java_Princeton_Recursive_barplot.tex}
-    \label{fig:cpp:columbia:iterative:optimized}
-    \caption{C++ Columbia Iterative Optimized bar plot}
+    \resizebox{\columnwidth}{!}{
+        \input{Data/results/FFT/barchart_65536.tex}
+    }
+    \label{tab:barchart:65536}
+    \caption{Bar chart for tests with block size 65536}
 \end{figure}
-% \begin{table}
-%     \centering
-%     \label{fig:cpp:columbia:iterative:optimized}
-%     \caption{Label here}
-%     \input{Data/results/FFT/Java_Columbia_optimized_Iterative.tex}
-% \end{table}
+% Which is slowest and why??
+
+% Which is fastest and why??
+
+\section{Optimizations}

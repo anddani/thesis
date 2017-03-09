@@ -30,9 +30,15 @@ This experiment consisted of tests for three different aspects of implementing a
 
 The reason why it is relevant to know how significant the JNI is, is because we want to see for what size of the data the transition time for going between Java and native is irrelevant compared to the total execution time of the JNI call. This would also show how much repeated calls to native code would affect the performance of a program. By minimizing the number of calls to the JNI, a program would get potentially faster.
 
-There are many different implementations of the FFT publicly available that could be of interest for use in ones project. This test demonstrates how some different libraries compare. It is helpful to see how viable different implementations are on Android, for both C++ libraries and Java libraries. It can also be useful to know how a small implementation compares to a large and complex library.
+% Q1: Why libraries??
+% A1: Because it is good to know the execution time of multiple implementations and to compare them. What makes one faster than the other?? 
 
-Finally, comparing optimization techniques for small libraries is a good way of demonstrating how a developer can improve performance to fit the requirements while still retaining manageable source code. Having one single source file is valuable, especially for native libraries.
+There are many different implementations of the FFT publicly available that could be of interest for use in ones project. This test demonstrates how some different libraries compare. It is helpful to see how viable different implementations are on Android, for both C++ libraries and Java libraries. It can also be useful to know how small implementations perform in terms of speed. The sample sizes used for the FFT can vary depending on the requirements for the implementation. If the app needs to be efficient, it is common to lower the number of collected samples. This comes at a cost of accuracy. A fast FFT implementation allows for more data being passed to the FFT, improving the frequency resolution.
+This is the reason it is important to have a fast FFT.
+
+% Q2: Why Optimizations
+
+Finally, comparing optimization techniques for small libraries is a good way of demonstrating how a developer can improve performance to fit the requirements while still retaining manageable source code. Having one single source file is valuable, especially for native libraries. This facilitates the process of adding libraries and bases on the results found in this report, they can also be sufficiently fast.
 
 \subsection{Hardware}
 % Phone model
@@ -93,6 +99,8 @@ There are multiple methods of measuring time in Java. It is possible to measure 
 
 To get comparable results, matching work between algorithms were included in the time measurements. Each test was given the formatted data it needed because . Although every test had to return a complex representation of the results. They all described this using the same class called \emph{Complex} found in Appendix~\ref{appendix:code} Listing~\ref{lst:complex}. This class was written by Robert Sedgewick and Kevin Wayne \cite{princeton:complex}.
 
+% Describe where the timer starts and where it ends for the tests. Describe why tables are calculated once. Because you seldom do one FFT calculation, it is OK to assume that the creation of the weights array is done before the FFT is run.
+
 \subsection{Memory measurement}
 The profiling tool provided by Android Studio was used to measure the amount of memory each test required. The method used was to attach the debugger to the app and measure using the profiler. To measure each test separately and equally, the app was launched freshly between tests and the garbage collector was forced before each test. After this, the memory allocation tracker was activated and then followed by starting a test. When the test had been done executing, the tracker was stopped and the results saved.
 
@@ -109,10 +117,13 @@ The unit of the resulting data will be in milliseconds. To be able to have 100 e
 
 
 \subsection{Data representation}
+When executing the tests, many block sizes were used although all of them are not present in Chapter \ref{ch:experiments} - Experiments. The ones that are not directly relevant to the discussion chapter are included in Appendix \ref{appendix:results}.
+
 \subsection{Data interpretation}
 
 \subsection{Sources of error}
 % https://www2.southeastern.edu/Academics/Faculty/rallain/plab193/labinfo/Error_Analysis/06_Sources_of_Error.html
+
 \subsection{Statistical significance}
 Because the execution times differ between runs, it is important to calculate the sample mean. This way we have an expected value to use in our results. To get an accurate sample mean, we must have a large sample size which is the number of runs we execute for each test. The following formula calculates the sample mean \cite[p.263]{olofsson2012probability}:
 
@@ -210,8 +221,24 @@ jdoubleArray jniVectorConversion(JNIEnv* env, jobject, jdoubleArray arr) {
 % Small block size
 % Large block size
 
+The following algorithms were used to compare and find a good estimate on the performance of FFT implementations with varying complexity:
+
+% CITE ALL
+\begin{itemize}
+    \item Princeton Recursive \cite{princeton:recursive}
+    \item Princeton Iterative
+    \item Columbia Iterative
+    \item Kiss \emph{Keep It Simple, Stupid} FFT
+\end{itemize}
+
+The Princeton Recursive FFT is a straightforward implementation of the FFT with no radical optimizations written by Robert Sedgewick and Kevin Wayne \cite{princeton:recursive}. This algorithm is implemented in Java. Twiddle factors are trigonometric constants used during the butterfly operations. They are not precomputed in this algorithm, leading to duplicate work when calling it multiple times.
+
+Princeton Iterative, also written by Robert Sedgewick and Kevin Wayne \cite{princeton:iterative}, is an iterative version of the previous FFT (also written in Java). Bit reversal and butterfly operations are used to produce a faster algorithm.
+
+Columbia Iterative 
+
 \subsection{Java libraries}
-% JTransforms \cite{jtransforms:benchmark}
+% Explain differences
 
 \subsection{C++ libraries}
 % Flags: -funroll-loops
@@ -219,12 +246,5 @@ jdoubleArray jniVectorConversion(JNIEnv* env, jobject, jdoubleArray arr) {
 
 % => http://edp.org/work/Construction.pdf <== OPTIMIZATION
 
-% N: n
-% Algorithm 1 name
-% t1
-% t2
-% ...
-% tn
-% Algorithm 2 name
-% t1
-% t2
+\section{NEON Optimization}
+

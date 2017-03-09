@@ -1,6 +1,7 @@
 #include <jni.h>
 #include <string>
 #include <android/log.h>
+#include <time.h>
 #include "FFTPrincetonConverted.h"
 #include "FFTColumbiaConverted.h"
 #include "FFTColumbiaConvertedOptimized.h"
@@ -66,7 +67,18 @@ jdoubleArray fftColumbiaIterative(JNIEnv* env, jobject obj, jdoubleArray arr, jd
 
 //    FFTColumbiaConverted fcc = FFTColumbiaConverted(N);
 //    fcc.fftIterative(elements, elements+N); // Run FFT
+
+//    // Timer start
+//    clock_t start = clock(), diff;
+
     fftCI(elements, elements+N, N, cos_v, sin_v);
+
+//    // Timer end
+//    diff = clock() - start;
+//
+//    int msec = diff * 1000 / CLOCKS_PER_SEC;
+//    __android_log_print(ANDROID_LOG_INFO, LOGTAG, "-- timer for fft columbia iter: %i, size: %i", msec, size/2);
+
 
     (*env).ReleaseDoubleArrayElements(arr, elements, 0);
     return arr;
@@ -76,9 +88,7 @@ jdoubleArray fftCIO(JNIEnv* env, jobject obj, jdoubleArray arr) {
     jsize size = (*env).GetArrayLength(arr);
     jdouble* elements = (*env).GetDoubleArrayElements(arr, 0);
     int N = size/2;
-
     fftColumbiaIterativeOptimized(elements, elements+N, N); // Run FFT
-
     (*env).ReleaseDoubleArrayElements(arr, elements, 0);
     return arr;
 }
@@ -102,7 +112,17 @@ jfloatArray fftNeon(JNIEnv* env, jobject obj, jfloatArray arr) {
     int stride = 1;
 
     fftColumbiaNeonInit(N);
+
+//    // Timer start
+//    clock_t start = clock(), diff;
+
     fftColumbiaNeon(in, out, (int)(log(stride)/log(2)), stride, N); // Run FFT
+
+//    // Timer end
+//    diff = clock() - start;
+//
+//    int msec = diff * 1000 / CLOCKS_PER_SEC;
+//    __android_log_print(ANDROID_LOG_INFO, LOGTAG, "-- timer for fft NEON: %i, size: %i", msec, size/2);
 
     for (i = 0; i < N; i+=2) {
         elements[i] = out[i].real();

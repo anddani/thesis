@@ -77,27 +77,20 @@ void fftColumbiaIterativeOptimized(double* x, double* y, int n) {
 }
 
 void fftColumbiaNeonInit(int N) {
-    cd test = I;
-
     int i;
     int n_luts = (int)(log(N)/log(2)) - 2;
     LUT = (cd**)malloc(n_luts * sizeof(cd*));
     for(i = 0; i < n_luts; i++) {
         int n = N / pow(2, i);
         LUT[i] = (cd*)memalign(16, n/2 * sizeof(cd));
-//        LUT[i] = (cd*)_mm_malloc(n/2 * sizeof(cd), 16);
 
         int j;
         for(j = 0; j < n/2; j+=4) {
             cd w[4];
             int k;
             for(k = 0; k < 4; k++) {
-                // n - L
-                // j+k - k
                 double kth = -2 * (j+k) * M_PI / n;
                 w[k] = cd(cos(kth), sin(kth));
-//                __android_log_print(ANDROID_LOG_INFO, LOGTAG, "-- (%f, %f)", w[k].real(), w[k].imag());
-
             }
             LUT[i][j] = cd(w[0].real(), w[1].real());
             LUT[i][j+1] = cd(w[2].real(), w[3].real());
@@ -173,9 +166,9 @@ void fftColumbiaNeon(cd *in, cd* out, int log2stride, int stride, int N) {
             float32x4_t Ek_im = vld1q_f32((float *)&out[k+2]);
             float32x4_t wOk_re = vsubq_f32(vmulq_f32(Ok_re,w_re),vmulq_f32(Ok_im,w_im));
             float32x4_t wOk_im = vaddq_f32(vmulq_f32(Ok_re,w_im),vmulq_f32(Ok_im,w_re));
-            vst1q_f32((float *)(out+k), vaddq_f32(Ek_re, wOk_re));
-            vst1q_f32((float *)(out+k+2), vaddq_f32(Ek_im, wOk_im));
-            vst1q_f32((float *)(out+k+N/2), vsubq_f32(Ek_re, wOk_re));
+            vst1q_f32((float *)(out+k)      , vaddq_f32(Ek_re, wOk_re));
+            vst1q_f32((float *)(out+k+2)    , vaddq_f32(Ek_im, wOk_im));
+            vst1q_f32((float *)(out+k+N/2)  , vsubq_f32(Ek_re, wOk_re));
             vst1q_f32((float *)(out+k+N/2+2), vsubq_f32(Ek_im, wOk_im));
         }
     }

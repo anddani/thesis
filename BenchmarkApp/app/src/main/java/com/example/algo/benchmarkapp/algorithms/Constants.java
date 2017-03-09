@@ -2,8 +2,7 @@ package com.example.algo.benchmarkapp.algorithms;
 
 public class Constants {
 
-//    public static final int BENCHMARK_ITER = 30;
-    public static final int BENCHMARK_ITER = 1;
+    public static final int BENCHMARK_ITER = 30;
 
     public static final int BENCHMARK_MESSAGE_NEW = 17;
     public static final int BENCHMARK_MESSAGE_DONE = 4711;
@@ -51,8 +50,7 @@ public class Constants {
         return blockSizes;
     }
 
-//    public static final int[] BLOCK_SIZES = getBlockSizes(16);
-    public static final int[] BLOCK_SIZES = getBlockSizes(4);
+    public static final int[] BLOCK_SIZES = getBlockSizes(16);
 
     public static final int NUM_ALGORITHMS = ALGORITHMS.values().length;
 }

@@ -15,7 +15,7 @@ import java.util.Random;
 public class Benchmark {
 
     private static final boolean DEBUG = false;
-    private static final double EPSILON = 0.000001;
+    private static final double EPSILON = 0.0001;
     private Random rand;
     private double[] re;
     private double[] im;
@@ -27,7 +27,6 @@ public class Benchmark {
 
         // Generate test data
         re = randomInput(N);
-//        System.out.println("initial real[]: " + Arrays.toString(re));
         im = new double[N];
     }
 
