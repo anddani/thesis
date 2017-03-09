@@ -20,7 +20,6 @@ add_library( # Sets the name of the library.
              # file are automatically included.
              src/main/cpp/native-lib.cpp )
 
-
 add_library(fft-lib SHARED src/main/cpp/fft-lib.cpp
                            src/main/cpp/FFTPrincetonConverted.cpp
                            src/main/cpp/FFTColumbiaConverted.cpp

@@ -15,7 +15,7 @@ import java.util.Random;
 public class Benchmark {
 
     private static final boolean DEBUG = false;
-    private static final double EPSILON = 0.000000001;
+    private static final double EPSILON = 0.000001;
     private Random rand;
     private double[] re;
     private double[] im;
@@ -260,16 +260,31 @@ public class Benchmark {
 
     public long FFTCppIterativeColumbiaOptimized() {
         // Let first half be filled with real and second half with imaginary
-        double[] z = new double[re.length*2];
+//        double[] z = new double[re.length*2];
+//        for (int i = 0; i < re.length; i++) {
+//            z[i] = re[i];
+//            z[i+re.length] = im[i];
+//        }
+//        float[] z = new float[re.length*2];
+//        for (int i = 0; i < re.length; i++) {
+//            z[i] = (float)re[i];
+//            z[i+re.length] = (float)im[i];
+//        }
+        float[] z = new float[re.length*2];
         for (int i = 0; i < re.length; i++) {
-            z[i] = re[i];
-            z[i+re.length] = im[i];
+            z[i] = (float)re[i];
+//            z[i+re.length] = (float)im[i];
         }
 
         long start = SystemClock.elapsedRealtimeNanos();
 
-        double[] nativeResult = fft_columbia_iterative_optimized(z);
+//        double[] nativeResult = fft_columbia_iterative_optimized(z);
+//        float[] nativeResult = fft_columbia_neon(z, new float);
+//        System.out.println(Arrays.toString(z));
+        float[] nativeResult = fft_columbia_neon(z);
 
+//        System.out.println(Arrays.toString(nativeResult));
+//        System.out.println(nativeResult.length + " re.length " + re.length);
         Complex[] x = new Complex[re.length];
         for (int i = 0; i < re.length; i++) {
             x[i] = new Complex(nativeResult[i], nativeResult[i+re.length]);
@@ -282,12 +297,12 @@ public class Benchmark {
             printComplex(x);
         }
 
-//        if (!isCorrect(x)) {
-//            System.out.println("FFT JAVA ITER COLUMBIA GIVES INCORRECT OUTPUT");
-//            printComplex(x);
-//            System.out.println("CORRECT: ");
-//            printComplex(correctOut);
-//        }
+        if (!isCorrect(x)) {
+            System.out.println("FFT JAVA ITER COLUMBIA GIVES INCORRECT OUTPUT");
+            printComplex(x);
+            System.out.println("CORRECT: ");
+            printComplex(correctOut);
+        }
         return stop;
     }
 
@@ -371,6 +386,7 @@ public class Benchmark {
     public native double[] fft_princeton_recursive(double[] arr);
     public native double[] fft_columbia_iterative(double[] arr, double[] cos, double[] sin);
     public native double[] fft_columbia_iterative_optimized(double[] arr);
+    public native float[] fft_columbia_neon(float[] arr);
     public native double[] fft_kiss(double[] arr);
     public native void jni_empty();
     public native double[] jni_params(double[] arr);

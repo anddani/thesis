@@ -13,6 +13,7 @@ public:
     FFTPrincetonConverted();
     ~FFTPrincetonConverted();
     int fftIterative(std::vector<std::complex<double> >& x);
+    int fftIterativeOptimized(std::vector<std::complex<double> >& x);
     std::vector<std::complex<double> > fftRecursive(std::vector<std::complex<double> > &x);
     std::vector<std::complex<double> > ifftRecursive(std::vector<std::complex<double> > x);
 

@@ -83,6 +83,43 @@ jdoubleArray fftCIO(JNIEnv* env, jobject obj, jdoubleArray arr) {
     return arr;
 }
 
+jfloatArray fftNeon(JNIEnv* env, jobject obj, jfloatArray arr) {
+    jsize size = (*env).GetArrayLength(arr);
+    jfloat* elements = (*env).GetFloatArrayElements(arr, 0);
+//    jfloat* outElements = (*env).GetFloatArrayElements(outArr, 0);
+    int N = size/2;
+//    std::vector<double> out(size);
+
+    cd* in = (cd*)malloc(N * sizeof(cd*));
+    cd* out = (cd*)malloc(N * sizeof(cd*));
+    int i;
+    for(i = 0; i < N; ++i) {
+        in[i] = cd(elements[i], 0);
+        out[i] = cd(0, 0);
+//        __android_log_print(ANDROID_LOG_INFO, LOGTAG, "-- (%f, %f)", in[i].real(), in[i].imag());
+    }
+
+    int stride = 1;
+
+    fftColumbiaNeonInit(N);
+    fftColumbiaNeon(in, out, (int)(log(stride)/log(2)), stride, N); // Run FFT
+
+    for (i = 0; i < N; i+=2) {
+        elements[i] = out[i].real();
+        elements[i+1] = out[i].imag();
+        elements[i+N] = out[i+1].real();
+        elements[i+N+1] = out[i+1].imag();
+    }
+
+    free(in);
+    free(out);
+
+    (*env).ReleaseFloatArrayElements(arr, elements, 0);
+//    (*env).ReleaseFloatArrayElements(outArr, outElements, 0);
+//    return outArr;
+    return arr;
+}
+
 jdoubleArray fftKiss(JNIEnv* env, jobject obj, jdoubleArray arr) {
     jsize size = (*env).GetArrayLength(arr);
     jdouble* elements = (*env).GetDoubleArrayElements(arr, 0);
@@ -134,6 +171,7 @@ static JNINativeMethod s_methods[] {
         {"fft_princeton_recursive",           "([D)[D",     (void*)fftPrincetonRecursive},
         {"fft_columbia_iterative",            "([D[D[D)[D", (void*)fftColumbiaIterative},
         {"fft_columbia_iterative_optimized",  "([D)[D",     (void*)fftCIO},
+        {"fft_columbia_neon",                 "([F)[F",     (void*)fftNeon},
         {"fft_kiss",                          "([D)[D",     (void*)fftKiss},
         {"jni_empty",                         "()V",        (void*)jniEmpty},
         {"jni_params",                        "([D)[D",     (void*)jniParams},

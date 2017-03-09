@@ -120,16 +120,17 @@ public class MainActivity extends AppCompatActivity {
      * for all block sizes and all algorithms
      */
     private void startBenchmarks() {
-        for (int a = 0; a < Constants.NUM_ALGORITHMS; a++) {
-            for (int b = 0; b < Constants.BLOCK_SIZES.length; b++) {
-                BenchmarkMessage message = new BenchmarkMessage(Constants.BENCHMARK_ITER, a, b);
+        for (int alg = 0; alg < Constants.NUM_ALGORITHMS; alg++) {
+            for (int sizeId = 0; sizeId < Constants.BLOCK_SIZES.length; sizeId++) {
+                BenchmarkMessage message = new BenchmarkMessage(Constants.BENCHMARK_ITER, alg, sizeId);
                 mTaskHandler.obtainMessage(0, message).sendToTarget();
             }
         }
     }
 
     /**
-     * Logs the result on the screen
+     * Logs the result on the screen and save
+     * it to a file called 'data.out' on the device.
      *
      * @param result Execution time
      */
