@@ -5,9 +5,13 @@
 #include "FFTPrincetonConverted.h"
 #include "FFTColumbiaConverted.h"
 #include "FFTColumbiaConvertedOptimized.h"
+#include "FFTIterativeNeon.h"
 #include "kiss-fft/_kiss_fft_guts.h"
 
 #define LOGTAG "FFTLIB"
+
+struct objFFT objfft;
+struct ParametersStruct parametersStruct;
 
 jdoubleArray fftPrincetonIterative(JNIEnv* env, jobject obj, jdoubleArray arr) {
     jsize size = (*env).GetArrayLength(arr);
@@ -100,8 +104,8 @@ jfloatArray fftNeon(JNIEnv* env, jobject obj, jfloatArray arr) {
     int N = size/2;
 //    std::vector<double> out(size);
 
-    cd* in = (cd*)malloc(N * sizeof(cd*));
-    cd* out = (cd*)malloc(N * sizeof(cd*));
+    cd* in = (cd*)malloc(N * sizeof(cd));
+    cd* out = (cd*)malloc(N * sizeof(cd));
     int i;
     for(i = 0; i < N; ++i) {
         in[i] = cd(elements[i], 0);
@@ -186,6 +190,33 @@ jdoubleArray jniVectorConversion(JNIEnv* env, jobject, jdoubleArray arr) {
     return arr;
 }
 
+void initIterativeNeon(JNIEnv*, jobject, jint size) {
+    fftIterativeNeonInit(&objfft, &parametersStruct, size);
+}
+
+jfloatArray runIterativeNeon(JNIEnv* env, jobject, jfloatArray arr) {
+    jsize size = (*env).GetArrayLength(arr);
+    jfloat* elements = (*env).GetFloatArrayElements(arr, 0);
+    int N = size/2;
+
+    float* sourceReal = (float*)malloc(N * sizeof(float*));
+    float* sourceImag = (float*)malloc(N * sizeof(float*));
+
+    int i;
+    for (i = 0; i < N; ++i) {
+        sourceReal[i] = elements[i];
+        sourceImag[i] = elements[i+N];
+    }
+
+    fftIterativeNeon(&objfft, sourceReal, sourceImag, elements, elements+N);
+
+    free(sourceReal);
+    free(sourceImag);
+
+    (*env).ReleaseFloatArrayElements(arr, elements, 0);
+    return arr;
+}
+
 static JNINativeMethod s_methods[] {
         {"fft_princeton_iterative",           "([D)[D",     (void*)fftPrincetonIterative},
         {"fft_princeton_recursive",           "([D)[D",     (void*)fftPrincetonRecursive},
@@ -196,6 +227,9 @@ static JNINativeMethod s_methods[] {
         {"jni_empty",                         "()V",        (void*)jniEmpty},
         {"jni_params",                        "([D)[D",     (void*)jniParams},
         {"jni_vector_conversion",             "([D)[D",     (void*)jniVectorConversion},
+
+        {"init_iterative_neon",               "(I)V",       (void*)initIterativeNeon},
+        {"run_iterative_neon",                "([F)[F",     (void*)runIterativeNeon},
 };
 
 jint JNI_OnLoad(JavaVM* vm, void* reserved) {

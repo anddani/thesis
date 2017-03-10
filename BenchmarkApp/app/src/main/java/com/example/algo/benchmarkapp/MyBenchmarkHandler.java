@@ -38,7 +38,7 @@ public class MyBenchmarkHandler extends Handler {
             StringBuilder sb = new StringBuilder();
             sb.append(Constants.ALGORITHM_NAMES[algorithm]);
             sb.append(" blockSize: ");
-            sb.append(Constants.BLOCK_SIZES[message.sizeId]);
+            sb.append(Constants.BLOCK_SIZES[sizeId]);
             sb.append(" executionTime: ");
 
             if (benchmarks[sizeId] == null) {
@@ -85,6 +85,9 @@ public class MyBenchmarkHandler extends Handler {
                     case JNI_VECTOR_CONVERSION:
                         time = bm.JNIBenchmarkVectorConversion();
                         jniTests = true;
+                        break;
+                    case NEON_CPP_ITERATIVE:
+                        time = bm.FFTCppIterativeNeon();
                         break;
                     default:
                         break;

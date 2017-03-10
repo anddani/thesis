@@ -381,6 +381,38 @@ public class Benchmark {
         return stop;
     }
 
+    public long FFTCppIterativeNeon() {
+        float[] z = new float[re.length*2];
+        for (int i = 0; i < re.length; i++) {
+            z[i] = (float)re[i];
+        }
+
+        init_iterative_neon(re.length);
+        long start = SystemClock.elapsedRealtimeNanos();
+
+        float[] nativeResult = run_iterative_neon(z);
+
+        Complex[] x = new Complex[re.length];
+        for (int i = 0; i < re.length; i++) {
+            x[i] = new Complex(nativeResult[i], nativeResult[i+re.length]);
+        }
+
+        long stop = SystemClock.elapsedRealtimeNanos() - start;
+
+        if (DEBUG) {
+            System.out.println("************* FFT CPP ITER COLUMBIA OPTIMIZED ************");
+            printComplex(x);
+        }
+
+        if (!isCorrect(x)) {
+            System.out.println("FFT JAVA ITER COLUMBIA GIVES INCORRECT OUTPUT");
+            printComplex(x);
+            System.out.println("CORRECT: ");
+            printComplex(correctOut);
+        }
+        return stop;
+    }
+
     public native double[] fft_princeton_iterative(double[] arr);
     public native double[] fft_princeton_recursive(double[] arr);
     public native double[] fft_columbia_iterative(double[] arr, double[] cos, double[] sin);
@@ -390,6 +422,9 @@ public class Benchmark {
     public native void jni_empty();
     public native double[] jni_params(double[] arr);
     public native double[] jni_vector_conversion(double[] arr);
+
+    public native void init_iterative_neon(int N);
+    public native float[] run_iterative_neon(float[] arr);
 
     static {
         System.loadLibrary("fft-lib");

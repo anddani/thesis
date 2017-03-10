@@ -1,4 +1,6 @@
 #include "FFTColumbiaConverted.h"
+#include <android/log.h>
+#define LOGTAG "FFTLIB"
 
 void fftCI(double* x, double* y, int n, double* cos_v, double* sin_v) {
      int m = (int)(log(n) / log(2));

@@ -3,6 +3,7 @@ package com.example.algo.benchmarkapp.algorithms;
 public class Constants {
 
     public static final int BENCHMARK_ITER = 30;
+//    public static final int BENCHMARK_ITER = 1;
 
     public static final int BENCHMARK_MESSAGE_NEW = 17;
     public static final int BENCHMARK_MESSAGE_DONE = 4711;
@@ -20,6 +21,7 @@ public class Constants {
         JNI_EMPTY,
         JNI_PARAMS,
         JNI_VECTOR_CONVERSION,
+        NEON_CPP_ITERATIVE,
     }
 
     public static final String[] ALGORITHM_NAMES = {
@@ -35,6 +37,7 @@ public class Constants {
             "JNI Benchmark_no_params",
             "JNI Benchmark_vector",
             "JNI Benchmark_convert",
+            "NEON CPP_Iterative",
     };
 
     /**
@@ -51,6 +54,7 @@ public class Constants {
     }
 
     public static final int[] BLOCK_SIZES = getBlockSizes(16);
+//    public static final int[] BLOCK_SIZES = getBlockSizes(4);
 
     public static final int NUM_ALGORITHMS = ALGORITHMS.values().length;
 }
