@@ -73,7 +73,7 @@ The setup used for performing the experiments were the following:
 % Location OFF
 % Which apps were in background?
 % Foreground services OFF
-During the tests, cellular was switched off and wifi was enabled and connected. There were no applications running in the background while performing the tests during the experiments. The tests were executed and compiled with the following versions:
+During the tests, both cellular and wifi was switched off. There were no applications running in the background while performing the tests during the experiments. Additionally, there were no foreground services running. \hilight{This was to prevent external influences affecting the results.} The tests were executed and compiled with the following versions:
 
 % All the tests were executed/compiled using . Cellular was switched off and wifi was connected. No other background apps were present while performing the tests during the experiments.
 \begin{table}[H]
@@ -90,8 +90,14 @@ During the tests, cellular was switched off and wifi was enabled and connected. 
         \hline
         \textbf{Java version} & 1.8.0\_76\\
         \hline
+        \textbf{Java compiler flags} & \texttt{FLAGS HERE}\\
+        \hline
+        \textbf{C++ compiler flags} & \texttt{FLAGS HERE}\\
+        \hline
     \end{tabular}
 \end{table}
+
+% WHY OPTIMIZATION LEVEL 3 WAS CHOSEN?
 
 
 \subsection{Time measurement}
@@ -114,7 +120,6 @@ The unit of the resulting data will be in milliseconds. To be able to have 100 e
 
 % INCORRECT?
 % This size is also appropriate because a typical sample size in human audible sound processing is 44.1~kHz if you want to have a maximum frequency output of $\sim22$ kHz.
-
 
 \subsection{Data representation}
 When executing the tests, many block sizes were used although all of them are not present in Chapter \ref{ch:experiments} - Experiments. The ones that are not directly relevant to the discussion chapter are included in Appendix \ref{appendix:results}.
@@ -197,6 +202,7 @@ For the second test, a function was written (see Figure~\ref{fig:jni:params}) th
 \end{figure}
 
 % TODO: JNI tests for making an array accessible in C++
+% TODO: USE GetPrimitiveArrayCritical AND ReleasePrimitiveArrayCritical.
 In Figure~\ref{fig:jni:conversion}, the third test started by calling the \texttt{GetDoubleArrayElements} function to be able to access the elements stored in \texttt{arr}. When all the calculations are done, the function will return \texttt{arr}. To overwrite the changes made on \texttt{elements}, a function called \texttt{ReleaseDoubleArrayElements} must be called.
 
 \begin{figure}
@@ -223,28 +229,36 @@ jdoubleArray jniVectorConversion(JNIEnv* env, jobject, jdoubleArray arr) {
 
 The following algorithms were used to compare and find a good estimate on the performance of FFT implementations with varying complexity:
 
-% CITE ALL
 \begin{itemize}
     \item Princeton Recursive \cite{princeton:recursive}
-    \item Princeton Iterative
-    \item Columbia Iterative
-    \item Kiss \emph{Keep It Simple, Stupid} FFT
+    \item Princeton Iterative \cite{princeton:iterative}
+    \item Columbia Iterative \cite{columbia:iterative}
+    \item Kiss (\emph{Keep It Simple, Stupid}) FFT \cite{kiss:fft}
 \end{itemize}
+
+\subsection{Java Libraries}
 
 The Princeton Recursive FFT is a straightforward implementation of the FFT with no radical optimizations written by Robert Sedgewick and Kevin Wayne \cite{princeton:recursive}. This algorithm is implemented in Java. Twiddle factors are trigonometric constants used during the butterfly operations. They are not precomputed in this algorithm, leading to duplicate work when calling it multiple times.
 
-Princeton Iterative, also written by Robert Sedgewick and Kevin Wayne \cite{princeton:iterative}, is an iterative version of the previous FFT (also written in Java). Bit reversal and butterfly operations are used to produce a faster algorithm.
+Princeton Iterative, also written by Robert Sedgewick and Kevin Wayne \cite{princeton:iterative}, is an iterative version of the previous FFT (also written in Java). Bit reversal and butterfly operations are used to produce a faster algorithm. 
 
-Columbia Iterative 
+Columbia Iterative \cite{columbia:iterative} uses pre-computed trigonometric tables that are prepared in the class constructor. Because you often call FFT for the same sizes in your program. It is beneficial to have the trigonometric tables saved and used in future calls to the FFT.
 
-\subsection{Java libraries}
-% Explain differences
+\subsection{C++ Libraries}
+Conversion to C++ was done manually for Princeton Iterative, Princeton Recursive and Columbia Iterative. Some changes were necessary to follow the C++ syntax. The Complex class used in Java was replaced by \texttt{std::complex} in all converted programs. Java dynamic arrays were replaced by \texttt{std::vector} for when they were created. This only occurred in the Princeton Recursive algorithm. In Princeton Iterative and Columbia Iterative, a Java array pointer was sent to the function and there were no arrays created in the function. In C++, an array pointer and a variable containing its size was used instead.
 
-\subsection{C++ libraries}
+Kiss FFT is a small library that consists of one source file. It is available under the BSD license. To use it, you first call the \texttt{kiss\_fft\_alloc} function which allocates memory for the twiddle factors as well as calculates them. This function returns a struct object which is used as a config. The FFT is executed when the \texttt{kiss\_fft} function is called. The first parameter is the config returned by the init function, followed by a pointer to the time domain input and a pointer to where the frequency output will be placed.
+
 % Flags: -funroll-loops
 % \cite{FFTW05}
 
 % => http://edp.org/work/Construction.pdf <== OPTIMIZATION
 
+
 \section{NEON Optimization}
+% https://aaltodoc.aalto.fi/bitstream/handle/123456789/23201/master_Sugawara_Koki_2016.pdf?sequence=1
+
+Two libraries were chosen to test how vectorization of the loops can improve performance. Both libraries were written in Intel SSE intrinsics and were converted to ARM NEON intrinsics. \texttt{float} was used so that the vector registers could hold 4 elements. It is possible to have the register hold two double precision variables although it will increase the number of instructions needed to calculate the FFT. For memory locality, this is also inefficient.
+
+The first FFT algorithm was a recursive implementation written by Anthony Blake~\cite{neon:recursive}. This algorithm has a initializer function that allocates space for the twiddle factors and calculates them. They are placed in a two dimensional array that utilizes memory locality to waste less memory bandwidth \cite{neon:recursive:details}. The second algorithm was a iterative implementation. This library is a straightforward implementation of FFT with SSE \cite{code:manyears} and was written for a sound source localization system \cite{manyears:site}
 

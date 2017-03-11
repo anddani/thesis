@@ -24,6 +24,10 @@
 \usepackage{adjustbox}
 \usepackage[export]{adjustbox}
 
+% \usepackage[charter]{mathdesign}
+% \def\rmdefault{bch} % not scaled
+% \def\ttdefault{blg}
+
 \definecolor{myblue}{cmyk}{10,0,0,0}
 \definecolor{mymauve}{rgb}{0.58,0,0.82}
 \definecolor{dkgreen}{rgb}{0,0.6,0}
@@ -40,6 +44,9 @@
     classoffset=0,
     morecomment=[l][\color{dkgreen}]{\#},
 }
+
+% \lstdefinestyle{customjava}{
+% }
 
 \usepackage{caption,subcaption} % for tables and figures
 \usepgfplotslibrary{groupplots}
@@ -128,11 +135,16 @@
     \vspace{3mm}
     Master's Thesis in Computer Science\\
     \vspace{3cm}
-    KTH Supervisor: Erik Isaksson\\
-    \vspace{5mm}
-    Bontouch Supervisor: Erik Westenius\\
-    \vspace{5mm}
-    Examiner: Olle Bälter
+    \begin{tabular}{rl}
+        KTH Supervisor: & Erik Isaksson\\
+        Bontouch Supervisor: & Erik Westenius\\
+        Examiner: & Olle Bälter
+    \end{tabular}
+    % KTH Supervisor: Erik Isaksson\\
+    % \vspace{5mm}
+    % Bontouch Supervisor: Erik Westenius\\
+    % \vspace{5mm}
+    % Examiner: Olle Bälter
 }
 \def\theabstract{\input{Abstract/abstract.tex}}
 \def\thedate{\today}

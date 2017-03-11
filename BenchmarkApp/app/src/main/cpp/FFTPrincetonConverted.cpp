@@ -98,45 +98,6 @@ vector<complex<double> > FFTPrincetonConverted::ifftRecursive(vector<complex<dou
     return y;
 }
 
-int FFTPrincetonConverted::fftIterativeOptimized(vector<complex<double> >& x) {
-    int N = x.size();
-
-    // N not power of 2
-    if ((N & (N - 1)) != 0) {
-        return -1;
-    }
-
-    // Bit reversal permutation
-    int shift = 1 + __builtin_clz(N);
-    for (unsigned int k = 0; k < N; k++) {
-        int j = reverseInt(k) >> shift;
-        if (j > k) {
-            complex<double> temp = x[j];
-            x[j] = x[k];
-            x[k] = temp;
-        }
-    }
-
-    // butterfly updates
-    for (int L = 2; L <= N; L = L+L) {
-        for (int k = 0; k < L/2; k++) {
-
-            double kth = -2 * k * M_PI / L;
-            complex<double> w(cos(kth), sin(kth));
-
-            for (int j = 0; j < N/L; j++) {
-
-                complex<double> tao = w * (x[j*L + k + L/2]);
-                x[j*L + k + L/2] = x[j*L + k] - tao;
-                x[j*L + k]       = x[j*L + k] + tao;
-
-            }
-
-        }
-    }
-    return 0;
-}
-
 uint32_t FFTPrincetonConverted::reverseInt(uint32_t x)
 {
     x = ((x >> 1) & 0x55555555u) | ((x & 0x55555555u) << 1);
