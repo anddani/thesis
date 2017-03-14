@@ -3,14 +3,16 @@ package com.example.algo.benchmarkapp;
 public class BenchmarkMessage {
 
     public int iterations;
-    public int algorithm;
+    public int algorithmNum;
     public int sizeId;
+    public int testType;
     public String messageString;
 
-    public BenchmarkMessage(int n, int a, int s) {
+    public BenchmarkMessage(int n, int a, int s, int tt) {
         iterations = n;
-        algorithm = a;
+        algorithmNum = a;
         sizeId = s;
+        testType = tt;
     }
 
     public void setMessageString(String m) {

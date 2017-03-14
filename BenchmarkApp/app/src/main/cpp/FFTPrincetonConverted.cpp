@@ -2,13 +2,7 @@
 
 using namespace std;
 
-FFTPrincetonConverted::FFTPrincetonConverted() {
-
-}
-FFTPrincetonConverted::~FFTPrincetonConverted() {
-
-}
-int FFTPrincetonConverted::fftIterative(vector<complex<double> >& x) {
+int fftPrincetonIterative(vector<complex<double> >& x) {
     int N = x.size();
 
     // N not power of 2
@@ -42,7 +36,7 @@ int FFTPrincetonConverted::fftIterative(vector<complex<double> >& x) {
     return 0;
 }
 
-vector<complex<double> > FFTPrincetonConverted::fftRecursive(vector<complex<double> > &x) {
+vector<complex<double> > fftPrincetonRecursive(vector<complex<double> > &x) {
     int n = x.size();
     if (n == 1) {
         vector<complex<double> > ret;
@@ -57,13 +51,13 @@ vector<complex<double> > FFTPrincetonConverted::fftRecursive(vector<complex<doub
     for (int k = 0; k < n/2; ++k) {
         even[k] = x[2 * k];
     }
-    vector<complex<double> > q = fftRecursive(even);
+    vector<complex<double> > q = fftPrincetonRecursive(even);
 
     vector<complex<double> > odd(n/2);
     for (int k = 0; k < n/2; ++k) {
         odd[k] = x[2 * k + 1];
     }
-    vector<complex<double> > r = fftRecursive(odd);
+    vector<complex<double> > r = fftPrincetonRecursive(odd);
 
     // Combine
     vector<complex<double> > y(n);
@@ -75,30 +69,8 @@ vector<complex<double> > FFTPrincetonConverted::fftRecursive(vector<complex<doub
     }
     return y;
 }
-vector<complex<double> > FFTPrincetonConverted::ifftRecursive(vector<complex<double> > x) {
-    int n = x.size();
-    vector<complex<double> > y(n);
 
-    // conjugate
-    for (int i = 0; i < n; ++i) {
-        y[i] = conj(x[i]);
-    }
-    // Forward FFT
-    y = fftRecursive(y);
-
-    // conjugate
-    for (int i = 0; i < n; ++i) {
-        y[i] = conj(y[i]);
-    }
-    for (int i = 0; i < n; ++i) {
-        double o = 1.0/n;
-        y[i].real(y[i].real() * o);
-        y[i].imag(y[i].imag() * o);
-    }
-    return y;
-}
-
-uint32_t FFTPrincetonConverted::reverseInt(uint32_t x)
+uint32_t reverseInt(uint32_t x)
 {
     x = ((x >> 1) & 0x55555555u) | ((x & 0x55555555u) << 1);
     x = ((x >> 2) & 0x33333333u) | ((x & 0x33333333u) << 2);

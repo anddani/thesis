@@ -3,6 +3,7 @@ package com.example.algo.benchmarkapp;
 import android.os.SystemClock;
 
 import com.example.algo.benchmarkapp.algorithms.Complex;
+import com.example.algo.benchmarkapp.algorithms.Constants;
 import com.example.algo.benchmarkapp.algorithms.FFTColumbiaIterative;
 import com.example.algo.benchmarkapp.algorithms.FFTPrincetonIterative;
 import com.example.algo.benchmarkapp.algorithms.FFTPrincetonRecursive;
@@ -302,8 +303,8 @@ public class Benchmark {
         return stop;
     }
 
-    public long JNIBenchmarkParams() {
-        double[] z = combineComplex(re, im);
+    public long JNIBenchmarkParams(int n) {
+        double[] z = combineComplex(randomInput(n/2), new double[n/2]);
         long start = SystemClock.elapsedRealtimeNanos();
 
         jni_params(z);
@@ -312,8 +313,8 @@ public class Benchmark {
         return stop;
     }
 
-    public long JNIBenchmarkVectorConversion() {
-        double[] z = combineComplex(re, im);
+    public long JNIBenchmarkVectorConversion(int n) {
+        double[] z = combineComplex(randomInput(n/2), new double[n/2]);
         long start = SystemClock.elapsedRealtimeNanos();
 
         jni_vector_conversion(z);
@@ -322,14 +323,14 @@ public class Benchmark {
         return stop;
     }
 
-    public long JNIBenchmarkColumbia() {
+    public long JNIBenchmarkColumbia(int n) {
         // Let first half be filled with real and second half with imaginary
-        double[] z = new double[re.length*2];
-        for (int i = 0; i < re.length; i++) {
-            z[i] = re[i];
-            z[i+re.length] = im[i];
+        double[] tempRe = randomInput(n/2);
+        double[] z = new double[tempRe.length*2];
+        for (int i = 0; i < tempRe.length; i++) {
+            z[i] = tempRe[i];
         }
-        FFTColumbiaIterative fftci = new FFTColumbiaIterative(re.length);
+        FFTColumbiaIterative fftci = new FFTColumbiaIterative(Constants.nextPowerOfTwo(tempRe.length));
 
         long start = SystemClock.elapsedRealtimeNanos();
 
@@ -399,8 +400,6 @@ public class Benchmark {
     public native double[] fft_princeton_iterative(double[] arr);
     public native double[] fft_princeton_recursive(double[] arr);
     public native double[] fft_columbia_iterative(double[] arr, double[] cos, double[] sin);
-//    public native double[] fft_columbia_iterative_optimized(double[] arr);
-
 
     public native void fft_kiss_init(int N);
     public native double[] fft_kiss(double[] arr);

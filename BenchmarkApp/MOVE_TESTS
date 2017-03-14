@@ -134,7 +134,7 @@ function convert_test_results {
     done <$1
 }
 
-function to_latex {
+function fft_to_latex {
     CURRENT_DIR=$1
     CONTENT=$(ls $CURRENT_DIR)
     COMMON_TABLES=""
@@ -144,6 +144,7 @@ function to_latex {
     # For each file in folder
     for c in $CONTENT ; do
 
+        # Skip optimized files
         if [[ "$c" =~ optimi ]] ; then
             continue
         fi
@@ -153,6 +154,7 @@ function to_latex {
         # If CURRENT_FILE is a file
         if [ -f "$CURRENT_FILE" ] ; then
             LANGUAGE=$(echo $c | tr '_' ' ' | awk '{print $1}')
+            echo $LANGUAGE
             TEX_COMMON_TABLE="$CURRENT_DIR/${LANGUAGE}_common_table.tex"
 
             tex_table $CURRENT_FILE
@@ -171,6 +173,7 @@ function to_latex {
             cat tempfil > $TEX_COMMON_TABLE
         fi
     done
+
     rm tempfil
 
     # Format common tables
@@ -220,8 +223,8 @@ elif [ "$CONVERT" == "1" ] ; then
 
     convert_test_results $LATEST
 
-    to_latex $RESULTS_PATH/FFT
-    to_latex $RESULTS_PATH/JNI
+    # fft_to_latex $RESULTS_PATH/FFT
+    # jni_to_latex $RESULTS_PATH/JNI
 
 else
     echo "-- moving data from phone to $DATA_PATH/$TIME"

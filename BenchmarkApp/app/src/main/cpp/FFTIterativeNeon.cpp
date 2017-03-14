@@ -1,8 +1,7 @@
 #include "FFTIterativeNeon.h"
-#include <android/log.h>
 #define LOGTAG "FFTLIB"
 
-unsigned int reverse(register unsigned int x)
+unsigned int reverse(int x)
 {
     x = ((x >> 1) & 0x55555555u) | ((x & 0x55555555u) << 1);
     x = ((x >> 2) & 0x33333333u) | ((x & 0x33333333u) << 2);
@@ -90,7 +89,9 @@ void fftTerminate(struct objFFT* myFFT)
 }
 
 
-void fftIterativeNeonInit(struct objFFT* myFFT, struct ParametersStruct* myParameters, unsigned int size) {
+void fftIterativeNeonInit(struct objFFT* myFFT,
+                          struct ParametersStruct* myParameters,
+                          unsigned int size) {
     // Temporary variable
     unsigned int tmpFrameSize;
 
@@ -278,7 +279,6 @@ void fftIterativeNeonInit(struct objFFT* myFFT, struct ParametersStruct* myParam
                     // Check if a is a multiple of 4
                     if ((a / 4.0f) == floorf(a/4.0f))
                     {
-
                         myFFT->simdARealGroups[simdAIndexGroup] = &myFFT->workingArrayReal[a];
                         myFFT->simdAImagGroups[simdAIndexGroup] = &myFFT->workingArrayImag[a];
                         myFFT->simdBRealGroups[simdBIndexGroup] = &myFFT->workingArrayReal[b];
@@ -289,7 +289,6 @@ void fftIterativeNeonInit(struct objFFT* myFFT, struct ParametersStruct* myParam
                         simdAIndexGroup++;
                         simdBIndexGroup++;
                         simdRIndexGroup++;
-
                     }
 
                 }
@@ -318,7 +317,11 @@ void fftIterativeNeonInit(struct objFFT* myFFT, struct ParametersStruct* myParam
 
 }
 
-void fftIterativeNeon(struct objFFT* myFFT, float* sourceArrayReal, float* sourceArrayImag, float* destArrayReal, float* destArrayImag) {
+void fftIterativeNeon(struct objFFT* myFFT,
+                      float* sourceArrayReal,
+                      float* sourceArrayImag,
+                      float* destArrayReal,
+                      float* destArrayImag) {
 
     // Array index
     unsigned int indexGroup;
@@ -533,7 +536,6 @@ void fftIterativeNeon(struct objFFT* myFFT, float* sourceArrayReal, float* sourc
     // Reorder result (it is actually in reverse bit order) and copy to destination array
     for (indexRevBitOrder = 0; indexRevBitOrder < myFFT->FFT_SIZE; indexRevBitOrder++)
     {
-
         destArrayReal[indexRevBitOrder] = myFFT->workingArrayReal[myFFT->revBitOrderArray[indexRevBitOrder]];
         destArrayImag[indexRevBitOrder] = myFFT->workingArrayImag[myFFT->revBitOrderArray[indexRevBitOrder]];
 

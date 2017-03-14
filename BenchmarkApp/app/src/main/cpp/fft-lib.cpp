@@ -14,7 +14,7 @@ struct objFFT objfft;
 struct ParametersStruct parametersStruct;
 kiss_fft_cfg fwd;
 
-jdoubleArray fftPrincetonIterative(JNIEnv* env, jobject obj, jdoubleArray arr) {
+jdoubleArray fftPI(JNIEnv* env, jobject obj, jdoubleArray arr) {
     jsize size = (*env).GetArrayLength(arr);
     jdouble* elements = (*env).GetDoubleArrayElements(arr, 0);
 
@@ -23,8 +23,7 @@ jdoubleArray fftPrincetonIterative(JNIEnv* env, jobject obj, jdoubleArray arr) {
         x.push_back(std::complex<double>(elements[i], elements[i+1]));
     }
 
-    FFTPrincetonConverted fpc = FFTPrincetonConverted();
-    int ret = fpc.fftIterative(x); // Run FFT
+    int ret = fftPrincetonIterative(x); // Run FFT
     if (ret == -1) {
         __android_log_print(ANDROID_LOG_INFO, LOGTAG, "-- Size not power of 2");
     }
@@ -40,7 +39,7 @@ jdoubleArray fftPrincetonIterative(JNIEnv* env, jobject obj, jdoubleArray arr) {
     return arr;
 }
 
-jdoubleArray fftPrincetonRecursive(JNIEnv* env, jobject obj, jdoubleArray arr) {
+jdoubleArray fftPR(JNIEnv* env, jobject obj, jdoubleArray arr) {
     jsize size = (*env).GetArrayLength(arr);
     jdouble* elements = (*env).GetDoubleArrayElements(arr, 0);
 
@@ -49,8 +48,7 @@ jdoubleArray fftPrincetonRecursive(JNIEnv* env, jobject obj, jdoubleArray arr) {
         x.push_back(std::complex<double>(elements[i], elements[i+1]));
     }
 
-    FFTPrincetonConverted fpc = FFTPrincetonConverted();
-    x = fpc.fftRecursive(x);
+    x = fftPrincetonRecursive(x);
 
     // place in return array
     // [x[0].real, x[0].imag, ... x[n-1].real, x[n-1].imag]
@@ -212,8 +210,8 @@ static JNINativeMethod s_methods[] {
         {"jni_columbia",                      "([D[D[D)[D", (void*)jniColumbia},
 
         // Converted FFTs
-        {"fft_princeton_iterative",           "([D)[D",     (void*)fftPrincetonIterative},
-        {"fft_princeton_recursive",           "([D)[D",     (void*)fftPrincetonRecursive},
+        {"fft_princeton_iterative",           "([D)[D",     (void*)fftPI},
+        {"fft_princeton_recursive",           "([D)[D",     (void*)fftPR},
         {"fft_columbia_iterative",            "([D[D[D)[D", (void*)fftColumbiaIterative},
         // Kiss FFT
         {"fft_kiss_init",                     "(I)V",       (void*)fftKissInit},

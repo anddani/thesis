@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
                 if (dataSizeText.isEmpty()) {
                     dataSizeText = DEFAULT_N;
                 }
-                int data = nextPowerOfTwo(Integer.parseInt(dataSizeText));
+                int data = Constants.nextPowerOfTwo(Integer.parseInt(dataSizeText));
                 int blockIndex = data == 0 ? 0 : 32 - Integer.numberOfLeadingZeros(data-1) - 4;
 
                 // Delete output file each run
@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
                 // Clear screen between tests
                 logTextView.setText("");
 
-                BenchmarkMessage message = new BenchmarkMessage(Constants.BENCHMARK_ITER, alg, blockIndex);
+                BenchmarkMessage message = new BenchmarkMessage(Constants.BENCHMARK_ITER, alg, blockIndex, Constants.ALG_TYPE);
                 mTaskHandler.obtainMessage(0, message).sendToTarget();
             }
         });
@@ -120,9 +120,18 @@ public class MainActivity extends AppCompatActivity {
      * for all block sizes and all algorithms
      */
     private void startBenchmarks() {
+        // Run JNI Tests
+        for (int test = 0; test < Constants.NUM_JNI_TESTS; test++) {
+            for (int size = 10; size <= 1000; size+=10) {
+                BenchmarkMessage message = new BenchmarkMessage(Constants.BENCHMARK_ITER, test, size, Constants.JNI_TYPE);
+                mTaskHandler.obtainMessage(0, message).sendToTarget();
+            }
+        }
+
+        // Run Algorithm Tests
         for (int alg = 0; alg < Constants.NUM_ALGORITHMS; alg++) {
             for (int sizeId = 0; sizeId < Constants.BLOCK_SIZES.length; sizeId++) {
-                BenchmarkMessage message = new BenchmarkMessage(Constants.BENCHMARK_ITER, alg, sizeId);
+                BenchmarkMessage message = new BenchmarkMessage(Constants.BENCHMARK_ITER, alg, sizeId, Constants.ALG_TYPE);
                 mTaskHandler.obtainMessage(0, message).sendToTarget();
             }
         }
@@ -156,17 +165,6 @@ public class MainActivity extends AppCompatActivity {
 
     private int getScrollAmount(TextView tv) {
         return tv.getLayout().getLineTop(tv.getLineCount()) - tv.getHeight();
-    }
-
-    private int nextPowerOfTwo(int v) {
-        v--;
-        v |= v >> 1;
-        v |= v >> 2;
-        v |= v >> 4;
-        v |= v >> 8;
-        v |= v >> 16;
-        v++;
-        return v;
     }
 
     private static final int[] buttonIds = {
