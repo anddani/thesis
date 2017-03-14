@@ -12,6 +12,7 @@
 
 struct objFFT objfft;
 struct ParametersStruct parametersStruct;
+kiss_fft_cfg fwd;
 
 jdoubleArray fftPrincetonIterative(JNIEnv* env, jobject obj, jdoubleArray arr) {
     jsize size = (*env).GetArrayLength(arr);
@@ -64,43 +65,22 @@ jdoubleArray fftPrincetonRecursive(JNIEnv* env, jobject obj, jdoubleArray arr) {
 
 jdoubleArray fftColumbiaIterative(JNIEnv* env, jobject obj, jdoubleArray arr, jdoubleArray cos, jdoubleArray sin) {
     jsize size = (*env).GetArrayLength(arr);
-    jdouble* elements = (*env).GetDoubleArrayElements(arr, 0);
-    jdouble* sin_v = (*env).GetDoubleArrayElements(sin, 0);
-    jdouble* cos_v = (*env).GetDoubleArrayElements(cos, 0);
+    jdouble* elements = (jdouble*)(*env).GetPrimitiveArrayCritical(arr, 0);
+    jdouble* sin_v = (jdouble*)(*env).GetPrimitiveArrayCritical(sin, 0);
+    jdouble* cos_v = (jdouble*)(*env).GetPrimitiveArrayCritical(cos, 0);
     int N = size/2;
-
-//    FFTColumbiaConverted fcc = FFTColumbiaConverted(N);
-//    fcc.fftIterative(elements, elements+N); // Run FFT
-
-//    // Timer start
-//    clock_t start = clock(), diff;
 
     fftCI(elements, elements+N, N, cos_v, sin_v);
 
-//    // Timer end
-//    diff = clock() - start;
-//
-//    int msec = diff * 1000 / CLOCKS_PER_SEC;
-//    __android_log_print(ANDROID_LOG_INFO, LOGTAG, "-- timer for fft columbia iter: %i, size: %i", msec, size/2);
-
-
-    (*env).ReleaseDoubleArrayElements(arr, elements, 0);
+    (*env).ReleasePrimitiveArrayCritical(arr, elements, 0);
+    (*env).ReleasePrimitiveArrayCritical(sin, sin_v, 0);
+    (*env).ReleasePrimitiveArrayCritical(cos, cos_v, 0);
     return arr;
 }
 
-//jdoubleArray fftCIO(JNIEnv* env, jobject obj, jdoubleArray arr) {
-//    jsize size = (*env).GetArrayLength(arr);
-//    jdouble* elements = (*env).GetDoubleArrayElements(arr, 0);
-//    int N = size/2;
-////    fftColumbiaIterativeOptimized(elements, elements+N, N); // Run FFT
-////    fftRecursiveNeon()
-//    (*env).ReleaseDoubleArrayElements(arr, elements, 0);
-//    return arr;
-//}
-
 jfloatArray fftNeon(JNIEnv* env, jobject obj, jfloatArray arr) {
     jsize size = (*env).GetArrayLength(arr);
-    jfloat* elements = (*env).GetFloatArrayElements(arr, 0);
+    jfloat* elements = (jfloat*)(*env).GetPrimitiveArrayCritical(arr, 0);
     int N = size/2;
 
     cd* in = (cd*)malloc(N * sizeof(cd));
@@ -128,13 +108,12 @@ jfloatArray fftNeon(JNIEnv* env, jobject obj, jfloatArray arr) {
     free(in);
     free(out);
 
-    (*env).ReleaseFloatArrayElements(arr, elements, 0);
+    (*env).ReleasePrimitiveArrayCritical(arr, elements, 0);
     return arr;
 }
 
-// TODO
 void fftKissInit(JNIEnv* env, jobject, jint half) {
-
+    fwd = kiss_fft_alloc(half, 0, 0, 0);
 }
 
 jdoubleArray fftKiss(JNIEnv* env, jobject, jdoubleArray arr) {
@@ -144,9 +123,6 @@ jdoubleArray fftKiss(JNIEnv* env, jobject, jdoubleArray arr) {
     int half = size/2;
     std::vector<kiss_fft_cpx> in(half);
     std::vector<kiss_fft_cpx> out(half);
-
-    // Allocate memory
-    kiss_fft_cfg fwd = kiss_fft_alloc(half, 0, 0, 0);
 
     for (int i = 0; i < size; i+=2) {
         in[i/2].r = elements[i];
@@ -162,16 +138,13 @@ jdoubleArray fftKiss(JNIEnv* env, jobject, jdoubleArray arr) {
         elements[i+1] = out[i/2].i;
     }
 
-    kiss_fft_free(fwd);
-
     // Return a double[]
     (*env).ReleaseDoubleArrayElements(arr, elements, 0);
     return arr;
 }
 
-// TODO
 void fftKissDelete(JNIEnv* env, jobject) {
-
+    kiss_fft_free(fwd);
 }
 
 void jniEmpty(JNIEnv*, jobject) {
@@ -183,8 +156,20 @@ jdoubleArray jniParams(JNIEnv*, jobject, jdoubleArray arr) {
 }
 
 jdoubleArray jniVectorConversion(JNIEnv* env, jobject, jdoubleArray arr) {
-    jdouble* elements = (*env).GetDoubleArrayElements(arr, 0);
-    (*env).ReleaseDoubleArrayElements(arr, elements, 0);
+    jdouble* elements = (jdouble*)(*env).GetPrimitiveArrayCritical(arr, 0);
+    (*env).ReleasePrimitiveArrayCritical(arr, elements, 0);
+    return arr;
+}
+jdoubleArray jniColumbia(JNIEnv* env, jobject obj, jdoubleArray arr, jdoubleArray cos, jdoubleArray sin) {
+    jsize size = (*env).GetArrayLength(arr);
+    jdouble* elements = (jdouble*)(*env).GetPrimitiveArrayCritical(arr, 0);
+    jdouble* sin_v = (jdouble*)(*env).GetPrimitiveArrayCritical(sin, 0);
+    jdouble* cos_v = (jdouble*)(*env).GetPrimitiveArrayCritical(cos, 0);
+    int N = size/2;
+
+    (*env).ReleasePrimitiveArrayCritical(arr, elements, 0);
+    (*env).ReleasePrimitiveArrayCritical(sin, sin_v, 0);
+    (*env).ReleasePrimitiveArrayCritical(cos, cos_v, 0);
     return arr;
 }
 
@@ -194,7 +179,7 @@ void initIterativeNeon(JNIEnv*, jobject, jint size) {
 
 jfloatArray runIterativeNeon(JNIEnv* env, jobject, jfloatArray arr) {
     jsize size = (*env).GetArrayLength(arr);
-    jfloat* elements = (*env).GetFloatArrayElements(arr, 0);
+    jfloat* elements = (jfloat*)(*env).GetPrimitiveArrayCritical(arr, 0);
     int N = size/2;
 
     float* sourceReal = (float*)malloc(N * sizeof(float*));
@@ -211,27 +196,36 @@ jfloatArray runIterativeNeon(JNIEnv* env, jobject, jfloatArray arr) {
     free(sourceReal);
     free(sourceImag);
 
-    (*env).ReleaseFloatArrayElements(arr, elements, 0);
+    (*env).ReleasePrimitiveArrayCritical(arr, elements, 0);
     return arr;
 }
 
+void deleteIterativeNeon(JNIEnv*, jobject) {
+    fftTerminate(&objfft);
+}
+
 static JNINativeMethod s_methods[] {
+        // JNI Tests
+        {"jni_empty",                         "()V",        (void*)jniEmpty},
+        {"jni_params",                        "([D)[D",     (void*)jniParams},
+        {"jni_vector_conversion",             "([D)[D",     (void*)jniVectorConversion},
+        {"jni_columbia",                      "([D[D[D)[D", (void*)jniColumbia},
+
+        // Converted FFTs
         {"fft_princeton_iterative",           "([D)[D",     (void*)fftPrincetonIterative},
         {"fft_princeton_recursive",           "([D)[D",     (void*)fftPrincetonRecursive},
         {"fft_columbia_iterative",            "([D[D[D)[D", (void*)fftColumbiaIterative},
-
+        // Kiss FFT
         {"fft_kiss_init",                     "(I)V",       (void*)fftKissInit},
         {"fft_kiss",                          "([D)[D",     (void*)fftKiss},
         {"fft_kiss_delete",                   "()V",        (void*)fftKissDelete},
 
-        {"jni_empty",                         "()V",        (void*)jniEmpty},
-        {"jni_params",                        "([D)[D",     (void*)jniParams},
-        {"jni_vector_conversion",             "([D)[D",     (void*)jniVectorConversion},
-
-        {"fft_columbia_neon",                 "([F)[F",     (void*)fftNeon},
-
+        // Recursive NEON
+        {"fft_recursive_neon",                 "([F)[F",    (void*)fftNeon},
+        // Iterative NEON
         {"init_iterative_neon",               "(I)V",       (void*)initIterativeNeon},
         {"run_iterative_neon",                "([F)[F",     (void*)runIterativeNeon},
+        {"delete_iterative_neon",             "()V",        (void*)deleteIterativeNeon},
 };
 
 jint JNI_OnLoad(JavaVM* vm, void*) {

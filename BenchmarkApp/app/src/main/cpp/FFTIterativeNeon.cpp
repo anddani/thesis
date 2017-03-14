@@ -1,4 +1,16 @@
 #include "FFTIterativeNeon.h"
+#include <android/log.h>
+#define LOGTAG "FFTLIB"
+
+unsigned int reverse(register unsigned int x)
+{
+    x = ((x >> 1) & 0x55555555u) | ((x & 0x55555555u) << 1);
+    x = ((x >> 2) & 0x33333333u) | ((x & 0x33333333u) << 2);
+    x = ((x >> 4) & 0x0f0f0f0fu) | ((x & 0x0f0f0f0fu) << 4);
+    x = ((x >> 8) & 0x00ff00ffu) | ((x & 0x00ff00ffu) << 8);
+    x = ((x >> 16) & 0xffffu) | ((x & 0xffffu) << 16);
+    return x;
+}
 
 void* newTable1D(int len, int sizeOneElement)
 {
@@ -48,6 +60,35 @@ void deleteTable1D(void* tablePtr)
     free(allocatedMemory);
 
 }
+
+void fftTerminate(struct objFFT* myFFT)
+{
+
+    // Free memory
+    deleteTable1D((void*) myFFT->WnReal);
+    deleteTable1D((void*) myFFT->WnImag);
+    deleteTable1D((void*) myFFT->simdWnReal);
+    deleteTable1D((void*) myFFT->simdWnImag);
+    deleteTable1D((void*) myFFT->workingArrayReal);
+    deleteTable1D((void*) myFFT->workingArrayImag);
+    deleteTable1D((void*) myFFT->fftTwiceReal);
+    deleteTable1D((void*) myFFT->fftTwiceRealFlipped);
+    deleteTable1D((void*) myFFT->fftTwiceImag);
+    deleteTable1D((void*) myFFT->fftTwiceImagFlipped);
+    deleteTable1D((void*) myFFT->emptyArray);
+    deleteTable1D((void*) myFFT->trashArray);
+    deleteTable1D((void*) myFFT->revBitOrderArray);
+    deleteTable1D((void*) myFFT->simdARealGroups);
+    deleteTable1D((void*) myFFT->simdAImagGroups);
+    deleteTable1D((void*) myFFT->simdBRealGroups);
+    deleteTable1D((void*) myFFT->simdBImagGroups);
+    deleteTable1D((void*) myFFT->simdRRealGroups);
+    deleteTable1D((void*) myFFT->simdRImagGroups);
+    deleteTable1D((void*) myFFT->simdAIndividual);
+    deleteTable1D((void*) myFFT->simdBIndividual);
+
+}
+
 
 void fftIterativeNeonInit(struct objFFT* myFFT, struct ParametersStruct* myParameters, unsigned int size) {
     // Temporary variable
@@ -169,29 +210,11 @@ void fftIterativeNeonInit(struct objFFT* myFFT, struct ParametersStruct* myParam
     // | Step C: Generate an array with reverse-bit indexes                |
     // +-------------------------------------------------------------------+
 
+    int shift = 1 + __builtin_clz(myFFT->FFT_SIZE);
     // Generate an array of reverse bit order
     for (indexRevBitOrder = 0; indexRevBitOrder < myFFT->FFT_SIZE; indexRevBitOrder++)
     {
-
-        myFFT->revBitOrderArray[indexRevBitOrder] = (indexRevBitOrder & 0x0001) << 15;
-        myFFT->revBitOrderArray[indexRevBitOrder] += (indexRevBitOrder & 0x0002) << 13;
-        myFFT->revBitOrderArray[indexRevBitOrder] += (indexRevBitOrder & 0x0004) << 11;
-        myFFT->revBitOrderArray[indexRevBitOrder] += (indexRevBitOrder & 0x0008) << 9;
-        myFFT->revBitOrderArray[indexRevBitOrder] += (indexRevBitOrder & 0x0010) << 7;
-        myFFT->revBitOrderArray[indexRevBitOrder] += (indexRevBitOrder & 0x0020) << 5;
-        myFFT->revBitOrderArray[indexRevBitOrder] += (indexRevBitOrder & 0x0040) << 3;
-        myFFT->revBitOrderArray[indexRevBitOrder] += (indexRevBitOrder & 0x0080) << 1;
-        myFFT->revBitOrderArray[indexRevBitOrder] += (indexRevBitOrder & 0x0100) >> 1;
-        myFFT->revBitOrderArray[indexRevBitOrder] += (indexRevBitOrder & 0x0200) >> 3;
-        myFFT->revBitOrderArray[indexRevBitOrder] += (indexRevBitOrder & 0x0400) >> 5;
-        myFFT->revBitOrderArray[indexRevBitOrder] += (indexRevBitOrder & 0x0800) >> 7;
-        myFFT->revBitOrderArray[indexRevBitOrder] += (indexRevBitOrder & 0x1000) >> 9;
-        myFFT->revBitOrderArray[indexRevBitOrder] += (indexRevBitOrder & 0x2000) >> 11;
-        myFFT->revBitOrderArray[indexRevBitOrder] += (indexRevBitOrder & 0x4000) >> 13;
-        myFFT->revBitOrderArray[indexRevBitOrder] += (indexRevBitOrder & 0x8000) >> 15;
-
-        myFFT->revBitOrderArray[indexRevBitOrder] >>= (16 - myFFT->FFT_NBLEVELS);
-
+        myFFT->revBitOrderArray[indexRevBitOrder] = reverse(indexRevBitOrder) >> shift;
     }
 
     // +-------------------------------------------------------------------+

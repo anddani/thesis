@@ -68,9 +68,6 @@ public class MyBenchmarkHandler extends Handler {
                     case FFT_CPP_ITERATIVE_COLUMBIA:
                         time = bm.FFTCppIterativeColumbia();
                         break;
-                    case FFT_CPP_ITERATIVE_COLUMBIA_OPTIMIZED:
-                        time = bm.FFTCppIterativeColumbiaOptimized();
-                        break;
                     case FFT_CPP_KISS:
                         time = bm.FFTCppKiss();
                         break;
@@ -85,6 +82,13 @@ public class MyBenchmarkHandler extends Handler {
                     case JNI_VECTOR_CONVERSION:
                         time = bm.JNIBenchmarkVectorConversion();
                         jniTests = true;
+                        break;
+                    case JNI_COLUMBIA:
+                        time = bm.JNIBenchmarkColumbia();
+                        jniTests = true;
+                        break;
+                    case NEON_CPP_RECURSIVE:
+                        time = bm.FFTCppRecursiveNeon();
                         break;
                     case NEON_CPP_ITERATIVE:
                         time = bm.FFTCppIterativeNeon();

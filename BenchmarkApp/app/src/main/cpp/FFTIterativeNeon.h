@@ -415,5 +415,6 @@ struct objFFT
 
 void fftIterativeNeonInit(struct objFFT* myFFT, struct ParametersStruct* myParameters, unsigned int size);
 void fftIterativeNeon(struct objFFT* myFFT, float* sourceArrayReal, float* sourceArrayImag, float* destArrayReal, float* destArrayImag);
+void fftTerminate(struct objFFT* myFFT);
 
 #endif // BENCHMARKAPP_FFTITERATIVENEON_H

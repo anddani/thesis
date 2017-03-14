@@ -15,7 +15,7 @@ import java.util.Random;
 public class Benchmark {
 
     private static final boolean DEBUG = false;
-    private static final double EPSILON = 0.0001;
+    private static final double EPSILON = 0.001;
     private Random rand;
     private double[] re;
     private double[] im;
@@ -78,10 +78,17 @@ public class Benchmark {
 
     private void checkCorrectness(Complex[] x, String message) {
         if (!isCorrect(x)) {
-            System.out.println(message);
-            printComplex(x);
+            System.out.println(x.length + " " + message);
+            for (int i = 0; i < 10; i++) {
+                System.out.println(x[i]);
+            }
             System.out.println("CORRECT: ");
-            printComplex(correctOut);
+            for (int i = 0; i < 10; i++) {
+                System.out.println(correctOut[i]);
+            }
+//            printComplex(x);
+//            System.out.println("CORRECT: ");
+//            printComplex(correctOut);
         }
     }
 
@@ -100,10 +107,10 @@ public class Benchmark {
     }
 
     public long FFTJavaRecursivePrinceton() {
-        long start = SystemClock.elapsedRealtimeNanos();
-
         // Initialize data
         Complex[] x = toComplex(re, im);
+
+        long start = SystemClock.elapsedRealtimeNanos();
 
         Complex[] result = FFTPrincetonRecursive.fft(x);
 
@@ -114,15 +121,15 @@ public class Benchmark {
             printComplex(result);
         }
 
-        checkCorrectness(x, "FFT JAVA REC PRINCETON GIVES INCORRECT OUTPUT");
+        checkCorrectness(result, "FFT JAVA REC PRINCETON GIVES INCORRECT OUTPUT");
         return stop;
     }
 
     public long FFTJavaIterativePrinceton() {
-        long start = SystemClock.elapsedRealtimeNanos();
-
         // Initialize data
         Complex[] x = toComplex(re, im);
+
+        long start = SystemClock.elapsedRealtimeNanos();
 
         FFTPrincetonIterative.fft(x);
 
@@ -138,16 +145,16 @@ public class Benchmark {
     }
 
     public long FFTCppIterativePrinceton() {
-        long start = SystemClock.elapsedRealtimeNanos();
-
         // Merge real and imaginary numbers
         double[] z = combineComplex(re, im);
 
+        long start = SystemClock.elapsedRealtimeNanos();
+
         double[] nativeResult = fft_princeton_iterative(z);
 
-        Complex[] x = toComplex(nativeResult);
-
         long stop = SystemClock.elapsedRealtimeNanos() - start;
+
+        Complex[] x = toComplex(nativeResult);
 
         if (DEBUG) {
             System.out.println("************* FFT CPP ITER PRINCETON ************");
@@ -159,17 +166,19 @@ public class Benchmark {
     }
 
     public long FFTCppRecursivePrinceton() {
-        long start = SystemClock.elapsedRealtimeNanos();
 
         // Merge real and imaginary numbers
         double[] z = combineComplex(re, im);
 
+        long start = SystemClock.elapsedRealtimeNanos();
+
         double[] nativeResult = fft_princeton_recursive(z);
+
+        long stop = SystemClock.elapsedRealtimeNanos() - start;
 
         // Create Java complex numbers
         Complex[] x = toComplex(nativeResult);
 
-        long stop = SystemClock.elapsedRealtimeNanos() - start;
 
         if (DEBUG) {
             System.out.println("************* FFT CPP REC PRINCETON ************");
@@ -192,9 +201,10 @@ public class Benchmark {
 
         fftci.fft(tempRe, tempIm);
 
+        long stop = SystemClock.elapsedRealtimeNanos() - start;
+
         Complex[] x = toComplex(tempRe, tempIm);
 
-        long stop = SystemClock.elapsedRealtimeNanos() - start;
 
         if (DEBUG) {
             System.out.println("************* FFT JAVA ITER COLUMBIA ************");
@@ -220,12 +230,13 @@ public class Benchmark {
 
         double[] nativeResult = fft_columbia_iterative(z, fftci.cos, fftci.sin);
 
+        long stop = SystemClock.elapsedRealtimeNanos() - start;
+
         Complex[] x = new Complex[re.length];
         for (int i = 0; i < re.length; i++) {
             x[i] = new Complex(nativeResult[i], nativeResult[i+re.length]);
         }
 
-        long stop = SystemClock.elapsedRealtimeNanos() - start;
 
         if (DEBUG) {
             System.out.println("************* FFT JAVA ITER COLUMBIA ************");
@@ -236,43 +247,23 @@ public class Benchmark {
         return stop;
     }
 
-    public long FFTCppIterativeColumbiaOptimized() {
-        float[] z = new float[re.length*2];
-        for (int i = 0; i < re.length; i++) {
-            z[i] = (float)re[i];
-        }
-
-        long start = SystemClock.elapsedRealtimeNanos();
-
-        float[] nativeResult = fft_columbia_neon(z);
-
-        Complex[] x = new Complex[re.length];
-        for (int i = 0; i < re.length; i++) {
-            x[i] = new Complex(nativeResult[i], nativeResult[i+re.length]);
-        }
-
-        long stop = SystemClock.elapsedRealtimeNanos() - start;
-
-        if (DEBUG) {
-            System.out.println("************* FFT CPP ITER COLUMBIA OPTIMIZED ************");
-            printComplex(x);
-        }
-
-        checkCorrectness(x, "FFT JAVA ITER COLUMBIA GIVES INCORRECT OUTPUT");
-        return stop;
-    }
-
     public long FFTCppKiss() {
-        long start = SystemClock.elapsedRealtimeNanos();
 
         // Merge real and imaginary numbers
         double[] z = combineComplex(re, im);
 
+        fft_kiss_init(z.length/2);
+
+        long start = SystemClock.elapsedRealtimeNanos();
+
         double[] nativeResult = fft_kiss(z);
+
+        long stop = SystemClock.elapsedRealtimeNanos() - start;
+
+        fft_kiss_delete();
 
         Complex[] x = toComplex(nativeResult);
 
-        long stop = SystemClock.elapsedRealtimeNanos() - start;
 
         if (DEBUG) {
             System.out.println("************* FFT CPP ITER KISS ************");
@@ -331,6 +322,50 @@ public class Benchmark {
         return stop;
     }
 
+    public long JNIBenchmarkColumbia() {
+        // Let first half be filled with real and second half with imaginary
+        double[] z = new double[re.length*2];
+        for (int i = 0; i < re.length; i++) {
+            z[i] = re[i];
+            z[i+re.length] = im[i];
+        }
+        FFTColumbiaIterative fftci = new FFTColumbiaIterative(re.length);
+
+        long start = SystemClock.elapsedRealtimeNanos();
+
+        double[] nativeResult = jni_columbia(z, fftci.cos, fftci.sin);
+
+        long stop = SystemClock.elapsedRealtimeNanos() - start;
+        return stop;
+    }
+
+    public long FFTCppRecursiveNeon() {
+        float[] z = new float[re.length*2];
+        for (int i = 0; i < re.length; i++) {
+            z[i] = (float)re[i];
+        }
+
+        long start = SystemClock.elapsedRealtimeNanos();
+
+        float[] nativeResult = fft_recursive_neon(z);
+
+        long stop = SystemClock.elapsedRealtimeNanos() - start;
+
+        Complex[] x = new Complex[re.length];
+        for (int i = 0; i < re.length; i++) {
+            x[i] = new Complex(nativeResult[i], nativeResult[i+re.length]);
+        }
+
+
+        if (DEBUG) {
+            System.out.println("************* FFT CPP RECURSIVE NEON ************");
+            printComplex(x);
+        }
+
+        checkCorrectness(x, "FFT CPP RECURSIVE NEON");
+        return stop;
+    }
+
     public long FFTCppIterativeNeon() {
         float[] z = new float[re.length*2];
         for (int i = 0; i < re.length; i++) {
@@ -343,12 +378,14 @@ public class Benchmark {
 
         float[] nativeResult = run_iterative_neon(z);
 
+        long stop = SystemClock.elapsedRealtimeNanos() - start;
+
         Complex[] x = new Complex[re.length];
         for (int i = 0; i < re.length; i++) {
             x[i] = new Complex(nativeResult[i], nativeResult[i+re.length]);
         }
 
-        long stop = SystemClock.elapsedRealtimeNanos() - start;
+        delete_iterative_neon();
 
         if (DEBUG) {
             System.out.println("************* FFT CPP ITER COLUMBIA OPTIMIZED ************");
@@ -363,14 +400,22 @@ public class Benchmark {
     public native double[] fft_princeton_recursive(double[] arr);
     public native double[] fft_columbia_iterative(double[] arr, double[] cos, double[] sin);
 //    public native double[] fft_columbia_iterative_optimized(double[] arr);
-    public native float[] fft_columbia_neon(float[] arr);
+
+
+    public native void fft_kiss_init(int N);
     public native double[] fft_kiss(double[] arr);
+    public native void fft_kiss_delete();
+
     public native void jni_empty();
     public native double[] jni_params(double[] arr);
     public native double[] jni_vector_conversion(double[] arr);
+    public native double[] jni_columbia(double[] arr, double[] cos, double[] sin);
 
-    public native void init_iterative_neon(int N);
+    public native float[] fft_recursive_neon(float[] arr);
+
+    public native void init_iterative_neon(int half);
     public native float[] run_iterative_neon(float[] arr);
+    public native void delete_iterative_neon();
 
     static {
         System.loadLibrary("fft-lib");
