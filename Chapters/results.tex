@@ -1,28 +1,33 @@
-\textit{Results from the experiments that were considered relevant are presented here.}
+\textit{Results from the JNI tests, FFT libraries and NEON optimizations are presented here.}
 
 %%==================================================================
 %% JNI-Tests
 %%==================================================================
 \section{JNI}
+The results of the tests that measure the JNI overhead can be found in Table~\ref{tab:jni:common}. These tests are presented with block sizes defined in chapter \ref{ch:method} - Method.
 
-\begin{table}
+\begin{table}[H]
     \centering
     \label{tab:jni:common}
     \caption{Results from the JNI tests, Time (ns)}
     \input{Data/results/JNI/common_table_JNI.tex}
 \end{table}
 
+Execution time and confidence intervals are given in nanoseconds and are rounded to four decimal points. The number after the $\pm$ sign is a two sided confidence interval with a confidence level of $95\%$.
+
+
 
 %%==================================================================
 %% FFT-Tests
 %%==================================================================
 \section{FFT Libraries}
+The results from the FFT Libraries are presented in line graphs, both language specific and graphs with both Java and C++ are given to illustrate the differences between languages and also provide differences for specific languages clearly.
 
 \subsection{Small block sizes}
 
 \begin{figure}
     \centering
-    \caption{Line graph for all algorithms, Small block sizes, Time (ms)}
+    \caption{Line graph for all algorithms, small block sizes}
     \label{fig:all:line:small}
     \input{Data/results/FFT/line_graph_SMALL.tex}
 \end{figure}
@@ -30,13 +35,13 @@
 \begin{figure}
     \centering
     \label{fig:cpp:line:small}
-    \caption{CPP Line graph SMALL}
+    \caption{C++ line graph for small block sizes}
     \input{Data/results/FFT/CPP_line_graph_SMALL.tex}
 \end{figure}
 \begin{table}
     \centering
     \label{tab:cpp:small}
-    \caption{Small block sizes C++ execution times, Time (ms)}
+    \caption{C++ results table for small block sizes}
     \resizebox{\columnwidth}{!}{
         \input{Data/results/FFT/CPP_common_table_SMALL.tex}
     }
@@ -46,45 +51,22 @@
 \begin{figure}
     \centering
     \label{fig:java:line:small}
-    \caption{Java Line graph SMALL}
+    \caption{Java line graph for small block sizes}
     \input{Data/results/FFT/Java_line_graph_SMALL.tex}
 \end{figure}
 \begin{table}
     \centering
     \label{tab:java:small}
-    \caption{Small block sizes Java execution times, Time (ms)}
+    \caption{Java results table for small block sizes}
     \resizebox{\columnwidth}{!}{
-        \input{Data/results/FFT/CPP_common_table_SMALL.tex}
+        \input{Data/results/FFT/Java_common_table_SMALL.tex}
     }
 \end{table}
-
-
-% \begin{table}
-%     \centering
-%     \caption{Java tests, Time(ms)}
-%     \resizebox{\columnwidth}{!}{
-%         \input{Data/results/FFT/Java_common_table_FFT.tex}
-%     }
-% \end{table}
-%
-% \begin{table}
-%     \centering
-%     \caption{CPP tests, Time(ms)}
-%     \resizebox{\columnwidth}{!}{
-%         \input{Data/results/FFT/CPP_common_table_FFT.tex}
-%     }
-% \end{table}
-
-% \begin{table}
-%     \centering
-%     \caption{NEON tests, Time(ms)}
-%     \input{Data/results/NEON/CPP_common_table_NEON.tex}
-% \end{table}
 
 \subsection{Medium block sizes}
 \begin{figure}
     \centering
-    \caption{Line graph for all algorithms, Medium block sizes, Time (ms)}
+    \caption{Line graph for all algorithms, medium block sizes}
     \label{fig:all:line:medium}
     \input{Data/results/FFT/line_graph_MEDIUM.tex}
 \end{figure}
@@ -92,13 +74,13 @@
 \begin{figure}
     \centering
     \label{fig:cpp:line:medium}
-    \caption{CPP Line graph MEDIUM}
+    \caption{C++ line graph for medium block sizes}
     \input{Data/results/FFT/CPP_line_graph_MEDIUM.tex}
 \end{figure}
 \begin{table}
     \centering
     \label{tab:cpp:medium}
-    \caption{Medium block sizes C++ execution times, Time (ms)}
+    \caption{C++ results table for small block sizes}
     \resizebox{\columnwidth}{!}{
         \input{Data/results/FFT/CPP_common_table_MEDIUM.tex}
     }
@@ -108,23 +90,21 @@
 \begin{figure}
     \centering
     \label{fig:java:line:medium}
-    \caption{Java Line graph MEDIUM}
+    \caption{Java line graph for medium block sizes}
     \input{Data/results/FFT/Java_line_graph_MEDIUM.tex}
 \end{figure}
 \begin{table}
     \centering
     \label{tab:java:medium}
-    \caption{Medium block sizes Java execution times, Time (ms)}
-    \resizebox{\columnwidth}{!}{
-        \input{Data/results/FFT/CPP_common_table_MEDIUM.tex}
-    }
+    \caption{Java results table for medium block sizes}
+    \input{Data/results/FFT/Java_common_table_MEDIUM.tex}
 \end{table}
 
 \subsection{Large block sizes}
 
 \begin{figure}
     \centering
-    \caption{Line graph for all algorithms, Large block sizes, Time (ms)}
+    \caption{Line graph for all algorithms, large block sizes}
     \label{fig:all:line:large}
     \input{Data/results/FFT/line_graph_LARGE.tex}
 \end{figure}
@@ -132,13 +112,13 @@
 \begin{figure}
     \centering
     \label{fig:cpp:line:large}
-    \caption{CPP Line graph LARGE}
+    \caption{C++ line graph for large block sizes}
     \input{Data/results/FFT/CPP_line_graph_LARGE.tex}
 \end{figure}
 \begin{table}
     \centering
     \label{tab:cpp:large}
-    \caption{Large block sizes C++ execution times, Time (ms)}
+    \caption{C++ results table for large block sizes}
     \resizebox{\columnwidth}{!}{
         \input{Data/results/FFT/CPP_common_table_LARGE.tex}
     }
@@ -148,16 +128,14 @@
 \begin{figure}
     \centering
     \label{fig:java:line:large}
-    \caption{Java Line graph LARGE}
+    \caption{Java line graph for large block sizes}
     \input{Data/results/FFT/Java_line_graph_LARGE.tex}
 \end{figure}
 \begin{table}
     \centering
     \label{tab:java:large}
-    \caption{Large block sizes Java execution times, Time (ms)}
-    \resizebox{\columnwidth}{!}{
-        \input{Data/results/FFT/CPP_common_table_LARGE.tex}
-    }
+    \caption{Java results table for large block sizes}
+    \input{Data/results/FFT/Java_common_table_LARGE.tex}
 \end{table}
 
 
@@ -175,7 +153,7 @@
 \begin{table}
     \centering
     \label{tab:java:extra}
-    \caption{Results from the Java FFT tests, Time (ns)}
+    \caption{Results from the Java FFT tests}
     \resizebox{\columnwidth}{!}{
         \input{Data/results/FFT/Java_common_table_EXTRA.tex}
     }
@@ -189,8 +167,8 @@
 
 \begin{table}
     \centering
-    \label{tab:jni:common}
-    \caption{Results from the CPP FFT tests, Time (ns)}
+    \label{tab:cpp:extra}
+    \caption{Results from the CPP FFT tests}
     \resizebox{\columnwidth}{!}{
         \input{Data/results/FFT/CPP_common_table_EXTRA.tex}
     }

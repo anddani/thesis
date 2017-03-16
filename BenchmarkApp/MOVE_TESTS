@@ -177,6 +177,7 @@ function create_line_graph {
         echo "\\legend{$(echo $ALG_TYPES | sed 's/^, //g')}" >> $CURRENT_FILE
         echo '\end{axis}' >> $CURRENT_FILE
         echo '\end{tikzpicture}' >> $CURRENT_FILE
+        sed -i '/#/d' $CURRENT_FILE
     done
 }
 

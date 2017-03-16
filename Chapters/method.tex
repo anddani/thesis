@@ -182,7 +182,7 @@ Our confidence interval will then be:
 % Test data: sizes of data, datatypes (long vs int vs float vs double)
 
 \section{JNI Tests}
-For testing the JNI overhead, three different tests were constructed. The first test had no parameters, returned void and did no calculations. The purpose of this test was to see how long it would take to call the smallest function possible. The function shown in Figure~\ref{fig:jni:empty} was used to test this.
+For testing the JNI overhead, four different tests were constructed. The first test had no parameters, returned void and did no calculations. The purpose of this test was to see how long it would take to call the smallest function possible. The function shown in Figure~\ref{fig:jni:empty} was used to test this.
 
 \begin{figure}[H]
 \begin{lstlisting}[
@@ -238,6 +238,34 @@ jdoubleArray jniVectorConversion(JNIEnv* env, jobject, jdoubleArray arr) {
 \label{fig:jni:conversion}
 \end{figure}
 
+The fourth and last test evaluated the performance of passing three arrays through JNI as well as the cost of getting and releasing the arrays. This test was included because the Columbia algorithm requires the precomputed trigonometric tables. This test is presented in Figure~\ref{fig:jni:columbia}
+
+\begin{figure}
+\begin{lstlisting}[
+        language={C++},
+        basicstyle=\ttfamily\footnotesize,
+        keywordstyle=\color{blue}\ttfamily,
+        stringstyle=\color{red}\ttfamily,
+        commentstyle=\color{green!70!black}\ttfamily,
+    ]
+jdoubleArray jniColumbia(JNIEnv* env,
+                         jobject obj,
+                         jdoubleArray arr,
+                         jdoubleArray cos,
+                         jdoubleArray sin) {
+    jdouble* elements = (jdouble*)(*env).GetPrimitiveArrayCritical(arr, 0);
+    jdouble* sin_v    = (jdouble*)(*env).GetPrimitiveArrayCritical(sin, 0);
+    jdouble* cos_v    = (jdouble*)(*env).GetPrimitiveArrayCritical(cos, 0);
+    (*env).ReleasePrimitiveArrayCritical(arr, elements, 0);
+    (*env).ReleasePrimitiveArrayCritical(sin, sin_v, 0);
+    (*env).ReleasePrimitiveArrayCritical(cos, cos_v, 0);
+    return arr;
+}
+\end{lstlisting}
+\caption{JNI overhead for Columbia FFT}
+\label{fig:jni:columbia}
+\end{figure}
+
 \section{Fast Fourier Transform Algorithms}
 % Small block size
 % Large block size
@@ -268,7 +296,6 @@ Kiss FFT is a small library that consists of one source file. It is available un
 % \cite{FFTW05}
 
 % => http://edp.org/work/Construction.pdf <== OPTIMIZATION
-
 
 \section{NEON Optimization}
 % https://aaltodoc.aalto.fi/bitstream/handle/123456789/23201/master_Sugawara_Koki_2016.pdf?sequence=1

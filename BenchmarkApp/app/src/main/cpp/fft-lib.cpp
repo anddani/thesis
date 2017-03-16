@@ -159,11 +159,9 @@ jdoubleArray jniVectorConversion(JNIEnv* env, jobject, jdoubleArray arr) {
     return arr;
 }
 jdoubleArray jniColumbia(JNIEnv* env, jobject obj, jdoubleArray arr, jdoubleArray cos, jdoubleArray sin) {
-    jsize size = (*env).GetArrayLength(arr);
     jdouble* elements = (jdouble*)(*env).GetPrimitiveArrayCritical(arr, 0);
     jdouble* sin_v = (jdouble*)(*env).GetPrimitiveArrayCritical(sin, 0);
     jdouble* cos_v = (jdouble*)(*env).GetPrimitiveArrayCritical(cos, 0);
-    int N = size/2;
 
     (*env).ReleasePrimitiveArrayCritical(arr, elements, 0);
     (*env).ReleasePrimitiveArrayCritical(sin, sin_v, 0);
