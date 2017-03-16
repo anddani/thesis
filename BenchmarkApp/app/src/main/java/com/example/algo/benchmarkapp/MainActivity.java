@@ -1,9 +1,14 @@
 package com.example.algo.benchmarkapp;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
@@ -60,12 +65,14 @@ public class MainActivity extends AppCompatActivity {
         myThread.start();
         mTaskHandler = new MyBenchmarkHandler(myThread.getLooper(), mUIHandler);
 
+
         runBenchmarksButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 // Delete output file each run
-                if (!new File(getFilesDir(), "data.out").delete()) {
+                File sdCard = Environment.getExternalStorageDirectory();
+                if (!new File(sdCard.getAbsolutePath() + "/data.out").delete()) {
                     System.out.println("DID NOT GET DELETED");
                 }
 
@@ -85,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
             System.out.println("Setting up onClick for button nr: " + i);
             setOnClick(buttons[i], i);
         }
+        requestWritePerimission();
     }
 
     private void setOnClick(final Button btn, final int alg) {
@@ -101,7 +109,8 @@ public class MainActivity extends AppCompatActivity {
                 int blockIndex = data == 0 ? 0 : 32 - Integer.numberOfLeadingZeros(data-1) - 4;
 
                 // Delete output file each run
-                if (!new File(getFilesDir(), "data.out").delete()) {
+                File sdCard = Environment.getExternalStorageDirectory();
+                if (!new File(sdCard.getAbsolutePath() + "/data.out").delete()) {
                     System.out.println("DID NOT GET DELETED");
                 }
                 saveResult("numTests " + Constants.BENCHMARK_ITER);
@@ -122,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
     private void startBenchmarks() {
         // Run JNI Tests
         for (int test = 0; test < Constants.NUM_JNI_TESTS; test++) {
-            for (int size = 10; size <= 1000; size+=10) {
+            for (int size = 500; size <= 5000; size+=500) {
                 BenchmarkMessage message = new BenchmarkMessage(Constants.BENCHMARK_ITER, test, size, Constants.JNI_TYPE);
                 mTaskHandler.obtainMessage(0, message).sendToTarget();
             }
@@ -146,9 +155,10 @@ public class MainActivity extends AppCompatActivity {
     public void saveResult(String result) {
         FileOutputStream out;
         try {
-            out = openFileOutput("data.out", MODE_APPEND);
+            out = new FileOutputStream(new File(Environment.getExternalStorageDirectory(), "data.out"), true);
             result = result + "\n";
             out.write(result.getBytes());
+            out.flush();
             out.close();
         } catch (Exception e) {
             e.printStackTrace();
@@ -165,6 +175,16 @@ public class MainActivity extends AppCompatActivity {
 
     private int getScrollAmount(TextView tv) {
         return tv.getLayout().getLineTop(tv.getLineCount()) - tv.getHeight();
+    }
+
+    private void requestWritePerimission() {
+        if (android.os.Build.VERSION.SDK_INT > android.os.Build.VERSION_CODES.LOLLIPOP) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                }
+            }
+        }
     }
 
     private static final int[] buttonIds = {

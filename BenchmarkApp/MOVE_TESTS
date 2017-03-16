@@ -7,91 +7,283 @@
 # unique folder
 TIME=$(date +"%y%m%d_%H%M%S")
 DATA_PATH=$EXJOBB_HOME/Data
-PACKAGE="com.example.algo.benchmarkapp"
-FILENAME="/data/data/$PACKAGE/files/data.out"
-BLOCK_SIZES="16 32 64 128 256 512 1024 2048 4096 8192 16384 32768 65536"
+# PACKAGE="com.example.algo.benchmarkapp"
+FILENAME="/sdcard/data.out"
+# BLOCK_SIZES="16 32 64 128 256 512 1024 2048 4096 8192 16384 32768 65536"
 
 RESULTS_PATH=$DATA_PATH/results
 
-function tex_bar_chart_same_size {
+# function tex_bar_chart_same_size {
+#     CURRENT_DIR=$1
+#     CONTENT=$(ls $CURRENT_DIR)
+#
+#     for i in $BLOCK_SIZES ; do
+#         TEX_BAR_CHART="$CURRENT_DIR/barchart_${i}.tex"
+#         MIN_TIME="1000000"
+#         MAX_TIME="0"
+#         ALGORITHMS=""
+#
+#         for c in $CONTENT ; do
+#             CURRENT_FILE=$CURRENT_DIR/$c
+#             CURRENT_TIME=$(cat $CURRENT_FILE | grep "^${i} " | awk '{print $2}')
+#
+#             ALG=$(echo $c | sed 's/_N_.*//g' | tr '_' ' ' | sed 's/PP/++/g')
+#             ALGORITHMS="$ALGORITHMS, $ALG"
+#
+#             echo '\addplot+[error bars/.cd, error bar style={red},y dir=both, y explicit] coordinates {' >> $TEX_BAR_CHART
+#             cat $CURRENT_FILE | grep "^${i}" | awk -v alg="$ALG" '{print "(" alg "," $2 ") +-(" $5 "," $5 ")"}' >> $TEX_BAR_CHART
+#             echo "};" >> $TEX_BAR_CHART
+#
+#             if (( $(echo "$CURRENT_TIME < $MIN_TIME" | bc -l) )) ; then
+#                 MIN_TIME=$CURRENT_TIME
+#             fi
+#             if (( $(echo "$CURRENT_TIME > $MAX_TIME" | bc -l) )) ; then
+#                 MAX_TIME=$CURRENT_TIME
+#             fi
+#         done
+#
+#         ALGORITHMS=$(echo $ALGORITHMS | sed 's/^, //g')
+#         YMAX=$(echo "scale=0 ; (($MAX_TIME / 100) + 1) * 100" | bc)
+#
+#         sed -i "1i \\\\\\begin{axis}[scale=1.5, enlarge x limits=0.4, ymin=0, ymax=$YMAX, ybar, ylabel={Time (ms)}, xtick=\\\empty, symbolic x coords={${ALGORITHMS}}, legend cell align=left, legend cell align=left, legend style={at={(1.6,0.75)}}]" $TEX_BAR_CHART
+#         sed -i '1i \\\\begin{tikzpicture}' $TEX_BAR_CHART
+#
+#         echo "\\legend{$ALGORITHMS}" >> $TEX_BAR_CHART
+#         echo "\\end{axis}" >> $TEX_BAR_CHART
+#         echo "\\end{tikzpicture}" >> $TEX_BAR_CHART
+#     done
+# }
+
+# function tex_bar_chart {
+#     CURRENT_FILE=$1
+#     TEX_BAR_CHART="${CURRENT_FILE}_barchart.tex"
+#
+#     ## Bar Chart ##
+#     # Header
+#     echo '\begin{tikzpicture}' >> $TEX_BAR_CHART
+#     MAX_TIME=$(cat $CURRENT_FILE | tail -1 | awk '{print $2}')
+#     YMAX=$(echo "scale=0 ; (($MAX_TIME / 100) + 1) * 100" | bc)
+#     echo "\\begin{axis}[scale=1.5, ylabel={Time (ms)}, xlabel={Block size}, ymin=0, ymax=$YMAX]" >> $TEX_BAR_CHART
+#
+#     # Plot content
+#     echo '\addplot[error bars/.cd, y dir=both, y explicit] coordinates {' >> $TEX_BAR_CHART
+#     cat $CURRENT_FILE | awk '{print "(" $1 "," $2 ") +-(" $5 "," $5 ")" }' >> $TEX_BAR_CHART
+#     echo '};' >> $TEX_BAR_CHART
+#
+#     # Footer
+#     echo '\end{axis}' >> $TEX_BAR_CHART
+#     echo '\end{tikzpicture}' >> $TEX_BAR_CHART
+#
+#     ln -s $TEX_BAR_CHART $(echo $TEX_BAR_CHART | sed 's/_N_[0-9]*//g')
+# }
+#
+# function tex_table {
+#     CURRENT_FILE=$1
+#     TEX_TABLE="${CURRENT_FILE}.tex"
+#
+#     # Header
+#     echo '\begin{tabular}{|r|r|r|r|r|}\hline' >> $TEX_TABLE
+#
+#     # Table content
+#     echo '    FFT Size & $\bar{X}$ & $s$ & $SE_{\bar{X}}$ & $ME_{\bar{X}}$ \\ \hline' >> $TEX_TABLE
+#     cat $CURRENT_FILE | sed 's/ / \& /g' | sed -r 's/([0-9]*\.[0-9]*$)/\$\\pm\$ \1/g' | sed 's/$/ \\\\ \\hline/g' | sed 's/^/    /g' >> $TEX_TABLE
+#
+#     # Footer
+#     echo '\end{tabular}' >> $TEX_TABLE
+#
+#     ln -s $TEX_TABLE $(echo $TEX_TABLE | sed 's/_N_[0-9]*//g')
+# }
+
+function create_common_table {
     CURRENT_DIR=$1
-    CONTENT=$(ls $CURRENT_DIR)
+    CURRENT_TYPE=$2
+    CONTENT=$(ls -I "*.tex" $CURRENT_DIR)
+    COMMON_TABLES=""
 
-    for i in $BLOCK_SIZES ; do
-        TEX_BAR_CHART="$CURRENT_DIR/barchart_${i}.tex"
-        MIN_TIME="1000000"
-        MAX_TIME="0"
-        ALGORITHMS=""
+    for c in $CONTENT ; do
+        CURRENT_FILE=$CURRENT_DIR/$c
+        TEX_GRAPH="${CURRENT_FILE}.tex"
 
-        for c in $CONTENT ; do
-            CURRENT_FILE=$CURRENT_DIR/$c
-            CURRENT_TIME=$(cat $CURRENT_FILE | grep "^${i} " | awk '{print $2}')
+        if [ -f "$CURRENT_FILE" ] ; then
+            MIN=0
+            MAX=100000000
 
-            ALG=$(echo $c | sed 's/_N_.*//g' | tr '_' ' ' | sed 's/PP/++/g')
-            ALGORITHMS="$ALGORITHMS, $ALG"
-
-            echo '\addplot+[error bars/.cd, error bar style={red},y dir=both, y explicit] coordinates {' >> $TEX_BAR_CHART
-            cat $CURRENT_FILE | grep "^${i}" | awk -v alg="$ALG" '{print "(" alg "," $2 ") +-(" $5 "," $5 ")"}' >> $TEX_BAR_CHART
-            echo "};" >> $TEX_BAR_CHART
-
-            if (( $(echo "$CURRENT_TIME < $MIN_TIME" | bc -l) )) ; then
-                MIN_TIME=$CURRENT_TIME
+            if [ $CURRENT_TYPE == "JNI" ] ; then 
+                TEX_COMMON_TABLE="$CURRENT_DIR/common_table_${CURRENT_TYPE}.tex"
+            else
+                LANGUAGE=$(echo $c | tr '_' ' ' | awk '{print $1}')
+                TEX_COMMON_TABLE="$CURRENT_DIR/${LANGUAGE}_common_table_${CURRENT_TYPE}.tex"
             fi
-            if (( $(echo "$CURRENT_TIME > $MAX_TIME" | bc -l) )) ; then
-                MAX_TIME=$CURRENT_TIME
+
+            # If no common table file exists, insert first column
+            if [ ! -f "$TEX_COMMON_TABLE" ] ; then
+                if [ "$CURRENT_TYPE" == "JNI" ] ; then
+                    echo $'\\textbf{Block size} \n\\textbf{500} \n\\textbf{1000} \n\\textbf{1500} \n\\textbf{2000} \n\\textbf{2500} \n\\textbf{3000} \n\\textbf{3500} \n\\textbf{4000} \n\\textbf{4500} \n\\textbf{5000}' > $TEX_COMMON_TABLE
+                elif [ "$CURRENT_TYPE" == "SMALL" ] ; then
+                    echo $'\\textbf{Block size} \n\\textbf{16} \n\\textbf{32} \n\\textbf{64} \n\\textbf{128}' > $TEX_COMMON_TABLE
+                elif [ "$CURRENT_TYPE" == "MEDIUM" ] ; then
+                    echo $'\\textbf{Block size} \n\\textbf{256} \n\\textbf{512} \n\\textbf{1024} \n\\textbf{2048} \n\\textbf{4096}' > $TEX_COMMON_TABLE
+                elif [ "$CURRENT_TYPE" == "LARGE" ] ; then
+                    echo $'\\textbf{Block size} \n\\textbf{8192} \n\\textbf{16384} \n\\textbf{32768} \n\\textbf{65536}' > $TEX_COMMON_TABLE
+                elif [ "$CURRENT_TYPE" == "EXTRA" ] ; then
+                    echo $'\\textbf{Block size} \n\\textbf{8192} \n\\textbf{16384} \n\\textbf{32768} \n\\textbf{65536} \n\\textbf{131072} \n\\textbf{262144}' > $TEX_COMMON_TABLE
+                else # ALL
+                    echo $'\\textbf{Block size} \n\\textbf{16} \n\\textbf{32} \n\\textbf{64} \n\\textbf{128} \n\\textbf{256} \n\\textbf{512} \n\\textbf{1024} \n\\textbf{2048} \n\\textbf{4096} \n\\textbf{8192} \n\\textbf{16384} \n\\textbf{32768} \n\\textbf{65536} \n\\textbf{131072} \n\\textbf{262144}' > $TEX_COMMON_TABLE
+                fi
+                COMMON_TABLES="$COMMON_TABLES $TEX_COMMON_TABLE"
             fi
-        done
 
-        ALGORITHMS=$(echo $ALGORITHMS | sed 's/^, //g')
-        YMAX=$(echo "scale=0 ; (($MAX_TIME / 100) + 1) * 100" | bc)
+            if [ "$CURRENT_TYPE" == "SMALL" ] ; then
+                    MIN=16
+                    MAX=128
+            elif [ "$CURRENT_TYPE" == "MEDIUM" ] ; then
+                    MIN=256
+                    MAX=4096
+            elif [ "$CURRENT_TYPE" == "LARGE" ] ; then
+                    MIN=8192
+                    MAX=65536
+            elif [ "$CURRENT_TYPE" == "EXTRA" ] ; then
+                    MIN=8192
+                    MAX=262144
+            fi
 
-        sed -i "1i \\\\\\begin{axis}[scale=1.5, enlarge x limits=0.4, ymin=0, ymax=$YMAX, ybar, ylabel={Time (ms)}, xtick=\\\empty, symbolic x coords={${ALGORITHMS}}, legend cell align=left, legend cell align=left, legend style={at={(1.6,0.75)}}]" $TEX_BAR_CHART
-        sed -i '1i \\\\begin{tikzpicture}' $TEX_BAR_CHART
+            # Symbolic link with removed N
+            # ln -s $TEX_GRAPH $(echo $TEX_GRAPH | sed 's/_N_[0-9]*//g')
 
-        echo "\\legend{$ALGORITHMS}" >> $TEX_BAR_CHART
-        echo "\\end{axis}" >> $TEX_BAR_CHART
-        echo "\\end{tikzpicture}" >> $TEX_BAR_CHART
+            TEST_NAME=$(echo $c | sed 's/\(Java\|CPP\)_//g' | sed 's/.*Benchmark_//g' | sed 's/_N_.*//g' | tr '_' ' ')
+            TEST_NAME="$(tr '[:lower:]' '[:upper:]' <<< ${TEST_NAME:0:1})${TEST_NAME:1}" # Capitalize first letter
+            TEST_NAME="& \\\\textbf{$TEST_NAME}"
+            cat $CURRENT_FILE | awk -v min=$MIN -v max=$MAX '{if (int($1) >= int(min) && int($1) <= int(max)) print "& " $2 " $\\pm$ " $5}' | sed "1i $TEST_NAME" | paste -d' ' $TEX_COMMON_TABLE - > tempfil
+            cat tempfil > $TEX_COMMON_TABLE
+        fi
+    done
+
+    rm tempfil
+
+    # Format common tables
+    for c in $COMMON_TABLES ; do
+
+        # Insert before first line
+        sed -i 's/$/\\\\\\hline/g' $c
+
+        # Get number of algorithms
+        NUM_COLS=$(cat $c | head -n 1 | grep -o '&' | wc -l)
+
+        # Tabular format
+        COLS=$(seq $NUM_COLS | xargs -I{} printf "c|")
+
+        sed -i "1i \\\\\\begin{tabular}{|l|$COLS}\\\\hline" $c
+        echo '\end{tabular}' >> $c
     done
 }
 
-function tex_bar_chart {
-    CURRENT_FILE=$1
-    TEX_BAR_CHART="${CURRENT_FILE}_barchart.tex"
+function create_line_graph {
+    CURRENT_DIR=$1
+    CURRENT_TYPE=$2
+    CONTENT=$(ls -I "*.tex" $CURRENT_DIR)
+    MIN=0
+    MAX=100000000
 
-    ## Bar Chart ##
-    # Header
-    echo '\begin{tikzpicture}' >> $TEX_BAR_CHART
-    MAX_TIME=$(cat $CURRENT_FILE | tail -1 | awk '{print $2}')
-    YMAX=$(echo "scale=0 ; (($MAX_TIME / 100) + 1) * 100" | bc)
-    echo "\\begin{axis}[scale=1.5, ylabel={Time (ms)}, xlabel={Block size}, ymin=0, ymax=$YMAX]" >> $TEX_BAR_CHART
+    if [ "$CURRENT_TYPE" == "SMALL" ] ; then
+        MIN=16
+        MAX=128
+    elif [ "$CURRENT_TYPE" == "MEDIUM" ] ; then
+        MIN=256
+        MAX=4096
+    elif [ "$CURRENT_TYPE" == "LARGE" ] ; then
+        MIN=8192
+        MAX=65536
+    elif [ "$CURRENT_TYPE" == "EXTRA" ] ; then
+        MIN=8192
+        MAX=262144
+    fi
 
-    # Plot content
-    echo '\addplot[error bars/.cd, y dir=both, y explicit] coordinates {' >> $TEX_BAR_CHART
-    cat $CURRENT_FILE | awk '{print "(" $1 "," $2 ") +-(" $5 "," $5 ")" }' >> $TEX_BAR_CHART
-    echo '};' >> $TEX_BAR_CHART
+    # Create one graph for every file
+    NEW_FILE="${CURRENT_DIR}/line_graph_${CURRENT_TYPE}.tex"
+
+    # Print graph header
+    echo '\begin{tikzpicture}' >> $NEW_FILE
+    echo '\begin{axis}[xlabel={Block size},ylabel={Time (ms)},width=0.70\linewidth,legend pos=north west,scaled y ticks = false,legend cell align=left,legend style={font=\scriptsize}]' >> $NEW_FILE
+    # Content
+    ALGS=""
+    for c in $CONTENT ; do
+        CURRENT_FILE=${CURRENT_DIR}/$c
+        # Algorithm label in legend
+        ALGS="$ALGS,$(echo $c | sed 's/_N_.*//g' | tr '_' ' ')"
+        echo '\addplot coordinates {' >> $NEW_FILE
+        cat $CURRENT_FILE | awk -v min=$MIN -v max=$MAX '{if (int($1) >= int(min) && int($1) <= int(max)) print "(" $1 ", " $2 ")"}' >> $NEW_FILE
+        echo '};' >> $NEW_FILE
+    done
 
     # Footer
-    echo '\end{axis}' >> $TEX_BAR_CHART
-    echo '\end{tikzpicture}' >> $TEX_BAR_CHART
+    ALGS=$(echo $ALGS | sed 's/^,//g')
+    echo "\\legend{${ALGS}}" >> $NEW_FILE
+    echo '\end{axis}' >> $NEW_FILE
+    echo '\end{tikzpicture}' >> $NEW_FILE
 
-    ln -s $TEX_BAR_CHART $(echo $TEX_BAR_CHART | sed 's/_N_[0-9]*//g')
+    # Create one graph for every language
+    FILES=""
+    # Content
+    ALGS=""
+    LANGUAGES=""
+    for c in $CONTENT ; do
+        LANGUAGES="$LANGUAGES $(echo $c | tr '_' ' ' | awk '{print $1}')"
+    done
+    LANGUAGES=$(echo $LANGUAGES | xargs -n1 | sort -u | xargs)
+
+    for l in $LANGUAGES ; do
+        for c in $CONTENT ; do
+            # If file has lang in name
+            if [[ $c =~ $l ]] ; then
+                CURRENT_FILE=$CURRENT_DIR/$c
+                NEW_FILE="${CURRENT_DIR}/${l}_line_graph_${CURRENT_TYPE}.tex"
+                if [ ! -f "$NEW_FILE" ] ; then
+                    # Print graph header
+                    echo '\begin{tikzpicture}' >> $NEW_FILE
+                    echo '\begin{axis}[xlabel={Block size},ylabel={Time (ms)},width=0.70\linewidth,legend pos=north west,scaled y ticks = false,legend cell align=left,legend style={font=\scriptsize}]' >> $NEW_FILE
+                    FILES="$FILES $NEW_FILE"
+                fi
+                # Algorithm label in legend
+                echo "# $(echo $c | sed 's/_N_.*//g' | tr '_' ' ')" >> $NEW_FILE
+                echo '\addplot coordinates {' >> $NEW_FILE
+                cat $CURRENT_FILE | awk -v min=$MIN -v max=$MAX '{if (int($1) >= int(min) && int($1) <= int(max)) print "(" $1 ", " $2 ")"}' >> $NEW_FILE
+                echo '};' >> $NEW_FILE
+            fi
+        done
+    done
+
+    # FOOTER
+    for CURRENT_FILE in $FILES ; do
+        ALG_TYPES=$(cat $CURRENT_FILE | grep '#' | sed 's/#/,/g')
+        echo "\\legend{$(echo $ALG_TYPES | sed 's/^, //g')}" >> $CURRENT_FILE
+        echo '\end{axis}' >> $CURRENT_FILE
+        echo '\end{tikzpicture}' >> $CURRENT_FILE
+    done
 }
 
-function tex_table {
-    CURRENT_FILE=$1
-    TEX_TABLE="${CURRENT_FILE}.tex"
+function fft_to_latex {
+    CURRENT_DIRS="$@"
 
-    # Header
-    echo '\begin{tabular}{|r|r|r|r|r|}\hline' >> $TEX_TABLE
+    for CURRENT_DIR in $CURRENT_DIRS ; do
+        CONTENT=$(ls $CURRENT_DIR)
+        COMMON_TABLES=""
 
-    # Table content
-    echo '    FFT Size & $\bar{X}$ & $s$ & $SE_{\bar{X}}$ & $ME_{\bar{X}}$ \\ \hline' >> $TEX_TABLE
-    cat $CURRENT_FILE | sed 's/ / \& /g' | sed -r 's/([0-9]*\.[0-9]*$)/\$\\pm\$ \1/g' | sed 's/$/ \\\\ \\hline/g' | sed 's/^/    /g' >> $TEX_TABLE
+        # common table for all sizes
+        create_common_table $CURRENT_DIR ${CURRENT_DIR##*/}
+        create_common_table $CURRENT_DIR "SMALL"
+        create_common_table $CURRENT_DIR "MEDIUM"
+        create_common_table $CURRENT_DIR "LARGE"
+        create_common_table $CURRENT_DIR "EXTRA"
 
-    # Footer
-    echo '\end{tabular}' >> $TEX_TABLE
+        # For each file in folder
+        create_line_graph $CURRENT_DIR ${CURRENT_DIR##*/}
+        create_line_graph $CURRENT_DIR "SMALL"
+        create_line_graph $CURRENT_DIR "MEDIUM"
+        create_line_graph $CURRENT_DIR "LARGE"
+        create_line_graph $CURRENT_DIR "EXTRA"
+    done
 
-    ln -s $TEX_TABLE $(echo $TEX_TABLE | sed 's/_N_[0-9]*//g')
+    # Mix match FFT and NEON for all sizes
 }
 
 function convert_test_results {
@@ -103,7 +295,6 @@ function convert_test_results {
         if [ "$TYPE" == "" ] ; then
             continue
         fi
-
         if [ "$TYPE" == "numTests" ] ; then
             N=$(echo $line | cut -d' ' -f2)
         else
@@ -134,64 +325,6 @@ function convert_test_results {
     done <$1
 }
 
-function fft_to_latex {
-    CURRENT_DIR=$1
-    CONTENT=$(ls $CURRENT_DIR)
-    COMMON_TABLES=""
-
-    tex_bar_chart_same_size $CURRENT_DIR
-
-    # For each file in folder
-    for c in $CONTENT ; do
-
-        # Skip optimized files
-        if [[ "$c" =~ optimi ]] ; then
-            continue
-        fi
-
-        CURRENT_FILE=$CURRENT_DIR/$c
-
-        # If CURRENT_FILE is a file
-        if [ -f "$CURRENT_FILE" ] ; then
-            LANGUAGE=$(echo $c | tr '_' ' ' | awk '{print $1}')
-            echo $LANGUAGE
-            TEX_COMMON_TABLE="$CURRENT_DIR/${LANGUAGE}_common_table.tex"
-
-            tex_table $CURRENT_FILE
-            # tex_bar_chart $CURRENT_FILE
-
-            ## Common table ##
-            if [ ! -f "$TEX_COMMON_TABLE" ] ; then
-                # Header
-                echo $'\\textbf{\\footnotesize Block size} \n\\textbf{16} \n\\textbf{32} \n\\textbf{64} \n\\textbf{128} \n\\textbf{256} \n\\textbf{512} \n\\textbf{1024} \n\\textbf{2048} \n\\textbf{4096} \n\\textbf{8192} \n\\textbf{16384} \n\\textbf{32768} \n\\textbf{65536}' > $TEX_COMMON_TABLE
-                COMMON_TABLES="$COMMON_TABLES $TEX_COMMON_TABLE"
-            fi
-
-            # Content
-            TEST_NAME="& \\\\textbf{\\\\footnotesize $(echo $c | sed 's/\(Java\|CPP\)_//g' | sed 's/_N_.*//g' | tr '_' ' ')}"
-            cat $CURRENT_FILE | awk '{print "& " $2 " $\\pm$ " $5}' | sed "1i $TEST_NAME" | paste -d' ' $TEX_COMMON_TABLE - > tempfil
-            cat tempfil > $TEX_COMMON_TABLE
-        fi
-    done
-
-    rm tempfil
-
-    # Format common tables
-    for c in $COMMON_TABLES ; do
-
-        # Insert before first line
-        sed -i 's/$/\\\\\\hline/g' $c
-
-        # Get number of algorithms
-        NUM_COLS=$(cat $c | head -n 1 | grep -o '&' | wc -l)
-
-        # Tabular format
-        COLS=$(seq $NUM_COLS | xargs -I{} printf "c|")
-
-        sed -i "1i \\\\\\begin{tabular}{|l|$COLS}\\\\hline" $c
-        echo '\end{tabular}' >> $c
-    done
-}
 
 if [ -z "$EXJOBB_HOME" ]; then
     echo "EXJOBB_HOME not set"
@@ -209,7 +342,7 @@ while getopts "cv" opt; do
 done
 
 if [ "$VIEW" == "1" ] ; then
-    eval adb shell "'run-as $PACKAGE cat $FILENAME'" | less
+    eval adb shell "'cat $FILENAME'" | less
 elif [ "$CONVERT" == "1" ] ; then
     # Get path and filename of the latest fetched file
     LATEST="$DATA_PATH/$(ls -l $DATA_PATH | grep '\.out' | tail -n 1 | awk -F ' ' '{print $9}')"
@@ -221,14 +354,18 @@ elif [ "$CONVERT" == "1" ] ; then
     fi
     mkdir $RESULTS_PATH
 
+    # Convert data.out to separate files
     convert_test_results $LATEST
 
-    # fft_to_latex $RESULTS_PATH/FFT
-    # jni_to_latex $RESULTS_PATH/JNI
+    # Create tables for each test
+    create_common_table $RESULTS_PATH/JNI JNI
+
+    # Create graphs for FFT and NEON tests
+    fft_to_latex $RESULTS_PATH/FFT $RESULTS_PATH/NEON
 
 else
     echo "-- moving data from phone to $DATA_PATH/$TIME"
-    eval adb shell "'run-as $PACKAGE cat $FILENAME'" > $DATA_PATH/$TIME.out
+    eval adb shell "'cat $FILENAME'" > $DATA_PATH/$TIME.out
 fi
 
 if [ $? -ne 0 ] ; then

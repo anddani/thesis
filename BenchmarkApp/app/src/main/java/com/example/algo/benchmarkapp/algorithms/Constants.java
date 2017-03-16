@@ -2,8 +2,8 @@ package com.example.algo.benchmarkapp.algorithms;
 
 public class Constants {
 
-//    public static final int BENCHMARK_ITER = 30;
-    public static final int BENCHMARK_ITER = 5;
+    public static final int BENCHMARK_ITER = 30;
+//    public static final int BENCHMARK_ITER = 5;
 
     public static final int BENCHMARK_MESSAGE_NEW = 17;
     public static final int BENCHMARK_MESSAGE_DONE = 4711;
@@ -27,20 +27,15 @@ public class Constants {
         FFT_CPP_ITERATIVE_COLUMBIA,
         FFT_CPP_KISS,
 
-//        JNI_EMPTY,
-//        JNI_PARAMS,
-//        JNI_VECTOR_CONVERSION,
-//        JNI_COLUMBIA,
-
         NEON_CPP_RECURSIVE,
         NEON_CPP_ITERATIVE,
     }
 
     public static final String[] JNI_NAMES = {
-            "JNI Benchmark_no_params",
-            "JNI Benchmark_vector",
-            "JNI Benchmark_convert",
-            "JNI Benchmark_Columbia",
+            "JNI 1_Benchmark_no_params",
+            "JNI 2_Benchmark_vector",
+            "JNI 3_Benchmark_convert",
+            "JNI 4_Benchmark_Columbia",
     };
 
     public static final String[] ALGORITHM_NAMES = {
@@ -51,11 +46,6 @@ public class Constants {
             "FFT CPP_Princeton_Recursive",
             "FFT CPP_Columbia_Iterative",
             "FFT CPP_KISS",
-//
-//            "JNI Benchmark_no_params",
-//            "JNI Benchmark_vector",
-//            "JNI Benchmark_convert",
-//            "JNI Benchmark_Columbia",
 
             "NEON CPP_Recursive",
             "NEON CPP_Iterative",
