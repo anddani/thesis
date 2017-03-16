@@ -7,92 +7,8 @@
 # unique folder
 TIME=$(date +"%y%m%d_%H%M%S")
 DATA_PATH=$EXJOBB_HOME/Data
-# PACKAGE="com.example.algo.benchmarkapp"
 FILENAME="/sdcard/data.out"
-# BLOCK_SIZES="16 32 64 128 256 512 1024 2048 4096 8192 16384 32768 65536"
-
 RESULTS_PATH=$DATA_PATH/results
-
-# function tex_bar_chart_same_size {
-#     CURRENT_DIR=$1
-#     CONTENT=$(ls $CURRENT_DIR)
-#
-#     for i in $BLOCK_SIZES ; do
-#         TEX_BAR_CHART="$CURRENT_DIR/barchart_${i}.tex"
-#         MIN_TIME="1000000"
-#         MAX_TIME="0"
-#         ALGORITHMS=""
-#
-#         for c in $CONTENT ; do
-#             CURRENT_FILE=$CURRENT_DIR/$c
-#             CURRENT_TIME=$(cat $CURRENT_FILE | grep "^${i} " | awk '{print $2}')
-#
-#             ALG=$(echo $c | sed 's/_N_.*//g' | tr '_' ' ' | sed 's/PP/++/g')
-#             ALGORITHMS="$ALGORITHMS, $ALG"
-#
-#             echo '\addplot+[error bars/.cd, error bar style={red},y dir=both, y explicit] coordinates {' >> $TEX_BAR_CHART
-#             cat $CURRENT_FILE | grep "^${i}" | awk -v alg="$ALG" '{print "(" alg "," $2 ") +-(" $5 "," $5 ")"}' >> $TEX_BAR_CHART
-#             echo "};" >> $TEX_BAR_CHART
-#
-#             if (( $(echo "$CURRENT_TIME < $MIN_TIME" | bc -l) )) ; then
-#                 MIN_TIME=$CURRENT_TIME
-#             fi
-#             if (( $(echo "$CURRENT_TIME > $MAX_TIME" | bc -l) )) ; then
-#                 MAX_TIME=$CURRENT_TIME
-#             fi
-#         done
-#
-#         ALGORITHMS=$(echo $ALGORITHMS | sed 's/^, //g')
-#         YMAX=$(echo "scale=0 ; (($MAX_TIME / 100) + 1) * 100" | bc)
-#
-#         sed -i "1i \\\\\\begin{axis}[scale=1.5, enlarge x limits=0.4, ymin=0, ymax=$YMAX, ybar, ylabel={Time (ms)}, xtick=\\\empty, symbolic x coords={${ALGORITHMS}}, legend cell align=left, legend cell align=left, legend style={at={(1.6,0.75)}}]" $TEX_BAR_CHART
-#         sed -i '1i \\\\begin{tikzpicture}' $TEX_BAR_CHART
-#
-#         echo "\\legend{$ALGORITHMS}" >> $TEX_BAR_CHART
-#         echo "\\end{axis}" >> $TEX_BAR_CHART
-#         echo "\\end{tikzpicture}" >> $TEX_BAR_CHART
-#     done
-# }
-
-# function tex_bar_chart {
-#     CURRENT_FILE=$1
-#     TEX_BAR_CHART="${CURRENT_FILE}_barchart.tex"
-#
-#     ## Bar Chart ##
-#     # Header
-#     echo '\begin{tikzpicture}' >> $TEX_BAR_CHART
-#     MAX_TIME=$(cat $CURRENT_FILE | tail -1 | awk '{print $2}')
-#     YMAX=$(echo "scale=0 ; (($MAX_TIME / 100) + 1) * 100" | bc)
-#     echo "\\begin{axis}[scale=1.5, ylabel={Time (ms)}, xlabel={Block size}, ymin=0, ymax=$YMAX]" >> $TEX_BAR_CHART
-#
-#     # Plot content
-#     echo '\addplot[error bars/.cd, y dir=both, y explicit] coordinates {' >> $TEX_BAR_CHART
-#     cat $CURRENT_FILE | awk '{print "(" $1 "," $2 ") +-(" $5 "," $5 ")" }' >> $TEX_BAR_CHART
-#     echo '};' >> $TEX_BAR_CHART
-#
-#     # Footer
-#     echo '\end{axis}' >> $TEX_BAR_CHART
-#     echo '\end{tikzpicture}' >> $TEX_BAR_CHART
-#
-#     ln -s $TEX_BAR_CHART $(echo $TEX_BAR_CHART | sed 's/_N_[0-9]*//g')
-# }
-#
-# function tex_table {
-#     CURRENT_FILE=$1
-#     TEX_TABLE="${CURRENT_FILE}.tex"
-#
-#     # Header
-#     echo '\begin{tabular}{|r|r|r|r|r|}\hline' >> $TEX_TABLE
-#
-#     # Table content
-#     echo '    FFT Size & $\bar{X}$ & $s$ & $SE_{\bar{X}}$ & $ME_{\bar{X}}$ \\ \hline' >> $TEX_TABLE
-#     cat $CURRENT_FILE | sed 's/ / \& /g' | sed -r 's/([0-9]*\.[0-9]*$)/\$\\pm\$ \1/g' | sed 's/$/ \\\\ \\hline/g' | sed 's/^/    /g' >> $TEX_TABLE
-#
-#     # Footer
-#     echo '\end{tabular}' >> $TEX_TABLE
-#
-#     ln -s $TEX_TABLE $(echo $TEX_TABLE | sed 's/_N_[0-9]*//g')
-# }
 
 function create_common_table {
     CURRENT_DIR=$1
@@ -163,16 +79,19 @@ function create_common_table {
     # Format common tables
     for c in $COMMON_TABLES ; do
 
-        # Insert before first line
-        sed -i 's/$/\\\\\\hline/g' $c
+        # Insert after each line
+        sed -i 's/$/\\\\/g' $c
 
         # Get number of algorithms
         NUM_COLS=$(cat $c | head -n 1 | grep -o '&' | wc -l)
 
         # Tabular format
-        COLS=$(seq $NUM_COLS | xargs -I{} printf "c|")
+        COLS=$(seq $NUM_COLS | xargs -I{} printf "c")
 
-        sed -i "1i \\\\\\begin{tabular}{|l|$COLS}\\\\hline" $c
+        sed -i "1i \\\\\\begin{tabular}{l$COLS}\\\\toprule" $c
+        sed -i '1i \\\rowcolors{1}{}{lightgray}' $c
+        sed -i '/Block size/ s/$/\\midrule/' $c
+        echo '\bottomrule' >> $c
         echo '\end{tabular}' >> $c
     done
 }

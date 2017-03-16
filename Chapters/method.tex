@@ -41,7 +41,6 @@ This is the reason it is important to have a fast FFT.
 Finally, optimizations only possible with native code is a good demonstration of how a developer can improve performance even more to fit the requirements while still retaining manageable source code. Having one single source file is valuable, especially for native libraries. This facilitates the process of adding libraries and based on the results found in this report, they can be sufficiently fast.
 
 \subsection{Hardware}
-% Phone model
 % Screen Brightness
 % Battery percentage?
 % The Google Nexus 6P was used throughout all experiments to get comparable results. The screen brightness was set to medium to prevent heat from affecting the CPU frequency.
@@ -66,18 +65,11 @@ The setup used for performing the experiments were the following:
     \end{tabular}
 \end{table}
 
+During the tests, \hilight{the screen brightness was set to as low as possible} to minimize the risk for CPU throttling.
+
 \subsection{Benchmark Environment}
-% Android version
-% Cellular on?
-% Wifi OFF!
-% Location OFF
-% Which apps were in background?
-% Foreground services OFF
+During the tests, both cellular and wifi was switched off. There were no applications running in the background while performing the tests during the experiments. Additionally, there were no foreground services running. This was to prevent external influences from affecting the results. The software versions, compiler versions and compiler flags are presented in Table \ref{tab:software}. The \texttt{-O3} optimization was used because it resulted in a small performance improvement. The app was signed and packaged with release as build type. It was then transferred and installed on the device.
 
-During the tests, both cellular and wifi was switched off. There were no applications running in the background while performing the tests during the experiments. Additionally, there were no foreground services running. This was to prevent external influences from affecting the results. The software versions, compiler versions and compiler flags are presented in Table \ref{tab:software}. The \texttt{-O3} optimization was used because it resulted in a small performance improvement.
-
-
-% All the tests were executed/compiled using . Cellular was switched off and wifi was connected. No other background apps were present while performing the tests during the experiments.
 \begin{table}[H]
     \centering
     \caption{Software used in the experiments}
@@ -98,6 +90,7 @@ During the tests, both cellular and wifi was switched off. There were no applica
     \end{tabular}
     \label{tab:software}
 \end{table}
+
 
 \subsection{Time measurement}
 There are multiple methods of measuring time in Java. It is possible to measure the wall-clock time using the \texttt{System.currentTimeMillis()} method. There are drawback of using wall-clock time for measuring time. Because it can be changed at any time, it could result in too small or too large runtime depending on seemingly random factors. What is more preferable is to measure elapsed cpu time. This do not depend on a changeable wall clock but rather use hardware to interpret time. It is possible to use both \texttt{System.nanoTime()} and \texttt{SystemClock.elapsedRealtimeNanos()} for this purpose.
