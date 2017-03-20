@@ -34,7 +34,7 @@ function create_common_table {
             # If no common table file exists, insert first column
             if [ ! -f "$TEX_COMMON_TABLE" ] ; then
                 if [ "$CURRENT_TYPE" == "JNI" ] ; then
-                    echo $'\\textbf{Block size} \n\\textbf{500} \n\\textbf{1000} \n\\textbf{1500} \n\\textbf{2000} \n\\textbf{2500} \n\\textbf{3000} \n\\textbf{3500} \n\\textbf{4000} \n\\textbf{4500} \n\\textbf{5000}' > $TEX_COMMON_TABLE
+                    echo $'\\textbf{Block size} \n\\textbf{16} \n\\textbf{32} \n\\textbf{64} \n\\textbf{128} \n\\textbf{256} \n\\textbf{512} \n\\textbf{1024} \n\\textbf{2048} \n\\textbf{4096} \n\\textbf{8192} \n\\textbf{16384} \n\\textbf{32768} \n\\textbf{65536} \n\\textbf{131072} \n\\textbf{262144}' > $TEX_COMMON_TABLE
                 elif [ "$CURRENT_TYPE" == "SMALL" ] ; then
                     echo $'\\textbf{Block size} \n\\textbf{16} \n\\textbf{32} \n\\textbf{64} \n\\textbf{128}' > $TEX_COMMON_TABLE
                 elif [ "$CURRENT_TYPE" == "MEDIUM" ] ; then
@@ -135,7 +135,7 @@ function create_line_graph {
     done
 
     # Footer
-    ALGS=$(echo $ALGS | sed 's/^,//g')
+    ALGS=$(echo $ALGS | sed 's/^,//g' | sed 's/PP/++/g')
     echo "\\legend{${ALGS}}" >> $NEW_FILE
     echo '\end{axis}' >> $NEW_FILE
     echo '\end{tikzpicture}' >> $NEW_FILE
@@ -174,7 +174,7 @@ function create_line_graph {
     # FOOTER
     for CURRENT_FILE in $FILES ; do
         ALG_TYPES=$(cat $CURRENT_FILE | grep '#' | sed 's/#/,/g')
-        echo "\\legend{$(echo $ALG_TYPES | sed 's/^, //g')}" >> $CURRENT_FILE
+        echo "\\legend{$(echo $ALG_TYPES | sed 's/^, //g' | sed 's/PP/++/g')}" >> $CURRENT_FILE
         echo '\end{axis}' >> $CURRENT_FILE
         echo '\end{tikzpicture}' >> $CURRENT_FILE
         sed -i '/#/d' $CURRENT_FILE

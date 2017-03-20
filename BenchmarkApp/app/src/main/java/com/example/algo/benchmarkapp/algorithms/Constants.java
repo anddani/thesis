@@ -75,9 +75,7 @@ public class Constants {
         return v;
     }
 
-//    public static final int[] BLOCK_SIZES = getBlockSizes(16);
-    public static final int[] BLOCK_SIZES = getBlockSizes(18);        // For
-//    public static final int[] LARGER_BLOCK_SIZES = getBlockSizes(18); // For NEON tests
+    public static final int[] BLOCK_SIZES = getBlockSizes(18);
 
     public static final int NUM_ALGORITHMS = ALGORITHMS.values().length;
     public static final int NUM_JNI_TESTS = JNI_TESTS.values().length;

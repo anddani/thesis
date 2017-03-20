@@ -131,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
     private void startBenchmarks() {
         // Run JNI Tests
         for (int test = 0; test < Constants.NUM_JNI_TESTS; test++) {
-            for (int size = 500; size <= 5000; size+=500) {
+            for (int size = 16; size <= (16 << (Constants.BLOCK_SIZES.length-1)); size <<= 1) {
                 BenchmarkMessage message = new BenchmarkMessage(Constants.BENCHMARK_ITER, test, size, Constants.JNI_TYPE);
                 mTaskHandler.obtainMessage(0, message).sendToTarget();
             }

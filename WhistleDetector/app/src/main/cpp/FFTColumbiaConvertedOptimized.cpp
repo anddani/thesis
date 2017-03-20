@@ -1,10 +1,7 @@
 #include "FFTColumbiaConvertedOptimized.h"
-#include "precomputed_tables.h"
 
 void fftColumbiaIterativeOptimized(double* x, double* y, int n, double* sin_v, double* cos_v) {
     /* Precomputed tables */
-//    double* cos_v = cos_a;
-//    double* sin_v = sin_a;
 
     int m = (int)(log(n) / log(2));
     int i,j,k,n1,n2,a;

@@ -4,17 +4,16 @@
 %% JNI-Tests
 %%==================================================================
 \section{JNI}
-The results of the tests that measure the JNI overhead can be found in Table~\ref{tab:jni:common}. These tests are presented with block sizes defined in chapter \ref{ch:method} - Method.
+The results of the tests that measure the JNI overhead can be found in Table~\ref{tab:jni:common}. These tests are presented with block sizes defined in chapter \ref{ch:method} - Method. Execution time and confidence intervals are given in nanoseconds and are rounded to four decimal points. The number after the $\pm$ sign is a two sided confidence interval with a confidence level of $95\%$.
+
+The test labeled \textbf{No params} is the test where a native void function with no parameters that returns immediately was called. \textbf{Vector} takes a \texttt{jdoubleArray} and returns a \texttt{jdoubleArray} immediately. \textbf{Convert} takes a \texttt{jdoubleArray}, converts it to a native array using \texttt{GetPrimitiveArrayCritical()}, converts it back to a \texttt{jdoubleArray} using \texttt{ReleasePrimitiveArrayCritical()} and returns a \texttt{jdoubleArray}. \textbf{Columbia} takes three \texttt{jdoubleArray}s, converts them with \texttt{GetPrimitiveArrayCritical()}, releases them with \texttt{ReleasePrimitiveArrayCritical()} and returns one \texttt{jdoubleArray}.
 
 \begin{table}[H]
     \centering
-    \label{tab:jni:common}
     \caption{Results from the JNI tests, Time (ns)}
+    \label{tab:jni:common}
     \input{Data/results/JNI/common_table_JNI.tex}
 \end{table}
-
-Execution time and confidence intervals are given in nanoseconds and are rounded to four decimal points. The number after the $\pm$ sign is a two sided confidence interval with a confidence level of $95\%$.
-
 
 
 %%==================================================================
@@ -27,21 +26,21 @@ The results from the FFT Libraries are presented in line graphs, both language s
 
 \begin{figure}
     \centering
+    \input{Data/results/FFT/line_graph_SMALL.tex}
     \caption{Line graph for all algorithms, small block sizes}
     \label{fig:all:line:small}
-    \input{Data/results/FFT/line_graph_SMALL.tex}
 \end{figure}
 
 \begin{figure}
     \centering
-    \label{fig:cpp:line:small}
-    \caption{C++ line graph for small block sizes}
     \input{Data/results/FFT/CPP_line_graph_SMALL.tex}
+    \caption{C++ line graph for small block sizes}
+    \label{fig:cpp:line:small}
 \end{figure}
 \begin{table}
     \centering
-    \label{tab:cpp:small}
     \caption{C++ results table for small block sizes}
+    \label{tab:cpp:small}
     \resizebox{\columnwidth}{!}{
         \input{Data/results/FFT/CPP_common_table_SMALL.tex}
     }
@@ -50,14 +49,14 @@ The results from the FFT Libraries are presented in line graphs, both language s
 
 \begin{figure}
     \centering
-    \label{fig:java:line:small}
-    \caption{Java line graph for small block sizes}
     \input{Data/results/FFT/Java_line_graph_SMALL.tex}
+    \caption{Java line graph for small block sizes}
+    \label{fig:java:line:small}
 \end{figure}
 \begin{table}
     \centering
-    \label{tab:java:small}
     \caption{Java results table for small block sizes}
+    \label{tab:java:small}
     \resizebox{\columnwidth}{!}{
         \input{Data/results/FFT/Java_common_table_SMALL.tex}
     }
@@ -66,21 +65,21 @@ The results from the FFT Libraries are presented in line graphs, both language s
 \subsection{Medium block sizes}
 \begin{figure}
     \centering
+    \input{Data/results/FFT/line_graph_MEDIUM.tex}
     \caption{Line graph for all algorithms, medium block sizes}
     \label{fig:all:line:medium}
-    \input{Data/results/FFT/line_graph_MEDIUM.tex}
 \end{figure}
 
 \begin{figure}
     \centering
-    \label{fig:cpp:line:medium}
-    \caption{C++ line graph for medium block sizes}
     \input{Data/results/FFT/CPP_line_graph_MEDIUM.tex}
+    \caption{C++ line graph for medium block sizes}
+    \label{fig:cpp:line:medium}
 \end{figure}
 \begin{table}
     \centering
-    \label{tab:cpp:medium}
     \caption{C++ results table for small block sizes}
+    \label{tab:cpp:medium}
     \resizebox{\columnwidth}{!}{
         \input{Data/results/FFT/CPP_common_table_MEDIUM.tex}
     }
@@ -89,14 +88,14 @@ The results from the FFT Libraries are presented in line graphs, both language s
 
 \begin{figure}
     \centering
-    \label{fig:java:line:medium}
-    \caption{Java line graph for medium block sizes}
     \input{Data/results/FFT/Java_line_graph_MEDIUM.tex}
+    \caption{Java line graph for medium block sizes}
+    \label{fig:java:line:medium}
 \end{figure}
 \begin{table}
     \centering
-    \label{tab:java:medium}
     \caption{Java results table for medium block sizes}
+    \label{tab:java:medium}
     \input{Data/results/FFT/Java_common_table_MEDIUM.tex}
 \end{table}
 
@@ -104,21 +103,21 @@ The results from the FFT Libraries are presented in line graphs, both language s
 
 \begin{figure}
     \centering
+    \input{Data/results/FFT/line_graph_LARGE.tex}
     \caption{Line graph for all algorithms, large block sizes}
     \label{fig:all:line:large}
-    \input{Data/results/FFT/line_graph_LARGE.tex}
 \end{figure}
 
 \begin{figure}
     \centering
-    \label{fig:cpp:line:large}
-    \caption{C++ line graph for large block sizes}
     \input{Data/results/FFT/CPP_line_graph_LARGE.tex}
+    \caption{C++ line graph for large block sizes}
+    \label{fig:cpp:line:large}
 \end{figure}
 \begin{table}
     \centering
-    \label{tab:cpp:large}
     \caption{C++ results table for large block sizes}
+    \label{tab:cpp:large}
     \resizebox{\columnwidth}{!}{
         \input{Data/results/FFT/CPP_common_table_LARGE.tex}
     }
@@ -127,14 +126,14 @@ The results from the FFT Libraries are presented in line graphs, both language s
 
 \begin{figure}
     \centering
-    \label{fig:java:line:large}
-    \caption{Java line graph for large block sizes}
     \input{Data/results/FFT/Java_line_graph_LARGE.tex}
+    \caption{Java line graph for large block sizes}
+    \label{fig:java:line:large}
 \end{figure}
 \begin{table}
     \centering
-    \label{tab:java:large}
     \caption{Java results table for large block sizes}
+    \label{tab:java:large}
     \input{Data/results/FFT/Java_common_table_LARGE.tex}
 \end{table}
 
@@ -152,31 +151,38 @@ The results from the FFT Libraries are presented in line graphs, both language s
 
 \begin{table}
     \centering
+    \caption{Java results table for extra large block sizes}
     \label{tab:java:extra}
-    \caption{Results from the Java FFT tests}
-    \resizebox{\columnwidth}{!}{
-        \input{Data/results/FFT/Java_common_table_EXTRA.tex}
-    }
+    \input{Data/results/FFT/Java_common_table_EXTRA.tex}
 \end{table}
 
 \begin{figure}
     \centering
-    \caption{NEON line graph EXTRA}
     \input{Data/results/NEON/line_graph_EXTRA.tex}
+    \caption{NEON results table for extra large block sizes}
+    \label{fig:neon:line:extra}
 \end{figure}
 
 \begin{table}
     \centering
+    \input{Data/results/NEON/CPP_common_table_EXTRA.tex}
+    \caption{C++ results table for extra large block sizes}
     \label{tab:cpp:extra}
-    \caption{Results from the CPP FFT tests}
+\end{table}
+
+\begin{table}
+    \centering
     \resizebox{\columnwidth}{!}{
         \input{Data/results/FFT/CPP_common_table_EXTRA.tex}
     }
+    \caption{C++ results table for extra large block sizes}
+    \label{tab:cpp:extra}
 \end{table}
 
 \begin{figure}
     \centering
-    \caption{Line graph EXTRA}
     \input{Data/results/FFT/line_graph_EXTRA.tex}
+    \caption{Line graph for all algorithms, extra large block sizes}
+    \label{fig:all:line:extra}
 \end{figure}
 

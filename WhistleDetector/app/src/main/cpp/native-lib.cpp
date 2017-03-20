@@ -1,9 +1,8 @@
 #include <jni.h>
 #include <string>
-#include <android/log.h>
 #include "FFTColumbiaConvertedOptimized.h"
 
-jdoubleArray fft(JNIEnv* env, jobject obj, jdoubleArray arr, jdoubleArray sin, jdoubleArray cos) {
+void fft(JNIEnv* env, jobject, jdoubleArray arr, jdoubleArray sin, jdoubleArray cos) {
     jsize size = (*env).GetArrayLength(arr);
     jdouble* elements = (*env).GetDoubleArrayElements(arr, 0);
     jdouble* sin_v = (*env).GetDoubleArrayElements(sin, 0);
@@ -14,14 +13,13 @@ jdoubleArray fft(JNIEnv* env, jobject obj, jdoubleArray arr, jdoubleArray sin, j
     fftColumbiaIterativeOptimized(elements, elements+N, N, sin_v, cos_v); // Run FFT
 
     (*env).ReleaseDoubleArrayElements(arr, elements, 0);
-    return arr;
 }
 
 static JNINativeMethod s_methods[] {
-        {"fft", "([D[D[D)[D", (void*)fft},
+        {"fft", "([D[D[D)V", (void*)fft},
 };
 
-jint JNI_OnLoad(JavaVM* vm, void* reserved) {
+jint JNI_OnLoad(JavaVM* vm, void*) {
     JNIEnv *env = NULL;
 
     vm->GetEnv((void**)&env, JNI_VERSION_1_6);
