@@ -1,9 +1,32 @@
-\section{Raw Data}
+\section{Data}
+
+\begin{table}[H]
+    \centering
+    \caption{Common table for FFT tests, Time(ms)}
+    \label{tab:appendix:common:cpp}
+    \resizebox{\columnwidth}{!}{
+        \input{Data/results/FFT/CPP_common_table_FFT.tex}
+    }
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \caption{Common table for Java tests, Time(ms)}
+    \label{tab:appendix:common:java}
+    \input{Data/results/FFT/Java_common_table_FFT.tex}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \caption{Common table for NEON tests, Time(ms)}
+    \label{tab:appendix:common:neon}
+    \input{Data/results/NEON/CPP_common_table_NEON.tex}
+\end{table}
 
 % \begin{table}[H]
 %     \centering
 %     \label{tab:common:table:jni}
-%     \caption{Common table for JNI tests, Time(ns)}
+%     \caption{Common table for JNI tests, Time(\textmu s)}
 %     \resizebox{\columnwidth}{!}{
 %         \input{Data/results/JNI/Benchmark_common_table.tex}
 %     }
@@ -30,21 +53,21 @@
 % \begin{table}[H]
 %     \centering
 %     \label{tab:jni:convert}
-%     \caption{JNI convert, Time (ns)}
+%     \caption{JNI convert, Time (textmu s)}
 %     \input{Data/results/JNI/Benchmark_convert.tex}
 % \end{table}
 %
 % \begin{table}[H]
 %     \centering
 %     \label{tab:jni:no:params}
-%     \caption{JNI no parameters, Time (ns)}
+%     \caption{JNI no parameters, Time (textmu s)}
 %     \input{Data/results/JNI/Benchmark_no_params.tex}
 % \end{table}
 %
 % \begin{table}[H]
 %     \centering
 %     \label{tab:jni:vector}
-%     \caption{JNI convert, Time (ns)}
+%     \caption{JNI convert, Time (textmu s)}
 %     \input{Data/results/JNI/Benchmark_vector.tex}
 % \end{table}
 %
@@ -118,3 +141,41 @@
 %     \label{fig:java:princeton:recursive:barchart}
 %     \caption{Java Princeton Recursive bar chart}
 % \end{figure}
+
+\section{ARR}
+\begin{figure}[H]
+    \centering
+    \input{Data/results/ARR/CPP_NEON_Iterative.tex}
+    \caption{}
+    \label{fig:arr:neon:Iterative}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \input{Data/results/ARR/CPP_NEON_Recursive.tex}
+    \caption{}
+    \label{fig:arr:neon:Recursive}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \input{Data/results/ARR/CPP_Columbia_Iterative.tex}
+    \caption{}
+    \label{fig:arr:columbia}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \input{Data/results/ARR/CPP_Princeton_Iterative.tex}
+    \caption{}
+    \label{fig:arr:princeton:iterative}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \input{Data/results/ARR/CPP_Princeton_Recursive.tex}
+    \caption{}
+    \label{fig:arr:princeton:recursive}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \input{Data/results/ARR/CPP_KISS.tex}
+    \caption{}
+    \label{fig:arr:kiss}
+\end{figure}

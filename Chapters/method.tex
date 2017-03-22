@@ -33,8 +33,7 @@ The reason why it is relevant to know how significant the JNI is, is because we 
 % Q1: Why libraries??
 % A1: Because it is good to know the execution time of multiple implementations and to compare them. What makes one faster than the other?? 
 
-There are many different implementations of the FFT publicly available that could be of interest for use in ones project. This test demonstrates how some different libraries compare. It is helpful to see how viable different implementations are on Android, for both C++ libraries and Java libraries. It can also be useful to know how small implementations perform in terms of speed. The sample sizes used for the FFT can vary depending on the requirements for the implementation. If the app needs to be efficient, it is common to lower the number of collected samples. This comes at a cost of accuracy. A fast FFT implementation allows for more data being passed to the FFT, improving the frequency resolution.
-This is the reason it is important to have a fast FFT.
+There are many different implementations of the FFT publicly available that could be of interest for use in ones project. This test demonstrates how some different libraries compare. It is helpful to see how viable different implementations are on Android, for both C++ libraries and Java libraries. It can also be useful to know how small implementations perform in terms of speed. The sample sizes used for the FFT can vary depending on the requirements for the implementation. If the app needs to be efficient, it is common to lower the number of collected samples. This comes at a cost of accuracy. A fast FFT implementation allows for more data being passed to the FFT, improving the frequency resolution. This is the reason it is important to have a fast FFT.
 
 % Q2: Why Optimizations
 
@@ -65,7 +64,7 @@ The setup used for performing the experiments were the following:
     \end{tabular}
 \end{table}
 
-During the tests, \hilight{the screen brightness was set to as low as possible} to minimize the risk for CPU throttling.
+% During the tests, \hilight{the screen brightness was set to as low as possible} to minimize the risk for CPU throttling.
 
 \subsection{Benchmark Environment}
 During the tests, both cellular and wifi was switched off. There were no applications running in the background while performing the tests during the experiments. Additionally, there were no foreground services running. This was to prevent external influences from affecting the results. The software versions, compiler versions and compiler flags are presented in Table \ref{tab:software}. The \texttt{-O3} optimization was used because it resulted in a small performance improvement. The app was signed and packaged with release as build type. It was then transferred and installed on the device.

@@ -1,10 +1,28 @@
 \textit{Describing text}
 
 \section{JNI Overhead}
+The test results from the JNI tests showed that the overhead is small relative to the computation of the FFT algorithm. As long as it is being run once per calculation, it will not affect the performance significantly. If the JNI is called in a loop when it might not be necessary, the overhead add up and becomes a larger part of the total execution time. Another thing to note is that the execution time stay within about 10 \textmu s. They are also not growing with larger input.
+
+The confidence intervals overlap for many of the values, meaning we cannot say whether or not one input yields a faster execution time than the other. Some larger block sizes has lower execution time than smaller block sizes and some grow for larger input. Because of this, it is reasonable to assume that nothing is done to the arrays when they are passed to the JNI, only pointers are copied. The \texttt{GetPrimitiveArrayCritical()} and \texttt{ReleasePrimitiveArrayCritical()} seem to introduce overhead when used on larger arrays. % <= CITE THIS ... as described in
+
+% The second tests compared the execution times for measuring the benefits of using a critical zone in native code. In Figure~\ref{}
 
 \section{Simplicity and Efficiency}
 
+% When choosing a java version, choose Columbia Iterative
+
+% Although you can have two equally long implementations, one could be faster than the other. It is important to do small tests with different sized data.
+
+% We can see in the tests that the best option is to choose KISS fft as it is the fastest of the options. BUT WHY??
+
+% NEON iterative is faster than the recursive because...
+
+% For smaller Block sizes, the Java version is as fast as the C++ one. It is easier to implement and more flexible to edit. No need for complicated JNI integration.
+
+% It is with very large block sizes the difference is clear.
+
 \section{Vectorization as Optimization}
+
 % The benefit of fitting it all in cache.
 
 % With radix 4, it is possible to fit all in cache?

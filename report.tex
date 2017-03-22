@@ -25,6 +25,7 @@
 \usepackage{rotating} % sidewaystable
 \usepackage[export]{adjustbox}
 
+\usepackage{textcomp}
 
 % \usepackage[charter]{mathdesign}
 % \def\rmdefault{bch} % not scaled
@@ -182,14 +183,6 @@
 \makechapter{Conclusion}{Conclusion\label{ch:conclusion}}
 \input{Chapters/conclusion.tex}
 
-\appendix
-
-\makeappendix{Appendix A}{Source code\label{appendix:code}}
-\input{Appendices/appendixA.tex}
-
-\makeappendix{Appendix B}{Results\label{appendix:results}}
-\input{Appendices/appendixB.tex}
-
 %%==================================================================
 %% BIBLIOGRAPHY
 %%==================================================================
@@ -201,5 +194,17 @@
 \fancyhead[RO]{\thepage}
 
 \bibliography{references}
+
+%%==================================================================
+%% APPENDIX
+%%==================================================================
+
+\appendix
+
+\makeappendix{Appendix A}{Source code\label{appendix:code}}
+\input{Appendices/appendixA.tex}
+
+\makeappendix{Appendix B}{Results\label{appendix:results}}
+\input{Appendices/appendixB.tex}
 
 \end{document}

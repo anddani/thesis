@@ -4,25 +4,35 @@
 %% JNI-Tests
 %%==================================================================
 \section{JNI}
-The results of the tests that measure the JNI overhead can be found in Table~\ref{tab:jni:common}. These tests are presented with block sizes defined in chapter \ref{ch:method} - Method. Execution time and confidence intervals are given in nanoseconds and are rounded to four decimal points. The number after the $\pm$ sign is a two sided confidence interval with a confidence level of $95\%$.
+The results of the tests that measure the JNI overhead can be found in Table~\ref{tab:jni:common}. These tests are presented with block sizes defined in chapter \ref{ch:method} - Method. Execution time and confidence intervals are given in microseconds and are rounded to four decimal points. The number after the $\pm$ sign is a two sided confidence interval with a confidence level of $95\%$. Each test was executed 100 times to ensure that we get more reliable sample means.
 
 The test labeled \textbf{No params} is the test where a native void function with no parameters that returns immediately was called. \textbf{Vector} takes a \texttt{jdoubleArray} and returns a \texttt{jdoubleArray} immediately. \textbf{Convert} takes a \texttt{jdoubleArray}, converts it to a native array using \texttt{GetPrimitiveArrayCritical()}, converts it back to a \texttt{jdoubleArray} using \texttt{ReleasePrimitiveArrayCritical()} and returns a \texttt{jdoubleArray}. \textbf{Columbia} takes three \texttt{jdoubleArray}s, converts them with \texttt{GetPrimitiveArrayCritical()}, releases them with \texttt{ReleasePrimitiveArrayCritical()} and returns one \texttt{jdoubleArray}.
 
+% DISCUSS HERE WHEN CORRECT DATA IS GATHERED
+% As seen in Table \ref{tab:jni:common}, the execution times for calling the JNI varied in the range of one microseconds and 14 microseconds. \textbf{Columbia} with block size \textbf{6}
+
 \begin{table}[H]
     \centering
-    \caption{Results from the JNI tests, Time (ns)}
+    \caption{Results from the JNI tests, Time (\textmu s)}
     \label{tab:jni:common}
     \input{Data/results/JNI/common_table_JNI.tex}
 \end{table}
+
 
 
 %%==================================================================
 %% FFT-Tests
 %%==================================================================
 \section{FFT Libraries}
-The results from the FFT Libraries are presented in line graphs, both language specific and graphs with both Java and C++ are given to illustrate the differences between languages and also provide differences for specific languages clearly.
+The results from the FFT Libraries are presented in line graphs, both language specific and graphs with both Java and C++ are given to illustrate the differences between languages and also provide differences for specific languages clearly. The time unit for these tests are presented in milliseconds as opposed to microseconds that the JNI was measured in. This was because the FFT ran in ranges below one millisecond and above one second among different algorithms and different block sizes. The means are calculated from the results of 100 test runs.
 
 \subsection{Small block sizes}
+Results from the small blocks tests shows clear difference between the different algorithms. In Figure~\ref{fig:all:line:small}, Princeton Recursive in Java perform the worst. Princeton Recursive in C++ and Princeton Iterative in Java perform better than Princeton Recursive Java although worse than the rest of the algorithms. % CHECK IF STILL RELEVANT AFTER NEW TESTS
+
+% In Table ... we can see that the difference is statistically significant.
+
+% found in Table~\ref{tab:cpp:small} and Table~\ref{tab:java:small}, shows that 
+
 
 \begin{figure}
     \centering

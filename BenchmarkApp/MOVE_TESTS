@@ -206,6 +206,42 @@ function fft_to_latex {
     # Mix match FFT and NEON for all sizes
 }
 
+function create_comparison_graph {
+    CURRENT_PATH=$1
+    # FFT_PATH=$1/FFT
+    ARR_PATH=$CURRENT_PATH/ARR
+
+    CONTENT=$(ls $ARR_PATH)
+
+    for c in $CONTENT ; do
+        if [[ "$c" =~ NEON ]] ; then
+            FFT_FILE=$CURRENT_PATH/NEON/$(echo $c | sed 's/NEON_//g')
+        else
+            FFT_FILE=$CURRENT_PATH/FFT/$c
+        fi
+        ARR_FILE=$ARR_PATH/$c
+        NEW_FILE=$(echo $ARR_FILE | sed 's/_N_.*//g').tex
+
+        echo '\begin{tikzpicture}' >> $NEW_FILE
+        echo '\begin{axis}[xlabel={Block size},ylabel={Time (ms)},width=0.70\linewidth,legend pos=north west,scaled y ticks = false,legend cell align=left,legend style={font=\scriptsize}]' >> $NEW_FILE
+
+        # ARR
+        echo '\addplot coordinates {' >> $NEW_FILE
+        cat $ARR_FILE | awk '{print "(" $1 ", " $2 ")"}' >> $NEW_FILE
+        echo '};' >> $NEW_FILE
+
+        # FFT
+        echo '\addplot coordinates {' >> $NEW_FILE
+        cat $FFT_FILE | awk '{print "(" $1 ", " $2 ")"}' >> $NEW_FILE
+        echo '};' >> $NEW_FILE
+
+        echo '\legend{GetFloatArrayCritical, GetPrimitiveArrayCritical}' >> $NEW_FILE
+        echo '\end{axis}' >> $NEW_FILE
+        echo '\end{tikzpicture}' >> $NEW_FILE
+
+    done
+}
+
 function convert_test_results {
     N=""
     while read line ; do
@@ -286,6 +322,9 @@ elif [ "$CONVERT" == "1" ] ; then
 
     # Create graphs for FFT and NEON tests
     fft_to_latex $RESULTS_PATH/FFT $RESULTS_PATH/NEON
+
+    # Create comparison for each test in folder
+    create_comparison_graph $RESULTS_PATH
 
 else
     echo "-- moving data from phone to $DATA_PATH/$TIME"

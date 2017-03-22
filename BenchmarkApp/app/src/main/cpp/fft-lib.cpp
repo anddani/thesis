@@ -182,8 +182,10 @@ jfloatArray runRecursiveNeon(JNIEnv* env, jobject obj, jfloatArray arr, jint arr
     jsize size = (*env).GetArrayLength(arr);
     jfloat* elements;
     if (arrTest) {
+        __android_log_print(ANDROID_LOG_INFO, LOGTAG, "-- Running arr test");
         elements = (*env).GetFloatArrayElements(arr, 0);
     } else {
+        __android_log_print(ANDROID_LOG_INFO, LOGTAG, "-- Running normal test");
         elements = (jfloat*)(*env).GetPrimitiveArrayCritical(arr, 0);
     }
     int N = size/2;
