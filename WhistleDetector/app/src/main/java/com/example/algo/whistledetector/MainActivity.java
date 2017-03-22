@@ -19,8 +19,6 @@ public class MainActivity extends AppCompatActivity {
 
         switch (this.getResources().getConfiguration().orientation) {
             case Configuration.ORIENTATION_PORTRAIT:
-                System.out.println("Orientation: Portrait");
-
                 if (getSupportFragmentManager().findFragmentByTag("FREQ_FRAGMENT") == null) {
                     getSupportFragmentManager().beginTransaction()
                             .replace(R.id.activity_main, new FrequencyDetectorFragment(), "FREQ_FRAGMENT")
@@ -29,8 +27,6 @@ public class MainActivity extends AppCompatActivity {
 
                 break;
             case Configuration.ORIENTATION_LANDSCAPE:
-                System.out.println("Orientation: Landscape");
-
                 if (getSupportFragmentManager().findFragmentByTag("PLOT_FRAGMENT") == null) {
                     getSupportFragmentManager().beginTransaction()
                             .replace(R.id.activity_main, new PlotFragment(), "PLOT_FRAGMENT")

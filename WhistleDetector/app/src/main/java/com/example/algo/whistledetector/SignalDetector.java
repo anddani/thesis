@@ -11,12 +11,12 @@ public class SignalDetector {
      *
      * @param x output from FFT
      * @param samples input to FFT
-     * @param fftci instance containing sin and cos tables
+     * @param trigTables sin and cos tables
      */
-    static void getFrequencyDomain(Complex[] x, double[] samples, FFTColumbiaIterative fftci) {
+    static void getFrequencyDomain(Complex[] x, double[] samples, TrigTables trigTables) {
         int half = samples.length/2;
 
-        fft(samples, fftci.sin, fftci.cos);
+        fft(samples, trigTables.sin, trigTables.cos);
 
         for (int i = 0; i < half; i++) {
             x[i].re = samples[i];

@@ -1,6 +1,6 @@
 #include <jni.h>
 #include <string>
-#include "FFTColumbiaConvertedOptimized.h"
+#include "FFTColumbiaConverted.h"
 
 void fft(JNIEnv* env, jobject, jdoubleArray arr, jdoubleArray sin, jdoubleArray cos) {
     jsize size = (*env).GetArrayLength(arr);
@@ -10,7 +10,7 @@ void fft(JNIEnv* env, jobject, jdoubleArray arr, jdoubleArray sin, jdoubleArray 
 
     int N = size/2;
 
-    fftColumbiaIterativeOptimized(elements, elements+N, N, sin_v, cos_v); // Run FFT
+    fftColumbiaIterative(elements, elements+N, N, sin_v, cos_v); // Run FFT
 
     (*env).ReleaseDoubleArrayElements(arr, elements, 0);
 }

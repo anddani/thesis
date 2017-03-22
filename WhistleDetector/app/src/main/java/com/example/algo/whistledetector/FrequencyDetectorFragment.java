@@ -1,10 +1,6 @@
 package com.example.algo.whistledetector;
 
-import android.content.Context;
 import android.graphics.Color;
-import android.media.AudioFormat;
-import android.media.AudioRecord;
-import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -23,30 +19,26 @@ public class FrequencyDetectorFragment extends Fragment {
 
     TextView tv_freq, tv_mag;
     RelativeLayout rl;
-    int bufferSize;
-    short[] buffer;
-    AudioRecord recorder;
-    SampleFromMic sampleFromMic;
 
-    public void updateView(Complex[] freqDomain) {
+    RecorderThread myThread;
 
-        int[] freq = ConvertDomain.maxAmplitude(freqDomain);
-
-//        if (tv_freq == null || tv_mag == null) {
-//            break;
-//        }
-
+    /**
+     * Sends a message to the UI thread to update background color depending on the frequency
+     * with the largest amplitude
+     *
+     * @param freq [frequency, amplitude]
+     */
+    public void updateView(int[] freq) {
         // Change color  of screen when target frequency is present
         if (freq[0] > TARGET_FREQUENCY - 100 && freq[0] < TARGET_FREQUENCY + 100 && freq[1] > MIN_AMPLITUDE) {
-            mHandler.obtainMessage(1, (int)freq[0], (int)freq[1]).sendToTarget();
+            mUIHandler.obtainMessage(1, freq[0], freq[1]).sendToTarget();
         } else {
-            mHandler.obtainMessage(2, (int)freq[0], (int)freq[1]).sendToTarget();
+            mUIHandler.obtainMessage(2, freq[0], freq[1]).sendToTarget();
         }
     }
 
 
-    // Notify UI thread to change background color
-    private final Handler mHandler = new Handler() {
+    private final Handler mUIHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == 1) {
@@ -60,35 +52,11 @@ public class FrequencyDetectorFragment extends Fragment {
     };
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        System.out.println("onAttach FrequencyDetectorFragment");
-    }
-
-    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (savedInstanceState == null) {
-
-            int minBufferSize = AudioRecord.getMinBufferSize(Constants.SAMPLING_RATE,
-                                                             AudioFormat.CHANNEL_IN_MONO,
-                                                             AudioFormat.ENCODING_PCM_16BIT);
-            System.out.println("minBufferSize: " + minBufferSize);
-
-            // Ensure that we take 2^N numbers of samples from mic
-            bufferSize = SignalDetector.nextPowerOfTwo(minBufferSize);
-
-            recorder = new AudioRecord(MediaRecorder.AudioSource.MIC,
-                                       Constants.SAMPLING_RATE,
-                                       AudioFormat.CHANNEL_IN_MONO,
-                                       AudioFormat.ENCODING_PCM_16BIT,
-                                       bufferSize);
-            buffer = new short[bufferSize];
-
-            recorder.startRecording();
-
-            sampleFromMic = new SampleFromMic();
-            sampleFromMic.start();
+            myThread = new RecorderThread(this, Constants.FREQUENCY_DETECTOR_FRAGMENT);
+            myThread.start();
         }
 
     }
@@ -98,12 +66,14 @@ public class FrequencyDetectorFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.activity_main, container, false);
 
-        rl = (RelativeLayout)rootView.findViewById(R.id.activity_main);
+        if (savedInstanceState == null) {
+            rl = (RelativeLayout)rootView.findViewById(R.id.activity_main);
 
-        tv_freq = (TextView)rootView.findViewById(R.id.frequency);
-        tv_mag = (TextView)rootView.findViewById(R.id.magnitude);
+            tv_freq = (TextView)rootView.findViewById(R.id.frequency);
+            tv_mag = (TextView)rootView.findViewById(R.id.magnitude);
 
-        rl.setBackgroundColor(Color.RED);
+            rl.setBackgroundColor(Color.RED);
+        }
 
         return rootView;
     }
@@ -112,53 +82,8 @@ public class FrequencyDetectorFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
 
-        if (recorder != null) {
-            recorder.stop();
-            recorder.release();
+        if (myThread != null) {
+            myThread.stopRecording();
         }
     }
-
-    class SampleFromMic extends Thread {
-        @Override
-        public void run() {
-            double[] doubleBuffer = new double[bufferSize*2];
-
-            // Pre-compute sin and cos tables
-            FFTColumbiaIterative fftci = new FFTColumbiaIterative(bufferSize);
-            Complex[] freqDomain = new Complex[bufferSize];
-
-            // Keep instances of complex numbers
-            for (int i = 0; i < freqDomain.length; i++) {
-                freqDomain[i] = new Complex(0.0, 0.0);
-            }
-
-            while (true) {
-                recorder.read(buffer, 0, buffer.length);
-
-                // Convert to double
-                for (int i = 0; i < bufferSize; i++) {
-                    doubleBuffer[i] = (double) buffer[i] / 32768.0; // Real
-                    doubleBuffer[i+bufferSize] = 0.0;               // Imaginary
-                }
-
-                // Run FFT
-                ConvertDomain.timeToFrequency(freqDomain, doubleBuffer, fftci);
-
-                // Get frequency with highest amplitude
-                int[] freq = ConvertDomain.maxAmplitude(freqDomain);
-
-                if (tv_freq == null || tv_mag == null) {
-                    break;
-                }
-
-                // Change color  of screen when target frequency is present
-                if (freq[0] > TARGET_FREQUENCY - 100 && freq[0] < TARGET_FREQUENCY + 100 && freq[1] > MIN_AMPLITUDE) {
-                    mHandler.obtainMessage(1, (int)freq[0], (int)freq[1]).sendToTarget();
-                } else {
-                    mHandler.obtainMessage(2, (int)freq[0], (int)freq[1]).sendToTarget();
-                }
-            }
-        }
-    }
-
 }

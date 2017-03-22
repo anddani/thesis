@@ -15,6 +15,8 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 public class PlotFragment extends Fragment {
 
     View rootView;
+
+    // Reusable data points
     private DataPoint[] dataPoints;
     private LineGraphSeries<DataPoint> series;
 
@@ -43,7 +45,7 @@ public class PlotFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (savedInstanceState == null) {
-            myThread = new RecorderThread(this);
+            myThread = new RecorderThread(this, Constants.PLOT_FRAGMENT);
             myThread.start();
         }
 
@@ -52,7 +54,6 @@ public class PlotFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        System.out.println("onCreateView PlotFragment");
         rootView = inflater.inflate(R.layout.plot_layout, container, false);
 
         if (savedInstanceState == null) {

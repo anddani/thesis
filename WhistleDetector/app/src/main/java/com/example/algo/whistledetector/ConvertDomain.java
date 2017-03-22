@@ -20,15 +20,14 @@ public class ConvertDomain {
      *
      * @param freqDomain container for results from the FFT
      * @param doubleBuffer input to FFT, first half real, second half imaginary
-     * @param fftci instance of FFT class with pre-computed trigonometric tables
+     * @param trigTables pre-computed trigonometric tables
      */
-    public static void timeToFrequency(Complex[] freqDomain, double[] doubleBuffer, FFTColumbiaIterative fftci) {
-
+    public static void timeToFrequency(Complex[] freqDomain, double[] doubleBuffer, TrigTables trigTables) {
         // Apply windowing function
         hanningWindow(doubleBuffer);
 
         // Run FFT and get sample in frequency domain
-        SignalDetector.getFrequencyDomain(freqDomain, doubleBuffer, fftci);
+        SignalDetector.getFrequencyDomain(freqDomain, doubleBuffer, trigTables);
     }
 
     /**
