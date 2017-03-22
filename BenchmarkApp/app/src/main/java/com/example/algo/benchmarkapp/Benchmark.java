@@ -10,7 +10,6 @@ import com.example.algo.benchmarkapp.algorithms.FFTPrincetonRecursive;
 
 import org.jtransforms.fft.DoubleFFT_1D;
 
-import java.util.Arrays;
 import java.util.Random;
 
 public class Benchmark {
@@ -87,9 +86,6 @@ public class Benchmark {
             for (int i = 0; i < 10; i++) {
                 System.out.println(correctOut[i]);
             }
-//            printComplex(x);
-//            System.out.println("CORRECT: ");
-//            printComplex(correctOut);
         }
     }
 
@@ -145,13 +141,13 @@ public class Benchmark {
         return stop;
     }
 
-    public long FFTCppIterativePrinceton() {
+    public long FFTCppIterativePrinceton(int arrTest) {
         // Merge real and imaginary numbers
         double[] z = combineComplex(re, im);
 
         long start = SystemClock.elapsedRealtimeNanos();
 
-        double[] nativeResult = fft_princeton_iterative(z);
+        double[] nativeResult = fft_princeton_iterative(z, arrTest);
 
         long stop = SystemClock.elapsedRealtimeNanos() - start;
 
@@ -166,14 +162,14 @@ public class Benchmark {
         return stop;
     }
 
-    public long FFTCppRecursivePrinceton() {
+    public long FFTCppRecursivePrinceton(int arrTest) {
 
         // Merge real and imaginary numbers
         double[] z = combineComplex(re, im);
 
         long start = SystemClock.elapsedRealtimeNanos();
 
-        double[] nativeResult = fft_princeton_recursive(z);
+        double[] nativeResult = fft_princeton_recursive(z, arrTest);
 
         long stop = SystemClock.elapsedRealtimeNanos() - start;
 
@@ -216,7 +212,7 @@ public class Benchmark {
         return stop;
     }
 
-    public long FFTCppIterativeColumbia() {
+    public long FFTCppIterativeColumbia(int arrTest) {
 
         // Let first half be filled with real and second half with imaginary
         double[] z = new double[re.length*2];
@@ -229,7 +225,7 @@ public class Benchmark {
 
         long start = SystemClock.elapsedRealtimeNanos();
 
-        double[] nativeResult = fft_columbia_iterative(z, fftci.cos, fftci.sin);
+        double[] nativeResult = fft_columbia_iterative(z, fftci.cos, fftci.sin, arrTest);
 
         long stop = SystemClock.elapsedRealtimeNanos() - start;
 
@@ -248,7 +244,7 @@ public class Benchmark {
         return stop;
     }
 
-    public long FFTCppKiss() {
+    public long FFTCppKiss(int arrTest) {
 
         // Merge real and imaginary numbers
         double[] z = combineComplex(re, im);
@@ -257,7 +253,7 @@ public class Benchmark {
 
         long start = SystemClock.elapsedRealtimeNanos();
 
-        double[] nativeResult = fft_kiss(z);
+        double[] nativeResult = fft_kiss(z, arrTest);
 
         long stop = SystemClock.elapsedRealtimeNanos() - start;
 
@@ -340,7 +336,7 @@ public class Benchmark {
         return stop;
     }
 
-    public long FFTCppRecursiveNeon() {
+    public long FFTCppRecursiveNeon(int arrTest) {
         float[] z = new float[re.length*2];
         for (int i = 0; i < re.length; i++) {
             z[i] = (float)re[i];
@@ -348,7 +344,7 @@ public class Benchmark {
 
         long start = SystemClock.elapsedRealtimeNanos();
 
-        float[] nativeResult = fft_recursive_neon(z);
+        float[] nativeResult = fft_recursive_neon(z, arrTest);
 
         long stop = SystemClock.elapsedRealtimeNanos() - start;
 
@@ -367,7 +363,7 @@ public class Benchmark {
         return stop;
     }
 
-    public long FFTCppIterativeNeon() {
+    public long FFTCppIterativeNeon(int arrTest) {
         float[] z = new float[re.length*2];
         for (int i = 0; i < re.length; i++) {
             z[i] = (float)re[i];
@@ -377,7 +373,7 @@ public class Benchmark {
 
         long start = SystemClock.elapsedRealtimeNanos();
 
-        float[] nativeResult = run_iterative_neon(z);
+        float[] nativeResult = run_iterative_neon(z, arrTest);
 
         long stop = SystemClock.elapsedRealtimeNanos() - start;
 
@@ -397,24 +393,24 @@ public class Benchmark {
         return stop;
     }
 
-    public native double[] fft_princeton_iterative(double[] arr);
-    public native double[] fft_princeton_recursive(double[] arr);
-    public native double[] fft_columbia_iterative(double[] arr, double[] cos, double[] sin);
-
-    public native void fft_kiss_init(int N);
-    public native double[] fft_kiss(double[] arr);
-    public native void fft_kiss_delete();
-
-    public native void jni_empty();
+    public native void     jni_empty();
     public native double[] jni_params(double[] arr);
     public native double[] jni_vector_conversion(double[] arr);
     public native double[] jni_columbia(double[] arr, double[] cos, double[] sin);
 
-    public native float[] fft_recursive_neon(float[] arr);
+    public native double[] fft_princeton_iterative(double[] arr, int arrTest);
+    public native double[] fft_princeton_recursive(double[] arr, int arrTest);
+    public native double[] fft_columbia_iterative(double[] arr, double[] cos, double[] sin, int arrTest);
 
-    public native void init_iterative_neon(int half);
-    public native float[] run_iterative_neon(float[] arr);
-    public native void delete_iterative_neon();
+    public native void     fft_kiss_init(int N);
+    public native double[] fft_kiss(double[] arr, int arrTest);
+    public native void     fft_kiss_delete();
+
+    public native float[]  fft_recursive_neon(float[] arr, int arrTest);
+
+    public native void     init_iterative_neon(int half);
+    public native float[]  run_iterative_neon(float[] arr, int arrTest);
+    public native void     delete_iterative_neon();
 
     static {
         System.loadLibrary("fft-lib");

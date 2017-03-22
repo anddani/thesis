@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
                     dataSizeText = DEFAULT_N;
                 }
                 int data = Constants.nextPowerOfTwo(Integer.parseInt(dataSizeText));
-                int blockIndex = data == 0 ? 0 : 32 - Integer.numberOfLeadingZeros(data-1) - 4;
+//                int blockIndex = data == 0 ? 0 : 32 - Integer.numberOfLeadingZeros(data-1) - 4;
 
                 // Delete output file each run
                 File sdCard = Environment.getExternalStorageDirectory();
@@ -118,8 +118,10 @@ public class MainActivity extends AppCompatActivity {
                 // Clear screen between tests
                 logTextView.setText("");
 
-                BenchmarkMessage message = new BenchmarkMessage(Constants.BENCHMARK_ITER, alg, blockIndex, Constants.ALG_TYPE);
-                mTaskHandler.obtainMessage(0, message).sendToTarget();
+                for (int sizeId = 0; sizeId < Constants.BLOCK_SIZES.length; sizeId++) {
+                    BenchmarkMessage message = new BenchmarkMessage(Constants.BENCHMARK_ITER, alg, sizeId);
+                    mTaskHandler.obtainMessage(0, message).sendToTarget();
+                }
             }
         });
     }
@@ -129,18 +131,9 @@ public class MainActivity extends AppCompatActivity {
      * for all block sizes and all algorithms
      */
     private void startBenchmarks() {
-        // Run JNI Tests
-        for (int test = 0; test < Constants.NUM_JNI_TESTS; test++) {
-            for (int size = 16; size <= (16 << (Constants.BLOCK_SIZES.length-1)); size <<= 1) {
-                BenchmarkMessage message = new BenchmarkMessage(Constants.BENCHMARK_ITER, test, size, Constants.JNI_TYPE);
-                mTaskHandler.obtainMessage(0, message).sendToTarget();
-            }
-        }
-
-        // Run Algorithm Tests
         for (int alg = 0; alg < Constants.NUM_ALGORITHMS; alg++) {
             for (int sizeId = 0; sizeId < Constants.BLOCK_SIZES.length; sizeId++) {
-                BenchmarkMessage message = new BenchmarkMessage(Constants.BENCHMARK_ITER, alg, sizeId, Constants.ALG_TYPE);
+                BenchmarkMessage message = new BenchmarkMessage(Constants.BENCHMARK_ITER, alg, sizeId);
                 mTaskHandler.obtainMessage(0, message).sendToTarget();
             }
         }

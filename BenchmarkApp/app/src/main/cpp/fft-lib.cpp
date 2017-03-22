@@ -1,7 +1,6 @@
 #include <jni.h>
 #include <string>
 #include <android/log.h>
-#include <time.h>
 #include "FFTPrincetonConverted.h"
 #include "FFTColumbiaConverted.h"
 #include "kiss-fft/_kiss_fft_guts.h"
@@ -14,9 +13,38 @@ struct objFFT objfft;
 struct ParametersStruct parametersStruct;
 kiss_fft_cfg fwd;
 
-jdoubleArray fftPI(JNIEnv* env, jobject obj, jdoubleArray arr) {
+void jniEmpty(JNIEnv*, jobject) {
+    return;
+}
+
+jdoubleArray jniParams(JNIEnv*, jobject, jdoubleArray arr) {
+    return arr;
+}
+
+jdoubleArray jniVectorConversion(JNIEnv* env, jobject, jdoubleArray arr) {
+    jdouble* elements = (jdouble*)(*env).GetPrimitiveArrayCritical(arr, 0);
+    (*env).ReleasePrimitiveArrayCritical(arr, elements, 0);
+    return arr;
+}
+jdoubleArray jniColumbia(JNIEnv* env, jobject obj, jdoubleArray arr, jdoubleArray cos, jdoubleArray sin) {
+    jdouble* elements = (jdouble*)(*env).GetPrimitiveArrayCritical(arr, 0);
+    jdouble* sin_v = (jdouble*)(*env).GetPrimitiveArrayCritical(sin, 0);
+    jdouble* cos_v = (jdouble*)(*env).GetPrimitiveArrayCritical(cos, 0);
+
+    (*env).ReleasePrimitiveArrayCritical(arr, elements, 0);
+    (*env).ReleasePrimitiveArrayCritical(sin, sin_v, 0);
+    (*env).ReleasePrimitiveArrayCritical(cos, cos_v, 0);
+    return arr;
+}
+
+jdoubleArray fftPI(JNIEnv* env, jobject obj, jdoubleArray arr, jint arrTest) {
     jsize size = (*env).GetArrayLength(arr);
-    jdouble* elements = (*env).GetDoubleArrayElements(arr, 0);
+    jdouble* elements;
+    if (arrTest) {
+        elements = (*env).GetDoubleArrayElements(arr, 0);
+    } else {
+        elements = (jdouble*)(*env).GetPrimitiveArrayCritical(arr, 0);
+    }
 
     std::vector<std::complex<double> > x;
     for (int i = 0; i < size; i+=2) {
@@ -35,13 +63,22 @@ jdoubleArray fftPI(JNIEnv* env, jobject obj, jdoubleArray arr) {
         elements[i + 1] = x[i/2].imag();
     }
 
-    (*env).ReleaseDoubleArrayElements(arr, elements, 0);
+    if (arrTest) {
+        (*env).ReleaseDoubleArrayElements(arr, elements, 0);
+    } else {
+        (*env).ReleasePrimitiveArrayCritical(arr, elements, 0);
+    }
     return arr;
 }
 
-jdoubleArray fftPR(JNIEnv* env, jobject obj, jdoubleArray arr) {
+jdoubleArray fftPR(JNIEnv* env, jobject obj, jdoubleArray arr, jint arrTest) {
     jsize size = (*env).GetArrayLength(arr);
-    jdouble* elements = (*env).GetDoubleArrayElements(arr, 0);
+    jdouble* elements;
+    if (arrTest) {
+        elements = (*env).GetDoubleArrayElements(arr, 0);
+    } else {
+        elements = (jdouble*)(*env).GetPrimitiveArrayCritical(arr, 0);
+    }
 
     std::vector<std::complex<double> > x;
     for (int i = 0; i < size; i+=2) {
@@ -57,28 +94,98 @@ jdoubleArray fftPR(JNIEnv* env, jobject obj, jdoubleArray arr) {
         elements[i + 1] = x[i/2].imag();
     }
 
-    (*env).ReleaseDoubleArrayElements(arr, elements, 0);
+    if (arrTest) {
+        (*env).ReleaseDoubleArrayElements(arr, elements, 0);
+    } else {
+        (*env).ReleasePrimitiveArrayCritical(arr, elements, 0);
+    }
     return arr;
 }
 
-jdoubleArray fftColumbiaIterative(JNIEnv* env, jobject obj, jdoubleArray arr, jdoubleArray cos, jdoubleArray sin) {
+jdoubleArray fftColumbiaIterative(JNIEnv* env, jobject obj, jdoubleArray arr, jdoubleArray cos, jdoubleArray sin, jint arrTest) {
     jsize size = (*env).GetArrayLength(arr);
-    jdouble* elements = (jdouble*)(*env).GetPrimitiveArrayCritical(arr, 0);
-    jdouble* sin_v = (jdouble*)(*env).GetPrimitiveArrayCritical(sin, 0);
-    jdouble* cos_v = (jdouble*)(*env).GetPrimitiveArrayCritical(cos, 0);
+    jdouble* elements;
+    jdouble* sin_v;
+    jdouble* cos_v;
+
+    if (arrTest) {
+        elements = (*env).GetDoubleArrayElements(arr, 0);
+        sin_v = (*env).GetDoubleArrayElements(sin, 0);
+        cos_v = (*env).GetDoubleArrayElements(cos, 0);
+    } else {
+        elements = (jdouble*)(*env).GetPrimitiveArrayCritical(arr, 0);
+        sin_v = (jdouble*)(*env).GetPrimitiveArrayCritical(sin, 0);
+        cos_v = (jdouble*)(*env).GetPrimitiveArrayCritical(cos, 0);
+    }
+
     int N = size/2;
 
     fftCI(elements, elements+N, N, cos_v, sin_v);
 
-    (*env).ReleasePrimitiveArrayCritical(arr, elements, 0);
-    (*env).ReleasePrimitiveArrayCritical(sin, sin_v, 0);
-    (*env).ReleasePrimitiveArrayCritical(cos, cos_v, 0);
+    if (arrTest) {
+        (*env).ReleaseDoubleArrayElements(arr, elements, 0);
+        (*env).ReleaseDoubleArrayElements(sin, sin_v, 0);
+        (*env).ReleaseDoubleArrayElements(cos, cos_v, 0);
+    } else {
+        (*env).ReleasePrimitiveArrayCritical(arr, elements, 0);
+        (*env).ReleasePrimitiveArrayCritical(sin, sin_v, 0);
+        (*env).ReleasePrimitiveArrayCritical(cos, cos_v, 0);
+    }
     return arr;
 }
 
-jfloatArray fftNeon(JNIEnv* env, jobject obj, jfloatArray arr) {
+void fftKissInit(JNIEnv* env, jobject, jint half) {
+    fwd = kiss_fft_alloc(half, 0, 0, 0);
+}
+
+jdoubleArray fftKiss(JNIEnv* env, jobject, jdoubleArray arr, jint arrTest) {
     jsize size = (*env).GetArrayLength(arr);
-    jfloat* elements = (jfloat*)(*env).GetPrimitiveArrayCritical(arr, 0);
+    jdouble* elements;
+    if (arrTest) {
+        elements = (*env).GetDoubleArrayElements(arr, 0);
+    } else {
+        elements = (jdouble*)(*env).GetPrimitiveArrayCritical(arr, 0);
+    }
+
+    int half = size/2;
+    std::vector<kiss_fft_cpx> in(half);
+    std::vector<kiss_fft_cpx> out(half);
+
+    for (int i = 0; i < size; i+=2) {
+        in[i/2].r = elements[i];
+        in[i/2].i = elements[i+1];
+        out[i/2].r = 0.0;
+        out[i/2].i = 0.0;
+    }
+
+    kiss_fft(fwd, &in[0], &out[0]);
+
+    for (int i = 0; i < size; i+=2) {
+        elements[i] = out[i/2].r;
+        elements[i+1] = out[i/2].i;
+    }
+
+    // Return a double[]
+    if (arrTest) {
+        (*env).ReleaseDoubleArrayElements(arr, elements, 0);
+    } else {
+        (*env).ReleasePrimitiveArrayCritical(arr, elements, 0);
+    }
+    return arr;
+}
+
+void fftKissDelete(JNIEnv* env, jobject) {
+    kiss_fft_free(fwd);
+}
+
+jfloatArray runRecursiveNeon(JNIEnv* env, jobject obj, jfloatArray arr, jint arrTest) {
+    jsize size = (*env).GetArrayLength(arr);
+    jfloat* elements;
+    if (arrTest) {
+        elements = (*env).GetFloatArrayElements(arr, 0);
+    } else {
+        elements = (jfloat*)(*env).GetPrimitiveArrayCritical(arr, 0);
+    }
     int N = size/2;
 
     cd* in = (cd*)malloc(N * sizeof(cd));
@@ -106,66 +213,11 @@ jfloatArray fftNeon(JNIEnv* env, jobject obj, jfloatArray arr) {
     free(in);
     free(out);
 
-    (*env).ReleasePrimitiveArrayCritical(arr, elements, 0);
-    return arr;
-}
-
-void fftKissInit(JNIEnv* env, jobject, jint half) {
-    fwd = kiss_fft_alloc(half, 0, 0, 0);
-}
-
-jdoubleArray fftKiss(JNIEnv* env, jobject, jdoubleArray arr) {
-    jsize size = (*env).GetArrayLength(arr);
-    jdouble* elements = (*env).GetDoubleArrayElements(arr, 0);
-
-    int half = size/2;
-    std::vector<kiss_fft_cpx> in(half);
-    std::vector<kiss_fft_cpx> out(half);
-
-    for (int i = 0; i < size; i+=2) {
-        in[i/2].r = elements[i];
-        in[i/2].i = elements[i+1];
-        out[i/2].r = 0.0;
-        out[i/2].i = 0.0;
+    if (arrTest) {
+        (*env).ReleaseFloatArrayElements(arr, elements, 0);
+    } else {
+        (*env).ReleasePrimitiveArrayCritical(arr, elements, 0);
     }
-
-    kiss_fft(fwd, &in[0], &out[0]);
-
-    for (int i = 0; i < size; i+=2) {
-        elements[i] = out[i/2].r;
-        elements[i+1] = out[i/2].i;
-    }
-
-    // Return a double[]
-    (*env).ReleaseDoubleArrayElements(arr, elements, 0);
-    return arr;
-}
-
-void fftKissDelete(JNIEnv* env, jobject) {
-    kiss_fft_free(fwd);
-}
-
-void jniEmpty(JNIEnv*, jobject) {
-    return;
-}
-
-jdoubleArray jniParams(JNIEnv*, jobject, jdoubleArray arr) {
-    return arr;
-}
-
-jdoubleArray jniVectorConversion(JNIEnv* env, jobject, jdoubleArray arr) {
-    jdouble* elements = (jdouble*)(*env).GetPrimitiveArrayCritical(arr, 0);
-    (*env).ReleasePrimitiveArrayCritical(arr, elements, 0);
-    return arr;
-}
-jdoubleArray jniColumbia(JNIEnv* env, jobject obj, jdoubleArray arr, jdoubleArray cos, jdoubleArray sin) {
-    jdouble* elements = (jdouble*)(*env).GetPrimitiveArrayCritical(arr, 0);
-    jdouble* sin_v = (jdouble*)(*env).GetPrimitiveArrayCritical(sin, 0);
-    jdouble* cos_v = (jdouble*)(*env).GetPrimitiveArrayCritical(cos, 0);
-
-    (*env).ReleasePrimitiveArrayCritical(arr, elements, 0);
-    (*env).ReleasePrimitiveArrayCritical(sin, sin_v, 0);
-    (*env).ReleasePrimitiveArrayCritical(cos, cos_v, 0);
     return arr;
 }
 
@@ -173,9 +225,14 @@ void initIterativeNeon(JNIEnv*, jobject, jint size) {
     fftIterativeNeonInit(&objfft, &parametersStruct, size);
 }
 
-jfloatArray runIterativeNeon(JNIEnv* env, jobject, jfloatArray arr) {
+jfloatArray runIterativeNeon(JNIEnv* env, jobject, jfloatArray arr, jint arrTest) {
     jsize size = (*env).GetArrayLength(arr);
-    jfloat* elements = (jfloat*)(*env).GetPrimitiveArrayCritical(arr, 0);
+    jfloat* elements;
+    if (arrTest) {
+        elements = (*env).GetFloatArrayElements(arr,0);
+    } else {
+        elements = (jfloat*)(*env).GetPrimitiveArrayCritical(arr, 0);
+    }
     int N = size/2;
 
     float* sourceReal = (float*)malloc(N * sizeof(float*));
@@ -192,7 +249,11 @@ jfloatArray runIterativeNeon(JNIEnv* env, jobject, jfloatArray arr) {
     free(sourceReal);
     free(sourceImag);
 
-    (*env).ReleasePrimitiveArrayCritical(arr, elements, 0);
+    if (arrTest) {
+        (*env).ReleaseFloatArrayElements(arr, elements, 0);
+    } else {
+        (*env).ReleasePrimitiveArrayCritical(arr, elements, 0);
+    }
     return arr;
 }
 
@@ -208,19 +269,20 @@ static JNINativeMethod s_methods[] {
         {"jni_columbia",                      "([D[D[D)[D", (void*)jniColumbia},
 
         // Converted FFTs
-        {"fft_princeton_iterative",           "([D)[D",     (void*)fftPI},
-        {"fft_princeton_recursive",           "([D)[D",     (void*)fftPR},
-        {"fft_columbia_iterative",            "([D[D[D)[D", (void*)fftColumbiaIterative},
+        {"fft_princeton_iterative",           "([DI)[D",     (void*)fftPI},
+        {"fft_princeton_recursive",           "([DI)[D",     (void*)fftPR},
+        {"fft_columbia_iterative",            "([D[D[DI)[D", (void*)fftColumbiaIterative},
         // Kiss FFT
         {"fft_kiss_init",                     "(I)V",       (void*)fftKissInit},
-        {"fft_kiss",                          "([D)[D",     (void*)fftKiss},
+        {"fft_kiss",                          "([DI)[D",    (void*)fftKiss},
         {"fft_kiss_delete",                   "()V",        (void*)fftKissDelete},
 
         // Recursive NEON
-        {"fft_recursive_neon",                 "([F)[F",    (void*)fftNeon},
+        {"fft_recursive_neon",                 "([FI)[F",   (void*)runRecursiveNeon},
+
         // Iterative NEON
         {"init_iterative_neon",               "(I)V",       (void*)initIterativeNeon},
-        {"run_iterative_neon",                "([F)[F",     (void*)runIterativeNeon},
+        {"run_iterative_neon",                "([FI)[F",    (void*)runIterativeNeon},
         {"delete_iterative_neon",             "()V",        (void*)deleteIterativeNeon},
 };
 

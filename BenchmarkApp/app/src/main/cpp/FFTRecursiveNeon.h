@@ -10,6 +10,6 @@ typedef std::complex<float> cd;
 
 void fftRecursiveNeonInit(int N);
 void fftRecursiveNeon(cd *in, cd* out, int log2stride, int stride, int N);
-
+void fftRecursiveNeonDelete(int N);
 
 #endif //BENCHMARKAPP_FFTRECURSIVENEON_H

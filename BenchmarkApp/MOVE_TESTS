@@ -236,6 +236,10 @@ function convert_test_results {
             # Margin of error
             ME=$(awk -v se="$SE" 'BEGIN{printf "%.4f", se*1.96}')
 
+            if [ "$ME" == "0.0000" ] ; then
+                ME="0.0001"
+            fi
+
             if [ ! -d "$FOLDER" ] ; then
                 mkdir $FOLDER
             fi

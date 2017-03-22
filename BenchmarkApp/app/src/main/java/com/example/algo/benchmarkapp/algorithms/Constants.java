@@ -2,23 +2,17 @@ package com.example.algo.benchmarkapp.algorithms;
 
 public class Constants {
 
-    public static final int BENCHMARK_ITER = 30;
-//    public static final int BENCHMARK_ITER = 5;
+    public static final int BENCHMARK_ITER = 3;
 
     public static final int BENCHMARK_MESSAGE_NEW = 17;
     public static final int BENCHMARK_MESSAGE_DONE = 4711;
 
-    public static final int JNI_TYPE = 0;
-    public static final int ALG_TYPE = 1;
-
-    public enum JNI_TESTS {
+    public enum ALGORITHMS {
         JNI_EMPTY,
         JNI_PARAMS,
         JNI_VECTOR_CONVERSION,
         JNI_COLUMBIA,
-    }
 
-    public enum ALGORITHMS {
         FFT_JAVA_ITERATIVE_PRINCETON,
         FFT_JAVA_RECURSIVE_PRINCETON,
         FFT_JAVA_ITERATIVE_COLUMBIA,
@@ -29,16 +23,21 @@ public class Constants {
 
         NEON_CPP_RECURSIVE,
         NEON_CPP_ITERATIVE,
+
+        ARR_CPP_ITERATIVE_PRINCETON,
+        ARR_CPP_RECURSIVE_PRINCETON,
+        ARR_CPP_ITERATIVE_COLUMBIA,
+        ARR_CPP_KISS,
+        NEON_CPP_NEON_RECURSIVE,
+        NEON_CPP_NEON_ITERATIVE,
     }
 
-    public static final String[] JNI_NAMES = {
+    public static final String[] ALGORITHM_NAMES = {
             "JNI 1_Benchmark_no_params",
             "JNI 2_Benchmark_vector",
             "JNI 3_Benchmark_convert",
             "JNI 4_Benchmark_Columbia",
-    };
 
-    public static final String[] ALGORITHM_NAMES = {
             "FFT Java_Princeton_Iterative",
             "FFT Java_Princeton_Recursive",
             "FFT Java_Columbia_Iterative",
@@ -49,6 +48,13 @@ public class Constants {
 
             "NEON CPP_Recursive",
             "NEON CPP_Iterative",
+
+            "ARR CPP_Princeton_Iterative",
+            "ARR CPP_Princeton_Recursive",
+            "ARR CPP_Columbia_Iterative",
+            "ARR CPP_KISS",
+            "ARR CPP_NEON_Recursive",
+            "ARR CPP_NEON_Iterative",
     };
 
     /**
@@ -75,8 +81,7 @@ public class Constants {
         return v;
     }
 
-    public static final int[] BLOCK_SIZES = getBlockSizes(18);
+    public static final int[] BLOCK_SIZES = getBlockSizes(16);
 
     public static final int NUM_ALGORITHMS = ALGORITHMS.values().length;
-    public static final int NUM_JNI_TESTS = JNI_TESTS.values().length;
 }
