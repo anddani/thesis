@@ -321,7 +321,7 @@ elif [ "$CONVERT" == "1" ] ; then
     create_common_table $RESULTS_PATH/JNI JNI
 
     # Create graphs for FFT and NEON tests
-    fft_to_latex $RESULTS_PATH/FFT $RESULTS_PATH/NEON
+    fft_to_latex $RESULTS_PATH/FFT $RESULTS_PATH/NEON $RESULTS_PATH/FLOAT
 
     # Create comparison for each test in folder
     create_comparison_graph $RESULTS_PATH

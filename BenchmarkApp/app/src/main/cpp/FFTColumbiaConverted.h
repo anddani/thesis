@@ -9,5 +9,6 @@ const double M_PI = 3.14159265358979323846;
 #endif
 
 void fftCI(double* x, double* y, int n, double* cos_v, double* sin_v);
+void floatFftCI(float* x, float* y, int n, float* cos_v, float* sin_v);
 
 #endif //BENCHMARKAPP_FFTCOLUMBIACONVERTED_H

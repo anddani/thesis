@@ -24,7 +24,10 @@ The test labeled \textbf{No params} is the test where a native void function wit
 %% FFT-Tests
 %%==================================================================
 \section{FFT Libraries}
+
 The results from the FFT Libraries are presented in line graphs, both language specific and graphs with both Java and C++ are given to illustrate the differences between languages and also provide differences for specific languages clearly. The time unit for these tests are presented in milliseconds as opposed to microseconds that the JNI was measured in. This was because the FFT ran in ranges below one millisecond and above one second among different algorithms and different block sizes. The means are calculated from the results of 100 test runs.
+
+\subsection{Float vs Double}
 
 \subsection{Small block sizes}
 Results from the small blocks tests shows clear difference between the different algorithms. In Figure~\ref{fig:all:line:small}, Princeton Recursive in Java perform the worst. Princeton Recursive in C++ and Princeton Iterative in Java perform better than Princeton Recursive Java although worse than the rest of the algorithms. % CHECK IF STILL RELEVANT AFTER NEW TESTS

@@ -2,7 +2,7 @@ package com.example.algo.benchmarkapp.algorithms;
 
 public class Constants {
 
-    public static final int BENCHMARK_ITER = 3;
+    public static final int BENCHMARK_ITER = 100;
 
     public static final int BENCHMARK_MESSAGE_NEW = 17;
     public static final int BENCHMARK_MESSAGE_DONE = 4711;
@@ -28,8 +28,21 @@ public class Constants {
         ARR_CPP_RECURSIVE_PRINCETON,
         ARR_CPP_ITERATIVE_COLUMBIA,
         ARR_CPP_KISS,
-        NEON_CPP_NEON_RECURSIVE,
-        NEON_CPP_NEON_ITERATIVE,
+
+        ARR_CPP_NEON_RECURSIVE,
+        ARR_CPP_NEON_ITERATIVE,
+
+        FLOAT_JAVA_ITERATIVE_PRINCETON,
+        FLOAT_JAVA_RECURSIVE_PRINCETON,
+        FLOAT_JAVA_ITERATIVE_COLUMBIA,
+
+        FLOAT_CPP_ITERATIVE_PRINCETON,
+        FLOAT_CPP_RECURSIVE_PRINCETON,
+        FLOAT_CPP_ITERATIVE_COLUMBIA,
+
+        ARR_CPP_FLOAT_ITERATIVE_PRINCETON,
+        ARR_CPP_FLOAT_RECURSIVE_PRINCETON,
+        ARR_CPP_FLOAT_ITERATIVE_COLUMBIA,
     }
 
     public static final String[] ALGORITHM_NAMES = {
@@ -55,6 +68,18 @@ public class Constants {
             "ARR CPP_KISS",
             "ARR CPP_NEON_Recursive",
             "ARR CPP_NEON_Iterative",
+
+            "FLOAT Java_Princeton_Iterative",
+            "FLOAT Java_Princeton_Recursive",
+            "FLOAT Java_Columbia_Iterative",
+
+            "FLOAT CPP_Princeton_Iterative",
+            "FLOAT CPP_Princeton_Recursive",
+            "FLOAT CPP_Columbia_Iterative",
+
+            "ARR CPP_Float_Princeton_Iterative",
+            "ARR CPP_Float_Princeton_Recursive",
+            "ARR CPP_Float_Columbia_Iterative",
     };
 
     /**
@@ -81,7 +106,7 @@ public class Constants {
         return v;
     }
 
-    public static final int[] BLOCK_SIZES = getBlockSizes(16);
+    public static final int[] BLOCK_SIZES = getBlockSizes(18);
 
     public static final int NUM_ALGORITHMS = ALGORITHMS.values().length;
 }

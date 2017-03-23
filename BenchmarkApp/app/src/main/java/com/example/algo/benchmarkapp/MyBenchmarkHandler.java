@@ -112,11 +112,38 @@ public class MyBenchmarkHandler extends Handler {
                 case ARR_CPP_KISS:
                     time = bm.FFTCppKiss(1);
                     break;
-                case NEON_CPP_NEON_RECURSIVE:
+                case ARR_CPP_NEON_RECURSIVE:
                     time = bm.FFTCppRecursiveNeon(1);
                     break;
-                case NEON_CPP_NEON_ITERATIVE:
+                case ARR_CPP_NEON_ITERATIVE:
                     time = bm.FFTCppIterativeNeon(1);
+                    break;
+                case FLOAT_JAVA_ITERATIVE_PRINCETON:
+                    time = bm.FloatFFTJavaIterativePrinceton();
+                    break;
+                case FLOAT_JAVA_RECURSIVE_PRINCETON:
+                    time = bm.FloatFFTJavaRecursivePrinceton();
+                    break;
+                case FLOAT_JAVA_ITERATIVE_COLUMBIA:
+                    time = bm.FloatFFTJavaIterativeColumbia();
+                    break;
+                case FLOAT_CPP_ITERATIVE_PRINCETON:
+                    time = bm.FloatFFTCppIterativePrinceton(0);
+                    break;
+                case FLOAT_CPP_RECURSIVE_PRINCETON:
+                    time = bm.FloatFFTCppRecursivePrinceton(0);
+                    break;
+                case FLOAT_CPP_ITERATIVE_COLUMBIA:
+                    time = bm.FloatFFTCppIterativeColumbia(0);
+                    break;
+                case ARR_CPP_FLOAT_ITERATIVE_PRINCETON:
+                    time = bm.FloatFFTCppIterativePrinceton(1);
+                    break;
+                case ARR_CPP_FLOAT_RECURSIVE_PRINCETON:
+                    time = bm.FloatFFTCppRecursivePrinceton(1);
+                    break;
+                case ARR_CPP_FLOAT_ITERATIVE_COLUMBIA:
+                    time = bm.FloatFFTCppIterativeColumbia(1);
                     break;
                 default:
                     break;

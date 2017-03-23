@@ -102,6 +102,103 @@ jdoubleArray fftPR(JNIEnv* env, jobject obj, jdoubleArray arr, jint arrTest) {
     return arr;
 }
 
+jfloatArray floatFftPI(JNIEnv* env, jobject obj, jfloatArray arr, jint arrTest) {
+    jsize size = (*env).GetArrayLength(arr);
+    jfloat* elements;
+    if (arrTest) {
+        elements = (*env).GetFloatArrayElements(arr, 0);
+    } else {
+        elements = (jfloat*)(*env).GetPrimitiveArrayCritical(arr, 0);
+    }
+
+    std::vector<std::complex<float> > x;
+    for (int i = 0; i < size; i+=2) {
+        x.push_back(std::complex<float>(elements[i], elements[i+1]));
+    }
+
+    int ret = floatFftPrincetonIterative(x); // Run FFT
+    if (ret == -1) {
+        __android_log_print(ANDROID_LOG_INFO, LOGTAG, "-- Size not power of 2");
+    }
+
+    // place in return array
+    // [x[0].real, x[0].imag, ... x[n-1].real, x[n-1].imag]
+    for (int i = 0; i < size; i+=2) {
+        elements[i] = x[i/2].real();
+        elements[i + 1] = x[i/2].imag();
+    }
+
+    if (arrTest) {
+        (*env).ReleaseFloatArrayElements(arr, elements, 0);
+    } else {
+        (*env).ReleasePrimitiveArrayCritical(arr, elements, 0);
+    }
+    return arr;
+}
+
+jfloatArray floatFftPR(JNIEnv* env, jobject obj, jfloatArray arr, jint arrTest) {
+    jsize size = (*env).GetArrayLength(arr);
+    jfloat* elements;
+    if (arrTest) {
+        elements = (*env).GetFloatArrayElements(arr, 0);
+    } else {
+        elements = (jfloat*)(*env).GetPrimitiveArrayCritical(arr, 0);
+    }
+
+    std::vector<std::complex<float> > x;
+    for (int i = 0; i < size; i+=2) {
+        x.push_back(std::complex<float>(elements[i], elements[i+1]));
+    }
+
+    x = floatFftPrincetonRecursive(x);
+
+    // place in return array
+    // [x[0].real, x[0].imag, ... x[n-1].real, x[n-1].imag]
+    for (int i = 0; i < size; i+=2) {
+        elements[i] = x[i/2].real();
+        elements[i + 1] = x[i/2].imag();
+    }
+
+    if (arrTest) {
+        (*env).ReleaseFloatArrayElements(arr, elements, 0);
+    } else {
+        (*env).ReleasePrimitiveArrayCritical(arr, elements, 0);
+    }
+    return arr;
+}
+
+jfloatArray floatFftColumbiaIterative(JNIEnv* env, jobject obj, jfloatArray arr, jfloatArray cos, jfloatArray sin, jint arrTest) {
+    jsize size = (*env).GetArrayLength(arr);
+    jfloat* elements;
+    jfloat* sin_v;
+    jfloat* cos_v;
+
+    if (arrTest) {
+        elements = (*env).GetFloatArrayElements(arr, 0);
+        sin_v = (*env).GetFloatArrayElements(sin, 0);
+        cos_v = (*env).GetFloatArrayElements(cos, 0);
+    } else {
+        elements = (jfloat *)(*env).GetPrimitiveArrayCritical(arr, 0);
+        sin_v = (jfloat *)(*env).GetPrimitiveArrayCritical(sin, 0);
+        cos_v = (jfloat *)(*env).GetPrimitiveArrayCritical(cos, 0);
+    }
+
+    int N = size/2;
+
+    floatFftCI(elements, elements+N, N, cos_v, sin_v);
+
+    if (arrTest) {
+        (*env).ReleaseFloatArrayElements(arr, elements, 0);
+        (*env).ReleaseFloatArrayElements(sin, sin_v, 0);
+        (*env).ReleaseFloatArrayElements(cos, cos_v, 0);
+    } else {
+        (*env).ReleasePrimitiveArrayCritical(arr, elements, 0);
+        (*env).ReleasePrimitiveArrayCritical(sin, sin_v, 0);
+        (*env).ReleasePrimitiveArrayCritical(cos, cos_v, 0);
+    }
+    return arr;
+}
+
 jdoubleArray fftColumbiaIterative(JNIEnv* env, jobject obj, jdoubleArray arr, jdoubleArray cos, jdoubleArray sin, jint arrTest) {
     jsize size = (*env).GetArrayLength(arr);
     jdouble* elements;
@@ -182,10 +279,8 @@ jfloatArray runRecursiveNeon(JNIEnv* env, jobject obj, jfloatArray arr, jint arr
     jsize size = (*env).GetArrayLength(arr);
     jfloat* elements;
     if (arrTest) {
-        __android_log_print(ANDROID_LOG_INFO, LOGTAG, "-- Running arr test");
         elements = (*env).GetFloatArrayElements(arr, 0);
     } else {
-        __android_log_print(ANDROID_LOG_INFO, LOGTAG, "-- Running normal test");
         elements = (jfloat*)(*env).GetPrimitiveArrayCritical(arr, 0);
     }
     int N = size/2;
@@ -286,6 +381,11 @@ static JNINativeMethod s_methods[] {
         {"init_iterative_neon",               "(I)V",       (void*)initIterativeNeon},
         {"run_iterative_neon",                "([FI)[F",    (void*)runIterativeNeon},
         {"delete_iterative_neon",             "()V",        (void*)deleteIterativeNeon},
+
+        // Converted float FFTs
+        {"float_fft_princeton_iterative",     "([FI)[F",     (void*)floatFftPI},
+        {"float_fft_princeton_recursive",     "([FI)[F",     (void*)floatFftPR},
+        {"float_fft_columbia_iterative",      "([F[F[FI)[F", (void*)floatFftColumbiaIterative},
 };
 
 jint JNI_OnLoad(JavaVM* vm, void*) {

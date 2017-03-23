@@ -70,6 +70,74 @@ vector<complex<double> > fftPrincetonRecursive(vector<complex<double> > &x) {
     return y;
 }
 
+int floatFftPrincetonIterative(vector<complex<float> >& x) {
+    int N = x.size();
+
+    // N not power of 2
+    if ((N & (N - 1)) != 0) {
+        return -1;
+    }
+
+    // Bit reversal permutation
+    int shift = 1 + __builtin_clz(N);
+    for (unsigned int k = 0; k < N; k++) {
+        int j = reverseInt(k) >> shift;
+        if (j > k) {
+            complex<float> temp = x[j];
+            x[j] = x[k];
+            x[k] = temp;
+        }
+    }
+
+    // butterfly updates
+    for (int L = 2; L <= N; L = L+L) {
+        for (int k = 0; k < L/2; k++) {
+            float kth = -2 * k * M_PI / L;
+            complex<float> w(cos(kth), sin(kth));
+            for (int j = 0; j < N/L; j++) {
+                complex<float> tao = w * (x[j*L + k + L/2]);
+                x[j*L + k + L/2] = x[j*L + k] - tao;
+                x[j*L + k]       = x[j*L + k] + tao;
+            }
+        }
+    }
+    return 0;
+}
+
+vector<complex<float> > floatFftPrincetonRecursive(vector<complex<float> > &x) {
+    int n = x.size();
+    if (n == 1) {
+        vector<complex<float> > ret;
+        ret.push_back(x[0]);
+        return ret;
+    }
+    if (n % 2 != 0) {
+        return vector<complex<float> >();
+    }
+
+    vector<complex<float> > even(n/2);
+    for (int k = 0; k < n/2; ++k) {
+        even[k] = x[2 * k];
+    }
+    vector<complex<float> > q = floatFftPrincetonRecursive(even);
+
+    vector<complex<float> > odd(n/2);
+    for (int k = 0; k < n/2; ++k) {
+        odd[k] = x[2 * k + 1];
+    }
+    vector<complex<float> > r = floatFftPrincetonRecursive(odd);
+
+    // Combine
+    vector<complex<float> > y(n);
+    for (int k = 0; k < n/2; ++k) {
+        float kth = -2 * k * M_PI / n;
+        complex<float> wk(cos(kth), sin(kth));
+        y[k] = q[k] + (wk*r[k]);
+        y[k + n/2] = q[k] - (wk*r[k]);
+    }
+    return y;
+}
+
 uint32_t reverseInt(uint32_t x)
 {
     x = ((x >> 1) & 0x55555555u) | ((x & 0x55555555u) << 1);

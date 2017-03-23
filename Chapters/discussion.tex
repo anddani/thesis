@@ -7,9 +7,16 @@ The confidence intervals overlap for many of the values, meaning we cannot say w
 
 % The second tests compared the execution times for measuring the benefits of using a critical zone in native code. In Figure~\ref{}
 
+\section{Floats and Doubles}
+% CACHING!!!!!!
+% Array would be twice as large if doubles were used. Bigger chance that the whole array can fit when using float elements. There is a really big  difference in both java and C++
+
 \section{Simplicity and Efficiency}
 
 % When choosing a java version, choose Columbia Iterative
+One thing that is clear is that the Columbia Iterative algorithm is the best one to choose from of the Java versions. It performs better than both Princeton Iterative and Princeton Recursive. It also allows simple modifications such as changing between using \texttt{float}s or  \texttt{double}s to represent the data.
+
+The reason Princeton Iterative and Princeton Recursive is slower in Java than in C++ is because they operate with \texttt{Complex} elements. Each time two \texttt{Complex} numbers are added, multiplied or subtracted, a new \texttt{Complex} object is created. This slows down the process and increases memory consumption, increasing work for the garbage collector.
 
 % Although you can have two equally long implementations, one could be faster than the other. It is important to do small tests with different sized data.
 
@@ -22,6 +29,8 @@ The confidence intervals overlap for many of the values, meaning we cannot say w
 % It is with very large block sizes the difference is clear.
 
 \section{Vectorization as Optimization}
+
+As the results show, vectorization was an improvement in regards to efficiency. This was as expected because it is possible to process more elements for each instruction. 
 
 % The benefit of fitting it all in cache.
 
