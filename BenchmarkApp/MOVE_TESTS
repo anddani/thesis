@@ -10,6 +10,9 @@ DATA_PATH=$EXJOBB_HOME/Data
 FILENAME="/sdcard/data.out"
 RESULTS_PATH=$DATA_PATH/results
 
+# GRAPH_HEADER='\begin{axis}[xlabel={Block size},ylabel={Time (ms)},width=0.45\linewidth,scaled y ticks = false,legend style={at={(0.5,1.1)},anchor=south,font=\scriptsize}]'
+GRAPH_HEADER='\begin{axis}[xlabel={Block size},ylabel={Time (ms)},width=0.45\linewidth,legend pos=north west,scaled y ticks = false,legend cell align=left,legend style={font=\scriptsize}]'
+
 function create_common_table {
     CURRENT_DIR=$1
     CURRENT_TYPE=$2
@@ -122,7 +125,8 @@ function create_line_graph {
 
     # Print graph header
     echo '\begin{tikzpicture}' >> $NEW_FILE
-    echo '\begin{axis}[xlabel={Block size},ylabel={Time (ms)},width=0.70\linewidth,legend pos=north west,scaled y ticks = false,legend cell align=left,legend style={font=\scriptsize}]' >> $NEW_FILE
+    # echo '\begin{axis}[xlabel={Block size},ylabel={Time (ms)},width=0.99\linewidth,legend pos=north west,scaled y ticks = false,legend cell align=left,legend style={font=\scriptsize}]' >> $NEW_FILE
+    echo $GRAPH_HEADER >> $NEW_FILE
     # Content
     ALGS=""
     for c in $CONTENT ; do
@@ -159,7 +163,8 @@ function create_line_graph {
                 if [ ! -f "$NEW_FILE" ] ; then
                     # Print graph header
                     echo '\begin{tikzpicture}' >> $NEW_FILE
-                    echo '\begin{axis}[xlabel={Block size},ylabel={Time (ms)},width=0.70\linewidth,legend pos=north west,scaled y ticks = false,legend cell align=left,legend style={font=\scriptsize}]' >> $NEW_FILE
+                    # echo '\begin{axis}[xlabel={Block size},ylabel={Time (ms)},width=0.99\linewidth,legend pos=north west,scaled y ticks = false,legend cell align=left,legend style={font=\scriptsize}]' >> $NEW_FILE
+                    echo $GRAPH_HEADER >> $NEW_FILE
                     FILES="$FILES $NEW_FILE"
                 fi
                 # Algorithm label in legend
@@ -216,6 +221,8 @@ function create_comparison_graph {
     for c in $CONTENT ; do
         if [[ "$c" =~ NEON ]] ; then
             FFT_FILE=$CURRENT_PATH/NEON/$(echo $c | sed 's/NEON_//g')
+        elif [[ "$c" =~ Float ]] ; then
+            FFT_FILE=$CURRENT_PATH/FLOAT/$(echo $c | sed 's/Float_//g')
         else
             FFT_FILE=$CURRENT_PATH/FFT/$c
         fi
@@ -223,7 +230,8 @@ function create_comparison_graph {
         NEW_FILE=$(echo $ARR_FILE | sed 's/_N_.*//g').tex
 
         echo '\begin{tikzpicture}' >> $NEW_FILE
-        echo '\begin{axis}[xlabel={Block size},ylabel={Time (ms)},width=0.70\linewidth,legend pos=north west,scaled y ticks = false,legend cell align=left,legend style={font=\scriptsize}]' >> $NEW_FILE
+        # echo '\begin{axis}[xlabel={Block size},ylabel={Time (ms)},width=0.99\linewidth,legend pos=north west,scaled y ticks = false,legend cell align=left,legend style={at={(0.5,1.1)},anchor=south,font=\scriptsize}]' >> $NEW_FILE
+        echo $GRAPH_HEADER >> $NEW_FILE
 
         # ARR
         echo '\addplot coordinates {' >> $NEW_FILE
@@ -325,6 +333,7 @@ elif [ "$CONVERT" == "1" ] ; then
 
     # Create comparison for each test in folder
     create_comparison_graph $RESULTS_PATH
+    create_common_table $RESULTS_PATH/ARR ARR
 
 else
     echo "-- moving data from phone to $DATA_PATH/$TIME"

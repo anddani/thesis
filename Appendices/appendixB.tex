@@ -1,8 +1,22 @@
 \section{Data}
-
+\subsection{JNI}
 \begin{table}[H]
     \centering
-    \caption{Common table for FFT tests, Time(ms)}
+    \label{tab:common:table:jni}
+    \caption{Common table for JNI tests, Time(\textmu s)}
+    \resizebox{\columnwidth}{!}{
+        \input{Data/results/JNI/common_table_JNI.tex}
+    }
+\end{table}
+
+\subsection{Double Tables}
+
+%%==================================================================
+%% Double tables
+%%==================================================================
+\begin{table}[H]
+    \centering
+    \caption{Common table for \texttt{double} C++ FFT tests, Time(ms)}
     \label{tab:appendix:common:cpp}
     \resizebox{\columnwidth}{!}{
         \input{Data/results/FFT/CPP_common_table_FFT.tex}
@@ -11,26 +25,137 @@
 
 \begin{table}[H]
     \centering
-    \caption{Common table for Java tests, Time(ms)}
+    \caption{Common table for \texttt{double} Java tests, Time(ms)}
     \label{tab:appendix:common:java}
     \input{Data/results/FFT/Java_common_table_FFT.tex}
 \end{table}
 
 \begin{table}[H]
     \centering
-    \caption{Common table for NEON tests, Time(ms)}
+    \caption{Common table for \texttt{double} NEON tests, Time(ms)}
     \label{tab:appendix:common:neon}
     \input{Data/results/NEON/CPP_common_table_NEON.tex}
 \end{table}
 
-% \begin{table}[H]
+\subsection{Float Tables}
+        
+%%==================================================================
+%% Float tables
+%%==================================================================
+\begin{table}[H]
+    \centering
+    \label{fig:appendix:java:common:float}
+    \caption{Common table for \texttt{float} Java tests, Time(ms)}
+    \input{Data/results/FLOAT/Java_common_table_FLOAT.tex}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \label{fig:appendix:cpp:common:float}
+    \caption{Common table for \texttt{float} C++ tests, Time(ms)}
+    \input{Data/results/FLOAT/CPP_common_table_FLOAT.tex}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \caption{Common table for \texttt{float} NEON tests, Time(ms)}
+    \label{tab:appendix:cpp:common:neon}
+    \input{Data/results/NEON/CPP_common_table_NEON.tex}
+\end{table}
+
+\subsection{C++ Float graphs}
+
+%%==================================================================
+%% C++ Float graphs
+%%==================================================================
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{cc}
+        \input{Data/results/FLOAT/CPP_line_graph_SMALL.tex}
+        &
+        \input{Data/results/FLOAT/CPP_line_graph_MEDIUM.tex}
+        \\
+        \input{Data/results/FLOAT/CPP_line_graph_LARGE.tex}
+        &
+        \input{Data/results/FLOAT/CPP_line_graph_EXTRA.tex}
+    \end{tabular}
+    \caption{\texttt{float} C++}
+    \label{fig:appendix:float:cpp:line}
+\end{table}
+
+% \begin{figure}[H]
 %     \centering
-%     \label{tab:common:table:jni}
-%     \caption{Common table for JNI tests, Time(\textmu s)}
-%     \resizebox{\columnwidth}{!}{
-%         \input{Data/results/JNI/Benchmark_common_table.tex}
-%     }
-% \end{table}
+%     \input{Data/results/FLOAT/CPP_line_graph_SMALL.tex}
+%     \caption{\texttt{float} C++ small}
+%     \label{fig:float:cpp:line:small}
+% \end{figure}
+% \begin{figure}[H]
+%     \centering
+%     \input{Data/results/FLOAT/CPP_line_graph_MEDIUM.tex}
+%     \caption{\texttt{float} C++ medium}
+%     \label{fig:float:cpp:line:medium}
+% \end{figure}
+% \begin{figure}[H]
+%     \centering
+%     \input{Data/results/FLOAT/CPP_line_graph_LARGE.tex}
+%     \caption{\texttt{float} C++ large}
+%     \label{fig:float:cpp:line:large}
+% \end{figure}
+% \begin{figure}[H]
+%     \centering
+%     \input{Data/results/FLOAT/CPP_line_graph_EXTRA.tex}
+%     \caption{\texttt{float} C++ extra}
+%     \label{fig:float:cpp:line:extra}
+% \end{figure}
+
+\subsection{Java Float graphs}
+%%==================================================================
+%% Java Float graphs
+%%==================================================================
+\begin{table}[H]
+    \centering
+    \begin{tabular}{cc}
+        \input{Data/results/FLOAT/Java_line_graph_SMALL.tex}
+        &
+        \input{Data/results/FLOAT/Java_line_graph_MEDIUM.tex}
+        \\
+        \input{Data/results/FLOAT/Java_line_graph_LARGE.tex}
+        &
+        \input{Data/results/FLOAT/Java_line_graph_EXTRA.tex}
+    \end{tabular}
+    \caption{\texttt{float} Java}
+    \label{fig:appendix:float:java:line}
+\end{table}
+
+% \begin{figure}[H]
+%     \centering
+%     \input{Data/results/FLOAT/Java_line_graph_SMALL.tex}
+%     \caption{\texttt{float} Java small}
+%     \label{fig:float:java:line:small}
+% \end{figure}
+% \begin{figure}[H]
+%     \centering
+%     \input{Data/results/FLOAT/Java_line_graph_MEDIUM.tex}
+%     \caption{\texttt{float} Java medium}
+%     \label{fig:float:java:line:medium}
+% \end{figure}
+% \begin{figure}[H]
+%     \centering
+%     \input{Data/results/FLOAT/Java_line_graph_LARGE.tex}
+%     \caption{\texttt{float} Java large}
+%     \label{fig:float:java:line:large}
+% \end{figure}
+% \begin{figure}[H]
+%     \centering
+%     \input{Data/results/FLOAT/Java_line_graph_EXTRA.tex}
+%     \caption{\texttt{float} Java extra}
+%     \label{fig:float:java:line:extra}
+% \end{figure}
+
+
+
+
 %
 % \begin{table}[H]
 %     \centering
@@ -144,114 +269,32 @@
 
 \section{ARR}
 
-\begin{figure}[H]
+\begin{table}[H]
     \centering
-    \input{Data/results/ARR/CPP_NEON_Iterative.tex}
-    \caption{}
-    \label{fig:arr:neon:Iterative}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \input{Data/results/ARR/CPP_NEON_Recursive.tex}
-    \caption{}
-    \label{fig:arr:neon:Recursive}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \input{Data/results/ARR/CPP_Columbia_Iterative.tex}
-    \caption{}
-    \label{fig:arr:columbia}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \input{Data/results/ARR/CPP_Princeton_Iterative.tex}
-    \caption{}
-    \label{fig:arr:princeton:iterative}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \input{Data/results/ARR/CPP_Princeton_Recursive.tex}
-    \caption{}
-    \label{fig:arr:princeton:recursive}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \input{Data/results/ARR/CPP_KISS.tex}
-    \caption{}
-    \label{fig:arr:kiss}
-\end{figure}
-
-\section{Float}
-
-        
-\begin{table}
-    \centering
-    \label{fig:java:common:float}
-    \caption{Java Common table \texttt{float}}
-    \input{Data/results/FLOAT/Java_common_table_FLOAT.tex}
+    \caption{Common table for ARR C++ tests, Time(ms)}
+    \label{tab:appendix:common:arr}
+    \rotatebox{90}{
+        \resizebox{\columnwidth}{!}{
+            \input{Data/results/ARR/CPP_common_table_ARR.tex}
+        }
+    }
 \end{table}
 
-\begin{table}
+\begin{table}[H]
     \centering
-    \label{fig:cpp:common:float}
-    \caption{C++ Common table \texttt{float}}
-    \input{Data/results/FLOAT/CPP_common_table_FLOAT.tex}
+    \begin{tabular}{cc}
+        \input{Data/results/ARR/CPP_NEON_Iterative.tex}
+        &
+        \input{Data/results/ARR/CPP_NEON_Recursive.tex}
+        \\
+        \input{Data/results/ARR/CPP_Columbia_Iterative.tex}
+        &
+        \input{Data/results/ARR/CPP_Princeton_Iterative.tex}
+        \\
+        \input{Data/results/ARR/CPP_Princeton_Recursive.tex}
+        &
+        \input{Data/results/ARR/CPP_KISS.tex}
+    \end{tabular}
+    \caption{ARR C++}
+    \label{fig:appendix:arr:line}
 \end{table}
-
-\subsection{C++}
-
-\begin{figure}[H]
-    \centering
-    \input{Data/results/FLOAT/CPP_line_graph_SMALL.tex}
-    \caption{Float C++ small}
-    \label{fig:float:cpp:line:small}
-\end{figure}
-\begin{figure}[H]
-    \centering
-    \input{Data/results/FLOAT/CPP_line_graph_MEDIUM.tex}
-    \caption{Float C++ medium}
-    \label{fig:float:cpp:line:medium}
-\end{figure}
-\begin{figure}[H]
-    \centering
-    \input{Data/results/FLOAT/CPP_line_graph_LARGE.tex}
-    \caption{Float C++ large}
-    \label{fig:float:cpp:line:large}
-\end{figure}
-\begin{figure}[H]
-    \centering
-    \input{Data/results/FLOAT/CPP_line_graph_EXTRA.tex}
-    \caption{Float C++ extra}
-    \label{fig:float:cpp:line:extra}
-\end{figure}
-
-\subsection{Java}
-\begin{figure}[H]
-    \centering
-    \input{Data/results/FLOAT/Java_line_graph_SMALL.tex}
-    \caption{Float Java small}
-    \label{fig:float:java:line:small}
-\end{figure}
-\begin{figure}[H]
-    \centering
-    \input{Data/results/FLOAT/Java_line_graph_MEDIUM.tex}
-    \caption{Float Java medium}
-    \label{fig:float:java:line:medium}
-\end{figure}
-\begin{figure}[H]
-    \centering
-    \input{Data/results/FLOAT/Java_line_graph_LARGE.tex}
-    \caption{Float Java large}
-    \label{fig:float:java:line:large}
-\end{figure}
-\begin{figure}[H]
-    \centering
-    \input{Data/results/FLOAT/Java_line_graph_EXTRA.tex}
-    \caption{Float Java extra}
-    \label{fig:float:java:line:extra}
-\end{figure}

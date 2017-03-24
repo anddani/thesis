@@ -5,6 +5,8 @@ The test results from the JNI tests showed that the overhead is small relative t
 
 The confidence intervals overlap for many of the values, meaning we cannot say whether or not one input yields a faster execution time than the other. Some larger block sizes has lower execution time than smaller block sizes and some grow for larger input. Because of this, it is reasonable to assume that nothing is done to the arrays when they are passed to the JNI, only pointers are copied. The \texttt{GetPrimitiveArrayCritical()} and \texttt{ReleasePrimitiveArrayCritical()} seem to introduce overhead when used on larger arrays. % <= CITE THIS ... as described in
 
+% DISCUSS ABOUT THE SUDDEN SPIKES FOR MEANS IN JNI TESTS
+
 % The second tests compared the execution times for measuring the benefits of using a critical zone in native code. In Figure~\ref{}
 
 \section{Floats and Doubles}
