@@ -11,7 +11,7 @@ FILENAME="/sdcard/data.out"
 RESULTS_PATH=$DATA_PATH/results
 
 # GRAPH_HEADER='\begin{axis}[xlabel={Block size},ylabel={Time (ms)},width=0.45\linewidth,scaled y ticks = false,legend style={at={(0.5,1.1)},anchor=south,font=\scriptsize}]'
-GRAPH_HEADER='\begin{axis}[xlabel={Block size},ylabel={Time (ms)},width=0.45\linewidth,legend pos=north west,scaled y ticks = false,legend cell align=left,legend style={font=\scriptsize}]'
+GRAPH_HEADER='\begin{axis}[xlabel={Block size},ylabel={Time (ms)},width=0.7\linewidth,legend pos=north west,scaled y ticks = false,legend cell align=left,legend style={font=\scriptsize}]'
 
 function create_common_table {
     CURRENT_DIR=$1
@@ -169,8 +169,8 @@ function create_line_graph {
                 fi
                 # Algorithm label in legend
                 echo "# $(echo $c | sed 's/_N_.*//g' | tr '_' ' ')" >> $NEW_FILE
-                echo '\addplot coordinates {' >> $NEW_FILE
-                cat $CURRENT_FILE | awk -v min=$MIN -v max=$MAX '{if (int($1) >= int(min) && int($1) <= int(max)) print "(" $1 ", " $2 ")"}' >> $NEW_FILE
+                echo '\addplot+[error bars/.cd, y dir=both,y explicit] coordinates {' >> $NEW_FILE
+                cat $CURRENT_FILE | awk -v min=$MIN -v max=$MAX '{if (int($1) >= int(min) && int($1) <= int(max)) print "(" $1 ", " $2 ") +- (" $3 ", " $3 ")"}' >> $NEW_FILE
                 echo '};' >> $NEW_FILE
             fi
         done

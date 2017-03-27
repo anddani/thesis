@@ -13,7 +13,14 @@ The confidence intervals overlap for many of the values, meaning we cannot say w
 % CACHING!!!!!!
 % Array would be twice as large if doubles were used. Bigger chance that the whole array can fit when using float elements. There is a really big  difference in both java and C++
 
-\section{Simplicity and Efficiency}
+\section{Simplicity and Efficiency} % FFT-libraries
+
+
+% Which is slowest and why (discussion)??
+
+% Which is fastest and why (discussion)??
+
+% Which tests triggered the GC??
 
 % When choosing a java version, choose Columbia Iterative
 One thing that is clear is that the Columbia Iterative algorithm is the best one to choose from of the Java versions. It performs better than both Princeton Iterative and Princeton Recursive. It also allows simple modifications such as changing between using \texttt{float}s or  \texttt{double}s to represent the data.
@@ -29,6 +36,8 @@ The reason Princeton Iterative and Princeton Recursive is slower in Java than in
 % For smaller Block sizes, the Java version is as fast as the C++ one. It is easier to implement and more flexible to edit. No need for complicated JNI integration.
 
 % It is with very large block sizes the difference is clear.
+
+% MAYBE THE C++ TESTS GOT MORE CLEAR GROWTH BECAUSE OF GETPRIMITIVEARRAY
 
 \section{Vectorization as Optimization}
 

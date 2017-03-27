@@ -11,6 +11,7 @@ The test labeled \textbf{No params} is the test where a native void function wit
 No surprising data regarding the first two tests were found. Neither the \textbf{No params} nor \textbf{Vector} tests had a clear increase in execution time for an increase in block size. \textbf{Vector} did have a higher mean for block size of \textbf{65536}. On the other hand, we can see that the 95\% confidence interval is very large ($\pm 3.1960$ \textmu s). This is due to its high standard deviation of 16.3058 \hilight{CITE}. Likewise, there is a spike in execution time mean for a block size of \textbf{1024} in the \textbf{Convert} test.
 
 
+% STILL RELEVANT??
 % DISCUSS HERE WHEN CORRECT DATA IS GATHERED
 % As seen in Table \ref{tab:jni:common}, the execution times for calling the JNI varied in the range of one microseconds and 14 microseconds. \textbf{Columbia} with block size \textbf{6}
 
@@ -28,12 +29,13 @@ No surprising data regarding the first two tests were found. Neither the \textbf
 %%==================================================================
 \section{FFT Libraries}
 
-The results from the FFT Libraries are presented in line graphs, both language specific and graphs with both Java and C++ are given to illustrate the differences between languages and also provide differences for specific languages clearly. The time unit for these tests are presented in milliseconds as opposed to microseconds that the JNI was measured in. This was because the FFT ran in ranges below one millisecond and above one second among different algorithms and different block sizes. The means are calculated from the results of 100 test runs.
+The results from the FFT Libraries are presented in line graphs, both language specific and graphs with both Java and C++ are given to illustrate the differences between languages and also provide differences for specific languages clearly. The time unit for these tests are presented in milliseconds. This was because the FFT ran in ranges below one millisecond and above one second among different algorithms and different block sizes. The means are calculated from the results of 100 test runs.
 
-\subsection{Float vs Double}
-
+%=========%
+%= SMALL =%
+%=========%
 \subsection{Small block sizes}
-Results from the small blocks tests shows clear difference between the different algorithms. In Figure~\ref{fig:all:line:small}, Princeton Recursive in Java perform the worst. Princeton Recursive in C++ and Princeton Iterative in Java perform better than Princeton Recursive Java although worse than the rest of the algorithms. % CHECK IF STILL RELEVANT AFTER NEW TESTS
+Results from the small blocks tests shows a clear difference between the different algorithms. In Figure~\ref{fig:all:line:small}, Princeton Recursive in Java perform the worst. Princeton Recursive in C++ and Princeton Iterative in Java perform better than Princeton Recursive Java although worse than the rest of the algorithms. The rest of the algorithms perform similarly and does not seem to grow given the small block sizes.
 
 % In Table ... we can see that the difference is statistically significant.
 
@@ -47,12 +49,31 @@ Results from the small blocks tests shows clear difference between the different
     \label{fig:all:line:small}
 \end{figure}
 
+As we can see in Figure~\ref{fig:java:line:small}, the standard deviation of Princeton Recursive and Princeton iterative. This means that the samples were sparse and as a result of this, not a reliable mean. We can see in Table~\ref{tab:java:small} that the confidence interval is generally larger for Princeton Iterative and Princeton Recursive compared to Columbia Iterative.
+
+\begin{figure}
+    \centering
+    \input{Data/results/FFT/Java_line_graph_SMALL.tex}
+    \caption{Java line graph for small block sizes with standard deviation error bars}
+    \label{fig:java:line:small}
+\end{figure}
+
+\begin{table}
+    \centering
+    \caption{Java results table for small block sizes}
+    \label{tab:java:small}
+    \input{Data/results/FFT/Java_common_table_SMALL.tex}
+\end{table}
+
+As for the C++ tests, the results are were scattered and has a more apparent increase in time with increasing block sizes. We can also see that the slowest algorithm, Princeton Recursive, has the largest standard deviation. It is clear by looking at Table~\ref{tab:cpp:small} that KISS performs the best, followed by Columbia Iterative, Princeton Iterative and Princeton Recursive.
+
 \begin{figure}
     \centering
     \input{Data/results/FFT/CPP_line_graph_SMALL.tex}
-    \caption{C++ line graph for small block sizes}
+    \caption{C++ line graph for small block sizes with standard deviation error bars}
     \label{fig:cpp:line:small}
 \end{figure}
+
 \begin{table}
     \centering
     \caption{C++ results table for small block sizes}
@@ -63,33 +84,40 @@ Results from the small blocks tests shows clear difference between the different
 \end{table}
 
 
-\begin{figure}
-    \centering
-    \input{Data/results/FFT/Java_line_graph_SMALL.tex}
-    \caption{Java line graph for small block sizes}
-    \label{fig:java:line:small}
-\end{figure}
-\begin{table}
-    \centering
-    \caption{Java results table for small block sizes}
-    \label{tab:java:small}
-    \resizebox{\columnwidth}{!}{
-        \input{Data/results/FFT/Java_common_table_SMALL.tex}
-    }
-\end{table}
-
+%==========%
+%= MEDIUM =%
+%==========%
 \subsection{Medium block sizes}
-\begin{figure}
+The medium block sizes continues the trend where Java Princeton Recursive performs the worst followed by Java Princeton Iterative and C++ Princeton Recursive. As for the small block sizes, Java Columbia Iterative, C++ Princeton Iterative, C++ Columbia Iterative and KISS have the smallest execution time and perform similarly.
+
+\begin{figure}[H]
     \centering
     \input{Data/results/FFT/line_graph_MEDIUM.tex}
     \caption{Line graph for all algorithms, medium block sizes}
     \label{fig:all:line:medium}
 \end{figure}
 
+The results found in Figure~\ref{fig:java:line:medium} are somewhat different than for the small block sizes. We can still see that Java Princeton Recursive diverges from the other algorithms. What is interesting is that it is now clearer which of Princeton Iterative and Columbia Iterative is the fastest. Columbia Iterative is clearly faster than Princeton Iterative as shown by the confidence intervals given in Table~\ref{tab:java:medium}. The standard deviations for the samples in the Princeton Recursive and Princeton Iterative are still relatively large compared to Columbia Iterative.
+
+\begin{figure}
+    \centering
+    \input{Data/results/FFT/Java_line_graph_MEDIUM.tex}
+    \caption{Java line graph for medium block sizes with standard deviation error bars}
+    \label{fig:java:line:medium}
+\end{figure}
+\begin{table}
+    \centering
+    \caption{Java results table for medium block sizes}
+    \label{tab:java:medium}
+    \input{Data/results/FFT/Java_common_table_MEDIUM.tex}
+\end{table}
+
+For the C++ algorithms, it is now clearer to see in which order the algorithms rank regarding performance in Figure~\ref{fig:cpp:line:medium}. Princeton Recursive performs worst while the rest has similar execution times. It is now clear that KISS performs best, followed by Columbia Iterative and then Princeton Iterative. In Table~\ref{tab:cpp:medium}
+
 \begin{figure}
     \centering
     \input{Data/results/FFT/CPP_line_graph_MEDIUM.tex}
-    \caption{C++ line graph for medium block sizes}
+    \caption{C++ line graph for medium block sizes with standard deviation error bars}
     \label{fig:cpp:line:medium}
 \end{figure}
 \begin{table}
@@ -101,20 +129,9 @@ Results from the small blocks tests shows clear difference between the different
     }
 \end{table}
 
-
-\begin{figure}
-    \centering
-    \input{Data/results/FFT/Java_line_graph_MEDIUM.tex}
-    \caption{Java line graph for medium block sizes}
-    \label{fig:java:line:medium}
-\end{figure}
-\begin{table}
-    \centering
-    \caption{Java results table for medium block sizes}
-    \label{tab:java:medium}
-    \input{Data/results/FFT/Java_common_table_MEDIUM.tex}
-\end{table}
-
+%=========%
+%= LARGE =%
+%=========%
 \subsection{Large block sizes}
 
 \begin{figure}
@@ -127,7 +144,7 @@ Results from the small blocks tests shows clear difference between the different
 \begin{figure}
     \centering
     \input{Data/results/FFT/CPP_line_graph_LARGE.tex}
-    \caption{C++ line graph for large block sizes}
+    \caption{C++ line graph for large block sizes with standard deviation error bars}
     \label{fig:cpp:line:large}
 \end{figure}
 \begin{table}
@@ -143,7 +160,7 @@ Results from the small blocks tests shows clear difference between the different
 \begin{figure}
     \centering
     \input{Data/results/FFT/Java_line_graph_LARGE.tex}
-    \caption{Java line graph for large block sizes}
+    \caption{Java line graph for large block sizes with standard deviation error bars}
     \label{fig:java:line:large}
 \end{figure}
 \begin{table}
@@ -152,13 +169,6 @@ Results from the small blocks tests shows clear difference between the different
     \label{tab:java:large}
     \input{Data/results/FFT/Java_common_table_LARGE.tex}
 \end{table}
-
-
-% Which is slowest and why (discussion)??
-
-% Which is fastest and why (discussion)??
-
-% Which tests triggered the GC??
 
 %%==================================================================
 %% NEON-Tests
@@ -183,7 +193,7 @@ Results from the small blocks tests shows clear difference between the different
     \centering
     \input{Data/results/NEON/CPP_common_table_EXTRA.tex}
     \caption{C++ results table for extra large block sizes}
-    \label{tab:cpp:extra}
+    \label{tab:neon:extra}
 \end{table}
 
 \begin{table}
