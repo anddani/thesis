@@ -11,7 +11,8 @@ FILENAME="/sdcard/data.out"
 RESULTS_PATH=$DATA_PATH/results
 
 # GRAPH_HEADER='\begin{axis}[xlabel={Block size},ylabel={Time (ms)},width=0.45\linewidth,scaled y ticks = false,legend style={at={(0.5,1.1)},anchor=south,font=\scriptsize}]'
-GRAPH_HEADER='\begin{axis}[xlabel={Block size},ylabel={Time (ms)},width=0.7\linewidth,legend pos=north west,scaled y ticks = false,legend cell align=left,legend style={font=\scriptsize}]'
+# GRAPH_HEADER='\begin{axis}[xlabel={Block size},ylabel={Time (ms)},width=0.7\linewidth,legend pos=north west,scaled y ticks = false,legend cell align=left,legend style={font=\scriptsize}]'
+GRAPH_HEADER='\begin{axis}[xlabel={Block size},ylabel={Time (ms)},width=0.65\linewidth,legend pos=north west,scaled y ticks = false,legend cell align=left,legend style={font=\scriptsize}]'
 
 function create_common_table {
     CURRENT_DIR=$1
@@ -250,6 +251,29 @@ function create_comparison_graph {
     done
 }
 
+function create_raw_tables {
+    CURRENT_DIRS="$@"
+
+    for CURRENT_DIR in $CURRENT_DIRS ; do
+        CONTENT=$(ls -I "*.tex" $CURRENT_DIR)
+        for c in $CONTENT ; do
+            CURRENT_FILE="${CURRENT_DIR}/raw_$(echo $c | sed 's/^[0-9]_//g' | sed 's/_N_[0-9]*//g').tex"
+
+            echo '\rowcolors{1}{}{lightgray}' >> $CURRENT_FILE
+            echo '\begin{tabular}{lcccc}\toprule' >> $CURRENT_FILE
+
+            echo '{\small Block size} & $\bar{X}$ & $s$ & $SE_{\bar{X}}$ & $ME_{\bar{X}}$ \\\midrule' >> $CURRENT_FILE
+
+            # cat $CURRENT_DIR/$c | awk '{print $1 " & " $2 " & " $3 " & " $4 "\\\\"}' >> $CURRENT_FILE
+            cat $CURRENT_DIR/$c | sed 's/$/\\\\/g' | sed 's/\([0-9]\) /\1 \& /g' >> $CURRENT_FILE
+
+            echo '\bottomrule' >> $CURRENT_FILE
+            echo '\end{tabular}' >> $CURRENT_FILE
+        done
+    done
+
+}
+
 function convert_test_results {
     N=""
     while read line ; do
@@ -334,6 +358,8 @@ elif [ "$CONVERT" == "1" ] ; then
     # Create comparison for each test in folder
     create_comparison_graph $RESULTS_PATH
     create_common_table $RESULTS_PATH/ARR ARR
+
+    create_raw_tables $RESULTS_PATH/FFT $RESULTS_PATH/NEON $RESULTS_PATH/FLOAT $RESULTS_PATH/ARR $RESULTS_PATH/JNI
 
 else
     echo "-- moving data from phone to $DATA_PATH/$TIME"

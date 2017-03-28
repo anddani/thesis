@@ -1,17 +1,10 @@
-\textit{To ensure that the experiment is carried out correctly, many different tools for measurements was evaluated. Different implementations of the FFT are also compared to choose the ones that would typically be used in an Android project.}
-% Test how large the cost of JNI
+\textit{To ensure that the experiments were carried out correctly, multiple tools for measurements were evaluated. Different implementations of the FFT are also compared to choose the ones that would typically be used in an Android project.}
 % Debug/VMDebug libraries
 
 % Preparation
-% What tools are used? Phone, software, libraries (currenttimemillis vs nantotime etc),
 % Different thread pools
-% Measure execution time
-% Measure memory consumption
-% Benchmark Environment (Which phone, Android version, Compiler version, Java version, compiler flags)
-% Benchmark Environment parameters (Started apps, memory left, started processes? cpu throttling by mobile case?)
 % Profilers for time and memory measurement
 % Which operations should be included?
-% Should I Measure every operation in detail?
 % Garbage collection discussion (You cannot control it)
 \section{Experiment model}
 
@@ -19,13 +12,15 @@
 % In java, we cannot control GC, which can lead to varying results
 % In java, do not use string concatenation (will ask for memory)
 % Measure first, optimize later
-This experiment consisted of tests for three different aspects of implementing algorithms in Java and in native code. To get an overview of how much of an impact different parts of an implementation have, the following subjects were investigated:
+% This experiment in this thesis consisted of tests for four different aspects of implementing an FFT in Java and in native code.
+
+In this thesis, different aspects that affects execution time for an FFT implementation are tested. To get an overview of how much of an impact they have, the following subjects were investigated:
 
 \begin{enumerate}
     \item Cost of using the JNI
-    \item \texttt{float} vs \texttt{double}
     \item Compare well known libraries
     \item Native exclusive optimization with NEON
+    \item Using \texttt{float} and \texttt{double} as primary data types
 \end{enumerate}
 
 The reason why it is relevant to know how significant the JNI is, is because we want to see for what size of the data the transition time for going between Java and native is irrelevant compared to the total execution time of the JNI call. This would also show how much repeated calls to native code would affect the performance of a program. By minimizing the number of calls to the JNI, a program would get potentially faster.
@@ -33,17 +28,21 @@ The reason why it is relevant to know how significant the JNI is, is because we 
 % Q1: Why libraries??
 % A1: Because it is good to know the execution time of multiple implementations and to compare them. What makes one faster than the other?? 
 
-There are many different implementations of the FFT publicly available that could be of interest for use in ones project. This test demonstrates how some different libraries compare. It is helpful to see how viable different implementations are on Android, for both C++ libraries and Java libraries. It can also be useful to know how small implementations perform in terms of speed. The sample sizes used for the FFT can vary depending on the requirements for the implementation. If the app needs to be efficient, it is common to lower the number of collected samples. This comes at a cost of accuracy. A fast FFT implementation allows for more data being passed to the FFT, improving the frequency resolution. This is the reason it is important to have a fast FFT.
+There are many different implementations of the FFT publicly available that could be of interest for use in ones project. This test demonstrates how some different libraries compare. It is helpful to see how viable different implementations are on Android, for both C++ libraries and Java libraries. It can also be useful to know how small implementations perform in terms of speed. The sample sizes used for the FFT can vary depending on the requirements for the implementation.
+
+If the app needs to be efficient, it is common to lower the number of collected samples. This comes at a cost of accuracy. A fast FFT implementation allows for more data being passed to the FFT, improving the frequency resolution. This is one of the reasons it is important to have a fast FFT.
 
 % Q2: Why Optimizations
 
-Finally, optimizations only possible with native code is a good demonstration of how a developer can improve performance even more to fit the requirements while still retaining manageable source code. Having one single source file is valuable, especially for native libraries. This facilitates the process of adding libraries and based on the results found in this report, they can be sufficiently fast.
+Optimizations only possible with native code is a good demonstration of how a developer can improve performance even more to fit the requirements while still retaining manageable source code. Having one single source file is valuable, especially for native libraries. This facilitates the process of adding libraries and based on the results found in this report, they can be sufficiently fast.
+
+Finally, comparing how performance can change depending on which data types that are used is also relevant for choosing a given implementation. Using the \texttt{float} data type, you use less memory at the cost of precision. A \texttt{double} occupies double the amount of space compared to a \texttt{float}, although it allows higher precision numbers. Caching is one aspect that could be utilized by reducing the space required for the results array.
 
 \subsection{Hardware}
 % Screen Brightness
 % Battery percentage?
 % The Google Nexus 6P was used throughout all experiments to get comparable results. The screen brightness was set to medium to prevent heat from affecting the CPU frequency.
-The setup used for performing the experiments were the following:
+In this thesis, the hardware was delimited to one device to prevent the experiment from being too extensive and allow a more narrow examination of the test performed. The setup used for performing the experiments were the following:
 
 \begin{table}[H]
     \centering
@@ -138,7 +137,7 @@ For the SIMD tests, even larger sizes were used. This was to demonstrate how the
 \subsection{Data representation}
 The block sizes chosen in the JNI and libraries tests are limited to every power of two from $2^4$ to $2^{16}$. For NEON tests, $2^{16} - 2^{18}$ will be used for the tests. One reason this interval was chosen was because it is relevant to have the largest data the largest number of blocks needed for sample rates of 44100 Hz. To get a resolution of at least one Hz for a frequency span of 0-22050 Hz, an FFT size of 44100 ($2^{16}$) is required. The lowest sample size was chosen to be $2^{4}$ to get a variety of data points to test for to find the increase in execution time for larger data sizes.
 
-All test results are not presented in Chapter \ref{ch:results} - Results. In this chapter, only the results that were relevant to discuss about are brought up. All the test results are found in Appendix \ref{appendix:results}. To visualize a result, bar charts and line graphs were used. To solve the problem that the FFT sizes were split into groups labeled \emph{small size} ($2^{4} - 2^{7}$) \emph{medium size} ($2^{8} - 2^{12}$) and \emph{large size} ($2^{13} - 2^{16}$).
+All test results are not presented in Chapter \ref{ch:results} - Results. In this chapter, only the results that were relevant to discuss about are brought up. All the test results are found in Appendix \ref{appendix:results}. To visualize a result, tables and line graphs were used. To solve the problem that the FFT sizes were split into groups labeled \emph{small size} ($2^{4} - 2^{7}$) \emph{medium size} ($2^{8} - 2^{12}$) and \emph{large size} ($2^{13} - 2^{16}$).
 
 \subsection{Sources of error}
 % https://www2.southeastern.edu/Academics/Faculty/rallain/plab193/labinfo/Error_Analysis/06_Sources_of_Error.html

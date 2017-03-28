@@ -1,9 +1,69 @@
 \section{Data}
-\subsection{JNI}
+
 \begin{table}[H]
     \centering
+    \caption{Data for Java Columbia Iterative, Time (ms)}
+    \label{tab:appendix:raw:java:columbia:iterative}
+    \input{Data/results/FFT/raw_Java_Columbia_Iterative.tex}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \caption{Data for Java Princeton Iterative, Time (ms)}
+    \label{tab:appendix:raw:java:princeton:iterative}
+    \input{Data/results/FFT/raw_Java_Princeton_Iterative.tex}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \caption{Data for Java Princeton Recursive, Time (ms)}
+    \label{tab:appendix:raw:java:princeton:recursive}
+    \input{Data/results/FFT/raw_Java_Princeton_Recursive.tex}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \caption{Data for C++ Columbia Iterative, Time (ms)}
+    \label{tab:appendix:raw:cpp:columbia:iterative}
+    \input{Data/results/FFT/raw_CPP_Columbia_Iterative.tex}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \caption{Data for C++ Princeton Iterative, Time (ms)}
+    \label{tab:appendix:raw:cpp:princeton:iterative}
+    \input{Data/results/FFT/raw_CPP_Princeton_Iterative.tex}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \caption{Data for C++ Princeton Recursive, Time (ms)}
+    \label{tab:appendix:raw:cpp:princeton:recursive}
+    \input{Data/results/FFT/raw_CPP_Princeton_Recursive.tex}
+\end{table}
+
+
+\begin{table}[H]
+    \centering
+    \caption{Data for C++ KISS, Time (ms)}
+    \label{tab:appendix:raw:cpp:kiss}
+    \input{Data/results/FFT/raw_CPP_KISS.tex}
+\end{table}
+
+\subsection{JNI}
+
+
+\begin{table}[H]
+    \centering
+    \caption{Data for JNI Vector, Time (ms)}
+    \label{tab:appendix:raw:jni:vector}
+    \input{Data/results/JNI/raw_Benchmark_vector.tex}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \caption{Common table for JNI tests, Time (\textmu s)}
     \label{tab:common:table:jni}
-    \caption{Common table for JNI tests, Time(\textmu s)}
     \resizebox{\columnwidth}{!}{
         \input{Data/results/JNI/common_table_JNI.tex}
     }
@@ -16,7 +76,7 @@
 %%==================================================================
 \begin{table}[H]
     \centering
-    \caption{Common table for \texttt{double} C++ FFT tests, Time(ms)}
+    \caption{Common table for \texttt{double} C++ FFT tests, Time (ms)}
     \label{tab:appendix:common:cpp}
     \resizebox{\columnwidth}{!}{
         \input{Data/results/FFT/CPP_common_table_FFT.tex}
@@ -25,14 +85,14 @@
 
 \begin{table}[H]
     \centering
-    \caption{Common table for \texttt{double} Java tests, Time(ms)}
+    \caption{Common table for \texttt{double} Java tests, Time (ms)}
     \label{tab:appendix:common:java}
     \input{Data/results/FFT/Java_common_table_FFT.tex}
 \end{table}
 
 \begin{table}[H]
     \centering
-    \caption{Common table for \texttt{double} NEON tests, Time(ms)}
+    \caption{Common table for \texttt{double} NEON tests, Time (ms)}
     \label{tab:appendix:common:neon}
     \input{Data/results/NEON/CPP_common_table_NEON.tex}
 \end{table}
@@ -45,20 +105,20 @@
 \begin{table}[H]
     \centering
     \label{fig:appendix:java:common:float}
-    \caption{Common table for \texttt{float} Java tests, Time(ms)}
+    \caption{Common table for \texttt{float} Java tests, Time (ms)}
     \input{Data/results/FLOAT/Java_common_table_FLOAT.tex}
 \end{table}
 
 \begin{table}[H]
     \centering
     \label{fig:appendix:cpp:common:float}
-    \caption{Common table for \texttt{float} C++ tests, Time(ms)}
+    \caption{Common table for \texttt{float} C++ tests, Time (ms)}
     \input{Data/results/FLOAT/CPP_common_table_FLOAT.tex}
 \end{table}
 
 \begin{table}[H]
     \centering
-    \caption{Common table for \texttt{float} NEON tests, Time(ms)}
+    \caption{Common table for \texttt{float} NEON tests, Time (ms)}
     \label{tab:appendix:cpp:common:neon}
     \input{Data/results/NEON/CPP_common_table_NEON.tex}
 \end{table}
@@ -271,7 +331,7 @@
 
 \begin{table}[H]
     \centering
-    \caption{Common table for ARR C++ tests, Time(ms)}
+    \caption{Common table for ARR C++ tests, Time (ms)}
     \label{tab:appendix:common:arr}
     \rotatebox{90}{
         \resizebox{\columnwidth}{!}{

@@ -8,7 +8,7 @@ The results of the tests that measure the JNI overhead can be found in Table~\re
 
 The test labeled \textbf{No params} is the test where a native void function with no parameters that returns immediately was called. \textbf{Vector} takes a \texttt{jdoubleArray} and returns a \texttt{jdoubleArray} immediately. \textbf{Convert} takes a \texttt{jdoubleArray}, converts it to a native array using \texttt{GetPrimitiveArrayCritical()}, converts it back to a \texttt{jdoubleArray} using \texttt{ReleasePrimitiveArrayCritical()} and returns a \texttt{jdoubleArray}. \textbf{Columbia} takes three \texttt{jdoubleArray}s, converts them the same way and returns the same way.
 
-No surprising data regarding the first two tests were found. Neither the \textbf{No params} nor \textbf{Vector} tests had a clear increase in execution time for an increase in block size. \textbf{Vector} did have a higher mean for block size of \textbf{65536}. On the other hand, we can see that the 95\% confidence interval is very large ($\pm 3.1960$ \textmu s). This is due to its high standard deviation of 16.3058 \hilight{CITE}. Likewise, there is a spike in execution time mean for a block size of \textbf{1024} in the \textbf{Convert} test.
+No surprising data regarding the first two tests were found. Neither the \textbf{No params} nor \textbf{Vector} tests had a clear increase in execution time for an increase in block size. \textbf{Vector} did have a higher mean for block size of \textbf{65536}. On the other hand, we can see that the 95\% confidence interval is very large ($\pm 3.1960$ \textmu s). This is due to its high standard deviation of 16.3058 found in Appendix \ref{appendix:results} Table \ref{tab:appendix:raw:jni:vector}. Likewise, there is a spike in execution time mean for a block size of \textbf{1024} in the \textbf{Convert} test.
 
 
 % STILL RELEVANT??
@@ -45,7 +45,7 @@ Results from the small blocks tests shows a clear difference between the differe
 \begin{figure}
     \centering
     \input{Data/results/FFT/line_graph_SMALL.tex}
-    \caption{Line graph for all algorithms, small block sizes}
+    \caption{Line graph for all algorithms, \emph{small} block sizes}
     \label{fig:all:line:small}
 \end{figure}
 
@@ -54,13 +54,13 @@ As we can see in Figure~\ref{fig:java:line:small}, the standard deviation of Pri
 \begin{figure}
     \centering
     \input{Data/results/FFT/Java_line_graph_SMALL.tex}
-    \caption{Java line graph for small block sizes with standard deviation error bars}
+    \caption{Java line graph for \emph{small} block sizes with standard deviation error bars}
     \label{fig:java:line:small}
 \end{figure}
 
 \begin{table}
     \centering
-    \caption{Java results table for small block sizes}
+    \caption{Java results table for \emph{small} block sizes, Time (ms)}
     \label{tab:java:small}
     \input{Data/results/FFT/Java_common_table_SMALL.tex}
 \end{table}
@@ -70,13 +70,13 @@ As for the C++ tests, the results are were scattered and has a more apparent inc
 \begin{figure}
     \centering
     \input{Data/results/FFT/CPP_line_graph_SMALL.tex}
-    \caption{C++ line graph for small block sizes with standard deviation error bars}
+    \caption{C++ line graph for \emph{small} block sizes with standard deviation error bars}
     \label{fig:cpp:line:small}
 \end{figure}
 
 \begin{table}
     \centering
-    \caption{C++ results table for small block sizes}
+    \caption{C++ results table for \emph{small} block sizes, Time (ms)}
     \label{tab:cpp:small}
     \resizebox{\columnwidth}{!}{
         \input{Data/results/FFT/CPP_common_table_SMALL.tex}
@@ -93,7 +93,7 @@ The medium block sizes continues the trend where Java Princeton Recursive perfor
 \begin{figure}[H]
     \centering
     \input{Data/results/FFT/line_graph_MEDIUM.tex}
-    \caption{Line graph for all algorithms, medium block sizes}
+    \caption{Line graph for all algorithms, \emph{medium} block sizes}
     \label{fig:all:line:medium}
 \end{figure}
 
@@ -102,27 +102,29 @@ The results found in Figure~\ref{fig:java:line:medium} are somewhat different th
 \begin{figure}
     \centering
     \input{Data/results/FFT/Java_line_graph_MEDIUM.tex}
-    \caption{Java line graph for medium block sizes with standard deviation error bars}
+    \caption{Java line graph for \emph{medium} block sizes with standard deviation error bars}
     \label{fig:java:line:medium}
 \end{figure}
 \begin{table}
     \centering
-    \caption{Java results table for medium block sizes}
+    \caption{Java results table for \emph{medium} block sizes, Time (ms)}
     \label{tab:java:medium}
     \input{Data/results/FFT/Java_common_table_MEDIUM.tex}
 \end{table}
 
-For the C++ algorithms, it is now clearer to see in which order the algorithms rank regarding performance in Figure~\ref{fig:cpp:line:medium}. Princeton Recursive performs worst while the rest has similar execution times. It is now clear that KISS performs best, followed by Columbia Iterative and then Princeton Iterative. In Table~\ref{tab:cpp:medium}
+For the C++ algorithms, it is now clearer to see in which order the algorithms rank regarding performance in Figure~\ref{fig:cpp:line:medium}. Princeton Recursive perform the worst while the rest has similar execution times. It is now clear that KISS performs best, followed by Columbia Iterative and then Princeton Iterative.
+
+In Table~\ref{tab:cpp:medium} we can see that the confidence intervals are relatively small, meaning these results have higher precision than for the same test with smaller block sizes. We can also see that there is no overlap between any confidence intervals thereby giving us a strong indication that the order in performance given in the previous paragraph is true.
 
 \begin{figure}
     \centering
     \input{Data/results/FFT/CPP_line_graph_MEDIUM.tex}
-    \caption{C++ line graph for medium block sizes with standard deviation error bars}
+    \caption{C++ line graph for \emph{medium} block sizes with standard deviation error bars}
     \label{fig:cpp:line:medium}
 \end{figure}
 \begin{table}
     \centering
-    \caption{C++ results table for small block sizes}
+    \caption{C++ results table for \emph{medium} block sizes, Time (ms)}
     \label{tab:cpp:medium}
     \resizebox{\columnwidth}{!}{
         \input{Data/results/FFT/CPP_common_table_MEDIUM.tex}
@@ -133,82 +135,89 @@ For the C++ algorithms, it is now clearer to see in which order the algorithms r
 %= LARGE =%
 %=========%
 \subsection{Large block sizes}
+Figure~\ref{fig:all:line:large} shows the growth in execution time for increasing block sizes of type \emph{large}. It continues the trend set by the tests with a block size of \emph{medium}. It is easy to see which algorithms that perform worse than the others. As previous tests showed, Java Princeton Recursive, Java Princeton Iterative and C++ Princeton Recursive are still the slowest.
 
 \begin{figure}
     \centering
     \input{Data/results/FFT/line_graph_LARGE.tex}
-    \caption{Line graph for all algorithms, large block sizes}
+    \caption{Line graph for all algorithms, \emph{large} block sizes}
     \label{fig:all:line:large}
 \end{figure}
+
+The results for the Java tests with \emph{large} block sizes are presented in Figure~\ref{fig:java:line:large} The results for large verifies the order in which the algorithms perform. The order in performance for Java is still Columbia Iterative, Princeton Iterative and Princeton Recursive (where Columbia Iterative is the fastest).
+
+\begin{figure}
+    \centering
+    \input{Data/results/FFT/Java_line_graph_LARGE.tex}
+    \caption{Java line graph for \emph{large} block sizes with standard deviation error bars}
+    \label{fig:java:line:large}
+\end{figure}
+\begin{table}
+    \centering
+    \caption{Java results table for \emph{large} block sizes, Time (ms)}
+    \label{tab:java:large}
+    \input{Data/results/FFT/Java_common_table_LARGE.tex}
+\end{table}
+
+Results for tests with \emph{large} block sizes in C++ produced some interesting results. In Figure~\ref{fig:cpp:line:large} Princeton Recursive has a much larger standard deviation than the other algorithms. It is also the slowest (see Table~\ref{tab:cpp:large}). We can also see in the same table that all algorithms are faster in C++ than Java and that there are no overlapping confidence intervals for a given algorithm or block size. Another thing to note is that the Columbia Iterative algorithm performs almost the same between Java and C++. This is not the case for Princeton Iterative or Recursive.
 
 \begin{figure}
     \centering
     \input{Data/results/FFT/CPP_line_graph_LARGE.tex}
-    \caption{C++ line graph for large block sizes with standard deviation error bars}
+    \caption{C++ line graph for \emph{large} block sizes with standard deviation error bars}
     \label{fig:cpp:line:large}
 \end{figure}
 \begin{table}
     \centering
-    \caption{C++ results table for large block sizes}
+    \caption{C++ results table for \emph{large} block sizes, Time (ms)}
     \label{tab:cpp:large}
     \resizebox{\columnwidth}{!}{
         \input{Data/results/FFT/CPP_common_table_LARGE.tex}
     }
 \end{table}
 
-
-\begin{figure}
-    \centering
-    \input{Data/results/FFT/Java_line_graph_LARGE.tex}
-    \caption{Java line graph for large block sizes with standard deviation error bars}
-    \label{fig:java:line:large}
-\end{figure}
-\begin{table}
-    \centering
-    \caption{Java results table for large block sizes}
-    \label{tab:java:large}
-    \input{Data/results/FFT/Java_common_table_LARGE.tex}
-\end{table}
-
 %%==================================================================
 %% NEON-Tests
 %%==================================================================
 \section{Optimizations}
+The NEON optimizations proved to be very efficient for \emph{extra large} block sizes. These results can be found in Table~\ref{tab:neon:extra}. Comparing these figures with the results, for the same block sizes, in Java (Table~\ref{tab:java:float:extra}), we can see that the results from the NEON tests are more than double the speed of the fastest Java implementation. Table~\ref{tab:java:float:extra} also shows that for very large block sizes, Princeton Iterative and Princeton Recursive are very inefficient compared to Columbia Iterative.
+
+When comparing the NEON results from Table~\ref{tab:neon:extra} with the results from the C++ tests found in Table~\ref{tab:cpp:float:extra}, it is clear that vectorization as an optimization is beneficial. NEON intrinsics resulted in almost twice as fast execution time in comparison with the normal C++ tests.
 
 \begin{table}
     \centering
-    \caption{Java results table for extra large block sizes}
-    \label{tab:java:extra}
-    \input{Data/results/FFT/Java_common_table_EXTRA.tex}
+    \caption{NEON \texttt{float} results table for \emph{extra large} block sizes, Time (ms)}
+    \label{tab:neon:extra}
+    \input{Data/results/NEON/CPP_common_table_EXTRA.tex}
+\end{table}
+
+\begin{table}
+    \centering
+    \caption{Java \texttt{float} results table for \emph{extra large} block sizes, Time (ms)}
+    \label{tab:java:float:extra}
+    \input{Data/results/FLOAT/Java_common_table_EXTRA.tex}
+\end{table}
+
+\begin{table}
+    \centering
+    \caption{C++ \texttt{float} results table for \emph{extra large} block sizes, Time (ms)}
+    \label{tab:cpp:float:extra}
+    \resizebox{\columnwidth}{!}{
+        \input{Data/results/FLOAT/CPP_common_table_EXTRA.tex}
+    }
 \end{table}
 
 \begin{figure}
     \centering
     \input{Data/results/NEON/line_graph_EXTRA.tex}
-    \caption{NEON results table for extra large block sizes}
+    \caption{NEON results table for \emph{extra large} block sizes, Time (ms)}
     \label{fig:neon:line:extra}
 \end{figure}
 
-\begin{table}
-    \centering
-    \input{Data/results/NEON/CPP_common_table_EXTRA.tex}
-    \caption{C++ results table for extra large block sizes}
-    \label{tab:neon:extra}
-\end{table}
 
-\begin{table}
-    \centering
-    \resizebox{\columnwidth}{!}{
-        \input{Data/results/FFT/CPP_common_table_EXTRA.tex}
-    }
-    \caption{C++ results table for extra large block sizes}
-    \label{tab:cpp:extra}
-\end{table}
-
-\begin{figure}
-    \centering
-    \input{Data/results/FFT/line_graph_EXTRA.tex}
-    \caption{Line graph for all algorithms, extra large block sizes}
-    \label{fig:all:line:extra}
-\end{figure}
-
+% \begin{figure}
+%     \centering
+%     \input{Data/results/FFT/line_graph_EXTRA.tex}
+%     \caption{Line graph for all algorithms, \emph{extra large} block sizes}
+%     \label{fig:all:line:extra}
+% \end{figure}
