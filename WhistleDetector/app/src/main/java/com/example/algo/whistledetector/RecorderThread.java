@@ -3,6 +3,7 @@ package com.example.algo.whistledetector;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
+import android.os.Handler;
 
 public class RecorderThread extends Thread {
 
@@ -10,25 +11,13 @@ public class RecorderThread extends Thread {
     private short[] buffer;
     private AudioRecord recorder;
 
-    private PlotFragment plotFragment;
-    private FrequencyDetectorFragment frequencyDetectorFragment;
+    private Handler mHandler;
 
     private boolean recording = true;
 
-    private int fragmentType;
 
-    public RecorderThread(FrequencyDetectorFragment fragment, int fragmentType) {
-        this(fragmentType);
-        frequencyDetectorFragment = fragment;
-    }
-
-    public RecorderThread(PlotFragment fragment, int fragmentType) {
-        this(fragmentType);
-        plotFragment = fragment;
-    }
-
-    public RecorderThread(int fragmentType) {
-        this.fragmentType = fragmentType;
+    public RecorderThread(Handler mHandler) {
+        this.mHandler = mHandler;
 
         int minBufferSize = AudioRecord.getMinBufferSize(Constants.SAMPLING_RATE,
                 AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT);
@@ -69,13 +58,9 @@ public class RecorderThread extends Thread {
             // Run FFT
             ConvertDomain.timeToFrequency(freqDomain, doubleBuffer, trigTables);
 
-            // Different UI-update depending on fragment
-            if (fragmentType == Constants.FREQUENCY_DETECTOR_FRAGMENT) {
-                int[] freq = ConvertDomain.maxAmplitude(freqDomain);
-                frequencyDetectorFragment.updateView(freq);
-            } else if (fragmentType == Constants.PLOT_FRAGMENT) {
-                plotFragment.updateView(freqDomain);
-            }
+            // Send result back to fragment
+            mHandler.obtainMessage(0, freqDomain).sendToTarget();
+
         }
     }
 

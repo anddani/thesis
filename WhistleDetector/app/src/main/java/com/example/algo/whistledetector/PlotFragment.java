@@ -3,6 +3,7 @@ package com.example.algo.whistledetector;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +22,8 @@ public class PlotFragment extends Fragment {
     private LineGraphSeries<DataPoint> series;
 
     GraphView graph;
-    RecorderThread myThread;
+
+    private static final String LOG_TAG = "PlotFrag";
 
     /**
      * Sets new dataPoints in the graph and refreshes the view
@@ -37,24 +39,20 @@ public class PlotFragment extends Fragment {
 
             dataPoints[i] = new DataPoint(frequency, amplitude);
         }
-
         series.resetData(dataPoints);
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (savedInstanceState == null) {
-            myThread = new RecorderThread(this, Constants.PLOT_FRAGMENT);
-            myThread.start();
-        }
-
+        Log.d(LOG_TAG, "onCreate() called");
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.plot_layout, container, false);
+        Log.d(LOG_TAG, "onCreateView() called");
 
         if (savedInstanceState == null) {
             graph = (GraphView) rootView.findViewById(R.id.graph);
@@ -72,7 +70,7 @@ public class PlotFragment extends Fragment {
             mViewport.setMaxY(20);
 
             // Initialize dataPoints once
-            int bufferSize = myThread.getBufferSize();
+            int bufferSize = ((MainActivity)getActivity()).mThread.getBufferSize();
             dataPoints = new DataPoint[bufferSize / 2];
             for (int i = 0; i < dataPoints.length; i++) {
                 dataPoints[i] = new DataPoint(0.0, 0.0);
@@ -87,8 +85,5 @@ public class PlotFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (myThread != null) {
-            myThread.stopRecording();
-        }
     }
 }

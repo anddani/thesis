@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +21,7 @@ public class FrequencyDetectorFragment extends Fragment {
     TextView tv_freq, tv_mag;
     RelativeLayout rl;
 
-    RecorderThread myThread;
+    private static final String LOG_TAG = "FrequencyDetectorFrag";
 
     /**
      * Sends a message to the UI thread to update background color depending on the frequency
@@ -36,7 +37,6 @@ public class FrequencyDetectorFragment extends Fragment {
             mUIHandler.obtainMessage(2, freq[0], freq[1]).sendToTarget();
         }
     }
-
 
     private final Handler mUIHandler = new Handler() {
         @Override
@@ -54,17 +54,14 @@ public class FrequencyDetectorFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (savedInstanceState == null) {
-            myThread = new RecorderThread(this, Constants.FREQUENCY_DETECTOR_FRAGMENT);
-            myThread.start();
-        }
-
+        Log.d(LOG_TAG, "onCreate() called");
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.activity_main, container, false);
+        Log.d(LOG_TAG, "onCreateView() called");
 
         if (savedInstanceState == null) {
             rl = (RelativeLayout)rootView.findViewById(R.id.activity_main);
@@ -81,9 +78,5 @@ public class FrequencyDetectorFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-
-        if (myThread != null) {
-            myThread.stopRecording();
-        }
     }
 }
