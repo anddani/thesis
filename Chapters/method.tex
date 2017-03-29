@@ -14,29 +14,29 @@
 % Measure first, optimize later
 % This experiment in this thesis consisted of tests for four different aspects of implementing an FFT in Java and in native code.
 
-In this thesis, different aspects that affects execution time for an FFT implementation are tested. To get an overview of how much of an impact they have, the following subjects were investigated:
+In this thesis, different aspects that can affect execution time for an FFT implementation on Android are tested. To get an overview of how much of an impact they have, the following subjects were investigated:
 
 \begin{enumerate}
     \item Cost of using the JNI
     \item Compare well known libraries
-    \item Native exclusive optimization with NEON
+    \item Vectorization optimization with NEON, exclusive for native
     \item Using \texttt{float} and \texttt{double} as primary data types
 \end{enumerate}
 
-The reason why it is relevant to know how significant the JNI is, is because we want to see for what size of the data the transition time for going between Java and native is irrelevant compared to the total execution time of the JNI call. This would also show how much repeated calls to native code would affect the performance of a program. By minimizing the number of calls to the JNI, a program would get potentially faster.
+The reason it is relevant to know how significant the JNI overhead is, is because we want to see for what size of the data the transition time for going between Java and native is irrelevant compared to the total execution time of the JNI call. This would also show how much repeated calls to native code would affect the performance of a program. By minimizing the number of calls to the JNI, a program would get potentially faster.
 
 % Q1: Why libraries??
 % A1: Because it is good to know the execution time of multiple implementations and to compare them. What makes one faster than the other?? 
 
-There are many different implementations of the FFT publicly available that could be of interest for use in ones project. This test demonstrates how some different libraries compare. It is helpful to see how viable different implementations are on Android, for both C++ libraries and Java libraries. It can also be useful to know how small implementations perform in terms of speed. The sample sizes used for the FFT can vary depending on the requirements for the implementation.
+There are many different implementations of the FFT publicly available that could be of interest for use in a project. This test demonstrates how different libraries compare. It is helpful to see how viable different implementations are on Android, both for C++ libraries and Java libraries. It can also be useful to know how small implementations can perform in terms of speed. The sample sizes used for the FFT can vary depending on the requirements for the implementation.
 
-If the app needs to be efficient, it is common to lower the number of collected samples. This comes at a cost of accuracy. A fast FFT implementation allows for more data being passed to the FFT, improving the frequency resolution. This is one of the reasons it is important to have a fast FFT.
+If the app needs to be efficient, it is common to lower the number of collected samples. This comes at a cost of accuracy. A fast FFT implementation allows for more data being passed to the FFT, improving frequency resolution. This is one of the reasons it is important to have a fast FFT.
 
 % Q2: Why Optimizations
 
-Optimizations only possible with native code is a good demonstration of how a developer can improve performance even more to fit the requirements while still retaining manageable source code. Having one single source file is valuable, especially for native libraries. This facilitates the process of adding libraries and based on the results found in this report, they can be sufficiently fast.
+Optimizations that are only possible in native code is a good demonstration of how a developer can improve performance even more and to perhaps achieve better execution times than what is possible in Java. Having one single source file is valuable, especially for native libraries. This facilitates the process of adding libraries \hilight{and based on the results found in this report, they can be sufficiently fast}.
 
-Finally, comparing how performance can change depending on which data types that are used is also relevant for choosing a given implementation. Using the \texttt{float} data type, you use less memory at the cost of precision. A \texttt{double} occupies double the amount of space compared to a \texttt{float}, although it allows higher precision numbers. Caching is one aspect that could be utilized by reducing the space required for the results array.
+Finally, comparing how performance can change depending on which data types that are used is also interesting when choosing a given implementation. Using the \texttt{float} data type, you use less memory at the cost of precision. A \texttt{double} occupies double the amount of space compared to a \texttt{float}, although it allows higher precision numbers. Caching is one aspect that could be utilized by reducing the space required for the results array.
 
 \subsection{Hardware}
 % Screen Brightness
@@ -66,7 +66,7 @@ In this thesis, the hardware was delimited to one device to prevent the experime
 % During the tests, \hilight{the screen brightness was set to as low as possible} to minimize the risk for CPU throttling.
 
 \subsection{Benchmark Environment}
-During the tests, both cellular and wifi was switched off. There were no applications running in the background while performing the tests during the experiments. Additionally, there were no foreground services running. This was to prevent external influences from affecting the results. The software versions, compiler versions and compiler flags are presented in Table \ref{tab:software}. The \texttt{-O3} optimization was used because it resulted in a small performance improvement. The app was signed and packaged with release as build type. It was then transferred and installed on the device.
+During the tests, both cellular and wifi were switched off. There were no applications running in the background while performing the tests during the experiments. Additionally, there were no foreground services running. This was to prevent any external influences from affecting the results. The software versions, compiler versions and compiler flags are presented in Table \ref{tab:software}. The \texttt{-O3} optimization was used because it resulted in a small performance improvements compared with no optimization. The app was signed and packaged with release as build type. It was then transferred and installed on the device.
 
 \begin{table}[H]
     \centering
@@ -91,9 +91,11 @@ During the tests, both cellular and wifi was switched off. There were no applica
 
 
 \subsection{Time measurement}
-There are multiple methods of measuring time in Java. It is possible to measure the wall-clock time using the \texttt{System.currentTimeMillis()} method. There are drawback of using wall-clock time for measuring time. Because it can be changed at any time, it could result in too small or too large runtime depending on seemingly random factors. What is more preferable is to measure elapsed cpu time. This do not depend on a changeable wall clock but rather use hardware to interpret time. It is possible to use both \texttt{System.nanoTime()} and \texttt{SystemClock.elapsedRealtimeNanos()} for this purpose.
+There are multiple methods of measuring time in Java. It is possible to measure the wall-clock time using the \texttt{System.currentTimeMillis()} method. There are drawbacks of using wall-clock time for measuring time. Because it is possible to manipulate the wall-clock at any time, it could result in too small or too large runtime depending on seemingly random factors. A more preferable method is to measure elapsed CPU time. This does not depend on a changeable wall-clock but rather use hardware to measure time. It is possible to use both \texttt{System.nanoTime()} and \texttt{SystemClock.elapsedRealtimeNanos()} for this purpose and the latter was used for the tests covered in this thesis.
 
-What is measured is the time to execute the tests assuming we have the desired input data and will get the required output data with no conversions. Different algorithms accepts different data types as input parameters. When using an algorithm, you would design your application such that it represents the data in the way it needs it. Some algorithms require a \texttt{Complex[]}, some require a \texttt{double[]} where the first half contains the real numbers and the second half contain the imaginary numbers and some require two double arrays, one for the real numbers and one for imaginary. Because of these different requirements, the timer encapsulates a function shown in Figure \ref{fig:timer:pos}.
+What is being measured is the time to execute the tests assuming we have the desired input data and will get the required output data where we do not convert the data. Different algorithms accepts different data types as input parameters. When using an algorithm, the easiest solution would be to design your application around the algorithm, its input parameters and its return type.
+
+Some algorithms require a \texttt{Complex[]}, some require a \texttt{double[]} where the first half contains the real numbers and the second half contain the imaginary numbers and some require two double arrays, one for the real numbers and one for imaginary. Because of these different requirements, the timer encapsulates a function shown in Figure \ref{fig:timer:pos}. The timer would not measure the conversion from the shared input to the input type required by the particular algorithm.
 
 \begin{figure}
 \begin{lstlisting}[
@@ -122,7 +124,8 @@ What is measured is the time to execute the tests assuming we have the desired i
 % Describe where the timer starts and where it ends for the tests. Describe why tables are calculated once. Because you seldom do one FFT calculation, it is OK to assume that the creation of the weights array is done before the FFT is run.
 
 \subsection{Memory measurement}
-The profiling tool provided by Android Studio was used to measure the amount of memory each test required. The method used was to attach the debugger to the app and measure using the profiler. To measure each test separately and equally, the app was launched freshly between tests and the garbage collector was forced before each test. After this, the memory allocation tracker was activated and then followed by starting a test. When the test had been done executing, the tracker was stopped and the results saved.
+\hilight{TODO:}
+\emph{The profiling tool provided by Android Studio was used to measure the amount of memory that each test required. The method used to measure the memory was to attach the debugger to the app and measure using the profiler. To measure each test separately and equally, the app was launched freshly between tests and the garbage collector was forced before each test. After this, the memory allocation tracker was activated and then followed by starting a test. When the test had been done executing, the tracker was stopped and the results saved.}
 
 \section{Evaluation}
 % How will the results be represented? 
@@ -130,23 +133,25 @@ The profiling tool provided by Android Studio was used to measure the amount of 
 % How many times will the programs be executed
 % Statistical significance
 % What is included in the calculation, what is not (adding result to string etc)
-The unit of the resulting data will be in milliseconds. To be able to have 100 executions run in reasonable time, the maximum size of the input data was limited to $2^{16} = 65536$. The sampling rate is what determines the highest frequency that could be found in the result. In this thesis, only the frequency range perceivable by the human ear ($\sim$ 20-22,000 Hz) is covered by the tests. Because the FFT is limited to sample sizes of powers of 2, the next power of 2 for a sampling rate of 44,100 is $2^{16}$.
+The unit of the resulting data was chosen to be in milliseconds. To be able to have 100 executions run in reasonable time, the maximum size of the input data was limited to $2^{18} = 262144$ for all the tests. The sampling rate is what determines the highest frequency that could be found in the result. The frequency range perceivable by the human ear ($\sim$ 20-22,000 Hz) is covered by the tests. According to the Nyquist theorem, the sampling rate must be at least twice the upper limit (44,000). Because the FFT is limited to sample sizes of powers of 2, the next power of 2 for a sampling rate of 44,000 is $2^{16}$. This size was chosen as the upper limit for the library comparisons.
 
 For the SIMD tests, even larger sizes were used. This was to demonstrate how the execution time grew when comparing Java with low level optimizations in C++. Here, sizes up to $2^{18}$ were used because the steps from $2^{16} - 2^{18}$ illustrated this point clearly. It is also with these sizes the garbage collection gets invoked many times due to large allocations.
 
 \subsection{Data representation}
-The block sizes chosen in the JNI and libraries tests are limited to every power of two from $2^4$ to $2^{16}$. For NEON tests, $2^{16} - 2^{18}$ will be used for the tests. One reason this interval was chosen was because it is relevant to have the largest data the largest number of blocks needed for sample rates of 44100 Hz. To get a resolution of at least one Hz for a frequency span of 0-22050 Hz, an FFT size of 44100 ($2^{16}$) is required. The lowest sample size was chosen to be $2^{4}$ to get a variety of data points to test for to find the increase in execution time for larger data sizes.
+The block sizes chosen in the JNI and libraries tests are limited to every power of two from $2^4$ to $2^{16}$. For NEON tests, $2^{16} - 2^{18}$ will be used for the tests. One reason this interval was chosen was because it is relevant to have the largest data the largest number of blocks needed for sample rates of 44100 Hz. To get a resolution of at least one Hz for a frequency span of 0-22050 Hz, an FFT size of $2^{16}$ (next power of two for 44,100) is required. The lowest sample size was chosen to be $2^{4}$ to get a variety of data points to test for to find the increase in execution time for larger data sizes.
 
-All test results are not presented in Chapter \ref{ch:results} - Results. In this chapter, only the results that were relevant to discuss about are brought up. All the test results are found in Appendix \ref{appendix:results}. To visualize a result, tables and line graphs were used. To solve the problem that the FFT sizes were split into groups labeled \emph{small size} ($2^{4} - 2^{7}$) \emph{medium size} ($2^{8} - 2^{12}$) and \emph{large size} ($2^{13} - 2^{16}$).
+Every test result were not presented in Chapter \ref{ch:results} - Results. In this chapter, only the results that were relevant to discuss about are included. The tests results not found in the results chapter is found in Appendix \ref{appendix:results}. To visualize a result, tables and line graphs were used. FFT sizes were split into groups labeled \emph{small} size ($2^{4} - 2^{7}$) \emph{medium} size ($2^{8} - 2^{12}$), \emph{large} size ($2^{13} - 2^{16}$) and \emph{extra large} size ($2^{17} - 2^{18}$). This decision was made to allow the discussion to be divided into groups to see where the difference in performance between the algorithms is significant.
+
+% To solve the problem that the FFT sizes were split into groups labeled
 
 \subsection{Sources of error}
 % https://www2.southeastern.edu/Academics/Faculty/rallain/plab193/labinfo/Error_Analysis/06_Sources_of_Error.html
-There are multiple factors that can skew the results when running the tests. Some are controllable and some are not. In these tests, allocation of objects were minimized as much as possible to prevent the overhead of allocating dynamic memory. Because the Java garbage collector is uncontrollable during runtime, this will depend on the sizes of the objects and other aspects dependent on a specific implementation. JNI allows native code to be run without interruption by the garbage collector by using the \texttt{GetPrimitiveArrayCritical} function call. 
+There are multiple factors that can skew the results when running the tests. Some are controllable and some are not. In these tests, allocation of objects were minimized as much as possible to prevent the overhead of allocating dynamic memory. Because the Java garbage collector is uncontrollable during runtime, this will depend on the sizes of the objects and other aspects dependent on a specific implementation. JNI allows native code to be run without interruption by the garbage collector by using the \texttt{GetPrimitiveArrayCritical} function call. Additionally, implementation details of the Java libraries were not altered to ensure that the exact library found was used.
 
 % CPU throttling is another factor that can influence the execution times. This is a feature where the CPU changes its clock frequency to reduce heat generated by being in full load for too long. Different phones have different cooling capability and a profiler can provide information if this occurs during a test. 
 
 \subsection{Statistical significance}
-Because the execution times differ between runs, it is important to calculate the sample mean. This way we have an expected value to use in our results. To get an accurate sample mean, we must have a large sample size which is the number of runs we execute for each test. The following formula calculates the sample mean \cite[p.263]{olofsson2012probability}:
+Because the execution times differ between runs, it is important to calculate the sample mean. This way we have an expected value to use in our results. To get an accurate sample mean, we must have a large sample size. This is the number of runs we choose to execute each test. The following formula calculates the sample mean \cite[p.263]{olofsson2012probability}:
 
 \begin{equation*}
     \bar{X} = \frac{1}{N} \sum\limits_{k = 1}^{N} X_k
@@ -157,7 +162,7 @@ We cannot say anything about how close to our mean the samples are with only the
     s = \sqrt{\frac{1}{N - 1} \sum\limits_{k = 1}^{N}\left(X_k - \bar{X}\right)^2}
 \end{equation*}
 
-When comparing results, we need to find a confidence interval for a given test and choose a confidence level. For the data gathered in this study, a 95\% two-sided confidence level was chosen when comparing the data. The confidence interval is calculated by taking the standard error of the mean which is found by using the following formula \cite[p.~304]{olofsson2012probability}:
+When comparing results, we need to find a confidence interval for a given test and choose a confidence level. For the data gathered in this study, a 95\% two-sided confidence level was chosen when comparing the data. To find the confidence interval we must first find the standard error of the mean using the following formula \cite[p.~304]{olofsson2012probability}:
 \begin{equation*}
     SE_{\bar{X}} = \frac{s}{\sqrt{N}}
 \end{equation*}
@@ -198,7 +203,7 @@ For testing the JNI overhead, four different tests were constructed. The first t
 \label{fig:jni:empty}
 \end{figure}
 
-For the second test, a function was written (see Figure~\ref{fig:jni:params}) that took a jdoubleArray as input and output. The reason this test was made was to see if JNI introduced some extra overhead for passing an argument and having a return value.
+For the second test, a function was written (see Figure~\ref{fig:jni:params}) that took a jdoubleArray as input and returned the same data type. The reason this test was made was to see if JNI introduced some extra overhead for passing an argument and having a return value.
 
 \begin{figure}[H]
 \begin{lstlisting}[
@@ -216,7 +221,7 @@ For the second test, a function was written (see Figure~\ref{fig:jni:params}) th
 \label{fig:jni:params}
 \end{figure}
 
-In Figure~\ref{fig:jni:conversion}, the third test started by calling the \texttt{GetPrimitiveArrayCritical} function to be able to access the elements stored in \texttt{arr}. When all the calculations are done, the function will return \texttt{arr}. To overwrite the changes made on \texttt{elements}, a function called \texttt{ReleasePrimitiveArrayCritical} must be called.
+In Figure~\ref{fig:jni:conversion}, the third test started by calling the \texttt{GetPrimitiveArrayCritical} function to be able to access the elements stored in \texttt{arr}. When all the calculations are done, the function will return \texttt{arr}. To overwrite the changes made on \texttt{elements}, a function called \texttt{ReleasePrimitiveArrayCritical} has to be called.
 
 \begin{figure}
 \begin{lstlisting}[
@@ -236,7 +241,7 @@ jdoubleArray jniVectorConversion(JNIEnv* env, jobject, jdoubleArray arr) {
 \label{fig:jni:conversion}
 \end{figure}
 
-The fourth and last test evaluated the performance of passing three arrays through JNI as well as the cost of getting and releasing the arrays. This test was included because the Columbia algorithm requires the precomputed trigonometric tables. This test is presented in Figure~\ref{fig:jni:columbia}
+The fourth and final test evaluated the performance of passing three arrays through JNI as well as the cost of getting and releasing the arrays. This test was included because the Columbia algorithm requires the precomputed trigonometric tables. This test is presented in Figure~\ref{fig:jni:columbia}.
 
 \begin{figure}
 \begin{lstlisting}[
@@ -268,7 +273,7 @@ jdoubleArray jniColumbia(JNIEnv* env,
 % Small block size
 % Large block size
 
-Different implementations of FFT was used in the libraries tests. Three of them were implemented in Java and one in C. All of them were contained in one file. The following algorithms were used to compare and find a good estimate on the performance of FFT implementations with varying complexity:
+Different implementations of FFT were used in the libraries tests. Three of them were implemented in Java and one in C. The implementations chosen were all contained in one file. The following algorithms were used to compare and find a good estimate on the performance of FFT implementations with varying complexity:
 
 \begin{itemize}
     \item Princeton Recursive \cite{princeton:recursive}
@@ -279,16 +284,16 @@ Different implementations of FFT was used in the libraries tests. Three of them 
 
 \subsection{Java Libraries}
 
-The Princeton Recursive FFT is a straightforward implementation of the FFT with no radical optimizations written by Robert Sedgewick and Kevin Wayne \cite{princeton:recursive}. This algorithm is implemented in Java. Twiddle factors are trigonometric constants used during the butterfly operations. They are not precomputed in this algorithm, leading to duplicate work when calling it multiple times.
+The Princeton Recursive FFT is a straightforward implementation of the FFT with no radical optimizations. It was implemented in Java by Robert Sedgewick and Kevin Wayne \cite{princeton:recursive}. Twiddle factors are trigonometric constants used during the butterfly operations. They are not precomputed in this algorithm, leading to duplicate work when calling it multiple times.
 
-Princeton Iterative, also written by Robert Sedgewick and Kevin Wayne \cite{princeton:iterative}, is an iterative version of the previous FFT (also written in Java). Bit reversal and butterfly operations are used to produce a faster algorithm. 
+Princeton Iterative, also written by Robert Sedgewick and Kevin Wayne \cite{princeton:iterative}, is an iterative version of the previous FFT (also written in Java). Bit reversal and butterfly operations are used to produce a faster algorithm.
 
-Columbia Iterative \cite{columbia:iterative} uses pre-computed trigonometric tables that are prepared in the class constructor. Because you commonly call FFT for the same sizes in your program. It is beneficial to have the trigonometric tables saved and used in future calls to the FFT.
+Columbia Iterative \cite{columbia:iterative} uses pre-computed trigonometric tables that are prepared in the class constructor. Because you commonly call FFT for the same sizes in your program, it is beneficial to have the trigonometric tables saved and use them in subsequent calls to the FFT.
 
 \subsection{C++ Libraries}
-Conversion to C++ was done manually for Princeton Iterative, Princeton Recursive and Columbia Iterative. Some changes were necessary to follow the C++ syntax. The Complex class used in Java was replaced by \texttt{std::complex} in all converted programs. Java dynamic arrays were replaced by \texttt{std::vector} for when they were created. This only occurred in the Princeton Recursive algorithm. In Princeton Iterative and Columbia Iterative, a Java array reference was sent to the function and there were no arrays created in the function. In C++, a pointer and a variable containing its size was used instead. 
+Conversion to C++ was done manually for Princeton Iterative, Princeton Recursive and Columbia Iterative. Some changes were necessary to follow the C++ syntax. The Complex class used in Java was replaced by \texttt{std::complex} in all converted programs. Java dynamic arrays were replaced by \texttt{std::vector} for when they were created. This only occurred in the Princeton Recursive algorithm. In Princeton Iterative and Columbia Iterative, a Java array reference was sent to the function and there were no arrays created in the function. In C++, a pointer and a variable containing its size was used instead.
 
-Kiss FFT is a small library that consists of one source file. It is available under the BSD license. To use it, you first call the \texttt{kiss\_fft\_alloc} function which allocates memory for the twiddle factors as well as calculates them. This function returns a struct object which is used as a config. The FFT is executed when the \texttt{kiss\_fft} function is called. The first parameter is the config returned by the init function, followed by a pointer to the time domain input and a pointer to where the frequency output will be placed.
+Kiss FFT is a small library that consists of one source file. It is available under the BSD license. To use it, you first call the \texttt{kiss\_fft\_alloc} function which allocates memory for the twiddle factors as well as calculates them. This function returns a struct object that is used as a config. The FFT is executed when the \texttt{kiss\_fft} function is called. The first parameter for this function is the config returned by the init function, followed by a pointer to the time domain input and a pointer to where the frequency output will be placed.
 
 % Flags: -funroll-loops
 % \cite{FFTW05}
@@ -298,6 +303,6 @@ Kiss FFT is a small library that consists of one source file. It is available un
 \section{NEON Optimization}
 % https://aaltodoc.aalto.fi/bitstream/handle/123456789/23201/master_Sugawara_Koki_2016.pdf?sequence=1
 
-Two libraries were chosen to test how vectorization of the loops can improve performance. Both libraries were written in Intel SSE intrinsics and were converted to ARM NEON intrinsics. \texttt{float} was used so that the vector registers could hold 4 elements. It is possible to have the register hold two double precision variables although it will increase the number of instructions needed to calculate the FFT. For memory locality, this is also inefficient.
+Two libraries were chosen to test how vectorization of the loops can improve performance. Both libraries were written in Intel SSE intrinsics and were converted to ARM NEON intrinsics. \texttt{float} was used so that the vector registers could hold 4 elements. It is possible to have the register hold two double precision variables although this would increase the number of instructions needed to calculate the FFT. For memory locality, this is also inefficient.
 
-The first FFT algorithm was a recursive implementation written by Anthony Blake~\cite{neon:recursive}. This algorithm has a initializer function that allocates space for the twiddle factors and calculates them. They are placed in a two dimensional array that utilizes memory locality to waste less memory bandwidth \cite{neon:recursive:details}. The converted program is listed in Appendix \ref{lst:recursive:neon}. The second algorithm was a iterative implementation. This library is a straightforward implementation of FFT with SSE \cite{code:manyears} and was written for a sound source localization system \cite{manyears:site}. The code that was converted from SSE to NEON is presented in Appendix \ref{lst:iterative:neon}.
+The first FFT algorithm was a recursive implementation written by Anthony Blake~\cite{neon:recursive}. This algorithm has an initializer function that allocates space for the twiddle factors and calculates them. They are placed in a two dimensional array that utilizes memory locality to waste less memory bandwidth \cite{neon:recursive:details}. The converted program is listed in Appendix \ref{lst:recursive:neon}. The second algorithm was an iterative implementation. This library is a straightforward implementation of FFT with SSE \cite{code:manyears} and was written for a sound source localization system \cite{manyears:site}. The code that was converted from SSE to NEON is presented in Appendix \ref{lst:iterative:neon}.

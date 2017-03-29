@@ -4,11 +4,11 @@
 %% JNI-Tests
 %%==================================================================
 \section{JNI}
-The results of the tests that measure the JNI overhead can be found in Table~\ref{tab:jni:common}. These tests are presented with block sizes defined in chapter \ref{ch:method} - Method. Execution time and confidence intervals are given in microseconds and are rounded to four decimal points. The number before the $\pm$ sign is the sample mean and the number after $\pm$ is a two sided confidence interval with a confidence level of $95\%$. Each test was executed 100 times to ensure that we get reliable sample means.
+The results from the tests that measure the JNI overhead can be found in Table~\ref{tab:jni:common}. These tests are presented with block sizes defined in chapter \ref{ch:method} - Method. Execution time and confidence intervals are given in microseconds and are rounded to four decimal points. The number before the $\pm$ sign is the sample mean and the number after $\pm$ is a two sided confidence interval with a confidence level of $95\%$. Each test was executed 100 times to ensure that we get reliable sample means.
 
 The test labeled \textbf{No params} is the test where a native void function with no parameters that returns immediately was called. \textbf{Vector} takes a \texttt{jdoubleArray} and returns a \texttt{jdoubleArray} immediately. \textbf{Convert} takes a \texttt{jdoubleArray}, converts it to a native array using \texttt{GetPrimitiveArrayCritical()}, converts it back to a \texttt{jdoubleArray} using \texttt{ReleasePrimitiveArrayCritical()} and returns a \texttt{jdoubleArray}. \textbf{Columbia} takes three \texttt{jdoubleArray}s, converts them the same way and returns the same way.
 
-No surprising data regarding the first two tests were found. Neither the \textbf{No params} nor \textbf{Vector} tests had a clear increase in execution time for an increase in block size. \textbf{Vector} did have a higher mean for block size of \textbf{65536}. On the other hand, we can see that the 95\% confidence interval is very large ($\pm 3.1960$ \textmu s). This is due to its high standard deviation of 16.3058 found in Appendix \ref{appendix:results} Table \ref{tab:appendix:raw:jni:vector}. Likewise, there is a spike in execution time mean for a block size of \textbf{1024} in the \textbf{Convert} test.
+No surprising data regarding the first two tests were found. Neither the \textbf{No params} nor \textbf{Vector} tests had a clear increase in execution time for an increase in block size. \textbf{Vector} did have a higher mean for block size \textbf{65536}. On the other hand, we can see that the 95\% confidence interval is very large ($\pm 3.1960$ \textmu s). This is likely due to its high standard deviation of 16.3058 found in Appendix \ref{appendix:results} Table \ref{tab:appendix:raw:jni:vector}. Likewise, there is a spike in execution time mean for a block size of \textbf{1024} in the \textbf{Convert} test.
 
 
 % STILL RELEVANT??
@@ -29,17 +29,13 @@ No surprising data regarding the first two tests were found. Neither the \textbf
 %%==================================================================
 \section{FFT Libraries}
 
-The results from the FFT Libraries are presented in line graphs, both language specific and graphs with both Java and C++ are given to illustrate the differences between languages and also provide differences for specific languages clearly. The time unit for these tests are presented in milliseconds. This was because the FFT ran in ranges below one millisecond and above one second among different algorithms and different block sizes. The means are calculated from the results of 100 test runs.
+The results from the FFT Libraries are presented in line graphs, both language specific and graphs with both Java and C++ are given to illustrate the differences between languages and also provide differences for specific languages clearly. The time unit for these tests are presented in milliseconds. This was because the FFT ran in ranges below one millisecond and above one second among different algorithms and different block sizes. The means were calculated from the results of 100 test runs.
 
 %=========%
 %= SMALL =%
 %=========%
 \subsection{Small block sizes}
 Results from the small blocks tests shows a clear difference between the different algorithms. In Figure~\ref{fig:all:line:small}, Princeton Recursive in Java perform the worst. Princeton Recursive in C++ and Princeton Iterative in Java perform better than Princeton Recursive Java although worse than the rest of the algorithms. The rest of the algorithms perform similarly and does not seem to grow given the small block sizes.
-
-% In Table ... we can see that the difference is statistically significant.
-
-% found in Table~\ref{tab:cpp:small} and Table~\ref{tab:java:small}, shows that 
 
 
 \begin{figure}
@@ -49,7 +45,7 @@ Results from the small blocks tests shows a clear difference between the differe
     \label{fig:all:line:small}
 \end{figure}
 
-As we can see in Figure~\ref{fig:java:line:small}, the standard deviation of Princeton Recursive and Princeton iterative. This means that the samples were sparse and as a result of this, not a reliable mean. We can see in Table~\ref{tab:java:small} that the confidence interval is generally larger for Princeton Iterative and Princeton Recursive compared to Columbia Iterative.
+As we can see in Figure~\ref{fig:java:line:small}, the standard deviation of Princeton Recursive and Princeton Iterative are very large. This means that the samples were sparse and as a result of this, not a reliable mean. We can see in Table~\ref{tab:java:small} that the confidence interval is generally larger for Princeton Iterative and Princeton Recursive compared to Columbia Iterative.
 
 \begin{figure}
     \centering
@@ -135,7 +131,7 @@ In Table~\ref{tab:cpp:medium} we can see that the confidence intervals are relat
 %= LARGE =%
 %=========%
 \subsection{Large block sizes}
-Figure~\ref{fig:all:line:large} shows the growth in execution time for increasing block sizes of type \emph{large}. It continues the trend set by the tests with a block size of \emph{medium}. It is easy to see which algorithms that perform worse than the others. As previous tests showed, Java Princeton Recursive, Java Princeton Iterative and C++ Princeton Recursive are still the slowest.
+Figure~\ref{fig:all:line:large} shows the growth in execution time for increasing block sizes of type \emph{large}. It continues the trend set by the tests with a block size of \emph{medium}. It is easy to see which algorithms that perform worse than the others. As previous tests shows, Java Princeton Recursive, Java Princeton Iterative and C++ Princeton Recursive are still the slowest.
 
 \begin{figure}
     \centering
@@ -144,7 +140,7 @@ Figure~\ref{fig:all:line:large} shows the growth in execution time for increasin
     \label{fig:all:line:large}
 \end{figure}
 
-The results for the Java tests with \emph{large} block sizes are presented in Figure~\ref{fig:java:line:large} The results for large verifies the order in which the algorithms perform. The order in performance for Java is still Columbia Iterative, Princeton Iterative and Princeton Recursive (where Columbia Iterative is the fastest).
+The results for the Java tests with \emph{large} block sizes are presented in Figure~\ref{fig:java:line:large}. The results from \emph{large} verifies the order in which the algorithms performs. The order in performance for Java is still Columbia Iterative, Princeton Iterative and Princeton Recursive (where Columbia Iterative is the fastest).
 
 \begin{figure}
     \centering
@@ -159,7 +155,7 @@ The results for the Java tests with \emph{large} block sizes are presented in Fi
     \input{Data/results/FFT/Java_common_table_LARGE.tex}
 \end{table}
 
-Results for tests with \emph{large} block sizes in C++ produced some interesting results. In Figure~\ref{fig:cpp:line:large} Princeton Recursive has a much larger standard deviation than the other algorithms. It is also the slowest (see Table~\ref{tab:cpp:large}). We can also see in the same table that all algorithms are faster in C++ than Java and that there are no overlapping confidence intervals for a given algorithm or block size. Another thing to note is that the Columbia Iterative algorithm performs almost the same between Java and C++. This is not the case for Princeton Iterative or Recursive.
+Results for tests with \emph{large} block sizes in C++ produced some interesting results. In Figure~\ref{fig:cpp:line:large} Princeton Recursive has a much larger standard deviation than the other algorithms. It is also the slowest (see Table~\ref{tab:cpp:large}). We can also see in the same table that all algorithms are faster in C++ than their equivalent in Java and that there are no overlapping confidence intervals for a given algorithm or block size. Another thing to note is that the Columbia Iterative algorithm performs almost the same between Java and C++. This is not the case for Princeton Iterative or Recursive.
 
 \begin{figure}
     \centering
@@ -180,7 +176,7 @@ Results for tests with \emph{large} block sizes in C++ produced some interesting
 %% NEON-Tests
 %%==================================================================
 \section{Optimizations}
-The NEON optimizations proved to be very efficient for \emph{extra large} block sizes. These results can be found in Table~\ref{tab:neon:extra}. Comparing these figures with the results, for the same block sizes, in Java (Table~\ref{tab:java:float:extra}), we can see that the results from the NEON tests are more than double the speed of the fastest Java implementation. Table~\ref{tab:java:float:extra} also shows that for very large block sizes, Princeton Iterative and Princeton Recursive are very inefficient compared to Columbia Iterative.
+The NEON optimizations proved to be very efficient for \emph{extra large} block sizes. These results can be found in Table~\ref{tab:neon:extra}. Comparing these figures with the results, for the same block sizes in Java (Table~\ref{tab:java:float:extra}), we can see that the results from the NEON tests are more than double the speed of the fastest Java implementation. Table~\ref{tab:java:float:extra} also shows that for very large block sizes, Princeton Iterative and Princeton Recursive are very inefficient compared to Columbia Iterative.
 
 When comparing the NEON results from Table~\ref{tab:neon:extra} with the results from the C++ tests found in Table~\ref{tab:cpp:float:extra}, it is clear that vectorization as an optimization is beneficial. NEON intrinsics resulted in almost twice as fast execution time in comparison with the normal C++ tests.
 
