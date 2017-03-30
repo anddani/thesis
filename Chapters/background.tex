@@ -627,6 +627,110 @@ Equation \ref{eq:1} \cite[p.~92]{tan2013digital} describes the mathematical proc
     X\left(k\right) = \sum\limits_{n=0}^{N-1}x\left(n\right)\cdot e^{-j2\pi kn/N},\ \ k = 0,1,2,\dots,N-1\label{eq:1}
 \end{align}
 
+\section{Fast Fourier Transform}
+The Fast Fourier Transform algorithm composed by Cooley and Tukey was a recursive algorithm that 
+% http://www.librow.com/articles/article-10
+% https://aaltodoc.aalto.fi/bitstream/handle/123456789/23201/master_Sugawara_Koki_2016.pdf?sequence=1
+
+\begin{figure}
+    \centering
+    \begin{tikzpicture}[node distance=2cm]
+
+        % nodes
+        \node (A) at (0, 0) {$f_j$};
+        \node (B) at (0, 1) {$f_i$};
+        \node (C) at (3, 0) {$f'_j$};
+        \node (D) at (3, 1) {$f'_i$};
+
+        \node [draw,circle,above left=-3mm and 2mm of D,inner sep=0pt] (plus) {$+$};
+        \node [draw,circle,below left=-3mm and 2mm of C,inner sep=0pt] (plus) {$-$};
+        \node [draw,circle,below right=-3mm and 2mm of A,inner sep=0pt] (plus) {$\times$};
+
+        % arrows
+        \draw [->,draw=red] (A) -- (D);
+        \draw [->,draw=red] (B) -- (C);
+
+    \end{tikzpicture}
+    \caption{Butterfly update}
+    \label{fig:butterfly:update}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \begin{tikzpicture}[node distance=2cm]
+
+        % nodes
+        \node (f0) at (0, 7) {$f_0$};
+        \node (f4) at (0, 6) {$f_4$};
+        \node (f2) at (0, 5) {$f_2$};
+        \node (f6) at (0, 4) {$f_6$};
+        \node (f1) at (0, 3) {$f_1$};
+        \node (f5) at (0, 2) {$f_5$};
+        \node (f3) at (0, 1) {$f_3$};
+        \node (f7) at (0, 0) {$f_7$};
+
+        \node (h1) at (2, 7) {};
+        \node (h2) at (2, 6) {};
+        \node (h3) at (2, 5) {};
+        \node (h4) at (2, 4) {};
+        \node (h5) at (2, 3) {};
+        \node (h6) at (2, 2) {};
+        \node (h7) at (2, 1) {};
+        \node (h8) at (2, 0) {};
+
+        \node (2h1) at (4, 7) {};
+        \node (2h2) at (4, 6) {};
+        \node (2h3) at (4, 5) {};
+        \node (2h4) at (4, 4) {};
+        \node (2h5) at (4, 3) {};
+        \node (2h6) at (4, 2) {};
+        \node (2h7) at (4, 1) {};
+        \node (2h8) at (4, 0) {};
+
+        \node (3h1) at (6, 7) {$F_0$};
+        \node (3h2) at (6, 6) {$F_1$};
+        \node (3h3) at (6, 5) {$F_2$};
+        \node (3h4) at (6, 4) {$F_3$};
+        \node (3h5) at (6, 3) {$F_4$};
+        \node (3h6) at (6, 2) {$F_5$};
+        \node (3h7) at (6, 1) {$F_6$};
+        \node (3h8) at (6, 0) {$F_7$};
+
+        % arrows
+        % First iteration
+        \draw [->,draw=red] (f0) -- (h2);
+        \draw [->,draw=red] (f4) -- (h1);
+        \draw [->,draw=red] (f2) -- (h4);
+        \draw [->,draw=red] (f6) -- (h3);
+        \draw [->,draw=red] (f1) -- (h6);
+        \draw [->,draw=red] (f5) -- (h5);
+        \draw [->,draw=red] (f3) -- (h8);
+        \draw [->,draw=red] (f7) -- (h7);
+
+        % Second iteration
+        \draw [->,draw=red] (h1) -- (2h3);
+        \draw [->,draw=red] (h2) -- (2h4);
+        \draw [->,draw=red] (h3) -- (2h1);
+        \draw [->,draw=red] (h4) -- (2h2);
+        \draw [->,draw=red] (h5) -- (2h7);
+        \draw [->,draw=red] (h6) -- (2h8);
+        \draw [->,draw=red] (h7) -- (2h5);
+        \draw [->,draw=red] (h8) -- (2h6);
+
+        % Third iteration
+        \draw [->,draw=red] (2h1) -- (3h5);
+        \draw [->,draw=red] (2h2) -- (3h6);
+        \draw [->,draw=red] (2h3) -- (3h7);
+        \draw [->,draw=red] (2h4) -- (3h8);
+        \draw [->,draw=red] (2h5) -- (3h1);
+        \draw [->,draw=red] (2h6) -- (3h2);
+        \draw [->,draw=red] (2h7) -- (3h3);
+        \draw [->,draw=red] (2h8) -- (3h4);
+    \end{tikzpicture}
+    \caption{Butterfly update for 8 values}
+    \label{fig:general:butterfly}
+\end{figure}
+
 \section{Related work}
 A study called \emph{FFT benchmark on Android devices: Java versus JNI} \cite{Jr2013} was published in 2013 and investigated how two implementations of FFT performed on different Android devices. The main point of the study was to compare how a pure Java implementation would perform compared to a library written in C called FFTW. This library supports multi-threaded computation and this aspect is also covered in this study. Their benchmark application was run on 35 different devices with different versions to get a wide picture of how the algorithms ran on different phones.
 
