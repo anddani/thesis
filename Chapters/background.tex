@@ -174,7 +174,6 @@ Loop unrolling is a technique used to optimize loops. By explicitly coding multi
 
 The gain in using loop unrolling is that you \enquote{save} the same amount of jump instructions as the amount of \enquote{hard coded} iterations you add. In theory, it is also possible to optimize even more by changing the offset of \texttt{LOAD WORD} instructions as shown in Figure~\ref{fig:assembly:optimized}. Then you would not need to update the iterator as often.
 
-
 \begin{figure}
     \centering
     \begin{adjustbox}{minipage=\linewidth,scale=0.8}

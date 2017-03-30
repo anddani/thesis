@@ -28,15 +28,13 @@ No surprising data regarding the first two tests were found. Neither the \textbf
 %% FFT-Tests
 %%==================================================================
 \section{FFT Libraries}
-
-The results from the FFT Libraries are presented in line graphs, both language specific and graphs with both Java and C++ are given to illustrate the differences between languages and also provide differences for specific languages clearly. The time unit for these tests are presented in milliseconds. This was because the FFT ran in ranges below one millisecond and above one second among different algorithms and different block sizes. The means were calculated from the results of 100 test runs.
+The results from the FFT Libraries are presented in line graphs, both language specific and graphs with both Java and C++ are given to illustrate the differences between languages and also provide differences for specific languages clearly. The time unit for these tests are presented in milliseconds. This was because the FFT ran in ranges below one millisecond and above one second among different algorithms and different block sizes. The means were calculated from the results of 100 test runs.  In each C++ line graph, the fastest Java test was added to make it easier to get a reference to compare the languages.
 
 %=========%
 %= SMALL =%
 %=========%
 \subsection{Small block sizes}
 Results from the small blocks tests shows a clear difference between the different algorithms. In Figure~\ref{fig:all:line:small}, Princeton Recursive in Java perform the worst. Princeton Recursive in C++ and Princeton Iterative in Java perform better than Princeton Recursive Java although worse than the rest of the algorithms. The rest of the algorithms perform similarly and does not seem to grow given the small block sizes.
-
 
 \begin{figure}
     \centering
@@ -61,7 +59,7 @@ As we can see in Figure~\ref{fig:java:line:small}, the standard deviation of Pri
     \input{Data/results/FFT/Java_common_table_SMALL.tex}
 \end{table}
 
-As for the C++ tests, the results are were scattered and has a more apparent increase in time with increasing block sizes. We can also see that the slowest algorithm, Princeton Recursive, has the largest standard deviation. It is clear by looking at Table~\ref{tab:cpp:small} that KISS performs the best, followed by Columbia Iterative, Princeton Iterative and Princeton Recursive.
+As for the C++ tests, the results were less scattered and had a more apparent increase in time with increasing block sizes. We can also see that the slowest algorithm, Princeton Recursive, has the largest standard deviation. It is clear by looking at Table~\ref{tab:cpp:small} that KISS performs the best, followed by Columbia Iterative, Princeton Iterative and then Princeton Recursive. If we look at the Java implementation, it has a general decrease in execution time for larger block sizes although it is faster than Princeton Iterative and Recursive.
 
 \begin{figure}
     \centering
@@ -108,7 +106,7 @@ The results found in Figure~\ref{fig:java:line:medium} are somewhat different th
     \input{Data/results/FFT/Java_common_table_MEDIUM.tex}
 \end{table}
 
-For the C++ algorithms, it is now clearer to see in which order the algorithms rank regarding performance in Figure~\ref{fig:cpp:line:medium}. Princeton Recursive perform the worst while the rest has similar execution times. It is now clear that KISS performs best, followed by Columbia Iterative and then Princeton Iterative.
+For the C++ algorithms, it is now clearer to see in which order the algorithms rank regarding performance in Figure~\ref{fig:cpp:line:medium}. Princeton Recursive perform the worst while the rest has similar execution times. It is now clear that KISS performs best, followed by Columbia Iterative and then Princeton Iterative. The Java Columbia Iterative implementation proves to be faster than Princeton for block sizes smaller than 4096.
 
 In Table~\ref{tab:cpp:medium} we can see that the confidence intervals are relatively small, meaning these results have higher precision than for the same test with smaller block sizes. We can also see that there is no overlap between any confidence intervals thereby giving us a strong indication that the order in performance given in the previous paragraph is true.
 
@@ -178,14 +176,16 @@ Results for tests with \emph{large} block sizes in C++ produced some interesting
 \section{Optimizations}
 The NEON optimizations proved to be very efficient for \emph{extra large} block sizes. These results can be found in Table~\ref{tab:neon:extra}. Comparing these figures with the results, for the same block sizes in Java (Table~\ref{tab:java:float:extra}), we can see that the results from the NEON tests are more than double the speed of the fastest Java implementation. Table~\ref{tab:java:float:extra} also shows that for very large block sizes, Princeton Iterative and Princeton Recursive are very inefficient compared to Columbia Iterative.
 
-When comparing the NEON results from Table~\ref{tab:neon:extra} with the results from the C++ tests found in Table~\ref{tab:cpp:float:extra}, it is clear that vectorization as an optimization is beneficial. NEON intrinsics resulted in almost twice as fast execution time in comparison with the normal C++ tests.
-
 \begin{table}
     \centering
     \caption{NEON \texttt{float} results table for \emph{extra large} block sizes, Time (ms)}
     \label{tab:neon:extra}
     \input{Data/results/NEON/CPP_common_table_EXTRA.tex}
 \end{table}
+
+When comparing the NEON results from Table~\ref{tab:neon:extra} with the results from the C++ tests found in Table~\ref{tab:cpp:float:extra}, it is clear that vectorization as an optimization is beneficial. NEON intrinsics resulted in almost twice as fast execution time in comparison with the normal C++ tests. It was also much faster than Java, especially compared to Java Princeton Iterative/Recursive.
+
+In Figure~\ref{fig:neon:line:extra} both the Iterative NEON and the Recursive NEON seems to have the same growth in execution time with increasing block size. Of these two algorithms, Iterative is the fastest. If we compare the results found for Java in Table~\ref{tab:java:float:extra} with the C++ results in Table~\ref{tab:cpp:float:extra} there is a big difference between the Princeton algorithms. The execution times are much larger in Java than in C++. The Java Columbia Iterative is faster than C++ Princeton Iterative for block sizes of 65536.
 
 \begin{table}
     \centering
@@ -205,7 +205,7 @@ When comparing the NEON results from Table~\ref{tab:neon:extra} with the results
 
 \begin{figure}
     \centering
-    \input{Data/results/NEON/line_graph_EXTRA.tex}
+    \input{Data/results/NEON/CPP_line_graph_EXTRA.tex}
     \caption{NEON results table for \emph{extra large} block sizes, Time (ms)}
     \label{fig:neon:line:extra}
 \end{figure}

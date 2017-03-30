@@ -137,6 +137,8 @@ The unit of the resulting data was chosen to be in milliseconds. To be able to h
 
 For the SIMD tests, even larger sizes were used. This was to demonstrate how the execution time grew when comparing Java with low level optimizations in C++. Here, sizes up to $2^{18}$ were used because the steps from $2^{16} - 2^{18}$ illustrated this point clearly. It is also with these sizes the garbage collection gets invoked many times due to large allocations.
 
+\hilight{FFT size for accelerometer}
+
 \subsection{Data representation}
 The block sizes chosen in the JNI and libraries tests are limited to every power of two from $2^4$ to $2^{16}$. For NEON tests, $2^{16} - 2^{18}$ will be used for the tests. One reason this interval was chosen was because it is relevant to have the largest data the largest number of blocks needed for sample rates of 44100 Hz. To get a resolution of at least one Hz for a frequency span of 0-22050 Hz, an FFT size of $2^{16}$ (next power of two for 44,100) is required. The lowest sample size was chosen to be $2^{4}$ to get a variety of data points to test for to find the increase in execution time for larger data sizes.
 
