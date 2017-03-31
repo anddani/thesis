@@ -562,7 +562,7 @@ SIMD has some prerequisites on the data that is being processed. Firstly, the da
     \label{fig:simd}
 \end{figure}
 
-\section{Discrete Fourier Transform}
+\section{Discrete Fourier Transform}\label{ch:dft}
 The Discrete Fourier Transform (\gls{dft}) is a method of converting a sampled signal from the time domain to the frequency domain. In other words, the DFT takes an observed signal and dissects each component that would form the observed signal. Every component of a signal can each be described as a sinusoidal wave with a frequency, amplitude and phase.
 
 If we observe Figure~\ref{fig:dft:ex1}, we can see how a signal in time domain looks like in frequency domain. The function displayed in the time domain consists of three sine components, each with its own amplitude and frequency. What the graph of the frequency domain shows, is the amplitude of each frequency. This can then be used to analyze the input signal.
@@ -624,11 +624,53 @@ In other words, you have to be able to reconstruct the signal given the samples 
 Equation \ref{eq:1} \cite[p.~92]{tan2013digital} describes the mathematical process of converting a signal $x$ to a spectrum $X$ of $x$ where $N$ is the number of samples, $n$ is the time step and $k$ is the frequency sample. When calculating $X\left(k\right) \forall\ k \in \left[0, N - 1\right]$ we clearly see that it will take $N^2$ multiplications. In 1965, Cooley and Tukey published a paper on an algorithm that could calculate the DFT in less than $2N\log(N)$ multiplications \cite{Cooley1964} called the Fast Fourier Transform (FFT).
 
 \begin{align}
-    X\left(k\right) = \sum\limits_{n=0}^{N-1}x\left(n\right)\cdot e^{-j2\pi kn/N},\ \ k = 0,1,2,\dots,N-1\label{eq:1}
+    X\left(k\right) = \sum\limits_{n=0}^{N-1}x\left(n\right)\cdot e^{-j\frac{2\pi}{N}kn},\ \ k = 0,1,2,\dots,N-1\label{eq:1}
 \end{align}
 
 \section{Fast Fourier Transform}
-The Fast Fourier Transform algorithm composed by Cooley and Tukey was a recursive algorithm that 
+The Fast Fourier Transform algorithm composed by Cooley and Tukey is a recursive algorithm that runs in $O(n\log n)$ time. The following derivation is based on the one found in this article from librow \cite{fft:derivation}. If we expand the expression in Equation~\ref{eq:1}, presented in Chapter~\ref{ch:dft}, for $N = 8$ we get:
+
+\begin{equation}
+    X_{k} = x_0 + x_1e^{-j\frac{2\pi}{8}k} + x_2e^{-j\frac{2\pi}{8}2k} + x_3e^{-j\frac{2\pi}{8}3k} + x_4e^{-j\frac{2\pi}{8}4k} + x_5e^{-j\frac{2\pi}{8}5k} + x_6e^{-j\frac{2\pi}{8}6k} + x_7e^{-j\frac{2\pi}{8}7k}
+\end{equation}\label{eq:first}
+
+This expression can be factorized to use recurring factors of $e$ to:
+
+\begin{equation}
+\begin{align}
+    X_{k} =&\ \ \ \ \ \ \ \ \ \ \ \ \left[x_0 + x_2e^{-j\frac{2\pi}{8}2k} + x_4e^{-j\frac{2\pi}{8}4k} + x_6e^{-j\frac{2\pi}{8}6k}\right]\\
+           &+ e^{-j\frac{2\pi}{8}k}\left[x_1 + x_3e^{-j\frac{2\pi}{8}2k} + x_5e^{-j\frac{2\pi}{8}4k} + x_7e^{-j\frac{2\pi}{8}6k}\right]
+\end{align}\label{eq:second}
+\end{equation}
+
+In turn, each bracket can be factorized to:
+
+\begin{equation}
+\begin{align}
+    X_{k} =&\ \ \ \ \ \ \ \ \ \ \ \ \left[\left(x_0 + x_4e^{-j\frac{2\pi}{8}4k}\right) + e^{-j\frac{2\pi}{8}2k}\left(x_2 + x_6e^{-j\frac{2\pi}{8}4k}\right)\right]\\
+           &+ e^{-j\frac{2\pi}{8}k}\left[\left(x_1 + x_5e^{-j\frac{2\pi}{8}4k}\right) + e^{-j\frac{2\pi}{8}2k}\left(x_3 + x_7e^{-j\frac{2\pi}{8}4k}\right)\right]
+\end{align}\label{eq:third}
+\end{equation}
+
+And finally simplified to:
+
+\begin{equation}
+\begin{align}
+    X_{k} =&\ \ \ \ \ \ \ \ \ \ \ \left[\left(x_0 + x_4e^{-j\pi k}\right) + e^{-j\frac{\pi}{2}k}\left(x_2 + x_6e^{-j\pi k}\right)\right]\\
+           &+ e^{-j\frac{\pi}{4}k}\left[\left(x_1 + x_5e^{-j\pi k}\right) + e^{-j\frac{\pi}{2}k}\left(x_3 + x_7e^{-j\pi k}\right)\right]
+\end{align}\label{eq:third:simplified}
+\end{equation}
+
+Because of symmetry around the unit circle we have the following rules:
+\begin{gather*}
+    e^{j(\phi + 2\pi)} = e^{j\phi}\\
+    e^{j(\phi + \pi)} = -e^{j\phi}
+\end{gather*}
+
+We can use these rules to prove that the factor multiplied with the second term in each parenthesis in Equation~\ref{eq:third:simplified} will be 1 for $\{X_0, X_2, X_4, X_6\}$ and -1 for $\{X_1, X_3, X_5, X_7\}$. This means that the sums for these values of $k$ will be the same. For this level (third) of the recursion we have four parentheses with two factors $x_k$ for a total of eight operands. The second level (Equation~\ref{eq:second}) have the same sums for $\{X_0, X_4\}$, $\{X_2, X_6\}$, $\{X_1, X_5\}$ and $\{X_3, X_7\}$. They will have the factors $1$, $-1$, $-i$ and $i$ respectively. This level has two parentheses with four factors in each meaning that there is eight factors to sum here as for the third level. The first level (Equation~\ref{eq:first}) has eight unique factors to sum.
+
+In total, this recursion tree has $\log_2(8)$ levels and each level have $8$ factors to sum. Generally this can be described as $\log_2(N)$ levels and $N$ factors at each level giving a time complexity of $O(N\log(N))$
+
 % http://www.librow.com/articles/article-10
 % https://aaltodoc.aalto.fi/bitstream/handle/123456789/23201/master_Sugawara_Koki_2016.pdf?sequence=1
 
@@ -637,14 +679,14 @@ The Fast Fourier Transform algorithm composed by Cooley and Tukey was a recursiv
     \begin{tikzpicture}[node distance=2cm]
 
         % nodes
-        \node (A) at (0, 0) {$f_j$};
-        \node (B) at (0, 1) {$f_i$};
-        \node (C) at (3, 0) {$f'_j$};
-        \node (D) at (3, 1) {$f'_i$};
+        \node (A) at (0, 0) {$x_j$};
+        \node (B) at (0, 1) {$x_i$};
+        \node (C) at (3, 0) {$x'_j$};
+        \node (D) at (3, 1) {$x'_i$};
 
         \node [draw,circle,above left=-3mm and 2mm of D,inner sep=0pt] (plus) {$+$};
         \node [draw,circle,below left=-3mm and 2mm of C,inner sep=0pt] (plus) {$-$};
-        \node [draw,circle,below right=-3mm and 2mm of A,inner sep=0pt] (plus) {$\times$};
+        \node [draw,circle,below right=-2mm and 2mm of A,inner sep=0pt] (plus) {$\times$};
 
         % arrows
         \draw [->,draw=red] (A) -- (D);
@@ -660,14 +702,14 @@ The Fast Fourier Transform algorithm composed by Cooley and Tukey was a recursiv
     \begin{tikzpicture}[node distance=2cm]
 
         % nodes
-        \node (f0) at (0, 7) {$f_0$};
-        \node (f4) at (0, 6) {$f_4$};
-        \node (f2) at (0, 5) {$f_2$};
-        \node (f6) at (0, 4) {$f_6$};
-        \node (f1) at (0, 3) {$f_1$};
-        \node (f5) at (0, 2) {$f_5$};
-        \node (f3) at (0, 1) {$f_3$};
-        \node (f7) at (0, 0) {$f_7$};
+        \node (f0) at (0, 7) {$x_0$};
+        \node (f4) at (0, 6) {$x_4$};
+        \node (f2) at (0, 5) {$x_2$};
+        \node (f6) at (0, 4) {$x_6$};
+        \node (f1) at (0, 3) {$x_1$};
+        \node (f5) at (0, 2) {$x_5$};
+        \node (f3) at (0, 1) {$x_3$};
+        \node (f7) at (0, 0) {$x_7$};
 
         \node (h1) at (2, 7) {};
         \node (h2) at (2, 6) {};
@@ -687,14 +729,14 @@ The Fast Fourier Transform algorithm composed by Cooley and Tukey was a recursiv
         \node (2h7) at (4, 1) {};
         \node (2h8) at (4, 0) {};
 
-        \node (3h1) at (6, 7) {$F_0$};
-        \node (3h2) at (6, 6) {$F_1$};
-        \node (3h3) at (6, 5) {$F_2$};
-        \node (3h4) at (6, 4) {$F_3$};
-        \node (3h5) at (6, 3) {$F_4$};
-        \node (3h6) at (6, 2) {$F_5$};
-        \node (3h7) at (6, 1) {$F_6$};
-        \node (3h8) at (6, 0) {$F_7$};
+        \node (3h1) at (6, 7) {$X_0$};
+        \node (3h2) at (6, 6) {$X_1$};
+        \node (3h3) at (6, 5) {$X_2$};
+        \node (3h4) at (6, 4) {$X_3$};
+        \node (3h5) at (6, 3) {$X_4$};
+        \node (3h6) at (6, 2) {$X_5$};
+        \node (3h7) at (6, 1) {$X_6$};
+        \node (3h8) at (6, 0) {$X_7$};
 
         % arrows
         % First iteration
