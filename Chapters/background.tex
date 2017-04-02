@@ -628,7 +628,7 @@ Equation \ref{eq:1} \cite[p.~92]{tan2013digital} describes the mathematical proc
 \end{align}
 
 \section{Fast Fourier Transform}
-The Fast Fourier Transform algorithm composed by Cooley and Tukey is a recursive algorithm that runs in $O(n\log n)$ time. The following derivation is based on the one found in this article from librow \cite{fft:derivation}. If we expand the expression in Equation~\ref{eq:1}, presented in Chapter~\ref{ch:dft}, for $N = 8$ we get:
+The Fast Fourier Transform algorithm composed by Cooley and Tukey is a recursive algorithm that runs in $O(N\log{}N)$ time. The following derivation is based on one found in this article from librow \cite{fft:derivation}. The notation for the imaginary number ($\sqrt{-1}$) was chosen to be $j$ instead of $i$ for consistency. If we expand the expression in Equation~\ref{eq:1}, presented in Chapter~\ref{ch:dft}, for $N = 8$ we get:
 
 \begin{equation}
     X_{k} = x_0 + x_1e^{-j\frac{2\pi}{8}k} + x_2e^{-j\frac{2\pi}{8}2k} + x_3e^{-j\frac{2\pi}{8}3k} + x_4e^{-j\frac{2\pi}{8}4k} + x_5e^{-j\frac{2\pi}{8}5k} + x_6e^{-j\frac{2\pi}{8}6k} + x_7e^{-j\frac{2\pi}{8}7k}
@@ -637,28 +637,28 @@ The Fast Fourier Transform algorithm composed by Cooley and Tukey is a recursive
 This expression can be factorized to use recurring factors of $e$ to:
 
 \begin{equation}
-\begin{align}
+\begin{aligned}
     X_{k} =&\ \ \ \ \ \ \ \ \ \ \ \ \left[x_0 + x_2e^{-j\frac{2\pi}{8}2k} + x_4e^{-j\frac{2\pi}{8}4k} + x_6e^{-j\frac{2\pi}{8}6k}\right]\\
            &+ e^{-j\frac{2\pi}{8}k}\left[x_1 + x_3e^{-j\frac{2\pi}{8}2k} + x_5e^{-j\frac{2\pi}{8}4k} + x_7e^{-j\frac{2\pi}{8}6k}\right]
-\end{align}\label{eq:second}
+\end{aligned}\label{eq:second}
 \end{equation}
 
 In turn, each bracket can be factorized to:
 
 \begin{equation}
-\begin{align}
+\begin{aligned}
     X_{k} =&\ \ \ \ \ \ \ \ \ \ \ \ \left[\left(x_0 + x_4e^{-j\frac{2\pi}{8}4k}\right) + e^{-j\frac{2\pi}{8}2k}\left(x_2 + x_6e^{-j\frac{2\pi}{8}4k}\right)\right]\\
            &+ e^{-j\frac{2\pi}{8}k}\left[\left(x_1 + x_5e^{-j\frac{2\pi}{8}4k}\right) + e^{-j\frac{2\pi}{8}2k}\left(x_3 + x_7e^{-j\frac{2\pi}{8}4k}\right)\right]
-\end{align}\label{eq:third}
+\end{aligned}\label{eq:third}
 \end{equation}
 
 And finally simplified to:
 
 \begin{equation}
-\begin{align}
+\begin{aligned}
     X_{k} =&\ \ \ \ \ \ \ \ \ \ \ \left[\left(x_0 + x_4e^{-j\pi k}\right) + e^{-j\frac{\pi}{2}k}\left(x_2 + x_6e^{-j\pi k}\right)\right]\\
            &+ e^{-j\frac{\pi}{4}k}\left[\left(x_1 + x_5e^{-j\pi k}\right) + e^{-j\frac{\pi}{2}k}\left(x_3 + x_7e^{-j\pi k}\right)\right]
-\end{align}\label{eq:third:simplified}
+\end{aligned}\label{eq:third:simplified}
 \end{equation}
 
 Because of symmetry around the unit circle we have the following rules:
@@ -667,35 +667,14 @@ Because of symmetry around the unit circle we have the following rules:
     e^{j(\phi + \pi)} = -e^{j\phi}
 \end{gather*}
 
-We can use these rules to prove that the factor multiplied with the second term in each parenthesis in Equation~\ref{eq:third:simplified} will be 1 for $\{X_0, X_2, X_4, X_6\}$ and -1 for $\{X_1, X_3, X_5, X_7\}$. This means that the sums for these values of $k$ will be the same. For this level (third) of the recursion we have four parentheses with two factors $x_k$ for a total of eight operands. The second level (Equation~\ref{eq:second}) have the same sums for $\{X_0, X_4\}$, $\{X_2, X_6\}$, $\{X_1, X_5\}$ and $\{X_3, X_7\}$. They will have the factors $1$, $-1$, $-i$ and $i$ respectively. This level has two parentheses with four factors in each meaning that there is eight factors to sum here as for the third level. The first level (Equation~\ref{eq:first}) has eight unique factors to sum.
+We can use these rules to prove that the factor multiplied with the second term in each parenthesis in Equation~\ref{eq:third:simplified} will be 1 for $\{X_0, X_2, X_4, X_6\}$ and -1 for $\{X_1, X_3, X_5, X_7\}$. This means that each $e$-factor in front of the $x_n$ will be the same for all values of $k$. For the third level of the recursion (Equation~\ref{eq:third:simplified}), we have four parentheses with two factors for a total of eight operands.
 
-In total, this recursion tree has $\log_2(8)$ levels and each level have $8$ factors to sum. Generally this can be described as $\log_2(N)$ levels and $N$ factors at each level giving a time complexity of $O(N\log(N))$
+The second level (Equation~\ref{eq:second}) have the same sums for $\{X_0, X_4\}$, $\{X_2, X_6\}$, $\{X_1, X_5\}$ and $\{X_3, X_7\}$.  They will have the factors $1$, $-1$, $-i$ and $i$ respectively. This level has two parentheses with four factors in each meaning that there is eight factors to sum here as for the third level. The first level (Equation~\ref{eq:first}) has eight unique factors to sum. In total, this recursion tree has $\log_2(8) = 3$ levels and each level has $8$ factors to sum. Generally this can be described as $\log_2(N)$ levels and $N$ factors at each level giving a time complexity of $O(N\log{}N)$.
 
 % http://www.librow.com/articles/article-10
 % https://aaltodoc.aalto.fi/bitstream/handle/123456789/23201/master_Sugawara_Koki_2016.pdf?sequence=1
 
-\begin{figure}
-    \centering
-    \begin{tikzpicture}[node distance=2cm]
-
-        % nodes
-        \node (A) at (0, 0) {$x_j$};
-        \node (B) at (0, 1) {$x_i$};
-        \node (C) at (3, 0) {$x'_j$};
-        \node (D) at (3, 1) {$x'_i$};
-
-        \node [draw,circle,above left=-3mm and 2mm of D,inner sep=0pt] (plus) {$+$};
-        \node [draw,circle,below left=-3mm and 2mm of C,inner sep=0pt] (plus) {$-$};
-        \node [draw,circle,below right=-2mm and 2mm of A,inner sep=0pt] (plus) {$\times$};
-
-        % arrows
-        \draw [->,draw=red] (A) -- (D);
-        \draw [->,draw=red] (B) -- (C);
-
-    \end{tikzpicture}
-    \caption{Butterfly update}
-    \label{fig:butterfly:update}
-\end{figure}
+An iterative version of this algorithm would mimic the behaviour of the recursive version described previously. To demonstrate this process, the order of which the recursive implementation operates is visualized in Figure~\ref{fig:general:butterfly}. One butterfly operation is described in Figure~\ref{fig:butterfly:update}. With mathematical notation, this relation is described as $x'_a = x_a + x_b\omega^{k}_{N}$ and $x'_b = x_a - x_b\omega^{k}_{N}$, where $\omega^{k}_{N} = e^{-j\frac{2\pi}{N}}$. The first step would be to arrange the order in which the sample array $x$ elements are in. One method for achieving this is to swap each element with the element at the bit-reverse of its index. Table~\ref{tab:rev:table} is a conversion table for an input array of size 8.
 
 \begin{figure}
     \centering
@@ -711,32 +690,32 @@ In total, this recursion tree has $\log_2(8)$ levels and each level have $8$ fac
         \node (f3) at (0, 1) {$x_3$};
         \node (f7) at (0, 0) {$x_7$};
 
-        \node (h1) at (2, 7) {};
-        \node (h2) at (2, 6) {};
-        \node (h3) at (2, 5) {};
-        \node (h4) at (2, 4) {};
-        \node (h5) at (2, 3) {};
-        \node (h6) at (2, 2) {};
-        \node (h7) at (2, 1) {};
-        \node (h8) at (2, 0) {};
+        \node [draw,circle,fill=black,inner sep=0pt,outer sep=2pt] (h1) at (3, 7) {};
+        \node [draw,circle,fill=black,inner sep=0pt,outer sep=2pt] (h2) at (3, 6) {};
+        \node [draw,circle,fill=black,inner sep=0pt,outer sep=2pt] (h3) at (3, 5) {};
+        \node [draw,circle,fill=black,inner sep=0pt,outer sep=2pt] (h4) at (3, 4) {};
+        \node [draw,circle,fill=black,inner sep=0pt,outer sep=2pt] (h5) at (3, 3) {};
+        \node [draw,circle,fill=black,inner sep=0pt,outer sep=2pt] (h6) at (3, 2) {};
+        \node [draw,circle,fill=black,inner sep=0pt,outer sep=2pt] (h7) at (3, 1) {};
+        \node [draw,circle,fill=black,inner sep=0pt,outer sep=2pt] (h8) at (3, 0) {};
 
-        \node (2h1) at (4, 7) {};
-        \node (2h2) at (4, 6) {};
-        \node (2h3) at (4, 5) {};
-        \node (2h4) at (4, 4) {};
-        \node (2h5) at (4, 3) {};
-        \node (2h6) at (4, 2) {};
-        \node (2h7) at (4, 1) {};
-        \node (2h8) at (4, 0) {};
+        \node [draw,circle,fill=black,inner sep=0pt,outer sep=2pt] (2h1) at (6, 7) {};
+        \node [draw,circle,fill=black,inner sep=0pt,outer sep=2pt] (2h2) at (6, 6) {};
+        \node [draw,circle,fill=black,inner sep=0pt,outer sep=2pt] (2h3) at (6, 5) {};
+        \node [draw,circle,fill=black,inner sep=0pt,outer sep=2pt] (2h4) at (6, 4) {};
+        \node [draw,circle,fill=black,inner sep=0pt,outer sep=2pt] (2h5) at (6, 3) {};
+        \node [draw,circle,fill=black,inner sep=0pt,outer sep=2pt] (2h6) at (6, 2) {};
+        \node [draw,circle,fill=black,inner sep=0pt,outer sep=2pt] (2h7) at (6, 1) {};
+        \node [draw,circle,fill=black,inner sep=0pt,outer sep=2pt] (2h8) at (6, 0) {};
 
-        \node (3h1) at (6, 7) {$X_0$};
-        \node (3h2) at (6, 6) {$X_1$};
-        \node (3h3) at (6, 5) {$X_2$};
-        \node (3h4) at (6, 4) {$X_3$};
-        \node (3h5) at (6, 3) {$X_4$};
-        \node (3h6) at (6, 2) {$X_5$};
-        \node (3h7) at (6, 1) {$X_6$};
-        \node (3h8) at (6, 0) {$X_7$};
+        \node (3h1) at (9, 7) {$X_0$};
+        \node (3h2) at (9, 6) {$X_1$};
+        \node (3h3) at (9, 5) {$X_2$};
+        \node (3h4) at (9, 4) {$X_3$};
+        \node (3h5) at (9, 3) {$X_4$};
+        \node (3h6) at (9, 2) {$X_5$};
+        \node (3h7) at (9, 1) {$X_6$};
+        \node (3h8) at (9, 0) {$X_7$};
 
         % arrows
         % First iteration
@@ -769,8 +748,87 @@ In total, this recursion tree has $\log_2(8)$ levels and each level have $8$ fac
         \draw [->,draw=red] (2h7) -- (3h3);
         \draw [->,draw=red] (2h8) -- (3h4);
     \end{tikzpicture}
-    \caption{Butterfly update for 8 values}
+    \caption{Butterfly update for 8 values \cite{fft:derivation}}
     \label{fig:general:butterfly}
+\end{figure}
+
+\begin{table}
+    \centering
+    \caption{Bit reversal conversion table for input size 8}
+    \label{tab:rev:table}
+    \begin{tabular}{|r|r||r|r|}
+        \hline
+        \textbf{normal dec} & \textbf{normal bin} & \textbf{reversed bin} & \textbf{reversed dec}\\
+        \hline
+        \texttt{0} & \texttt{000} & \texttt{000} & \texttt{0} \\
+        \texttt{1} & \texttt{001} & \texttt{100} & \texttt{4} \\
+        \texttt{2} & \texttt{010} & \texttt{010} & \texttt{2} \\
+        \texttt{3} & \texttt{011} & \texttt{110} & \texttt{6} \\
+        \texttt{4} & \texttt{100} & \texttt{001} & \texttt{1} \\
+        \texttt{5} & \texttt{101} & \texttt{101} & \texttt{5} \\
+        \texttt{6} & \texttt{110} & \texttt{011} & \texttt{3} \\
+        \texttt{7} & \texttt{111} & \texttt{111} & \texttt{7} \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\begin{figure}
+    \centering
+    \begin{tikzpicture}[node distance=2cm]
+
+        % nodes
+        \node (A) at (0, 0) {$x_b$};
+        \node (B) at (0, 1) {$x_a$};
+        \node (C) at (3, 0) {$x'_b$};
+        \node (D) at (3, 1) {$x'_a$};
+
+        \node [draw,circle,above left=-3mm and 2mm of D,inner sep=0pt] (plus) {$+$};
+        \node [draw,circle,below left=-3mm and 2mm of C,inner sep=0pt] (plus) {$-$};
+        \node [draw,circle,below right=-2mm and 2mm of A,inner sep=0pt] (plus) {$\times$};
+
+        % arrows
+        \draw [->,draw=red] (A) -- (D);
+        \draw [->,draw=red] (B) -- (C);
+
+    \end{tikzpicture}
+    \caption{Butterfly update \cite{fft:derivation}}
+    \label{fig:butterfly:update}
+\end{figure}
+
+When we have achieved this, the operation order must be established. For the first iteration, the size of the gap between the operands is one. The next gap size is two and the third is four. It is now possible to construct an iterative algorithm with pseudocode as shown in Algorithm~\ref{alg:fft}. The fist part of the algorithm is the Bit reversal. This has clearly $O(N)$ time complexity assuming the time complexity of bit\_reverse is bounded by the size of an integer. For the butterfly updates, the outer while loop will run for $\log{}N$ iterations and the two inner loops will run a total of $\frac{step}{2} \frac{N}{step} = \frac{N}{2}$ times. It is now clear that the time complexity of this algorithm is $O(N\log{}N)$.
+
+
+\begin{figure}[H]
+    \begin{algorithm}[H]
+        \KwData{Complex array $x = x_1, x_2, ..., x_N$ in time domain}
+        \KwResult{Complex array $X = X_1, X_2, ..., X_N$ in frequency domain}
+
+        \tcc{Bit reversal}
+        \For{$i\gets 0$ \KwTo $N - 1$}{
+            $r \gets$ bit\_reverse($i$)\\
+            \If{$r > i$}{
+                temp $\gets$ $x$[i]\\
+                $x$[i] $\gets$ $x$[r]\\
+                $x$[r] $\gets$ temp
+            }
+        }
+
+        \tcc{Butterfly updates}
+        $step \gets 2$\\
+        \While{$step \leq N$}{
+            \For{$k\gets 0$ \KwTo $step/2 - 1$}{
+                \For{$p\gets 0$ \KwTo $N/step - 1$}{
+                    $curr\gets p * step + k$\\
+                    $x$[$curr$] $= x$[$curr$] $+$ $x$[$curr + step/2$]$*\omega^{k}_{step}$\\
+                    $x$[$curr + step/2$] $= x$[$curr$] $-$ $x$[$curr + step/2$]$*\omega^{k}_{step}$
+                }
+            }
+            $step \gets 2*step$
+        }
+        \textbf{return} $x$
+        \caption{Iterative FFT}
+        \label{alg:fft}
+    \end{algorithm}
 \end{figure}
 
 \section{Related work}
