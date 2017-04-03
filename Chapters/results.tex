@@ -174,7 +174,9 @@ Results for tests with \emph{large} block sizes in C++ produced some interesting
 %% NEON-Tests
 %%==================================================================
 \section{Optimizations}
-The NEON optimizations proved to be very efficient for \emph{extra large} block sizes. These results can be found in Table~\ref{tab:neon:extra}. Comparing these figures with the results, for the same block sizes in Java (Table~\ref{tab:java:float:extra}), we can see that the results from the NEON tests are more than double the speed of the fastest Java implementation. Table~\ref{tab:java:float:extra} also shows that for very large block sizes, Princeton Iterative and Princeton Recursive are very inefficient compared to Columbia Iterative.
+The NEON optimizations proved to be very efficient for \emph{extra large} block sizes. These results can be found in Table~\ref{tab:neon:extra}. Comparing these figures with the results, for the same block sizes in Java (Table~\ref{tab:java:float:extra}), we can see that the results from the NEON tests are more than double the speed of the fastest Java implementation. Note that the data type for all of the optimization tests (as well as the C++ and Java tests) were \texttt{float}. Because we get faster execution time by lining up more elements, the \texttt{float} data type was used for the NEON intrinsics. When comparing this with non-NEON tests, \texttt{float}s were used in Java and C++ to make the results more comparable.
+
+Table~\ref{tab:java:float:extra} also show that for very large block sizes, Princeton Iterative and Princeton Recursive are very inefficient compared to Columbia Iterative. This also holds true for the C++ implementation. For these block sizes, however, the differences in execution time is smaller than for Java (as seen in Table~\ref{tab:cpp:float:extra}).
 
 \begin{table}
     \centering
@@ -187,11 +189,22 @@ When comparing the NEON results from Table~\ref{tab:neon:extra} with the results
 
 In Figure~\ref{fig:neon:line:extra} both the Iterative NEON and the Recursive NEON seems to have the same growth in execution time with increasing block size. Of these two algorithms, Iterative is the fastest. If we compare the results found for Java in Table~\ref{tab:java:float:extra} with the C++ results in Table~\ref{tab:cpp:float:extra} there is a big difference between the Princeton algorithms. The execution times are much larger in Java than in C++. The Java Columbia Iterative is faster than C++ Princeton Iterative for block sizes of 65536.
 
+As we can see in Table~\ref{tab:java:double:extra}, the results show that when using \texttt{double}s, the performance will be worse for Columbia Iterative and Princeton Recursive. Interestingly, the Princeton Iterative was faster when using \texttt{double}s than with \texttt{float}s. This characteristic can not be found in the C++ \texttt{float} vs \texttt{double} tests. Here, the \texttt{float} tests were always running faster than the corresponding \texttt{double} test.  
+
 \begin{table}
     \centering
     \caption{Java \texttt{float} results table for \emph{extra large} block sizes, Time (ms)}
     \label{tab:java:float:extra}
     \input{Data/results/FLOAT/Java_common_table_EXTRA.tex}
+\end{table}
+
+\begin{table}
+    \centering
+    \caption{Java \texttt{double} results table for \emph{extra large} block sizes, Time (ms)}
+    \label{tab:java:double:extra}
+    \resizebox{\columnwidth}{!}{
+        \input{Data/results/FFT/Java_common_table_EXTRA.tex}
+    }
 \end{table}
 
 \begin{table}
@@ -203,9 +216,20 @@ In Figure~\ref{fig:neon:line:extra} both the Iterative NEON and the Recursive NE
     }
 \end{table}
 
+\begin{table}
+    \centering
+    \caption{C++ \texttt{double} results table for \emph{extra large} block sizes, Time (ms)}
+    \label{tab:cpp:double:extra}
+    \resizebox{\columnwidth}{!}{
+        \input{Data/results/FFT/CPP_common_table_EXTRA.tex}
+    }
+\end{table}
+
 \begin{figure}
     \centering
     \input{Data/results/NEON/CPP_line_graph_EXTRA.tex}
     \caption{NEON results table for \emph{extra large} block sizes, Time (ms)}
     \label{fig:neon:line:extra}
 \end{figure}
+
+

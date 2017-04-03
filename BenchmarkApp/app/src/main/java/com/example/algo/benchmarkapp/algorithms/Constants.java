@@ -2,6 +2,11 @@ package com.example.algo.benchmarkapp.algorithms;
 
 public class Constants {
 
+    public static final int TIME = 0;
+    public static final int MEMORY = 1;
+
+    public static final int CURRENT_MEASUREMENT = MEMORY;
+
     public static final int BENCHMARK_ITER = 100;
 
     public static final int BENCHMARK_MESSAGE_NEW = 17;

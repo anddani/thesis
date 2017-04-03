@@ -11,9 +11,10 @@ import com.example.algo.benchmarkapp.algorithms.FFTPrincetonRecursive;
 import com.example.algo.benchmarkapp.algorithms.FloatFFTColumbiaIterative;
 import com.example.algo.benchmarkapp.algorithms.FloatFFTPrincetonRecursive;
 
-import org.jtransforms.fft.DoubleFFT_1D;
-
 import java.util.Random;
+
+import static com.example.algo.benchmarkapp.algorithms.Constants.CURRENT_MEASUREMENT;
+import static com.example.algo.benchmarkapp.algorithms.Constants.MEMORY;
 
 public class Benchmark {
 
@@ -171,11 +172,21 @@ public class Benchmark {
     }
 
     public long JNIBenchmarkEmpty() {
-        long start = SystemClock.elapsedRealtimeNanos();
+        long start, stop;
+        Runtime runtime = Runtime.getRuntime();
+        if (CURRENT_MEASUREMENT == MEMORY) {
+            start = runtime.totalMemory() - runtime.freeMemory();
+        } else {
+            start = SystemClock.elapsedRealtimeNanos();
+        }
 
         jni_empty();
 
-        long stop = SystemClock.elapsedRealtimeNanos() - start;
+        if (CURRENT_MEASUREMENT == MEMORY) {
+            stop = runtime.totalMemory() - runtime.freeMemory() - start;
+        } else {
+            stop = SystemClock.elapsedRealtimeNanos() - start;
+        }
         return stop;
     }
 

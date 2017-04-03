@@ -1,20 +1,13 @@
-\textit{Describing text}
+\textit{The discussion chapter covers how the JNI affects performance, how efficient smaller FFT libraries are, why the optimization gave the results found in Chapter~\ref{ch:results} and the efficiency difference between floats and doubles.}
 
 \section{JNI Overhead}
 The test results from the JNI tests showed that the overhead is small relative to the computation of the FFT algorithm. As long as it is being run once per calculation, it will not affect the performance significantly. If the JNI is called in a loop when it might not be necessary, the overhead add up and becomes a larger part of the total execution time. Another thing to note is that the execution time stay within about 10 \textmu s. They are also not growing with larger input.
 
 The confidence intervals overlap for many of the values, meaning we cannot say whether or not one input yields a faster execution time than the other. Some larger block sizes has lower execution time than smaller block sizes and some grow for larger input. Because of this, it is reasonable to assume that nothing is done to the arrays when they are passed to the JNI, only pointers are copied. The \texttt{GetPrimitiveArrayCritical()} and \texttt{ReleasePrimitiveArrayCritical()} seem to introduce overhead when used on larger arrays. % <= CITE THIS ... as described in
 
-\hilight{Discuss about the sudden spikes for means in JNI tests}
+Regarding the sudden spike in mean in the JNI tests, this can be a cause of one large execution time, skewing the results. This is actually the case for the \textbf{Convert} tests with block size 1024 as seen in figure~\ref{fig:raw:jni:convert:1024} found in Appendix B. A reason for this could be that the garbage collector began executing during the timing of the test.
 
 % The second tests compared the execution times for measuring the benefits of using a critical zone in native code. In Figure~\ref{}
-
-\section{Floats and Doubles}
-\hilight{Caching}
-
-\hilight{Array would be twice as large if doubles were used.}\\
-\hilight{Greater chance that the whole array can fit when using float elements.}
-\hilight{There is a really big difference in both Java and C++.}
 
 \section{Simplicity and Efficiency} % FFT-libraries
 
@@ -30,8 +23,6 @@ The confidence intervals overlap for many of the values, meaning we cannot say w
 % Precision (smaller intervals) for larger block sizes C++. Because larger execution times result in more consistent execution times??
 \hilight{Precision (smaller intervals) for larger block sizes C++.}\\
 \hilight{Because larger execution times result in more consistent execution times??}
-
-\hilight{When choosing a java version, choose Columbia Iterative (Conclusion)}
 
 One thing that is clear is that the Columbia Iterative algorithm is the best one to choose from of the Java versions. It performs better than both Princeton Iterative and Princeton Recursive. It also allows simple modifications such as changing between using \texttt{float}s or  \texttt{double}s to represent the data.
 
@@ -98,3 +89,12 @@ As the results show, vectorization was an improvement in regards to efficiency. 
 
 % Discuss differences in performance large java times, small java times WHY?
 \hilight{Discuss differences in performance large java times, small java times WHY?}
+
+\hilight{Accelerometer?}
+
+\section{Floats and Doubles}
+\hilight{Caching}
+
+\hilight{Array would be twice as large if doubles were used.}\\
+\hilight{Greater chance that the whole array can fit when using float elements.}
+\hilight{There is a really big difference in both Java and C++.}
