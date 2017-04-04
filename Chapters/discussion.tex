@@ -12,7 +12,9 @@ Regarding the sudden spike in mean in the JNI tests, this can be a cause of one 
 \section{Simplicity and Efficiency} % FFT-libraries
 
 % Which is slowest and why (discussion)??
-\hilight{Which is slowest and why??}
+The slowest algorithm was the Java Princeton Recursive. The reason for this was that it does a lot of method calls. Additionally, each call creates new \texttt{Complex} arrays when splitting up the array in odd and even indices. Lastly, when combining the arrays, new \texttt{Complex} objects are created each time an operation is done between two complex numbers. The \texttt{Complex} class creates immutable objects.
+
+The C++ version of the Princeton Recursive algorithm is faster than the Java version. One big difference is that the \texttt{std::complex} type used in C++ does not create new instances each time is is being operated with. This lowers the number of calls requesting more memory from the heap. Depending on the situation for the program, there is a risk that the program must ask the system for more memory, slowing down the allocation process.
 
 % Which is fastest and why (discussion)??
 \hilight{Which is fastest and why??}

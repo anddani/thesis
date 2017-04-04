@@ -1,5 +1,6 @@
 package com.example.algo.benchmarkapp;
 
+import android.os.Debug;
 import android.os.SystemClock;
 import android.util.Log;
 
@@ -15,6 +16,7 @@ import com.example.algo.benchmarkapp.algorithms.FloatFFTPrincetonRecursive;
 
 import java.util.Random;
 
+import static com.example.algo.benchmarkapp.algorithms.Constants.MEMORY;
 import static com.example.algo.benchmarkapp.algorithms.Constants.TEST_TYPE;
 import static com.example.algo.benchmarkapp.algorithms.Constants.TIME;
 
@@ -28,9 +30,20 @@ public class Benchmark {
     private float[] fRe;
     private float[] fIm;
 
+    private float[] fTableCos;
+    private float[] fTableSin;
+    private double[] dTableCos;
+    private double[] dTableSin;
+
+    private float[] floatMemoryArray;
+    private double[] doubleMemoryArray;
+
     private final String LOG_TAG = "Benchmark";
 
     private Complex[] correctOut;
+
+    FloatFFTColumbiaIterative floatCI;
+    FFTColumbiaIterative doubleCI;
 
     public Benchmark(int N) {
         Log.d(LOG_TAG, "new Benchmark()");
@@ -41,6 +54,17 @@ public class Benchmark {
         im = new double[N];
         fRe = new float[N];
         fIm = new float[N];
+
+        floatMemoryArray = new float[N*2];
+        doubleMemoryArray = new double[N*2];
+
+        floatCI = new FloatFFTColumbiaIterative(re.length);
+        fTableCos = floatCI.cos;
+        fTableSin = floatCI.sin;
+
+        doubleCI = new FFTColumbiaIterative(re.length);
+        dTableCos = doubleCI.cos;
+        dTableSin = doubleCI.sin;
 
         for (int i = 0; i < N; i++) {
             fRe[i] = (float)re[i];
@@ -96,7 +120,7 @@ public class Benchmark {
     // [real[0], imaginary[0], real[1], imaginary[1], ...]
     private double[] combineComplex(double[] real, double[] imaginary) {
         int N = real.length*2;
-        double[] c = new double[N];
+        double[] c = doubleMemoryArray;
         for (int i = 0; i < N; i+=2) {
             c[i] = real[i/2];
             c[i + 1] = imaginary[i/2];
@@ -105,7 +129,7 @@ public class Benchmark {
     }
     private float[] combineComplex(float[] real, float[] imaginary) {
         int N = real.length*2;
-        float[] c = new float[N];
+        float[] c = floatMemoryArray;
         for (int i = 0; i < N; i+=2) {
             c[i] = real[i/2];
             c[i + 1] = imaginary[i/2];
@@ -213,11 +237,9 @@ public class Benchmark {
         for (int i = 0; i < tempRe.length; i++) {
             z[i] = tempRe[i];
         }
-        FFTColumbiaIterative fftci = new FFTColumbiaIterative(Constants.nextPowerOfTwo(tempRe.length));
-
         long start = SystemClock.elapsedRealtimeNanos();
 
-        double[] nativeResult = jni_columbia(z, fftci.cos, fftci.sin);
+        double[] nativeResult = jni_columbia(z, dTableCos, dTableSin);
 
         long stop = SystemClock.elapsedRealtimeNanos() - start;
         return stop;
@@ -315,16 +337,21 @@ public class Benchmark {
     }
 
     public long FFTJavaIterativeColumbia() {
-        // Will hold the result from FFT
-        double[] tempRe = re.clone();
-        double[] tempIm = im.clone();
+        double[] tempRe;
+        double[] tempIm;
+        if (TEST_TYPE == TIME) {
+            // Will hold the result from FFT
+            tempRe = re.clone();
+            tempIm = im.clone();
+        } else {
+            tempRe = re;
+            tempIm = im;
+        }
 
         // Initialize cos and sin tables
-        FFTColumbiaIterative fftci = new FFTColumbiaIterative(tempRe.length);
-
         long start = SystemClock.elapsedRealtimeNanos();
 
-        fftci.fft(tempRe, tempIm);
+        doubleCI.fft(tempRe, tempIm);
 
         long stop = SystemClock.elapsedRealtimeNanos() - start;
 
@@ -343,19 +370,16 @@ public class Benchmark {
     }
 
     public long FFTCppIterativeColumbia(int arrTest) {
-
         // Let first half be filled with real and second half with imaginary
-        double[] z = new double[re.length*2];
+        double[] z = doubleMemoryArray;
         for (int i = 0; i < re.length; i++) {
             z[i] = re[i];
             z[i+re.length] = im[i];
         }
 
-        FFTColumbiaIterative fftci = new FFTColumbiaIterative(re.length);
-
         long start = SystemClock.elapsedRealtimeNanos();
 
-        double[] nativeResult = fft_columbia_iterative(z, fftci.cos, fftci.sin, arrTest);
+        double[] nativeResult = fft_columbia_iterative(z, dTableCos, dTableSin, arrTest);
 
         long stop = SystemClock.elapsedRealtimeNanos() - start;
 
@@ -405,9 +429,10 @@ public class Benchmark {
     }
 
     public long FFTCppRecursiveNeon(int arrTest) {
-        float[] z = new float[re.length*2];
+        float[] z = floatMemoryArray;
         for (int i = 0; i < re.length; i++) {
             z[i] = (float)re[i];
+            z[i+re.length] = (float)0.0;
         }
 
         long start = SystemClock.elapsedRealtimeNanos();
@@ -433,9 +458,10 @@ public class Benchmark {
     }
 
     public long FFTCppIterativeNeon(int arrTest) {
-        float[] z = new float[re.length*2];
+        float[] z = floatMemoryArray;
         for (int i = 0; i < re.length; i++) {
             z[i] = (float)re[i];
+            z[i+re.length] = (float)0.0;
         }
 
         init_iterative_neon(re.length);
@@ -465,16 +491,20 @@ public class Benchmark {
     }
 
     public long FloatFFTJavaIterativeColumbia() {
-        // Will hold the result from FFT
-        float[] tempRe = fRe.clone();
-        float[] tempIm = fIm.clone();
-
-        // Initialize cos and sin tables
-        FloatFFTColumbiaIterative fftci = new FloatFFTColumbiaIterative(tempRe.length);
+        float[] tempRe;
+        float[] tempIm;
+        if (TEST_TYPE == TIME) {
+            // Will hold the result from FFT
+            tempRe = fRe.clone();
+            tempIm = fIm.clone();
+        } else {
+            tempRe = fRe;
+            tempIm = fIm;
+        }
 
         long start = SystemClock.elapsedRealtimeNanos();
 
-        fftci.fft(tempRe, tempIm);
+        floatCI.fft(tempRe, tempIm);
 
         long stop = SystemClock.elapsedRealtimeNanos() - start;
 
@@ -556,7 +586,6 @@ public class Benchmark {
     }
 
     public long FloatFFTCppRecursivePrinceton(int arrTest) {
-
         // Merge real and imaginary numbers
         float[] z = combineComplex(fRe, fIm);
 
@@ -582,19 +611,16 @@ public class Benchmark {
     }
 
     public long FloatFFTCppIterativeColumbia(int arrTest) {
-
-        // Let first half be filled with real and second half with imaginary
-        float[] z = new float[re.length*2];
+        float[] z = floatMemoryArray;
         for (int i = 0; i < re.length; i++) {
             z[i] = fRe[i];
-            z[i+fRe.length] = fIm[i];
+            z[i + fRe.length] = fIm[i];
         }
 
-        FloatFFTColumbiaIterative fftci = new FloatFFTColumbiaIterative(re.length);
 
         long start = SystemClock.elapsedRealtimeNanos();
 
-        float[] nativeResult = float_fft_columbia_iterative(z, fftci.cos, fftci.sin, arrTest);
+        float[] nativeResult = float_fft_columbia_iterative(z, fTableCos, fTableSin, arrTest);
 
         long stop = SystemClock.elapsedRealtimeNanos() - start;
 
@@ -603,7 +629,6 @@ public class Benchmark {
             for (int i = 0; i < fRe.length; i++) {
                 x[i] = new FloatComplex(nativeResult[i], nativeResult[i + fRe.length]);
             }
-
 
             if (DEBUG) {
                 System.out.println("************* FFT JAVA ITER COLUMBIA ************");

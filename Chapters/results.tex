@@ -189,7 +189,7 @@ When comparing the NEON results from Table~\ref{tab:neon:extra} with the results
 
 In Figure~\ref{fig:neon:line:extra} both the Iterative NEON and the Recursive NEON seems to have the same growth in execution time with increasing block size. Of these two algorithms, Iterative is the fastest. If we compare the results found for Java in Table~\ref{tab:java:float:extra} with the C++ results in Table~\ref{tab:cpp:float:extra} there is a big difference between the Princeton algorithms. The execution times are much larger in Java than in C++. The Java Columbia Iterative is faster than C++ Princeton Iterative for block sizes of 65536.
 
-As we can see in Table~\ref{tab:java:double:extra}, the results show that when using \texttt{double}s, the performance will be worse for Columbia Iterative and Princeton Recursive. Interestingly, the Princeton Iterative was faster when using \texttt{double}s than with \texttt{float}s. This characteristic can not be found in the C++ \texttt{float} vs \texttt{double} tests. Here, the \texttt{float} tests were always running faster than the corresponding \texttt{double} test.  
+As we can see in Table~\ref{tab:java:double:extra}, the results show that when using \texttt{double}s, the performance will be worse for Columbia Iterative and Princeton Recursive. Interestingly, the Princeton Iterative was faster when using \texttt{double}s than with \texttt{float}s. This characteristic can not be found in the C++ \texttt{float} vs \texttt{double} tests. We can see that the \texttt{float} tests were always running faster than the corresponding \texttt{double} test.  
 
 \begin{table}
     \centering
@@ -232,4 +232,33 @@ As we can see in Table~\ref{tab:java:double:extra}, the results show that when u
     \label{fig:neon:line:extra}
 \end{figure}
 
-
+%%==================================================================
+%% Memory-Tests
+%%==================================================================
+% \section{Memory tests}
+%
+% \begin{table}
+%     \centering
+%     \caption{Total runtime allocation, one call, for block size 262144, Memory (bytes)}
+%     \label{tab:result:memory}
+%     \rowcolors{1}{}{lightgray}
+%     \begin{tabular}{lr}\toprule
+%         \textbf{Block size} & \textbf{Memory} \\\midrule
+%         \textbf{Java Columbia Iterative} & \\
+%         \textbf{Java Princeton Iterative} & \\
+%         \textbf{Java Princeton Recursive} & \\
+%         \textbf{Java Float Columbia Iterative} & \\
+%         \textbf{Java Float Princeton Iterative} & \\
+%         \textbf{Java Float Princeton Recursive} & 1,571,016\\
+%         \textbf{C++ Columbia Iterative} & \\
+%         \textbf{C++ Princeton Iterative} & \\
+%         \textbf{C++ Princeton Recursive} & \\
+%         \textbf{C++ Float Columbia Iterative} & 0\\
+%         \textbf{C++ Float Princeton Iterative} & 0\\
+%         \textbf{C++ Float Princeton Recursive} & 0\\
+%         \textbf{KISS} & 0\\
+%         \textbf{NEON Iterative} & 0 \\
+%         \textbf{NEON Recursive} & 0 \\
+%     \bottomrule
+%     \end{tabular}
+% \end{table}
