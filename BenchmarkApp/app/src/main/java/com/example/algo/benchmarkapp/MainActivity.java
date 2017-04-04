@@ -13,8 +13,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import com.example.algo.benchmarkapp.algorithms.Constants;
@@ -44,8 +47,6 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    private Button[] buttons = new Button[buttonIds.length];
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,11 +61,16 @@ public class MainActivity extends AppCompatActivity {
         dataSize = (EditText) findViewById(R.id.data_size);
 
         Button runBenchmarksButton = (Button) findViewById(R.id.run_button);
+        Button runOneBenchmarkButton = (Button) findViewById(R.id.run_one);
 
         HandlerThread myThread = new HandlerThread("Worker Thread");
         myThread.start();
         mTaskHandler = new MyBenchmarkHandler(myThread.getLooper(), mUIHandler);
 
+        final Spinner spinner = (Spinner) findViewById(R.id.mySpinner);
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, Constants.ALGORITHM_NAMES);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(spinnerAdapter);
 
         runBenchmarksButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,45 +91,21 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        for (int i = 0; i < buttonIds.length; i++) {
-            buttons[i] = (Button) findViewById(buttonIds[i]);
-            buttons[i].setText(buttonLabels[i]);
-            buttons[i].setTextSize(10);
-            System.out.println("Setting up onClick for button nr: " + i);
-            setOnClick(buttons[i], i);
-        }
-        requestWritePerimission();
-    }
-
-    private void setOnClick(final Button btn, final int alg) {
-        btn.setOnClickListener(new View.OnClickListener() {
+        runOneBenchmarkButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                int alg = spinner.getSelectedItemPosition();
                 System.out.println("Button pressed with n: " + alg);
-
-                String dataSizeText = dataSize.getText().toString();
-                if (dataSizeText.isEmpty()) {
-                    dataSizeText = DEFAULT_N;
-                }
-                int data = Constants.nextPowerOfTwo(Integer.parseInt(dataSizeText));
-//                int blockIndex = data == 0 ? 0 : 32 - Integer.numberOfLeadingZeros(data-1) - 4;
-
-                // Delete output file each run
-                File sdCard = Environment.getExternalStorageDirectory();
-                if (!new File(sdCard.getAbsolutePath() + "/data.out").delete()) {
-                    System.out.println("DID NOT GET DELETED");
-                }
-                saveResult("numTests " + Constants.BENCHMARK_ITER);
 
                 // Clear screen between tests
                 logTextView.setText("");
 
-                for (int sizeId = 0; sizeId < Constants.BLOCK_SIZES.length; sizeId++) {
-                    BenchmarkMessage message = new BenchmarkMessage(Constants.BENCHMARK_ITER, alg, sizeId);
-                    mTaskHandler.obtainMessage(0, message).sendToTarget();
-                }
+                BenchmarkMessage message = new BenchmarkMessage(Constants.BENCHMARK_ITER, alg, Constants.BLOCK_SIZES.length-1);
+                mTaskHandler.obtainMessage(0, message).sendToTarget();
             }
         });
+
+        requestWritePerimission();
     }
 
     /**
@@ -179,28 +161,4 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
-    private static final int[] buttonIds = {
-            R.id.fft1,
-            R.id.fft2,
-            R.id.fft3,
-            R.id.fft4,
-            R.id.fft5,
-            R.id.fft6,
-            R.id.fft7,
-            R.id.fft8,
-            R.id.fft9,
-    };
-
-    private static final String[] buttonLabels = {
-            "Princeton Java Iterative",
-            "Princeton Java Recursive",
-            "Columbia Java Iterative",
-            "C++ Princeton converted Iterative",
-            "C++ Princeton converted Recursive",
-            "C++ Columbia converted Iterative",
-            "C++ KISS",
-            "C++ Columbia optimized Iterative",
-            "Java Columbia optimized Iterative"
-    };
 }

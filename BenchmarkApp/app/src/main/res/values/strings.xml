@@ -6,4 +6,5 @@
     <string name="num_iter_text">#Iterations</string>
     <string name="data_size_text">N</string>
     <string name="log_title">LOG</string>
+    <string name="run_one">Run Benchmark!</string>
 </resources>

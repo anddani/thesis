@@ -4,19 +4,24 @@ import com.example.algo.benchmarkapp.algorithms.Constants;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.util.Log;
 
 public class MyBenchmarkHandler extends Handler {
 
     private Handler mUIHandler;
     private Benchmark[] benchmarks = new Benchmark[Constants.BLOCK_SIZES.length];
 
+    private final String LOG_TAG = "MyBenchmarkHandler";
+
 
     public MyBenchmarkHandler(Looper myLooper, Handler mUIHandler) {
         super(myLooper);
         this.mUIHandler = mUIHandler;
+        newBenchmarks();
     }
 
     public void newBenchmarks() {
+        Log.d(LOG_TAG, "Running newBenchmarks()");
         for (int i = 0; i < Constants.BLOCK_SIZES.length; i++) {
             benchmarks[i] = new Benchmark(Constants.BLOCK_SIZES[i]);
         }
@@ -48,9 +53,9 @@ public class MyBenchmarkHandler extends Handler {
         sb.append(size);
         sb.append(" executionTime: ");
 
-        if (benchmarks[sizeId] == null) {
-            benchmarks[sizeId] = new Benchmark(size);
-        }
+//        if (benchmarks[sizeId] == null) {
+//            benchmarks[sizeId] = new Benchmark(size);
+//        }
 
         Benchmark bm = benchmarks[sizeId];
 
