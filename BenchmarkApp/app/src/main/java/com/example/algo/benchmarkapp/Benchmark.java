@@ -30,10 +30,18 @@ public class Benchmark {
     private float[] fRe;
     private float[] fIm;
 
+    private double[] tempRe;
+    private double[] tempIm;
+    private float[] fTempRe;
+    private float[] fTempIm;
+
     private float[] fTableCos;
     private float[] fTableSin;
     private double[] dTableCos;
     private double[] dTableSin;
+
+    private Complex[] complexResult;
+    private FloatComplex[] fComplexResult;
 
     private float[] floatMemoryArray;
     private double[] doubleMemoryArray;
@@ -55,6 +63,19 @@ public class Benchmark {
         fRe = new float[N];
         fIm = new float[N];
 
+        tempRe = new double[N];
+        tempIm = new double[N];
+        fTempRe = new float[N];
+        fTempIm = new float[N];
+
+        complexResult = new Complex[N];
+        fComplexResult = new FloatComplex[N];
+
+        for (int i = 0; i < N; i++) {
+            complexResult[i] = new Complex(0.0, 0.0);
+            fComplexResult[i] = new FloatComplex(0.0f, 0.0f);
+        }
+
         floatMemoryArray = new float[N*2];
         doubleMemoryArray = new double[N*2];
 
@@ -69,6 +90,7 @@ public class Benchmark {
         for (int i = 0; i < N; i++) {
             fRe[i] = (float)re[i];
         }
+
     }
 
     private double[] randomInput(int N) {
@@ -83,18 +105,22 @@ public class Benchmark {
     // x = [Complex(c[0],c[1]),Complex(c[2],c[3])...]
     private Complex[] toComplex(double[] c) {
         int N = c.length;
-        Complex[] x = new Complex[N/2];
+        Complex[] x = complexResult;
         for (int i = 0; i < N; i+=2) {
-            x[i/2] = new Complex(c[i], c[i+1]);
+//            x[i/2] = new Complex(c[i], c[i+1]);
+            x[i/2].re = c[i];
+            x[i/2].im = c[i+1];
         }
         return x;
     }
 
     private FloatComplex[] toComplex(float[] c) {
         int N = c.length;
-        FloatComplex[] x = new FloatComplex[N/2];
+        FloatComplex[] x = fComplexResult;
         for (int i = 0; i < N; i+=2) {
-            x[i/2] = new FloatComplex(c[i], c[i+1]);
+//            x[i/2] = new FloatComplex(c[i], c[i+1]);
+            x[i/2].re = c[i];
+            x[i/2].im = c[i+1];
         }
         return x;
     }
@@ -102,17 +128,21 @@ public class Benchmark {
     // x = [Complex(real[0], imaginary[0]), Complex(real[1], imaginary[1]), ...]
     private Complex[] toComplex(double[] real, double[] imaginary) {
         int N = real.length;
-        Complex[] x = new Complex[N];
+        Complex[] x = complexResult;
         for (int i = 0; i < N; i++) {
-            x[i] = new Complex(real[i], imaginary[i]);
+//            x[i] = new Complex(real[i], imaginary[i]);
+            x[i].re = real[i];
+            x[i].im = imaginary[i];
         }
         return x;
     }
     private FloatComplex[] toComplex(float[] real, float[] imaginary) {
         int N = real.length;
-        FloatComplex[] x = new FloatComplex[N];
+        FloatComplex[] x = fComplexResult;
         for (int i = 0; i < N; i++) {
-            x[i] = new FloatComplex(real[i], imaginary[i]);
+//            x[i] = new FloatComplex(real[i], imaginary[i]);
+            x[i].re = real[i];
+            x[i].im = imaginary[i];
         }
         return x;
     }
@@ -176,7 +206,11 @@ public class Benchmark {
 
     private boolean isCorrect(Complex[] c) {
         if (correctOut == null) {
-            correctOut = c;
+//            correctOut = c;
+            correctOut = new Complex[c.length];
+            for (int i = 0; i < c.length; i++) {
+                correctOut[i] = new Complex(c[i].re, c[i].im);
+            }
             return true;
         }
         for (int i = 0; i < c.length; i++) {
@@ -210,8 +244,8 @@ public class Benchmark {
         return stop;
     }
 
-    public long JNIBenchmarkParams(int n) {
-        double[] z = combineComplex(randomInput(n/2), new double[n/2]);
+    public long JNIBenchmarkParams() {
+        double[] z = combineComplex(re, im);
         long start = SystemClock.elapsedRealtimeNanos();
 
         jni_params(z);
@@ -220,8 +254,8 @@ public class Benchmark {
         return stop;
     }
 
-    public long JNIBenchmarkVectorConversion(int n) {
-        double[] z = combineComplex(randomInput(n/2), new double[n/2]);
+    public long JNIBenchmarkVectorConversion() {
+        double[] z = combineComplex(re, im);
         long start = SystemClock.elapsedRealtimeNanos();
 
         jni_vector_conversion(z);
@@ -230,13 +264,9 @@ public class Benchmark {
         return stop;
     }
 
-    public long JNIBenchmarkColumbia(int n) {
+    public long JNIBenchmarkColumbia() {
         // Let first half be filled with real and second half with imaginary
-        double[] tempRe = randomInput(n/2);
-        double[] z = new double[tempRe.length*2];
-        for (int i = 0; i < tempRe.length; i++) {
-            z[i] = tempRe[i];
-        }
+        double[] z = combineComplex(re, im);
         long start = SystemClock.elapsedRealtimeNanos();
 
         double[] nativeResult = jni_columbia(z, dTableCos, dTableSin);
@@ -337,15 +367,9 @@ public class Benchmark {
     }
 
     public long FFTJavaIterativeColumbia() {
-        double[] tempRe;
-        double[] tempIm;
-        if (TEST_TYPE == TIME) {
-            // Will hold the result from FFT
-            tempRe = re.clone();
-            tempIm = im.clone();
-        } else {
-            tempRe = re;
-            tempIm = im;
+        for (int i = 0; i < re.length; i++) {
+            tempRe[i] = re[i];
+            tempIm[i] = im[i];
         }
 
         // Initialize cos and sin tables
@@ -384,9 +408,11 @@ public class Benchmark {
         long stop = SystemClock.elapsedRealtimeNanos() - start;
 
         if (TEST_TYPE == TIME) {
-            Complex[] x = new Complex[re.length];
+            Complex[] x = complexResult;
             for (int i = 0; i < re.length; i++) {
-                x[i] = new Complex(nativeResult[i], nativeResult[i + re.length]);
+//                x[i] = new Complex(nativeResult[i], nativeResult[i + re.length]);
+                x[i].re = nativeResult[i];
+                x[i].im = nativeResult[i + re.length];
             }
 
 
@@ -432,7 +458,7 @@ public class Benchmark {
         float[] z = floatMemoryArray;
         for (int i = 0; i < re.length; i++) {
             z[i] = (float)re[i];
-            z[i+re.length] = (float)0.0;
+            z[i+re.length] = 0.0f;
         }
 
         long start = SystemClock.elapsedRealtimeNanos();
@@ -442,9 +468,11 @@ public class Benchmark {
         long stop = SystemClock.elapsedRealtimeNanos() - start;
 
         if (TEST_TYPE == TIME) {
-            Complex[] x = new Complex[re.length];
+            Complex[] x = complexResult;
             for (int i = 0; i < re.length; i++) {
-                x[i] = new Complex(nativeResult[i], nativeResult[i + re.length]);
+//                x[i] = new Complex(nativeResult[i], nativeResult[i + re.length]);
+                x[i].re = nativeResult[i];
+                x[i].im = nativeResult[i + re.length];
             }
 
             if (DEBUG) {
@@ -461,7 +489,7 @@ public class Benchmark {
         float[] z = floatMemoryArray;
         for (int i = 0; i < re.length; i++) {
             z[i] = (float)re[i];
-            z[i+re.length] = (float)0.0;
+            z[i+re.length] = 0.0f;
         }
 
         init_iterative_neon(re.length);
@@ -473,9 +501,11 @@ public class Benchmark {
         long stop = SystemClock.elapsedRealtimeNanos() - start;
 
         if (TEST_TYPE == TIME) {
-            Complex[] x = new Complex[re.length];
+            Complex[] x = complexResult;
             for (int i = 0; i < re.length; i++) {
-                x[i] = new Complex(nativeResult[i], nativeResult[i + re.length]);
+//                x[i] = new Complex(nativeResult[i], nativeResult[i + re.length]);
+                x[i].re = nativeResult[i];
+                x[i].im = nativeResult[i + re.length];
             }
 
             delete_iterative_neon();
@@ -491,25 +521,19 @@ public class Benchmark {
     }
 
     public long FloatFFTJavaIterativeColumbia() {
-        float[] tempRe;
-        float[] tempIm;
-        if (TEST_TYPE == TIME) {
-            // Will hold the result from FFT
-            tempRe = fRe.clone();
-            tempIm = fIm.clone();
-        } else {
-            tempRe = fRe;
-            tempIm = fIm;
+        for (int i = 0; i < fRe.length; i++) {
+            fTempRe[i] = fRe[i];
+            fTempIm[i] = fIm[i];
         }
 
         long start = SystemClock.elapsedRealtimeNanos();
 
-        floatCI.fft(tempRe, tempIm);
+        floatCI.fft(fTempRe, fTempIm);
 
         long stop = SystemClock.elapsedRealtimeNanos() - start;
 
         if (TEST_TYPE == TIME) {
-            FloatComplex[] x = toComplex(tempRe, tempIm);
+            FloatComplex[] x = toComplex(fTempRe, fTempIm);
 
             if (DEBUG) {
                 System.out.println("************* FFT JAVA ITER COLUMBIA ************");

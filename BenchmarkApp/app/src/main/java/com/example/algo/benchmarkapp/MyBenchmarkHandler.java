@@ -30,7 +30,7 @@ public class MyBenchmarkHandler extends Handler {
     @Override
     public void handleMessage(Message msg) {
         if (msg.what == Constants.BENCHMARK_MESSAGE_NEW) {
-            newBenchmarks();
+//            newBenchmarks();
             mUIHandler.obtainMessage(msg.what).sendToTarget();
         } else {
             BenchmarkMessage message = (BenchmarkMessage) msg.obj;
@@ -67,15 +67,15 @@ public class MyBenchmarkHandler extends Handler {
                     jniTest = true;
                     break;
                 case JNI_PARAMS:
-                    time = bm.JNIBenchmarkParams(size);
+                    time = bm.JNIBenchmarkParams();
                     jniTest = true;
                     break;
                 case JNI_VECTOR_CONVERSION:
-                    time = bm.JNIBenchmarkVectorConversion(size);
+                    time = bm.JNIBenchmarkVectorConversion();
                     jniTest = true;
                     break;
                 case JNI_COLUMBIA:
-                    time = bm.JNIBenchmarkColumbia(size);
+                    time = bm.JNIBenchmarkColumbia();
                     jniTest = true;
                     break;
                 case FFT_JAVA_ITERATIVE_PRINCETON:

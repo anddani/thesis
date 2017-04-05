@@ -16,6 +16,8 @@ The slowest algorithm was the Java Princeton Recursive. The reason for this was 
 
 The C++ version of the Princeton Recursive algorithm is faster than the Java version. One big difference is that the \texttt{std::complex} type used in C++ does not create new instances each time is is being operated with. This lowers the number of calls requesting more memory from the heap. Depending on the situation for the program, there is a risk that the program must ask the system for more memory, slowing down the allocation process.
 
+Additionally, this will increase the work for the garbage collector, increasing the risk of it being triggered during the timing. To prevent the number of allocations you are doing inside a repeated process is to reuse allocated memory. This is done by pre-allocating the necessary arrays or other data structures and overwrite the results for each call. Avoiding calls to new in a method that is called multiple times can increase time and memory efficiency.
+
 % Which is fastest and why (discussion)??
 \hilight{Which is fastest and why??}
 

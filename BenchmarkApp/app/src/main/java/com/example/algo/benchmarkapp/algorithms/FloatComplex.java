@@ -32,8 +32,8 @@ package com.example.algo.benchmarkapp.algorithms;
 import java.util.Objects;
 
 public class FloatComplex {
-    private final float re;   // the real part
-    private final float im;   // the imaginary part
+    public float re;   // the real part
+    public float im;   // the imaginary part
 
     // create a new object with the given real and imaginary parts
     public FloatComplex(float real, float imag) {

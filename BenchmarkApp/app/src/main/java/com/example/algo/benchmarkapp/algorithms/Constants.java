@@ -4,9 +4,9 @@ public class Constants {
 
     public static final int TIME = 0;
     public static final int MEMORY = 1;
-    public static final int TEST_TYPE = MEMORY;
+    public static final int TEST_TYPE = TIME;
 
-    public static final int BENCHMARK_ITER = 1;
+    public static final int BENCHMARK_ITER = 100;
 
     public static final int BENCHMARK_MESSAGE_NEW = 17;
     public static final int BENCHMARK_MESSAGE_DONE = 4711;
