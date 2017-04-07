@@ -97,11 +97,23 @@ public class MainActivity extends AppCompatActivity {
                 int alg = spinner.getSelectedItemPosition();
                 System.out.println("Button pressed with n: " + alg);
 
+                // Delete output file each run
+                File sdCard = Environment.getExternalStorageDirectory();
+                if (!new File(sdCard.getAbsolutePath() + "/data.out").delete()) {
+                    System.out.println("DID NOT GET DELETED");
+                }
+
+                saveResult("numTests " + Constants.BENCHMARK_ITER);
+
                 // Clear screen between tests
                 logTextView.setText("");
 
-                BenchmarkMessage message = new BenchmarkMessage(Constants.BENCHMARK_ITER, alg, Constants.BLOCK_SIZES.length-1);
-                mTaskHandler.obtainMessage(0, message).sendToTarget();
+//                BenchmarkMessage message = new BenchmarkMessage(Constants.BENCHMARK_ITER, alg, Constants.BLOCK_SIZES.length-1);
+//                mTaskHandler.obtainMessage(0, message).sendToTarget();
+                for (int sizeId = 0; sizeId < Constants.BLOCK_SIZES.length; sizeId++) {
+                    BenchmarkMessage message = new BenchmarkMessage(Constants.BENCHMARK_ITER, alg, sizeId);
+                    mTaskHandler.obtainMessage(0, message).sendToTarget();
+                }
             }
         });
 

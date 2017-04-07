@@ -1,29 +1,25 @@
 #include "FFTColumbiaConverted.h"
 #define LOGTAG "FFTLIB"
+#include "android/log.h"
 
-void fftCI(double* x, double* y, int n, double* cos_v, double* sin_v) {
+
+
+long fftCI(double* x, double* y, int n, double* cos_v, double* sin_v) {
      int m = (int)(log(n) / log(2));
     int i,j,k,n1,n2,a;
     double c,s,e,t1,t2;
 
+
     // Bit-reverse
     j = 0;
     n2 = n/2;
-    for (i=1; i < n - 1; i++) {
-        n1 = n2;
-        while ( j >= n1 ) {
-            j = j - n1;
-            n1 >>= 1;
-        }
-        j = j + n1;
-
-        if (i < j) {
-            t1 = x[i];
-            x[i] = x[j];
-            x[j] = t1;
-            t1 = y[i];
-            y[i] = y[j];
-            y[j] = t1;
+    int shift = 1 + __builtin_clz(n);
+    for (unsigned int k = 0; k < n; k++) {
+        int j = reverseIntc(k) >> shift;
+        if (j > k) {
+            double temp = x[j];
+            x[j] = x[k];
+            x[k] = temp;
         }
     }
 
@@ -32,6 +28,7 @@ void fftCI(double* x, double* y, int n, double* cos_v, double* sin_v) {
     n2 = 1;
     long long counter = 0L;
 
+    clock_t time1 = clock();
     for (i=0; i < m; i++) {
         n1 = n2;
         n2 = n2 + n2;
@@ -53,6 +50,10 @@ void fftCI(double* x, double* y, int n, double* cos_v, double* sin_v) {
             }
         }
     }
+
+
+    double total_time = double(clock() - time1);
+    return (long)total_time;
 }
 
 void floatFftCI(float* x, float* y, int n, float* cos_v, float* sin_v) {
@@ -107,4 +108,14 @@ void floatFftCI(float* x, float* y, int n, float* cos_v, float* sin_v) {
             }
         }
     }
+}
+
+uint32_t reverseIntc(uint32_t x)
+{
+    x = ((x >> 1) & 0x55555555u) | ((x & 0x55555555u) << 1);
+    x = ((x >> 2) & 0x33333333u) | ((x & 0x33333333u) << 2);
+    x = ((x >> 4) & 0x0f0f0f0fu) | ((x & 0x0f0f0f0fu) << 4);
+    x = ((x >> 8) & 0x00ff00ffu) | ((x & 0x00ff00ffu) << 8);
+    x = ((x >> 16) & 0xffffu) | ((x & 0xffffu) << 16);
+    return x;
 }

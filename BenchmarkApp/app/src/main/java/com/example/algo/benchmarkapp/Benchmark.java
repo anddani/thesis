@@ -107,7 +107,6 @@ public class Benchmark {
         int N = c.length;
         Complex[] x = complexResult;
         for (int i = 0; i < N; i+=2) {
-//            x[i/2] = new Complex(c[i], c[i+1]);
             x[i/2].re = c[i];
             x[i/2].im = c[i+1];
         }
@@ -118,7 +117,6 @@ public class Benchmark {
         int N = c.length;
         FloatComplex[] x = fComplexResult;
         for (int i = 0; i < N; i+=2) {
-//            x[i/2] = new FloatComplex(c[i], c[i+1]);
             x[i/2].re = c[i];
             x[i/2].im = c[i+1];
         }
@@ -130,7 +128,6 @@ public class Benchmark {
         int N = real.length;
         Complex[] x = complexResult;
         for (int i = 0; i < N; i++) {
-//            x[i] = new Complex(real[i], imaginary[i]);
             x[i].re = real[i];
             x[i].im = imaginary[i];
         }
@@ -140,7 +137,6 @@ public class Benchmark {
         int N = real.length;
         FloatComplex[] x = fComplexResult;
         for (int i = 0; i < N; i++) {
-//            x[i] = new FloatComplex(real[i], imaginary[i]);
             x[i].re = real[i];
             x[i].im = imaginary[i];
         }
@@ -206,7 +202,6 @@ public class Benchmark {
 
     private boolean isCorrect(Complex[] c) {
         if (correctOut == null) {
-//            correctOut = c;
             correctOut = new Complex[c.length];
             for (int i = 0; i < c.length; i++) {
                 correctOut[i] = new Complex(c[i].re, c[i].im);
@@ -323,12 +318,12 @@ public class Benchmark {
 
         long start = SystemClock.elapsedRealtimeNanos();
 
-        double[] nativeResult = fft_princeton_iterative(z, arrTest);
+        long nativeResult = fft_princeton_iterative(z, arrTest);
 
         long stop = SystemClock.elapsedRealtimeNanos() - start;
 
         if (TEST_TYPE == TIME) {
-            Complex[] x = toComplex(nativeResult);
+            Complex[] x = toComplex(z);
 
             if (DEBUG) {
                 System.out.println("************* FFT CPP ITER PRINCETON ************");
@@ -337,7 +332,7 @@ public class Benchmark {
 
             checkCorrectness(x, "FFT JAVA ITER PRINCETON GIVES INCORRECT OUTPUT");
         }
-        return stop;
+        return nativeResult;
     }
 
     public long FFTCppRecursivePrinceton(int arrTest) {
@@ -403,16 +398,15 @@ public class Benchmark {
 
         long start = SystemClock.elapsedRealtimeNanos();
 
-        double[] nativeResult = fft_columbia_iterative(z, dTableCos, dTableSin, arrTest);
+        long nativeResult = fft_columbia_iterative(z, dTableCos, dTableSin, arrTest);
 
         long stop = SystemClock.elapsedRealtimeNanos() - start;
 
         if (TEST_TYPE == TIME) {
             Complex[] x = complexResult;
             for (int i = 0; i < re.length; i++) {
-//                x[i] = new Complex(nativeResult[i], nativeResult[i + re.length]);
-                x[i].re = nativeResult[i];
-                x[i].im = nativeResult[i + re.length];
+                x[i].re = z[i];
+                x[i].im = z[i + re.length];
             }
 
 
@@ -423,7 +417,7 @@ public class Benchmark {
 
             checkCorrectness(x, "FFT JAVA ITER COLUMBIA GIVES INCORRECT OUTPUT");
         }
-        return stop;
+        return nativeResult;
     }
 
     public long FFTCppKiss(int arrTest) {
@@ -641,7 +635,6 @@ public class Benchmark {
             z[i + fRe.length] = fIm[i];
         }
 
-
         long start = SystemClock.elapsedRealtimeNanos();
 
         float[] nativeResult = float_fft_columbia_iterative(z, fTableCos, fTableSin, arrTest);
@@ -669,9 +662,9 @@ public class Benchmark {
     public native double[] jni_vector_conversion(double[] arr);
     public native double[] jni_columbia(double[] arr, double[] cos, double[] sin);
 
-    public native double[] fft_princeton_iterative(double[] arr, int arrTest);
+    public native long     fft_princeton_iterative(double[] arr, int arrTest);
     public native double[] fft_princeton_recursive(double[] arr, int arrTest);
-    public native double[] fft_columbia_iterative(double[] arr, double[] cos, double[] sin, int arrTest);
+    public native long     fft_columbia_iterative(double[] arr, double[] cos, double[] sin, int arrTest);
 
     public native void     fft_kiss_init(int N);
     public native double[] fft_kiss(double[] arr, int arrTest);

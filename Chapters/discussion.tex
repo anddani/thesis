@@ -5,52 +5,54 @@ The test results from the JNI tests showed that the overhead is small relative t
 
 The confidence intervals overlap for many of the values, meaning we cannot say whether or not one input yields a faster execution time than the other. Some larger block sizes has lower execution time than smaller block sizes and some grow for larger input. Because of this, it is reasonable to assume that nothing is done to the arrays when they are passed to the JNI, only pointers are copied. The \texttt{GetPrimitiveArrayCritical()} and \texttt{ReleasePrimitiveArrayCritical()} seem to introduce overhead when used on larger arrays. % <= CITE THIS ... as described in
 
-Regarding the sudden spike in mean in the JNI tests, this can be a cause of one large execution time, skewing the results. This is actually the case for the \textbf{Convert} tests with block size 1024 as seen in figure~\ref{fig:raw:jni:convert:1024} found in Appendix B. A reason for this could be that the garbage collector began executing during the timing of the test.
+Regarding the spike in mean in the JNI tests, this can be a cause of one large execution time, skewing the results. This is actually the case for the \textbf{Convert} tests with block size 1024 as seen in Figure~\ref{fig:raw:jni:convert:1024} found in Appendix B. A reason for this could be that the garbage collector began executing during the timing of the test.
 
 % The second tests compared the execution times for measuring the benefits of using a critical zone in native code. In Figure~\ref{}
 
 \section{Simplicity and Efficiency} % FFT-libraries
 
 % Which is slowest and why (discussion)??
-The slowest algorithm was the Java Princeton Recursive. The reason for this was that it does a lot of method calls. Additionally, each call creates new \texttt{Complex} arrays when splitting up the array in odd and even indices. Lastly, when combining the arrays, new \texttt{Complex} objects are created each time an operation is done between two complex numbers. The \texttt{Complex} class creates immutable objects.
+The slowest algorithm was the Java Princeton Recursive. The reason for this is because it does many method calls. Additionally, each call creates new \texttt{Complex} arrays when splitting up the array in odd and even indices. Lastly, when combining the arrays, new \texttt{Complex} objects are created each time an operation is done between two complex numbers. The \texttt{Complex} class creates immutable objects.
 
 The C++ version of the Princeton Recursive algorithm is faster than the Java version. One big difference is that the \texttt{std::complex} type used in C++ does not create new instances each time is is being operated with. This lowers the number of calls requesting more memory from the heap. Depending on the situation for the program, there is a risk that the program must ask the system for more memory, slowing down the allocation process.
 
 Additionally, this will increase the work for the garbage collector, increasing the risk of it being triggered during the timing. To prevent the number of allocations you are doing inside a repeated process is to reuse allocated memory. This is done by pre-allocating the necessary arrays or other data structures and overwrite the results for each call. Avoiding calls to new in a method that is called multiple times can increase time and memory efficiency.
 
 % Which is fastest and why (discussion)??
-\hilight{Which is fastest and why??}
+Of the algorithms tested in the FFT library tests, KISS FFT was the fastest. It is more optimized than the \enquote{basic} implementations found in the Columbia and Princeton algorithms. In C++, Princeton Iterative and Columbia Iterative were the fastest and in Java, Columbia Iterative was the fastest. The reason for it being faster in C++ is, as for Java Princeton Recursive, because it uses the \texttt{Complex} class to represent complex numbers. Because Java Columbia Iterative used double arrays to represent real and imaginary numbers, no new objects needed to be created.
 
 % Which tests triggered the GC??
 \hilight{Which tests triggered the GC??}
 
 % Precision (smaller intervals) for larger block sizes C++. Because larger execution times result in more consistent execution times??
-\hilight{Precision (smaller intervals) for larger block sizes C++.}\\
-\hilight{Because larger execution times result in more consistent execution times??}
+% \hilight{Precision (smaller intervals) for larger block sizes C++.}\\
+% \hilight{Because larger execution times result in more consistent execution times??}
 
 One thing that is clear is that the Columbia Iterative algorithm is the best one to choose from of the Java versions. It performs better than both Princeton Iterative and Princeton Recursive. It also allows simple modifications such as changing between using \texttt{float}s or  \texttt{double}s to represent the data.
 
 The reason Princeton Iterative and Princeton Recursive is slower in Java than in C++ is because they operate with \texttt{Complex} elements. Each time two \texttt{Complex} numbers are added, multiplied or subtracted, a new \texttt{Complex} object is created. This slows down the process and increases memory consumption, increasing work for the garbage collector.
 
 % Although you can have two equally long implementations, one could be faster than the other.  It is important to do small tests with different sized data.
-
-\hilight{Although you can have two equally long implementations,}
-\hilight{one could be faster than the other.}\\
-\hilight{It is important to do small tests with different sized data.}
+As we have seen in the tests, choosing an iterative implementation is preferable and choosing the correctly implemented iterative implementation is also important. It is possible to compare implementations by setting up small tests. This is a small time investment that can impact the performance of a program significantly. It is also possible to scan through the implementation, looking for places where it allocates memory and edit it so that it uses an already allocated array. This reduces the number of calls for more memory which lessens the chance of a garbage collect.
 
 % We can see in the tests that the best option is to choose KISS fft as it is the fastest of the options. BUT WHY??
-\hilight{We can see in the tests that the best option is to choose KISS fft as it is the fastest of the options.}
+% \hilight{We can see in the tests that the best option is to choose KISS fft as it is the fastest of the options.}
 
-
-% NEON iterative is faster than the recursive because...
-\hilight{NEON iterative is faster than the recursive because...}
 
 % For smaller Block sizes, the Java version is as fast as the C++ one. It is easier to implement and more flexible to edit. No need for complicated JNI integration.
-\hilight{For smaller Block sizes, the Java version is almost as fast as the C++ one.}
-\hilight{It is easier to implement and more flexible to edit. No need for complicated JNI integration.}
+Comparing the Java and C++ implementations of the Columbia Iterative FFT, for \emph{small}-\emph{large} block sizes, the Java version is almost exactly as fast as the C++ version. For the block sizes added in the \emph{extra large} group, the C++ version perform better. If you were to choose between the C++ and the Java variant of Columbia, it is arguably better to choose the Java version. Avoiding having to implement a JNI bridge between Java and native is more preferable than the almost non-existent boost in performance.
 
-% It is with very large block sizes the difference is clear.
-\hilight{It is with very large block sizes the difference is clear.}
+Another argument why it is sensible to choose the Java version is that is has enough performance to allow graphical rendering in 60 \gls{fps}. Let's say we have an application that visualizes sound with a sampling frequency of 44100 Hz and updates the screen at 60 frames per second. It has 16.66 ms to do all the processing needed between the screen updates. If we want to have double precision numbers and use Java it is possible to do an FFT with a size of \textbf{32768}.
+
+This size is more than needed and would require a delay of $32768/44100\approx 743 $ ms. A more appropriate block size to use is \hilight{some size + FFT overhead < 16.66 ms}
+\hilight{Motivate the frequency resolution received here as well}
+
+% \hilight{For smaller Block sizes, the Java version is almost as fast as the C++ one.}
+% \hilight{It is easier to implement and more flexible to edit. No need for complicated JNI integration.}
+
+% It is with very large block sizes the difference is clear. 
+\hilight{It is with very large block sizes the difference is clear.}\\
+\hilight{Point to the differences for the largest block sizes for java v c++}
 
 % MAYBE THE C++ TESTS GOT MORE CLEAR GROWTH BECAUSE OF GETPRIMITIVEARRAY
 \hilight{C++ Tests got more clear growth because of GetPrimitiveArrayCritical?}
@@ -58,6 +60,10 @@ The reason Princeton Iterative and Princeton Recursive is slower in Java than in
 \hilight{Speed required when rendering to screen at a constant refresh rate}
 
 \section{Vectorization as Optimization}
+
+
+% NEON iterative is faster than the recursive because...
+\hilight{NEON iterative is faster than the recursive because...}
 
 \hilight{Implementation effort}
 
@@ -102,3 +108,5 @@ As the results show, vectorization was an improvement in regards to efficiency. 
 \hilight{Array would be twice as large if doubles were used.}\\
 \hilight{Greater chance that the whole array can fit when using float elements.}
 \hilight{There is a really big difference in both Java and C++.}
+
+\hilight{Sustainability}

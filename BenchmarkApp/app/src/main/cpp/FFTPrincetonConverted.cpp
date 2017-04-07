@@ -1,14 +1,20 @@
 #include "FFTPrincetonConverted.h"
+#include <android/log.h>
+#include <ctime>
+#include <chrono>
+#define LOGTAG "FFTLIB"
 
 using namespace std;
+using namespace std::chrono;
 
-int fftPrincetonIterative(vector<complex<double> >& x) {
+long fftPrincetonIterative(vector<complex<double> >& x) {
     int N = x.size();
 
     // N not power of 2
     if ((N & (N - 1)) != 0) {
         return -1;
     }
+
 
     // Bit reversal permutation
     int shift = 1 + __builtin_clz(N);
@@ -20,6 +26,7 @@ int fftPrincetonIterative(vector<complex<double> >& x) {
             x[k] = temp;
         }
     }
+    clock_t time1 = clock();
 
     // butterfly updates
     for (int L = 2; L <= N; L = L+L) {
@@ -33,7 +40,9 @@ int fftPrincetonIterative(vector<complex<double> >& x) {
             }
         }
     }
-    return 0;
+    double total_time = double(clock() - time1);
+
+    return (long)total_time;
 }
 
 vector<complex<double> > fftPrincetonRecursive(vector<complex<double> > &x) {

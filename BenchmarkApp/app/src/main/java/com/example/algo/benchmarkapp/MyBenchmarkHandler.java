@@ -30,7 +30,6 @@ public class MyBenchmarkHandler extends Handler {
     @Override
     public void handleMessage(Message msg) {
         if (msg.what == Constants.BENCHMARK_MESSAGE_NEW) {
-//            newBenchmarks();
             mUIHandler.obtainMessage(msg.what).sendToTarget();
         } else {
             BenchmarkMessage message = (BenchmarkMessage) msg.obj;
@@ -52,10 +51,6 @@ public class MyBenchmarkHandler extends Handler {
         sb.append(" blockSize: ");
         sb.append(size);
         sb.append(" executionTime: ");
-
-//        if (benchmarks[sizeId] == null) {
-//            benchmarks[sizeId] = new Benchmark(size);
-//        }
 
         Benchmark bm = benchmarks[sizeId];
 
