@@ -1,5 +1,18 @@
-\textit{Describing text}
+\textit{The conclusions drawn from the discussion will be presented in this chapter as well as an answer to the scientific question of this thesis. Propositions of future work will also be included.}
 
-\hilight{When choosing a java version, choose Columbia Iterative (Conclusion)}
+% As we see, choosing the correct FFT implementation can have a large impact.
+
+% \hilight{When choosing a java version, choose Columbia Iterative (Conclusion)}
+One of the conclusions to draw from the results are that when choosing Java, the best algorithm was the Columbia Iterative. This algorithm neither allocated any memory nor did it re-calculate the trigonometric values needed in the algorithm. It was also the easiest to convert to C++ because it did not include any Java specific constructs (not including method definition). It was also the fastest between it, Princeton Iterative and Princeton Recursive for both Java and C++.
+
+KISS FFT was the fastest of all the native implementations 
 
 \hilight{Native is architecture dependent. Not always the possible to use it}
+
+\hilight{Parallelization as future work. More compatible than vectorization.}
+
+%%%
+% Answer research question
+
+%%%
+% Future work

@@ -1,4 +1,4 @@
-\textit{The discussion chapter covers how the JNI affects performance, how efficient smaller FFT libraries are, why the optimization gave the results found in Chapter~\ref{ch:results} and the efficiency difference between floats and doubles.}
+\textit{The discussion chapter covers how the JNI affects performance, how efficient smaller FFT libraries are, why the optimization gave the results found in Chapter~\ref{ch:results} - Results and the efficiency difference between floats and doubles.}
 
 \section{JNI Overhead}
 The test results from the JNI tests showed that the overhead is small relative to the computation of the FFT algorithm. As long as it is being run once per calculation, it will not affect the performance significantly. If the JNI is called in a loop when it might not be necessary, the overhead add up and becomes a larger part of the total execution time. Another thing to note is that the execution time stay within about 10 \textmu s. They are also not growing with larger input.
@@ -14,7 +14,7 @@ Regarding the spike in mean in the JNI tests, this can be a cause of one large e
 % Which is slowest and why (discussion)??
 The slowest algorithm was the Java Princeton Recursive. The reason for this is because it does many method calls. Additionally, each call creates new \texttt{Complex} arrays when splitting up the array in odd and even indices. Lastly, when combining the arrays, new \texttt{Complex} objects are created each time an operation is done between two complex numbers. The \texttt{Complex} class creates immutable objects.
 
-The C++ version of the Princeton Recursive algorithm is faster than the Java version. One big difference is that the \texttt{std::complex} type used in C++ does not create new instances each time is is being operated with. This lowers the number of calls requesting more memory from the heap. Depending on the situation for the program, there is a risk that the program must ask the system for more memory, slowing down the allocation process.
+The C++ version of the Princeton Recursive algorithm is faster than the Java version. One big difference is that the \texttt{std::complex} type used in C++ does not create new instances each time is is being operated with. Instead, they are placed on the stack. This lowers the number of calls requesting more memory from the heap. Depending on the situation for the program, there is a risk that the program must ask the system for more memory, slowing down the allocation process.
 
 Additionally, this will increase the work for the garbage collector, increasing the risk of it being triggered during the timing. To prevent the number of allocations you are doing inside a repeated process is to reuse allocated memory. This is done by pre-allocating the necessary arrays or other data structures and overwrite the results for each call. Avoiding calls to new in a method that is called multiple times can increase time and memory efficiency.
 
@@ -42,71 +42,47 @@ As we have seen in the tests, choosing an iterative implementation is preferable
 % For smaller Block sizes, the Java version is as fast as the C++ one. It is easier to implement and more flexible to edit. No need for complicated JNI integration.
 Comparing the Java and C++ implementations of the Columbia Iterative FFT, for \emph{small}-\emph{large} block sizes, the Java version is almost exactly as fast as the C++ version. For the block sizes added in the \emph{extra large} group, the C++ version perform better. If you were to choose between the C++ and the Java variant of Columbia, it is arguably better to choose the Java version. Avoiding having to implement a JNI bridge between Java and native is more preferable than the almost non-existent boost in performance.
 
-Another argument why it is sensible to choose the Java version is that is has enough performance to allow graphical rendering in 60 \gls{fps}. Let's say we have an application that visualizes sound with a sampling frequency of 44100 Hz and updates the screen at 60 frames per second. It has 16.66 ms to do all the processing needed between the screen updates. If we want to have double precision numbers and use Java it is possible to do an FFT with a size of \textbf{32768}.
+Another argument why it is sensible to choose the Java version is that is has enough performance for processing to allow graphical rendering in 60 \gls{fps}. Let's say we have an application that visualizes sound with a sampling frequency of 44100 Hz and updates the screen at 60 frames per second. It has 16.66 ms to do all the processing needed between the screen updates. If we want to have double precision numbers and use Java it is possible to do an FFT with a size of \textbf{32768}.
 
-This size is more than needed and would require a delay of $32768/44100\approx 743 $ ms. A more appropriate block size to use is \hilight{some size + FFT overhead < 16.66 ms}
-\hilight{Motivate the frequency resolution received here as well}
+This size is more than needed and would require a delay of $32768/44100\approx 743 $ ms and the fastest Java algorithm for double point precision ran in $12$ ms for this block size. As we can see, in relation, the time it takes to execute an FFT is only a small fraction of the time it takes to gather the same number of samples. This is important because it allows larger FFT sizes from the sampled audio, increasing the frequency resolution in the results, while still being sufficiently fast.
 
-% \hilight{For smaller Block sizes, the Java version is almost as fast as the C++ one.}
-% \hilight{It is easier to implement and more flexible to edit. No need for complicated JNI integration.}
+% \hilight{some size + FFT overhead < 16.66 ms}
+% \hilight{Motivate the frequency resolution received here as well}
+
+For smaller block sizes (\emph{medium} and \emph{large}), common when sampling low frequencies such as speech and acceleration data, it is relevant to have a fast transform for these sizes. Comparing C++ and Java we see that Java is not that much slower, at best, than C++. This gives an incentive to use Java, allowing more consistent code and does not add the complexity of JNI.
 
 % It is with very large block sizes the difference is clear. 
-\hilight{It is with very large block sizes the difference is clear.}\\
-\hilight{Point to the differences for the largest block sizes for java v c++}
+When the block sizes are large, a bigger difference is found between the algorithms. One reason for this is the impact the garbage collection has when triggered during the timing of an algorithm. The pauses can be, depending on the work done in the garbage collect, around \hilight{MIN-MAX} ms.
+% \hilight{It is with very large block sizes the difference is clear.}\\
+% \hilight{Point to the differences for the largest block sizes for java v c++}
 
-% MAYBE THE C++ TESTS GOT MORE CLEAR GROWTH BECAUSE OF GETPRIMITIVEARRAY
-\hilight{C++ Tests got more clear growth because of GetPrimitiveArrayCritical?}
+% Discuss differences in performance large java times, small java times WHY?
+% \hilight{Discuss differences in performance large java times, small java times WHY?}
 
-\hilight{Speed required when rendering to screen at a constant refresh rate}
+\hilight{Why was KISS FFT fast?}
 
 \section{Vectorization as Optimization}
 
+As the results show, vectorization was an improvement in regards to efficiency. This was as expected because it is possible to process more elements for each instruction. The optimizations implicitly implemented loop unrolling because more operations were covered in the body of the loop, resulting in less jump instructions overall, leading to less instructions in total.
 
-% NEON iterative is faster than the recursive because...
-\hilight{NEON iterative is faster than the recursive because...}
+The Recursive NEON implementation did not perform much worse than the Iterative version. The difference between the implementations were of a smaller factor than between Princeton Iterative and Recursive. One reason for this could be that because the twiddle factors are moved so that they are closer in cache in a two dimensional array for the recursive version. This could be the reason for the performance increase.
 
-\hilight{Implementation effort}
+% IMPRTNT => MORE PROS <= IMPRNT 
 
-% Harder to maintain
-\hilight{Harder to maintain}
+One disadvantage of using NEON intrinsics is the fact that you cannot run it on all CPU architectures. Not all Android devices runs on ARM, making it less compatible if the program depends on its optimizations. One example of an optimization that is architecture independent and works on all multi-core CPUs is parallelization. Another disadvantage of NEON is that it makes a program harder to maintain. It introduces complexity to the program in addition to JNI. 
 
-% Pros/Cons
+A possible implementation could be optimized by fitting all the components in cache. This reduces the overhead of fetching data from memory which would slow down the overall performance. If it is not possible for the data to fit the cache, you can rewrite the algorithm such that the elements are stored close by in order of access. This will result in less cache invalidation and less direct memory reads.
 
-\hilight{Pros/Cons with NEON (Vectorization)}
-
-As the results show, vectorization was an improvement in regards to efficiency. This was as expected because it is possible to process more elements for each instruction. 
-
-% The benefit of fitting it all in cache.
-\hilight{The benefit of fitting it all in cache.}
-
-% With radix 4, it is possible to fit all in cache?
-
-% Preparations for this such as lining up data correctly.
-\hilight{Preparations by lining up data correctly.}\\
-\hilight{Minimize RAM access.}
-
-%%%
-% When is the fastest required performance-wise??
-\hilight{When is the fastest required performance-wise??}
-
-% Limitations of the NEON intrinsics. Only works for ARM
-\hilight{Limitations of the NEON intrinsics. Only works for ARM}
+When needing to do a lot of processing with the data in frequency domain, a fast FFT will help in lowering the total execution time. If the data is also transformed back into time domain, for example when you want to filter out noise in an audio signal and play it back. Another reason you would want a fast FFT is when the computation time for some validation need to be as fast as possible. An example of this is voice recognition where we want answers in reasonable time. Another example could be to do image recognition on fingerprints for fast biometric authentication.
 
 % Compare percentage speedup for iterative compared with recursive.
-\hilight{Compare percentage speedup for iterative compared with recursive.}
+% \hilight{Compare percentage speedup for iterative compared with recursive.}
 
-% As we see, choosing the correct FFT implementation can have a large impact.
-
-% Discuss differences in performance large java times, small java times WHY?
-\hilight{Discuss differences in performance large java times, small java times WHY?}
-
-\hilight{Accelerometer?}
 
 \section{Floats and Doubles}
-\hilight{Caching}
 
-\hilight{Array would be twice as large if doubles were used.}\\
-\hilight{Greater chance that the whole array can fit when using float elements.}
-\hilight{There is a really big difference in both Java and C++.}
+One reason for using the \texttt{float} data type is that they are stored as 32-bit values instead of 64-bit values as \texttt{double}s are stored. This means that the program requires less memory and reduces the risk of triggering the \texttt{GC\_FOR\_ALLOC} due to the lack of free memory distributed to the process. Another reason for choosing to use \texttt{float} is that they can compute faster depending on the architecture of the device. In the case of the experiments performed in this thesis, this was the case for the chosen device.
 
-\hilight{Sustainability}
+In addition to this, because \texttt{float}s are half the size of \texttt{double}s, they have a large chance of fitting in cache. Depending on the cache size, it could be beneficial to use the \texttt{float} data type. This is important to have in mind. A reason why you would not use \texttt{float}s is when you need the precision of \texttt{double}s, when the performance difference is not an issue or not existent.
+
+The test results showed that there is a big difference when computing floats and doubles for in both Java and C++. It is also the case that some \texttt{float} tests in Java is almost double the speed of the corresponding algorithm for \texttt{double} in C++. This shows the importance, on some architectures, to choose the appropriate data structures as they can impact the performance greatly.
