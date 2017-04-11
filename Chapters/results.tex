@@ -266,8 +266,9 @@ As we can see in Table~\ref{tab:java:double:extra}, the results show that when u
 %%==================================================================
 %% GC trigger
 %%==================================================================
-\section{Garbage Collector}
-Table~\ref{tab:result:gc:trigger} shows how many garbage collections that were triggered during the tests. Each row includes all block sizes and 100 iterations for one algorithm. The sticky concurrent mark sweep 
+\section{Garbage Collection}
+\label{ch:gc}
+Table~\ref{tab:result:gc:trigger} shows how many garbage collections that were triggered during the tests. Each row includes all block sizes and 100 iterations for one algorithm. This figure lists number of partial Concurrent Mark Sweeps, the sum of its garbage collection pauses, the number of sticky Concurrent Mark Sweeps and the sum of its garbage collection pauses.
 
 \begin{table}[H]
     \centering
@@ -278,11 +279,11 @@ Table~\ref{tab:result:gc:trigger} shows how many garbage collections that were t
         \begin{tabular}{|l|rr|rr|}\toprule
             \textbf{Block size} & \textbf{\# partial} & \textbf{total time} & \textbf{\# sticky} & \textbf{total time}\\\midrule
             \textbf{Java Columbia Iterative}        & 0 & 0 & 0 & 0\\
-            \textbf{Java Princeton Iterative}       & 328 & 1868.38 & 325 & 1811.70\\
+            \textbf{Java Princeton Iterative}       & 336 & 2,016.48 & 349 & 2,046.88\\
             \textbf{Java Princeton Recursive}       & 360 & 645.88 & 85 & 486.97\\
             \textbf{Java Float Columbia Iterative}  & 0 & 0 & 0 & 0\\
-            \textbf{Java Float Princeton Iterative} & 410 & 3194.31 & 348 & 2965.09\\
-            \textbf{Java Float Princeton Recursive} & 398 & 598.55 & 580 & 1137.00\\
+            \textbf{Java Float Princeton Iterative} & 400 & 2,791.10 & 325 & 2,627.63\\
+            \textbf{Java Float Princeton Recursive} & 356 & 635.12 & 466 & 1,035.78\\
             \textbf{C++ Columbia Iterative}         & 0 & 0 & 0 & 0\\
             \textbf{C++ Princeton Iterative}        & 0 & 0 & 0 & 0\\
             \textbf{C++ Princeton Recursive}        & 0 & 0 & 0 & 0\\

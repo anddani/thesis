@@ -22,7 +22,7 @@ Additionally, this will increase the work for the garbage collector, increasing 
 Of the algorithms tested in the FFT library tests, KISS FFT was the fastest. It is more optimized than the \enquote{basic} implementations found in the Columbia and Princeton algorithms. In C++, Princeton Iterative and Columbia Iterative were the fastest and in Java, Columbia Iterative was the fastest. The reason for it being faster in C++ is, as for Java Princeton Recursive, because it uses the \texttt{Complex} class to represent complex numbers. Because Java Columbia Iterative used double arrays to represent real and imaginary numbers, no new objects needed to be created.
 
 % Which tests triggered the GC??
-\hilight{Which tests triggered the GC??}
+The results from Chapter~\ref{ch:gc} show that the Java Princeton algorithms caused the GC to run. This behaviour was as expected because they called new during their execution. Java Columbia did not cause any garbage collection as well as any of the C++ algorithms.
 
 % Precision (smaller intervals) for larger block sizes C++. Because larger execution times result in more consistent execution times??
 % \hilight{Precision (smaller intervals) for larger block sizes C++.}\\
