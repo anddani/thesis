@@ -59,7 +59,7 @@ When the block sizes are large, a bigger difference is found between the algorit
 % Discuss differences in performance large java times, small java times WHY?
 % \hilight{Discuss differences in performance large java times, small java times WHY?}
 
-\hilight{Why was KISS FFT fast?}
+KISS FFT was the fastest of all the native implementations. This was because of the optimizations done to improve its performance. Using multiple radix implementations of the FFT, it is possible to get more performance at the cost of higher code complexity. It shows the potential in doing small optimizations that does not rely on multi-core or other architecture dependent optimization techniques.
 
 \section{Vectorization as Optimization}
 
