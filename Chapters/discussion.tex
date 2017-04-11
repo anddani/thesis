@@ -22,7 +22,7 @@ Additionally, this will increase the work for the garbage collector, increasing 
 Of the algorithms tested in the FFT library tests, KISS FFT was the fastest. It is more optimized than the \enquote{basic} implementations found in the Columbia and Princeton algorithms. In C++, Princeton Iterative and Columbia Iterative were the fastest and in Java, Columbia Iterative was the fastest. The reason for it being faster in C++ is, as for Java Princeton Recursive, because it uses the \texttt{Complex} class to represent complex numbers. Because Java Columbia Iterative used double arrays to represent real and imaginary numbers, no new objects needed to be created.
 
 % Which tests triggered the GC??
-The results from Chapter~\ref{ch:gc} show that the Java Princeton algorithms caused the GC to run. This behaviour was as expected because they called new during their execution. Java Columbia did not cause any garbage collection as well as any of the C++ algorithms.
+The results from Chapter~\ref{ch:gc} - Garbage Collection show that the Java Princeton algorithms caused the GC to run. This behaviour was as expected because they called new during their execution. Java Columbia did not cause any garbage collection as well as any of the C++ algorithms.
 
 % Precision (smaller intervals) for larger block sizes C++. Because larger execution times result in more consistent execution times??
 % \hilight{Precision (smaller intervals) for larger block sizes C++.}\\
@@ -52,7 +52,7 @@ This size is more than needed and would require a delay of $32768/44100\approx 7
 For smaller block sizes (\emph{medium} and \emph{large}), common when sampling low frequencies such as speech and acceleration data, it is relevant to have a fast transform for these sizes. Comparing C++ and Java we see that Java is not that much slower, at best, than C++. This gives an incentive to use Java, allowing more consistent code and does not add the complexity of JNI.
 
 % It is with very large block sizes the difference is clear. 
-When the block sizes are large, a bigger difference is found between the algorithms. One reason for this is the impact the garbage collection has when triggered during the timing of an algorithm. The pauses can be, depending on the work done in the garbage collect, around \hilight{MIN-MAX} ms.
+When the block sizes are large, a bigger difference is found between the algorithms. One reason for this is the impact the garbage collection has when triggered during the timing of an algorithm. The pauses can range between, depending on the work done in the garbage collect, 0.468-23.760 ms.
 % \hilight{It is with very large block sizes the difference is clear.}\\
 % \hilight{Point to the differences for the largest block sizes for java v c++}
 
