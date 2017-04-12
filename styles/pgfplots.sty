@@ -1,0 +1,30 @@
+\usepackage{caption,subcaption} % for tables and figures
+\usepgfplotslibrary{groupplots}
+
+\pgfplotsset{compat=1.11,
+    /pgfplots/bar  cycle  list/.style={/pgfplots/cycle  list={%
+            {orange,fill=orange!30!white,mark=none},%
+            {yellow,fill=yellow!30!white,mark=none},%
+            {brown!60!black,fill=brown!30!white,mark=none},%
+            {green,fill=green!30!white,mark=none},%
+            {red,fill=red!30!white,mark=none},%
+            {blue,fill=blue!30!white,mark=none},%
+            {cyan,fill=cyan!30!white,mark=none},%
+            {magenta,fill=magenta!30!white,mark=none},%
+        }
+    },
+}
+
+\pgfdeclarelayer{background}
+\pgfsetlayers{background,main}
+
+\pgfkeys{
+    /tikz/node distance/.append code={
+        \pgfkeyssetvalue{/tikz/node distance value}{#1}
+    },
+    /pgfplots/scale/.style={
+        x post scale=#1,
+        y post scale=#1,
+        z post scale=#1
+    }
+}

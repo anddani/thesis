@@ -1,16 +1,28 @@
 \textit{The conclusions drawn from the discussion will be presented in this chapter as well as an answer to the scientific question of this thesis. Propositions of future work will also be included.}
 
-% As we see, choosing the correct FFT implementation can have a large impact.
+%%%
+% JNI Conclusion
+JNI overhead is very small, at around 1-10 \textmu s for a Qualcomm MSM8994 Snapdragon 810 chip. If a program were to call native code in a loop, it could add up to some overhead. It is only for very small block sizes around $2^4 - 2^6$ where this overhead becomes a substantial part of the total execution time. For larger and more common block sizes, the overhead from JNI is not significant.
 
-% \hilight{When choosing a java version, choose Columbia Iterative (Conclusion)}
-One of the conclusions to draw from the results are that when choosing Java, the best algorithm was the Columbia Iterative. This algorithm neither allocated any memory nor did it re-calculate the trigonometric values needed in the algorithm. It was also the easiest to convert to C++ because it did not include any Java specific constructs (not including method definition). It was also the fastest between it, Princeton Iterative and Princeton Recursive for both Java and C++.
+%%%
+% FFT Conclusion
+One of the conclusions to draw from the results is that when choosing Java, the best algorithm was the Columbia Iterative. This algorithm neither allocated any memory nor did it re-calculate the trigonometric values needed in the algorithm. It was also the easiest to convert to C++ because it did not include any Java specific constructs (not including method definition). It was also the fastest between it, Princeton Iterative and Princeton Recursive for both Java and C++.
 
-\hilight{Native is architecture dependent. Not always the possible to use it}
+%% Optimization Conclusion
+Native optimization is architecture dependent. This means that an application work only work on a subset of Android devices running some architecture(s) the program is compiled for. Further, some optimizations are only possible on a few architectures. This makes some optimizations better than other. An example of a more portable optimization is parallelization.
 
-\hilight{Parallelization as future work. More compatible than vectorization.}
+%%%
+% Float and Doubles Conclusion
+Operations between elements of the \texttt{float} data structure resulted in faster execution time than between \texttt{double}s on the Nexus 6P. It is therefore important to know if \texttt{float} gives sufficient precision for the given application. If high precision is important, \texttt{double} is the primary data type to choose. \texttt{float} is useful for architectures where it is faster to compute between floats or when memory efficiency is important.
+
+%%%
+% Garbage Collection Conclusion
+To prevent garbage collection pauses throughout the program, it is necessary to pre-allocate data structures that should be used in a function that is called multiple times instead of creating one for each call. This reduces the work needed to be done by the garbage collector each time allocated memory goes out of scope, resulting in less garbage collection pauses.
 
 %%%
 % Answer research question
+Based on the results from the experiments, we can see that there is not a significant performance difference between the fastest FFT library for Java in this report compared with its corresponding implementation in native code. Optimization in native code does make native code significantly faster than the fastest Java implementation. This does increase the complexity of the code and decrease the compatibility between devices.
 
 %%%
 % Future work
+One interesting aspect that could be examined for future work is parallelization. This optimization has more compatibility than the optimization in NEON because it can be used in Java. There are different libraries to compare a possible implementation with such as JTransforms \cite{jtransforms:benchmark}.

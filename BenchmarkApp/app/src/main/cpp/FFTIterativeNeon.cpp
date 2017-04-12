@@ -536,8 +536,9 @@ void fftIterativeNeon(struct objFFT* myFFT,
     // Reorder result (it is actually in reverse bit order) and copy to destination array
     for (indexRevBitOrder = 0; indexRevBitOrder < myFFT->FFT_SIZE; indexRevBitOrder++)
     {
-        destArrayReal[indexRevBitOrder] = myFFT->workingArrayReal[myFFT->revBitOrderArray[indexRevBitOrder]];
-        destArrayImag[indexRevBitOrder] = myFFT->workingArrayImag[myFFT->revBitOrderArray[indexRevBitOrder]];
+        int revIndex = myFFT->revBitOrderArray[indexRevBitOrder];
+        destArrayReal[indexRevBitOrder] = myFFT->workingArrayReal[revIndex];
+        destArrayImag[indexRevBitOrder] = myFFT->workingArrayImag[revIndex];
 
     }
 }

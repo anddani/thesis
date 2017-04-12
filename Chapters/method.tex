@@ -63,8 +63,6 @@ In this thesis, the hardware was delimited to one device to prevent the experime
     \end{tabular}
 \end{table}
 
-% During the tests, \hilight{the screen brightness was set to as low as possible} to minimize the risk for CPU throttling.
-
 \subsection{Benchmark Environment}
 During the tests, both cellular and Wi-Fi were switched off. There were no applications running in the background while performing the tests during the experiments. Additionally, there were no foreground services running. This was to prevent any external influences from affecting the results. The software versions, compiler versions and compiler flags are presented in Table \ref{tab:software}. The \texttt{-O3} optimization was used because it resulted in a small performance improvements compared with no optimization. The app was signed and packaged with release as build type. It was then transferred and installed on the device.
 
@@ -123,9 +121,9 @@ Some algorithms require a \texttt{Complex[]}, some require a \texttt{double[]} w
 
 % Describe where the timer starts and where it ends for the tests. Describe why tables are calculated once. Because you seldom do one FFT calculation, it is OK to assume that the creation of the weights array is done before the FFT is run.
 
-\subsection{Memory measurement}
-\hilight{TODO:}
-\emph{The profiling tool provided by Android Studio was used to measure the amount of memory that each test required. The method used to measure the memory was to attach the debugger to the app and measure using the profiler. To measure each test separately and equally, the app was launched freshly between tests and the garbage collector was forced before each test. After this, the memory allocation tracker was activated and then followed by starting a test. When the test had been done executing, the tracker was stopped and the results saved. The memory measure tests were executed at a different time than the execution time tests}
+% \subsection{Memory measurement}
+% \hl{TODO:}
+% \emph{The profiling tool provided by Android Studio was used to measure the amount of memory that each test required. The method used to measure the memory was to attach the debugger to the app and measure using the profiler. To measure each test separately and equally, the app was launched freshly between tests and the garbage collector was forced before each test. After this, the memory allocation tracker was activated and then followed by starting a test. When the test had been done executing, the tracker was stopped and the results saved. The memory measure tests were executed at a different time than the execution time tests}
 
 \section{Evaluation}
 % How will the results be represented? 

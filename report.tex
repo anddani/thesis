@@ -25,106 +25,25 @@
 \usepackage{rotating} % sidewaystable
 \usepackage[export]{adjustbox}
 \usepackage[linesnumbered, ruled]{algorithm2e}
+\usepackage{soul} % Highlight
 
 \usepackage{subcaption}
-
 \usepackage{textcomp}
 
-% \usepackage[charter]{mathdesign}
-% \def\rmdefault{bch} % not scaled
-% \def\ttdefault{blg}
-
-\definecolor{lightgray}{gray}{0.9}
-\definecolor{myblue}{cmyk}{10,0,0,0}
-\definecolor{mymauve}{rgb}{0.58,0,0.82}
-\definecolor{dkgreen}{rgb}{0,0.6,0}
-\lstdefinelanguage
-[mips]{Assembler}
-{
-    morekeywords={loop},
-    keywordstyle=\color{mymauve},
-    classoffset=1,
-    morekeywords={
-        lw,add,addi,sw,lw,bge
-    },
-    keywordstyle=\color{blue},
-    classoffset=0,
-    morecomment=[l][\color{dkgreen}]{\#},
-}
-
-% \lstdefinestyle{customjava}{
-% }
-
-\usepackage{caption,subcaption} % for tables and figures
-\usepgfplotslibrary{groupplots}
-\usetikzlibrary{arrows,matrix,positioning}
-\tikzset{>=latex}
-
-\pgfplotsset{compat=1.11,
-    /pgfplots/bar  cycle  list/.style={/pgfplots/cycle  list={%
-            {orange,fill=orange!30!white,mark=none},%
-            {yellow,fill=yellow!30!white,mark=none},%
-            {brown!60!black,fill=brown!30!white,mark=none},%
-            {green,fill=green!30!white,mark=none},%
-            {red,fill=red!30!white,mark=none},%
-            {blue,fill=blue!30!white,mark=none},%
-            {cyan,fill=cyan!30!white,mark=none},%
-            {magenta,fill=magenta!30!white,mark=none},%
-        }
-    },
-}
-
-\usetikzlibrary{positioning,calc,fit,chains,arrows}
-
-\definecolor{mybluei}{RGB}{124,156,205}
-\definecolor{myblueii}{RGB}{73,121,193}
-\definecolor{mygreen}{RGB}{202,217,126}
-\definecolor{mydarkgreen}{RGB}{38,175,0}
-\definecolor{myred}{RGB}{255,23,23}
-\definecolor{mypink}{RGB}{233,198,235}
-\definecolor{mygrey}{RGB}{191,193,192}
-\definecolor{myyellow}{RGB}{215,226,0}
-
-\definecolor{myeggshell}{RGB}{240,234,214}
-\definecolor{mylightgreen}{RGB}{178,255,140}
-\definecolor{mylightred}{RGB}{255,161,99}
+%%==================================================================
+%% CUSTOM STYLES
+%%==================================================================
+\usepackage{styles/colors}
+\usepackage{styles/c}
+\usepackage{styles/assembler}
+\usepackage{styles/tikz}
+\usepackage{styles/pgfplots}
 
 \lstset{
     commentstyle=\color{green},
     keywordstyle=\color{blue},
     morecomment=[l]{;}
 }
-
-% this length is used to control the width of the light blue frame
-% for the upper part of the diagram
-\newlength\myframesep
-\setlength\myframesep{8pt}
-
-\pgfdeclarelayer{background}
-\pgfsetlayers{background,main}
-
-\pgfkeys{
-    /tikz/node distance/.append code={
-        \pgfkeyssetvalue{/tikz/node distance value}{#1}
-    },
-    /pgfplots/scale/.style={
-        x post scale=#1,
-        y post scale=#1,
-        z post scale=#1
-    }
-}
-
-\newcommand\widernode[5][blueb]{
-    \node[
-        #1,
-        inner sep=0pt,
-        shift=($(#2.south)-(#2.north)$),
-        yshift=-\pgfkeysvalueof{/tikz/node distance value},
-        fit={(#2) (#3)},
-    label=center:{\sffamily\bfseries\color{white}#4}] (#5) {};
-}
-
-\newcommand{\hilight}[1]{\colorbox{yellow}{#1}}
 
 % DEBUG
 \sloppy
