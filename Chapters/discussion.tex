@@ -3,7 +3,7 @@
 \section{JNI Overhead}
 The test results from the JNI tests showed that the overhead is small relative to the computation of the FFT algorithm. As long as it is being run once per calculation, it will not affect the performance significantly. If the JNI is called in a loop when it might not be necessary, the overhead add up and becomes a larger part of the total execution time. Another thing to note is that the execution time stay within about 10 \textmu s. They are also not growing with larger input.
 
-The confidence intervals overlap for many of the values, meaning we cannot say whether or not one input yields a faster execution time than the other. Some larger block sizes has lower execution time than smaller block sizes and some grow for larger input. Because of this, it is reasonable to assume that nothing is done to the arrays when they are passed to the JNI, only pointers are copied. The \texttt{GetPrimitiveArrayCritical()} and \texttt{ReleasePrimitiveArrayCritical()} seem to introduce overhead when used on larger arrays. % <= CITE THIS ... as described in
+The confidence intervals overlap for many of the values, meaning we cannot say whether one input yields a faster execution time than the other. Some larger block sizes has lower execution time than smaller block sizes and some grow for larger input. It is then reasonable to assume that nothing is done to the arrays when they are passed to the JNI, only pointers are copied. The \texttt{GetPrimitiveArrayCritical} and \texttt{ReleasePrimitiveArrayCritical} seem to introduce overhead when used on larger arrays. % <= CITE THIS ... as described in
 
 Regarding the spike in mean in the JNI tests, this can be a cause of one large execution time, skewing the results. This is actually the case for the \textbf{Convert} tests with block size 1024 as seen in Figure~\ref{fig:raw:jni:convert:1024} found in Appendix B. A reason for this could be that the garbage collector began executing during the timing of the test.
 
@@ -15,10 +15,8 @@ The C++ version of the Princeton Recursive algorithm is faster than the Java ver
 
 Additionally, this will increase the work for the garbage collector, increasing the risk of it being triggered during the timing. To prevent the number of allocations you are doing inside a repeated process is to reuse allocated memory. This is done by pre-allocating the necessary arrays or other data structures and overwrite the results for each call. Avoiding calls to new in a method that is called multiple times can increase time and memory efficiency.
 
-% Which is fastest and why (discussion)??
 Of the algorithms tested in the FFT library tests, KISS FFT was the fastest. It is more optimized than the \enquote{basic} implementations found in the Columbia and Princeton algorithms. In C++, Princeton Iterative and Columbia Iterative were the fastest and in Java, Columbia Iterative was the fastest. The reason for it being faster in C++ is, as for Java Princeton Recursive, because it uses the \texttt{Complex} class to represent complex numbers. Because Java Columbia Iterative used double arrays to represent real and imaginary numbers, no new objects needed to be created.
 
-% Which tests triggered the GC??
 The results from Chapter~\ref{ch:gc} - Garbage Collection show that the Java Princeton algorithms caused the GC to run. This behaviour was as expected because they called new during their execution. Java Columbia did not cause any garbage collection as well as any of the C++ algorithms.
 
 One thing that is clear is that the Columbia Iterative algorithm is the best one to choose from of the Java versions. It performs better than both Princeton Iterative and Princeton Recursive. It also allows simple modifications such as changing between using \texttt{float}s or  \texttt{double}s to represent the data.
@@ -41,13 +39,13 @@ When the block sizes are large, a bigger difference is found between the algorit
 
 KISS FFT was the fastest of all the native implementations. This was because of the optimizations done to improve its performance. Using multiple radix implementations of the FFT, it is possible to get more performance at the cost of higher code complexity. It shows the potential in doing small optimizations that does not rely on multi-core or other architecture dependent optimization techniques.
 
+How memory is used differs between algorithms. As seen in Chapter \ref{ch:gc}, only four tests caused the garbage collector to be run. Java Princeton Iterative and Recursive with both \texttt{float} and \texttt{double} as primary data types were the algorithms causing this. This is because they create new arrays each time they are called. The garbage collector need to remove each array that is allocated each call, thus increasing the total work the garbage collector must achieve.
+
 \section{Vectorization as Optimization}
 
 As the results show, vectorization was an improvement in regards to efficiency. This was as expected because it is possible to process more elements for each instruction. The optimizations implicitly implemented loop unrolling because more operations were covered in the body of the loop, resulting in less jump instructions overall, leading to less instructions in total.
 
-The Recursive NEON implementation did not perform much worse than the Iterative version. The difference between the implementations were of a smaller factor than between Princeton Iterative and Recursive. One reason for this could be that because the twiddle factors are moved so that they are closer in cache in a two dimensional array for the recursive version. This could be the reason for the performance increase.
-
-% => Reduce cache misses <=
+The Recursive NEON implementation did not perform much worse than the Iterative version. The difference between the implementations were of a smaller factor than between Princeton Iterative and Recursive. One reason for this could be that because the twiddle factors are moved so that they are closer in cache in a two dimensional array for the recursive version. They are placed in order of access to reduce the number of cache misses. This could be the reason for the performance increase.
 
 % IMPRTNT => MORE PROS <= IMPRTNT 
 
@@ -58,13 +56,8 @@ A possible implementation could be optimized by fitting all the components in ca
 When needing to do a lot of processing with the data in frequency domain, a fast FFT will help in lowering the total execution time. If the data is also transformed back into time domain, for example when you want to filter out noise in an audio signal and play it back. Another reason you would want a fast FFT is when the computation time for some validation need to be as fast as possible. An example of this is voice recognition where we want answers in reasonable time. Another example could be to do image recognition on fingerprints for fast biometric authentication.
 
 \section{Floats and Doubles}
+One reason for using the \texttt{float} data type is that they are stored as 32-bit values instead of 64-bit values as \texttt{double}s are stored. This means that the program requires less memory and reduces the risk of triggering the \texttt{GC\_FOR\_ALLOC} due to the lack of free memory distributed to the process. Most modern devices has pipelined floating point operations to optimize calculations \cite{android:float}. In the case of the experiments performed in this thesis, \texttt{float} performed better than \texttt{double} for the device used in the tests.
 
-% => Specify architectures where it is not true that float is faster than double. <=
+The reason for this is that because \texttt{float}s are half the size of \texttt{double}s, they have a large chance of fitting in cache. Depending on the cache size, it could be beneficial to use the \texttt{float} data type. This is an important point to keep in mind. A reason why you would not use \texttt{float}s is when you need the precision of \texttt{double}s, when the performance difference is not an issue or not existent.
 
-One reason for using the \texttt{float} data type is that they are stored as 32-bit values instead of 64-bit values as \texttt{double}s are stored. This means that the program requires less memory and reduces the risk of triggering the \texttt{GC\_FOR\_ALLOC} due to the lack of free memory distributed to the process. Another reason for choosing to use \texttt{float} is that they can compute faster depending on the architecture of the device. In the case of the experiments performed in this thesis, this was the case for the chosen device.
-
-In addition to this, because \texttt{float}s are half the size of \texttt{double}s, they have a large chance of fitting in cache. Depending on the cache size, it could be beneficial to use the \texttt{float} data type. This is important to have in mind. A reason why you would not use \texttt{float}s is when you need the precision of \texttt{double}s, when the performance difference is not an issue or not existent.
-
-The test results showed that there is a big difference when computing floats and doubles for in both Java and C++. It is also the case that some \texttt{float} tests in Java is almost double the speed of the corresponding algorithm for \texttt{double} in C++. This shows the importance, on some architectures, to choose the appropriate data structures as they can impact the performance greatly.
-
-% => NEW PARAGRAPH ABOUT GC <=
+The test results showed that there is a big difference when computing floats and doubles for in both Java and C++. It is also the case that some \texttt{float} tests in Java is almost double the speed of the corresponding algorithm for \texttt{double} in C++. This shows the importance, on some architectures with different cache sizes, to choose the appropriate data structures as they can impact the performance greatly.
