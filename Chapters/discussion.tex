@@ -47,7 +47,7 @@ As the results show, vectorization was an improvement in regards to efficiency. 
 
 The Recursive NEON implementation did not perform much worse than the Iterative version. The difference between the implementations were of a smaller factor than between Princeton Iterative and Recursive. One reason for this could be that because the twiddle factors are moved so that they are closer in cache in a two dimensional array for the recursive version. They are placed in order of access to reduce the number of cache misses. This could be the reason for the performance increase.
 
-% IMPRTNT => MORE PROS <= IMPRTNT 
+% IMPRTNT => MORE PROS?? <= IMPRTNT 
 
 One disadvantage of using NEON intrinsics is the fact that you cannot run it on all CPU architectures. Not all Android devices runs on ARM, and not all ARMv7 supports NEON \cite{arm:neon}. This makes it less compatible if the program depends on its optimizations. One example of an optimization that is architecture independent and works on all multi-core CPUs is parallelization. Another disadvantage of NEON is that it makes a program harder to maintain. It introduces complexity to the program in addition to JNI. 
 

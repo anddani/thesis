@@ -1,18 +1,8 @@
 \textit{To ensure that the experiments were carried out correctly, multiple tools for measurements were evaluated. Different implementations of the FFT are also compared to choose the ones that would typically be used in an Android project.}
-% Debug/VMDebug libraries
 
-% Preparation
-% Different thread pools
-% Profilers for time and memory measurement
-% Which operations should be included?
-% Garbage collection discussion (You cannot control it)
 \section{Experiment model}
 
 % http://lessthanoptimal.github.io/Java-Matrix-Benchmark/manual/MethodologyRuntimeBenchmark/
-% In java, we cannot control GC, which can lead to varying results
-% In java, do not use string concatenation (will ask for memory)
-% Measure first, optimize later
-% This experiment in this thesis consisted of tests for four different aspects of implementing an FFT in Java and in native code.
 
 In this thesis, different aspects that can affect execution time for an \gls{fft} implementation on Android are tested. To get an overview of how much of an impact they have, the following subjects were investigated:
 
@@ -25,25 +15,18 @@ In this thesis, different aspects that can affect execution time for an \gls{fft
 
 The reason it is relevant to know how significant the \gls{jni} overhead is, is because we want to see for what size of the data the transition time for going between Java and native is irrelevant compared to the total execution time of the \gls{jni} call. This would also show how much repeated calls to native code would affect the performance of a program. By minimizing the number of calls to the \gls{jni}, a program would get potentially faster.
 
-% Q1: Why libraries??
-% A1: Because it is good to know the execution time of multiple implementations and to compare them. What makes one faster than the other?? 
-
 There are many different implementations of the \gls{fft} publicly available that could be of interest for use in a project. This test demonstrates how different libraries compare. It is helpful to see how viable different implementations are on Android, both for C++ libraries and Java libraries. It can also be useful to know how small implementations can perform in terms of speed. The sample sizes used for the \gls{fft} can vary depending on the requirements for the implementation.
 
 If the app needs to be efficient, it is common to lower the number of collected samples. This comes at a cost of accuracy. A fast \gls{fft} implementation allows for more data being passed to the \gls{fft}, improving frequency resolution. This is one of the reasons it is important to have a fast \gls{fft}.
-
-% Q2: Why Optimizations
 
 Optimizations that are only possible in native code is a good demonstration of how a developer can improve performance even more and to perhaps achieve better execution times than what is possible in Java. Having one single source file is valuable, especially for native libraries. This facilitates the process of adding and editing libraries.
 
 Finally, comparing how performance can change depending on which data types that are used is also interesting when choosing a given implementation. Using the \texttt{float} data type, you use less memory at the cost of precision. A \texttt{double} occupies double the amount of space compared to a \texttt{float}, although it allows higher precision numbers. Caching is one aspect that could be utilized by reducing the space required for the results array.
 
 \subsection{Hardware}
-% Screen Brightness
-% Battery percentage?
-% The Google Nexus 6P was used throughout all experiments to get comparable results. The screen brightness was set to medium to prevent heat from affecting the CPU frequency.
 In this thesis, the hardware was delimited to one device to prevent the experiment from being too extensive and allow a more narrow examination of the test performed. The setup used for performing the experiments were the following:
 
+\ifrelease
 \begin{table}[H]
     \centering
     \label{tab:hardware}
@@ -62,10 +45,12 @@ In this thesis, the hardware was delimited to one device to prevent the experime
         \hline
     \end{tabular}
 \end{table}
+\fi
 
 \subsection{Benchmark Environment}
-During the tests, both cellular and Wi-Fi were switched off. There were no applications running in the background while performing the tests during the experiments. Additionally, there were no foreground services running. This was to prevent any external influences from affecting the results. The software versions, compiler versions and compiler flags are presented in Table \ref{tab:software}. The \texttt{-O3} optimization was used because it resulted in a small performance improvements compared with no optimization. The app was signed and packaged with release as build type. It was then transferred and installed on the device.
+During the tests, both cellular and Wi-Fi were switched off. There were no applications running in the background while performing the tests during the experiments. Additionally, there were no foreground services running. This was to prevent any external influences from affecting the results. The software versions, compiler versions and compiler flags are presented in Table~\ref{tab:software}. The \texttt{-O3} optimization was used because it resulted in a small performance improvements compared with no optimization. The app was signed and packaged with release as build type. It was then transferred and installed on the device.
 
+\ifrelease
 \begin{table}[H]
     \centering
     \caption{Software used in the experiments}
@@ -86,15 +71,16 @@ During the tests, both cellular and Wi-Fi were switched off. There were no appli
     \end{tabular}
     \label{tab:software}
 \end{table}
-
+\fi
 
 \subsection{Time measurement}
 There are multiple methods of measuring time in Java. It is possible to measure the wall-clock time using the \texttt{System.currentTimeMillis()} method. There are drawbacks of using wall-clock time for measuring time. Because it is possible to manipulate the wall-clock at any time, it could result in too small or too large runtime depending on seemingly random factors. A more preferable method is to measure elapsed CPU time. This does not depend on a changeable wall-clock but rather use hardware to measure time. It is possible to use both \texttt{System.nanoTime()} and \texttt{SystemClock.elapsedRealtimeNanos()} for this purpose and the latter was used for the tests covered in this thesis.
 
 What is being measured is the time to execute the tests assuming we have the desired input data and will get the required output data where we do not convert the data. Different algorithms accepts different data types as input parameters. When using an algorithm, the easiest solution would be to design your application around the algorithm, its input parameters and its return type. When possible to calculate external dependencies such as lookup tables, this is done outside the timer as it is only done once and not for each call to the \gls{fft}.
 
-Some algorithms require a \texttt{Complex[]}, some require a \texttt{double[]} where the first half contains the real numbers and the second half contain the imaginary numbers and some require two double arrays, one for the real numbers and one for imaginary. Because of these different requirements, the timer encapsulates a function shown in Figure \ref{fig:timer:pos}. The timer would not measure the conversion from the shared input to the input type required by the particular algorithm.
+Some algorithms require a \texttt{Complex[]}, some require a \texttt{double[]} where the first half contains the real numbers and the second half contain the imaginary numbers and some require two double arrays, one for the real numbers and one for imaginary. Because of these different requirements, the timer encapsulates a function shown in Figure~\ref{fig:timer:pos}. The timer would not measure the conversion from the shared input to the input type required by the particular algorithm.
 
+\ifrelease
 \begin{figure}
 \begin{lstlisting}[
         language={C++},
@@ -118,27 +104,21 @@ Some algorithms require a \texttt{Complex[]}, some require a \texttt{double[]} w
 \caption{Timer placements for tests}
 \label{fig:timer:pos}
 \end{figure}
-
-% Describe where the timer starts and where it ends for the tests. Describe why tables are calculated once. Because you seldom do one FFT calculation, it is OK to assume that the creation of the weights array is done before the FFT is run.
+\fi
 
 % \subsection{Memory measurement}
 % \hl{TODO:}
 % \emph{The profiling tool provided by Android Studio was used to measure the amount of memory that each test required. The method used to measure the memory was to attach the debugger to the app and measure using the profiler. To measure each test separately and equally, the app was launched freshly between tests and the garbage collector was forced before each test. After this, the memory allocation tracker was activated and then followed by starting a test. When the test had been done executing, the tracker was stopped and the results saved. The memory measure tests were executed at a different time than the execution time tests}
 
 \section{Evaluation}
-% How will the results be represented? 
-% How will I interpret the results
-% How many times will the programs be executed
-% Statistical significance
-% What is included in the calculation, what is not (adding result to string etc)
-The unit of the resulting data was chosen to be in milliseconds. To be able to have 100 executions run in reasonable time, the maximum size of the input data was limited to $2^{18} = 262144$ for all the tests. The sampling rate is what determines the highest frequency that could be found in the result. The frequency range perceivable by the human ear ($\sim$ 20-22,000 Hz) is covered by the tests. According to the Nyquist theorem, the sampling rate must be at least twice the upper limit (44,000). Because the \gls{fft} is limited to sample sizes of powers of 2, the next power of 2 for a sampling rate of 44,000 is $2^{16}$. This size was chosen as the upper limit for the library comparisons.
+The unit of the resulting data was chosen to be in milliseconds. To be able to have 100 executions run in reasonable time, the maximum size of the input data was limited to $2^{18} = 262144$ for all the tests. We need this many executions of the same test to get statistically significant results. The sampling rate is what determines the highest frequency that could be found in the result. The frequency range perceivable by the human ear ($\sim$ 20-22,000 Hz) is covered by the tests. According to the Nyquist theorem, the sampling rate must be at least twice the upper limit (44,000). Because the \gls{fft} is limited to sample sizes of powers of 2, the next power of 2 for a sampling rate of 44,000 is $2^{16}$. This size was chosen as the upper limit for the library comparisons.
 
 For the SIMD tests, even larger sizes were used. This was to demonstrate how the execution time grew when comparing Java with low level optimizations in C++. Here, sizes up to $2^{18}$ were used because the steps from $2^{16} - 2^{18}$ illustrated this point clearly. It is also with these sizes the garbage collection gets invoked many times due to large allocations.
 
 \subsection{Data representation}
 The block sizes chosen in the \gls{jni} and libraries tests are limited to every power of two from $2^4$ to $2^{16}$. For NEON tests, $2^{16} - 2^{18}$ will be used for the tests. One reason this interval was chosen was because it is relevant to have the largest data the largest number of blocks needed for sample rates of 44100 Hz. To get a resolution of at least one Hz for a frequency span of 0-22050 Hz, an \gls{fft} size of $2^{16}$ (next power of two for 44,100) is required. The lowest sample size was chosen to be $2^{4}$ to get a variety of data points to test for to find the increase in execution time for larger data sizes.
 
-Every test result were not presented in Chapter \ref{ch:results} - Results. In this chapter, only the results that were relevant to discuss about are included. The tests results not found in the results chapter is found in Appendix \ref{appendix:results}. To visualize a result, tables and line graphs were used. \gls{fft} sizes were split into groups labeled \emph{small} size ($2^{4} - 2^{7}$) \emph{medium} size ($2^{8} - 2^{12}$), \emph{large} size ($2^{13} - 2^{16}$) and \emph{extra large} size ($2^{17} - 2^{18}$). This decision was made to allow the discussion to be divided into groups to see where the difference in performance between the algorithms is significant. An accelerometer samples at low frequencies, commonly at the ones grouped as \emph{small}.
+Every test result were not presented in Chapter~\ref{ch:results} - Results. In this chapter, only the results that were relevant to discuss about are included. The tests results not found in the results chapter is found in Appendix~\ref{appendix:results}. To visualize a result, tables and line graphs were used. \gls{fft} sizes were split into groups labeled \emph{small} size ($2^{4} - 2^{7}$) \emph{medium} size ($2^{8} - 2^{12}$), \emph{large} size ($2^{13} - 2^{16}$) and \emph{extra large} size ($2^{17} - 2^{18}$). This decision was made to allow the discussion to be divided into groups to see where the difference in performance between the algorithms is significant. An accelerometer samples at low frequencies, commonly at the ones grouped as \emph{small}.
 
 For the normal \gls{fft} tests, the data type \texttt{double} was used and when presenting the results for the optimization tests, \texttt{float} was used. This was to ensure that we could discuss the differences in efficiency for choosing a specific data type.
 
@@ -175,12 +155,6 @@ Our confidence interval will then be:
 \begin{equation*}
     \bar{X} \pm ME_{\bar{X}}
 \end{equation*}
-
-% Description of which algorithms that are available, which one that is used and why
-% Detailed description/comparison between the code.
-% Correctness test/verification??
-% Complexity
-% Test data: sizes of data, datatypes (long vs int vs float vs double)
 
 \section{JNI Tests}
 For testing the \gls{jni} overhead, four different tests were constructed. The first test had no parameters, returned void and did no calculations. The purpose of this test was to see how long it would take to call the smallest function possible. The function shown in Figure~\ref{fig:jni:empty} was used to test this.
@@ -268,9 +242,6 @@ jdoubleArray jniColumbia(JNIEnv* env,
 \end{figure}
 
 \section{Fast Fourier Transform Algorithms}
-% Small block size
-% Large block size
-
 Different implementations of \gls{fft} were used in the libraries tests. Three of them were implemented in Java and one in C. The implementations chosen were all contained in one file. The following algorithms were used to compare and find a good estimate on the performance of \gls{fft} implementations with varying complexity:
 
 \begin{itemize}
@@ -293,14 +264,10 @@ Conversion to C++ was done manually for Princeton Iterative, Princeton Recursive
 
 Kiss \gls{fft} is a small library that consists of one source file. It is available under the BSD license. To use it, you first call the \texttt{kiss\_fft\_alloc} function which allocates memory for the twiddle factors as well as calculates them. This function returns a struct object that is used as a config. The \gls{fft} is executed when the \texttt{kiss\_fft} function is called. The first parameter for this function is the config returned by the init function, followed by a pointer to the time domain input and a pointer to where the frequency output will be placed.
 
-% Flags: -funroll-loops
-% \cite{FFTW05}
-
-% => http://edp.org/work/Construction.pdf <== OPTIMIZATION
-
 \section{NEON Optimization}
+% => http://edp.org/work/Construction.pdf <== OPTIMIZATION
 % https://aaltodoc.aalto.fi/bitstream/handle/123456789/23201/master_Sugawara_Koki_2016.pdf?sequence=1
 
 Two libraries were chosen to test how vectorization of the loops can improve performance. Both libraries were written in Intel SSE intrinsics and were converted to ARM NEON intrinsics. \texttt{float} was used so that the vector registers could hold 4 elements. It is possible to have the register hold two double precision variables although this would increase the number of instructions needed to calculate the \gls{fft}. For memory locality, this is also inefficient.
 
-The first \gls{fft} algorithm was a recursive implementation written by Anthony Blake~\cite{neon:recursive}. This algorithm has an initializer function that allocates space for the twiddle factors and calculates them. They are placed in a two dimensional array that utilizes memory locality to waste less memory bandwidth \cite{neon:recursive:details}. The converted program is listed in Appendix \ref{lst:recursive:neon}. The second algorithm was an iterative implementation. This library is a straightforward implementation of \gls{fft} with SSE \cite{code:manyears} and was written for a sound source localization system \cite{manyears:site}. The code that was converted from SSE to NEON is presented in Appendix \ref{lst:iterative:neon}.
+The first \gls{fft} algorithm was a recursive implementation written by Anthony Blake~\cite{neon:recursive}. This algorithm has an initializer function that allocates space for the twiddle factors and calculates them. They are placed in a two dimensional array that utilizes memory locality to waste less memory bandwidth \cite{neon:recursive:details}. The converted program is listed in Appendix~\ref{lst:recursive:neon}. The second algorithm was an iterative implementation. This library is a straightforward implementation of \gls{fft} with SSE \cite{code:manyears} and was written for a sound source localization system \cite{manyears:site}. The code that was converted from SSE to NEON is presented in Appendix~\ref{lst:iterative:neon}.

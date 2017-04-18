@@ -4,30 +4,35 @@
 %% PACKAGES
 %%==================================================================
 \usepackage[T1]{fontenc}
-\usepackage{fancybox} % tools for boxes
-\usepackage{verbatim} % Verbatim environments
-\usepackage{multirow} % Fancy tables
-\usepackage[table]{xcolor} % table option for fancy tables
-\usepackage{parskip} % No indent paragraph
-\usepackage{amsmath} % Math environments
-\usepackage{url} % For URLs
-\usepackage{tikz} % Custom figures
-\usepackage{pgfplots} % Plots
-\usepackage{float} % Force figure/table position
-\usepackage{amssymb} % Mathematical symbols in text
-\usepackage{csquotes} % \enquote environment
-\usepackage{listings} % Source code listings
-\usepackage{parcolumns} % Text/figures/tables side-by-side
-\usepackage{array} % Programmable table formatting
-\usepackage{booktabs} % Fancy tables with \toprule \midrule \bottomrule
-\usepackage[acronym]{glossaries} % Glossary
-\usepackage{rotating} % sidewaystable
-\usepackage[export]{adjustbox} % \resizebox
+\usepackage{fancybox}                          % tools for boxes
+\usepackage{verbatim}                          % Verbatim environments
+\usepackage{multirow}                          % Fancy tables
+\usepackage[table]{xcolor}                     % table option for fancy tables
+\usepackage{parskip}                           % No indent paragraph
+\usepackage{amsmath}                           % Math environments
+\usepackage{url}                               % For URLs
+\usepackage{tikz}                              % Custom figures
+\usepackage{pgfplots}                          % Plots
+\usepackage{float}                             % Force figure/table position
+\usepackage{amssymb}                           % Mathematical symbols in text
+\usepackage{csquotes}                          % \enquote environment
+\usepackage{listings}                          % Source code listings
+\usepackage{parcolumns}                        % Text/figures/tables side-by-side
+\usepackage{array}                             % Programmable table formatting
+\usepackage{booktabs}                          % Fancy tables
+\usepackage{rotating}                          % sidewaystable
+\usepackage{soul}                              % Highlight
+\usepackage[export]{adjustbox}                 % \resizebox
+\usepackage[acronym]{glossaries}               % Glossary
 \usepackage[linesnumbered, ruled]{algorithm2e} % Pseudo-code
-\usepackage{soul} % Highlight
 
 \usepackage{subcaption}
 \usepackage{textcomp} % Text Companion Fonts
+
+\newif\ifrelease
+\newif\ifdebug
+% \releasetrue % Show appendix and figures
+\debugtrue % Use sloppy
 
 %%==================================================================
 %% CUSTOM STYLES
@@ -45,7 +50,9 @@
 }
 
 % DEBUG
+\ifdebug
 \sloppy
+\fi
 
 \loadglsentries{glossaries}
 
@@ -121,6 +128,8 @@
 %% APPENDIX
 %%==================================================================
 
+% Show appendix if release is true
+\ifrelease
 \appendix
 
 \makeappendix{Appendix A}{Source code\label{appendix:code}}
@@ -128,5 +137,6 @@
 
 \makeappendix{Appendix B}{Results\label{appendix:results}}
 \input{Appendices/appendixB.tex}
+\fi
 
 \end{document}

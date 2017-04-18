@@ -3,17 +3,9 @@
 
 \textit{This thesis explores differences in performance between bytecode and native libraries. The Fast Fourier Transform algorithm is the focus of this degree project. Experiments was be carried out to investigate how and when it is necessary to implement the Fast Fourier Transform in Java or C++ on Android.}
 
-% Introduce the area (background)?
-% What needs to be done (problem)?
-% What is supposed to be done (purpose)?
-% What is the result of the work (goal)?
-% How will the thesis and work be carried out (methods)?
-% How will the work be presented (outline)?
-
 %%==================================================================
 %% BACKGROUND
 %%==================================================================
-% Introduce company and what they do/why mobile phone technology is relevant today. Lead to the problem.
 \section{Background}
 Android is an operating system for smartphones and as of November 2016 it is the most used \cite{android:os:popularity}. One reason for this is because it was designed to be run on multiple different architectures \cite{android:os:devices}. Google states that they want to ensure that manufacturers and developers have an open platform to use and therefore releases Android as Open Source software \cite{android:os:opensource}. The Android kernel is based on the Linux kernel although with some alterations to support the hardware of mobile devices.
 
@@ -25,24 +17,17 @@ To allow developers to reuse libraries written in C or C++ or just to write low 
 %%==================================================================
 %% PROBLEM
 %%==================================================================
-% Describe problem and form the hypothesis
 \section{Problem}
-Nowadays, mobile phones are fast enough to handle heavy calculations on the devices themselves. To ensure that resources are spent in an efficient manner, this study has investigated how significant the performance boost is when compiling the Fast Fourier Transform (\gls{fft}) with the \gls{ndk} tools instead of by ART. Multiple different implementations of FFTs was be evaluated as well as the effects of the Java Native Interface (\gls{jni}), a framework for communicating between Java code and native shared libraries. The following research question was formed on the basis of these requirements:
+Nowadays, mobile phones are fast enough to handle heavy calculations on the devices themselves. To ensure that resources are spent in an efficient manner, this study has investigated how significant the performance boost is when compiling the Fast Fourier Transform (\gls{fft}) using the \gls{ndk} tools instead of using \gls{art}. Multiple different implementations of FFTs was be evaluated as well as the effects of the Java Native Interface (\gls{jni}), a framework for communicating between Java code and native shared libraries. The following research question was formed on the basis of these requirements:
 
-
-%\hilight{calculation heavy tasks} in C or C++ instead of Java is significant.
 
 \begin{center}
     \textit{Is there a significant performance difference between implementations of a Fast Fourier Transform (FFT) in native code, compiled by Clang, and Dalvik bytecode, compiled by Android Runtime, on Android?}
 \end{center}
 
-
 %%==================================================================
 %% PURPOSE
 %%==================================================================
-% Purpose with the thesis
-% Purpose with the work
-% What the report shows
 \section{Purpose}
 This thesis is a study that evaluates when and where there is a gain in writing a part of an Android application in C++. One purpose of this study is to educate the reader about the process of porting parts of an app to native code using the Native Development Kit (\gls{ndk}). Another is to explore the topic of performance differences between Android Runtime (\gls{art}) and native code compiled by Clang/\gls{llvm}. Because \gls{art} is relatively new (Nov 2014) \cite{android:dalvik:release}, this study would contribute with more information about to the performance of \gls{art} and how it performs compared to native code compiled by the \gls{ndk}. The results of the study can also be used to value the decision of implementing a given algorithm or other solutions in native code instead of Java. It is valuable to know how efficient an implementation in native code is, depending on the size of the data.
 
@@ -50,35 +35,23 @@ The reason you would want to write part of an application in native code is to p
 
 Some of the findings in this thesis can help decide which method of programming for Android that should be used for a given problem. For some problems, it is necessary to choose the appropriate programming method to ensure that an application is smooth and responsive. It is therefore important to know when and where it is necessary to optimize code. Further, when developing for Android there are multiple types of problems that occur and it is relevant to know which problems are worth solving in \gls{ndk} rather than the Software Development Kit (\gls{sdk}).
 
-% The objective of this project is to investigate when and where it would be beneficial to use the NDK instead of Java when developing for Android. This project will cover how an implementation of the FFT benefits from being compiled by the NDK with Clang compared to Java code compiled by Android Runtime. In Android development, you want to use Java when you control how the application should behave and call native functions when a lot of processing is needed. The overhead caused by calling a native function via the Java Native Interface (JNI) is something that must be taken into account when measuring the execution time of the programs.
-
 %%==================================================================
 %% GOAL
 %%==================================================================
-% More general than purpose
-% Titta på JNIkostnad
 \section{Goal}
 The goal of this project was to examine the efficiency of ART and how it compares to natively written code using the \gls{ndk} in combination with the Java Native Interface (\gls{jni}). This report presents a study that investigates the relevance of using the \gls{ndk} to produce efficient code. Further, the cost to pass through the \gls{jni} is also a factor when analysing the code. A discussion about to what extent the efficiency of the program reduces the simplicity of the code is also present. For people who are interested to know about the impacts of implementing algorithms in C++ for Android, this study could be of some use.
 
 %%==================================================================
 %% METHOD
 %%==================================================================
-% Research - Scientific
-% Material (literature), about literature study
-% Thesis (to find material/data and reach results), concerns thesis
-% The work
-% Summarize the methods used and describe them in detail in method chapter.
-% Motivate using Quantitative or Qualitative research methodology
-% Philosophical assumption
-% How did I search databases for information?
 \section{Procedure}
 %% KEYWORDS
 %% NDK, Android, Benchmark*, Java, C, C++, Dalvik, Runtime, ART, efficien*, JNI,
 %% FFT, Fast Fourier Transform, Fourier Transform, 
 
-% How I gathered data.
-The method used to find the relevant literature and previous studies was to search through databases using boolean expressions. By specifying synonyms and required keywords, more literature could be found. Figure~\ref{fig:db:search} contains the expression that was used to narrow down the search results to relevant articles.% For each article found, the liability was assessed by looking at the amount of times it has been referenced (for articles) and if it has been through a peer-review.
+The method used to find the relevant literature and previous studies was to search through databases using boolean expressions. By specifying synonyms and required keywords, more literature could be found. Figure~\ref{fig:db:search} contains the expression that was used to narrow down the search results to relevant articles.
 
+\ifrelease
 \begin{figure}[H]
     \centering
     \begin{align*}
@@ -91,8 +64,9 @@ The method used to find the relevant literature and previous studies was to sear
     \caption{Expression used to filter out relevant articles}
     \label{fig:db:search}
 \end{figure}
+\fi
 
-The execution time of the programs varied because of factors such as scheduling, CPU clock frequency scaling and other uncontrollable behaviour caused by the operating system. To get accurate measurements, a mean of a large numbers of runs were calculated for each program. Additionally, it was also necessary to calculate the standard error of each set of execution times. With the standard error we can determine if the difference in execution time between two programs are statistically significant or not.
+This is a strictly quantitative study, meaning numerical data and its statistical significance was the basis for the discussion. The execution time of the programs varied because of factors such as scheduling, CPU clock frequency scaling and other uncontrollable behaviour caused by the operating system. To get accurate measurements, a mean of a large numbers of runs were calculated for each program. Additionally, it was also necessary to calculate the standard error of each set of execution times. With the standard error we can determine if the difference in execution time between two programs are statistically significant or not.
 
 Three different tests were carried out to gather enough data to be able to make reasonable statements about the results. The first one was to find out how significant the overhead of \gls{jni} is. This is important to know to be able to see exactly how large the cost of going between Java and native code is in relation to the actual work. The second test was a comparison between multiple well known libraries to find how much they differ in performance. In the third and final test, two comparable implementations of \gls{fft} were chosen, one in Java and one in C++. These two implementations were then optimized using different optimization techniques and later compared.
 
@@ -100,7 +74,6 @@ Three different tests were carried out to gather enough data to be able to make 
 %% DELIMITATIONS
 %%==================================================================
 \section{Delimitations}
-% Skip multiple cores?
 This thesis does only cover a performance evaluation of the \gls{fft} algorithm and does not go into detail on other related algorithms. The decision of choosing the \gls{fft} was due to it being a common algorithm to use in signal analysis. This thesis does not investigate the performance differences for \gls{fft} in parallel due to the complexity of the Linux kernel used on Android. This would require more knowledge outside the scope of this project and would result in a too broad of a subject. The number of optimization methods covered in this thesis were also delimited to the scope of this degree project.
 
 \section{Limitations}
@@ -109,23 +82,20 @@ The tests were carried out on the same phone under the same circumstances to red
 %%==================================================================
 %% ETHICS AND SUSTAINABILITY
 %%==================================================================
-% Environment, economics, society
 \section{Ethics and Sustainability}
 An ethical aspect of this thesis is that because there could be people making decisions based on this report, it is important that the conclusions are presented together with its conditions so that there are no misunderstandings. Another important thing is that every detail of each test is explicitly stated so that every test can be recreated by someone else. Finally, it is necessary to be critical of the results and find how reasonable the results are.
 
 Environmental sustainability is kept in mind in this investigation because there is an aspect of battery usage in different implementations of algorithms. The less number of instructions an algorithm require, the faster will the CPU lower its frequency, saving power. This will also have an influence on the user experience and can therefore have an impact on the society aspect of sustainability. If this study is used as a basis on a decision that have an economical impact, this thesis would fulfil the economical sustainability goal.
-
-
 
 %%==================================================================
 %% OUTLINE
 %%==================================================================
 \section{Outline}
 \begin{itemize}
-    \item \textit{\textbf{Chapter \ref{ch:introduction} - Introduction --}} Introduces the reader to the project. This chapter describes why this investigation is beneficial in its field and for whom it is useful.
-    \item \textit{\textbf{Chapter \ref{ch:background} - Background --}} Provides the reader with the necessary information to understand the content of the investigation.
-    \item \textit{\textbf{Chapter \ref{ch:method} - Method --}} Discusses the hardware, software and methods that are the basis of the experiment. Here, the different methods of measurement are compared and the most appropriate are chosen.
-    \item \textit{\textbf{Chapter \ref{ch:results} - Results --}} The results of the experiments are presented here.
-    \item \textit{\textbf{Chapter \ref{ch:discussion} - Discussion --}} Discussion regarding the results as well as the chosen method.
-    \item \textit{\textbf{Chapter \ref{ch:conclusion} - Conclusion --}} Presents what the experiments showed and future work.
+    \item \textit{\textbf{Chapter~\ref{ch:introduction} - Introduction --}} Introduces the reader to the project. This chapter describes why this investigation is beneficial in its field and for whom it is useful.
+    \item \textit{\textbf{Chapter~\ref{ch:background} - Background --}} Provides the reader with the necessary information to understand the content of the investigation.
+    \item \textit{\textbf{Chapter~\ref{ch:method} - Method --}} Discusses the hardware, software and methods that are the basis of the experiment. Here, the different methods of measurement are compared and the most appropriate are chosen.
+    \item \textit{\textbf{Chapter~\ref{ch:results} - Results --}} The results of the experiments are presented here.
+    \item \textit{\textbf{Chapter~\ref{ch:discussion} - Discussion --}} Discussion regarding the results as well as the chosen method.
+    \item \textit{\textbf{Chapter~\ref{ch:conclusion} - Conclusion --}} Presents what the experiments showed and future work.
 \end{itemize}
