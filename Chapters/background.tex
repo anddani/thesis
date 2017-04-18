@@ -93,7 +93,7 @@ lib/
 % GOOD => https://www.fer.unizg.hr/_download/repository/jni.pdf <=
 To be able to call native libraries from Java code, a framework named Java Native Interface (\gls{jni}) is used. Using this interface, C/C++ functions are mapped as methods and primitive data types are converted between Java and C/C++. For this to work, special syntax is needed for \gls{jni} to recognize which method in which class a native function should correspond to.
 
-To mark a function as native in Java, a special keyword called \texttt{native} is used to define a method. The library which implements this method must also be included in the same class. By using the \texttt{System.loadLibrary("mylib")} call, we can specify the name of the shared object that should be loaded. Inside the native library we must follow a function naming convention to map a method to a function. The rules are that you must start the function name with \texttt{Java} followed by the package, class and method name. Figure~\ref{fig:native} demonstrates how to map a method to a native function.
+To mark a function as native in Java, a special keyword called \texttt{native} is used to define a method. The library which implements this method must also be included in the same class. By using the \texttt{System.loadLibrary("mylib")} call, we can specify the name of the static library that should be loaded. Inside the native library we must follow a function naming convention to map a method to a function. The rules are that you must start the function name with \texttt{Java} followed by the package, class and method name. Figure~\ref{fig:native} demonstrates how to map a method to a native function.
 
 \ifrelease
 \begin{figure}[H]
