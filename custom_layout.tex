@@ -1,0 +1,181 @@
+\documentclass[a4paper, 12pt, notitlepage]{report}
+
+%%==================================================================
+%% PACKAGES
+%%==================================================================
+\usepackage[utf8]{inputenc} 
+\usepackage{fancybox}                          % tools for boxes
+\usepackage{verbatim}                          % Verbatim environments
+\usepackage{multirow}                          % Fancy tables
+\usepackage[table]{xcolor}                     % table option for fancy tables
+% \usepackage{parskip}                           % No indent paragraph
+\usepackage{amsmath}                           % Math environments
+\usepackage{url}                               % For URLs
+\usepackage{tikz}                              % Custom figures
+\usepackage{pgfplots}                          % Plots
+\usepackage{float}                             % Force figure/table position
+\usepackage{amssymb}                           % Mathematical symbols in text
+\usepackage{csquotes}                          % \enquote environment
+\usepackage{listings}                          % Source code listings
+\usepackage{parcolumns}                        % Text/figures/tables side-by-side
+\usepackage{array}                             % Programmable table formatting
+\usepackage{booktabs}                          % Fancy tables
+\usepackage{rotating}                          % sidewaystable
+\usepackage{soul}                              % Highlight
+\usepackage[export]{adjustbox}                 % \resizebox
+\usepackage[acronym]{glossaries}               % Glossary
+\usepackage[linesnumbered, ruled]{algorithm2e} % Pseudo-code
+
+\usepackage{subcaption}
+\usepackage{textcomp} % Text Companion Fonts
+
+% Formating
+\usepackage[margin=2.5cm]{geometry} % sets margin around text to 2.5
+
+\newif\ifrelease
+\newif\ifdebug
+% \releasetrue    % Show appendix and figures
+\debugtrue      % Use sloppy
+
+%%==================================================================
+%% CUSTOM STYLES
+%%==================================================================
+\usepackage{styles/colors}
+\usepackage{styles/c}
+\usepackage{styles/assembler}
+\usepackage{styles/tikz}
+\usepackage{styles/pgfplots}
+
+\lstset{%
+    commentstyle=\color{green},
+    keywordstyle=\color{blue},
+    morecomment=[l]{;}
+}
+
+\ifdebug
+\sloppy
+\fi
+
+\loadglsentries{glossaries}
+
+\begin{document}
+
+\pagenumbering{gobble} % Turn off page numbering
+
+%%==================================================================
+%% VARIABLES
+%%==================================================================
+\def\thesistitle{\LARGE Comparing Android Runtime with native:\\ Fast Fourier Transform on Android}
+\def\theauthor{André Danielsson}
+\def\theschool{KTH -- Royal Institute of Technology}
+\def\thedegree{Master's Thesis in Computer Science}
+\def\thesupervisors{%
+    \begin{tabular}{ll}
+        \textbf{KTH Supervisor:} & Erik Isaksson\\
+        \textbf{Bontouch Supervisor:} & Erik Westenius\\
+        \textbf{Examiner:} & Olle Bälter
+    \end{tabular}
+}
+\def\theabstract{\input{Abstract/abstract.tex}}
+\def\thedate{\today}
+\def\thepreface{\input{Preface/preface.tex}}
+\def\thesweabstract{\input{SweAbstract/sweabstract.tex}}
+
+%%==================================================================
+%% PREAMBLES
+%%==================================================================
+% \maketitle
+\begin{titlepage}
+    \centering
+    {\scshape\large\theschool\par}
+    \vspace{1cm}
+    {\scshape\normalsize\thedegree\par}
+    \vspace{1.5cm}
+    {\Large\bfseries\thesistitle\par}
+    \vspace{1.5cm}
+    {\large\itshape\theauthor\par}
+    \vspace{1cm}
+    {\large \today\par}
+
+    \vfill
+
+    {\large\thesupervisors\par}
+    \vspace{1cm}
+\end{titlepage}
+
+%%==================================================================
+%% Abstracts
+%%==================================================================
+\begin{abstract}
+    \input{Abstract/abstract.tex}
+\end{abstract}
+
+\vspace{1cm}
+
+\renewcommand{\abstractname}{Sammanfattning}
+\begin{abstract}
+    \input{SweAbstract/sweabstract.tex}
+\end{abstract}
+
+%%==================================================================
+%% TABLE OF CONTENTS/FIGURES/TABLES
+%%==================================================================
+\tableofcontents
+
+\listoffigures
+
+\listoftables
+
+%%==================================================================
+%% REPORT
+%%==================================================================
+\chapter{Introduction}\label{ch:introduction}
+\pagenumbering{arabic} % Turn on page numbering
+\input{Chapters/introduction.tex}
+\cleardoublepage
+
+\chapter{Background}\label{ch:background}
+\input{Chapters/background.tex}
+\cleardoublepage
+
+\chapter{Method}\label{ch:method}
+\input{Chapters/method.tex}
+\cleardoublepage
+
+\chapter{Results}\label{ch:results}
+\input{Chapters/results.tex}
+\cleardoublepage
+
+\chapter{Discussion}\label{ch:discussion}
+\input{Chapters/discussion.tex}
+\cleardoublepage
+
+\chapter{Conclusion}\label{ch:conclusion}
+\input{Chapters/conclusion.tex}
+\cleardoublepage
+
+%%==================================================================
+%% BIBLIOGRAPHY
+%%==================================================================
+\bibliographystyle{ieeetr}
+
+\bibliography{references}
+
+%%==================================================================
+%% APPENDIX
+%%==================================================================
+
+% Show appendix if release is true
+\ifrelease
+\appendix
+
+\chapter{Source code}\label{appendix:code}
+\input{Appendices/appendixA.tex}
+\cleardoublepage
+
+\chapter{Results}\label{appendix:results}
+\input{Appendices/appendixB.tex}
+\cleardoublepage
+\fi
+
+\end{document}
