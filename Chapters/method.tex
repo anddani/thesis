@@ -15,7 +15,7 @@ In this thesis, different aspects that can affect execution time for an \gls{fft
 
 The reason it is relevant to know how significant the \gls{jni} overhead is, is because we want to see for what data size the transition time for going between Java and native is irrelevant compared to the total execution time of the \gls{jni} call. This would also show how much repeated calls to native code would affect the performance of a program. By minimizing the number of calls to the \gls{jni}, a program would potentially get faster.
 
-There are many different implementations of the \gls{fft} publicly available that could be of interest for use in a project. This test demonstrates how different libraries compare. It is helpful to see how viable different implementations are on Android, both for C++ libraries and Java libraries. It can also be useful to know how small implementations can perform in terms of speed. The sample sizes used for the \gls{fft} can vary depending on the requirements for the implementation.
+There are many different implementations of the \gls{fft} publicly available that could be of interest for use in a project. This test demonstrates how different libraries compare. It is helpful to see how viable different implementations are on Android, both for C++ libraries and for Java libraries. It can also be useful to know how small implementations can perform in terms of speed. The sample sizes used for the \gls{fft} can vary depending on the requirements for the implementation.
 
 If the app needs to be efficient, it is common to lower the number of collected samples. This comes at a cost of accuracy. A fast \gls{fft} implementation allows for more data being passed to the \gls{fft}, improving frequency resolution. This is one of the reasons it is important to have a fast \gls{fft}.
 
@@ -24,7 +24,7 @@ Optimizations that are only possible in native code is a good demonstration of h
 Finally, comparing how performance can change depending on which data types that are used is also interesting when choosing a given implementation. Using the \texttt{float} data type, you use less memory at the cost of precision. A \texttt{double} occupies double the amount of space compared to a \texttt{float}, although it allows higher precision numbers. Caching is one aspect that could be utilized by reducing the space required for the results array.
 
 \subsection{Hardware}
-In this thesis, the hardware was delimited to one device to prevent the experiment from being too extensive and allow a more narrow examination of the test performed. The setup used for performing the experiments were the following:
+In this thesis, the hardware was delimited to one device to prevent the experiment from being too extensive and allow a more narrow examination of the test performed. The setup used for performing the experiments is described in Table~\ref{tab:hardware}.
 
 \ifrelease
 \begin{table}[H]
@@ -74,9 +74,9 @@ During the tests, both cellular and Wi-Fi were switched off. There were no appli
 \fi
 
 \subsection{Time measurement}
-There are multiple methods of measuring time in Java. It is possible to measure the wall-clock time using the \texttt{System.currentTimeMillis()} method. There are drawbacks of using wall-clock time for measuring time. Because it is possible to manipulate the wall-clock at any time, it could result in too small or too large runtime depending on seemingly random factors. A more preferable method is to measure elapsed CPU time. This does not depend on a changeable wall-clock but rather use hardware to measure time. It is possible to use both \texttt{System.nanoTime()} and \texttt{SystemClock.elapsedRealtimeNanos()} for this purpose and the latter was used for the tests covered in this thesis.
+There are multiple methods of measuring time in Java. It is possible to measure the wall-clock time using the \texttt{System.currentTimeMillis()} method. There are drawbacks of using wall-clock time for measuring time. Because it is possible to manipulate the wall-clock at any time, it could result in too small or too large times depending on seemingly random factors. A more preferable method is to measure elapsed CPU time. This does not depend on a changeable wall-clock but rather it uses hardware to measure time. It is possible to use both \texttt{System.nanoTime()} and \texttt{SystemClock.elapsedRealtimeNanos()} for this purpose and the latter was used for the tests covered in this thesis.
 
-What is being measured is the time to execute the tests assuming we have the desired input data and will get the required output data where we do not convert the data. Different algorithms accepts different data types as input parameters. When using an algorithm, the easiest solution would be to design your application around the algorithm, its input parameters and its return type. When possible to calculate external dependencies such as lookup tables, this is done outside the timer as it is only done once and not for each call to the \gls{fft}.
+What is being measured is the time to execute the tests assuming we have the desired input data and will get the required output data where we do not convert the data. Different algorithms accepts different data types as input parameters. When using an algorithm, the easiest solution would be to design your application around the algorithm (its input parameters and its return type). When possible to calculate external dependencies such as lookup tables, this is done outside the timer as it is only done once and not for each call to the \gls{fft}.
 
 Some algorithms require a \texttt{Complex[]}, some require a \texttt{double[]} where the first half contains the real numbers and the second half contain the imaginary numbers and some require two double arrays, one for the real numbers and one for imaginary. Because of these different requirements, the timer encapsulates a function shown in Figure~\ref{fig:timer:pos}. The timer would not measure the conversion from the shared input to the input type required by the particular algorithm.
 
@@ -129,7 +129,7 @@ There are multiple factors that can skew the results when running the tests. Som
 % CPU throttling is another factor that can influence the execution times. This is a feature where the CPU changes its clock frequency to reduce heat generated by being in full load for too long. Different phones have different cooling capability and a profiler can provide information if this occurs during a test. 
 
 \subsection{Statistical significance}
-Because the execution times differ between runs, it is important to calculate the sample mean. This way we have an expected value to use in our results. To get an accurate sample mean, we must have a large sample size. This is the number of runs we choose to execute each test. The following formula calculates the sample mean \cite[p.263]{olofsson2012probability}:
+Because the execution times differ between runs, it is important to calculate the sample mean. This way we have an expected value to use in our results. To get an accurate sample mean, we must have a large sample size. The sample size chosen for the tests in this thesis was 100. The following formula calculates the sample mean \cite[p.263]{olofsson2012probability}:
 
 \begin{equation*}
     \bar{X} = \frac{1}{N} \sum\limits_{k = 1}^{N} X_k
