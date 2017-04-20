@@ -192,21 +192,21 @@
 %-------------------------------------------------------
 % Include preface
 %-------------------------------------------------------
- \thispagestyle{empty}
- \setcounter{secnumdepth}{-2}
- {\ifthenelse{\equal{\lang}{2}}
-  {
-        \chapter*{\hrulefill\\[-4pt]\hfill \sc \bfseries \sffamily 
-                  F{\"o}rord\\[-22pt]\hrulefill\\}
-  }
-  {
-        \chapter*{\hrulefill\\[-4pt]\hfill \sc \bfseries \sffamily 
-                  Preface\\[-22pt]\hrulefill\\}
-  }}
- \setcounter{secnumdepth}{2}
- \noindent #5
-
- \cleardoublepage
+%  \thispagestyle{empty}
+%  \setcounter{secnumdepth}{-2}
+%  {\ifthenelse{\equal{\lang}{2}}
+%   {
+%         \chapter*{\hrulefill\\[-4pt]\hfill \sc \bfseries \sffamily 
+%                   F{\"o}rord\\[-22pt]\hrulefill\\}
+%   }
+%   {
+%         \chapter*{\hrulefill\\[-4pt]\hfill \sc \bfseries \sffamily 
+%                   Preface\\[-22pt]\hrulefill\\}
+%   }}
+%  \setcounter{secnumdepth}{2}
+%  \noindent #5
+%
+%  \cleardoublepage
 
 %-------------------------------------------------------
 % Make Table of Contents
