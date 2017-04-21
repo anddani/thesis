@@ -38,7 +38,7 @@ while (<>) {
 open (my $eng_abstract, '>', "abstract.html") || die $!;
 my $eng_html = "<html>
   <head>
-    <meta charset=\"UTF-8\" />
+    <meta charset=\"UTF-8\">
     <title>$title</title>
   </head>
   <body>
@@ -55,7 +55,7 @@ close $eng_abstract;
 open (my $swe_abstract, '>', "sammanfattning.html") || die $!;
 my $swe_html = "<html>
   <head>
-    <meta charset=\"UTF-8\" />
+    <meta charset=\"UTF-8\">
     <title>$swetitle</title>
   </head>
   <body>
