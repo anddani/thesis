@@ -17,7 +17,7 @@ while (<>) {
     } elsif (m/\\def\\swethesistitle\{\\.*? (.*)\}/) {
         $_ = $1;
         s/\\//g; # Remove newline
-        $title = $_;
+        $swetitle = $_;
     } elsif (m/\\def\\theauthor\{\\.*? (.*)\}/) {
         $author = $1;
     } elsif (m/\\def\\theabstract\{\\input\{(.*)\}\}/) {
