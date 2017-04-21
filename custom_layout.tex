@@ -58,10 +58,6 @@
 
 \loadglsentries{glossaries}
 
-\begin{document}
-
-\pagenumbering{gobble} % Turn off page numbering
-
 %%==================================================================
 %% VARIABLES
 %%==================================================================
@@ -80,6 +76,19 @@
 \def\thedate{\today}
 \def\thepreface{\input{Preface/preface.tex}}
 \def\thesweabstract{\input{SweAbstract/sweabstract.tex}}
+
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE,RO]{\theauthor}
+\fancyhead[RE,LO]{\leftmark}
+\fancyfoot[CE,CO]{\thepage}
+% \fancyfoot[LE,RO]{\thepage}
+
+\begin{document}
+
+\pagenumbering{gobble} % Turn off page numbering
 
 %%==================================================================
 %% PREAMBLES

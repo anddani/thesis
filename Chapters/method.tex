@@ -29,8 +29,8 @@ In this thesis, the hardware was delimited to one device to prevent the experime
 \ifrelease
 \begin{table}[H]
     \centering
-    \label{tab:hardware}
     \caption{Hardware used in the experiments}
+    \label{tab:hardware}
     \begin{tabular}{|l|l|}
         \hline
         \textbf{Phone model} & Google Nexus 6P\\
@@ -46,6 +46,7 @@ In this thesis, the hardware was delimited to one device to prevent the experime
     \end{tabular}
 \end{table}
 \fi
+
 
 \subsection{Benchmark Environment}
 During the tests, both cellular and Wi-Fi were switched off. There were no applications running in the background while performing the tests during the experiments. Additionally, there were no foreground services running. This was to prevent any external influences from affecting the results. The software versions, compiler versions and compiler flags are presented in Table~\ref{tab:software}. The \texttt{-O3} optimization was used because it resulted in a small performance improvements compared with no optimization. The app was signed and packaged with release as build type. It was then transferred and installed on the device.
@@ -195,7 +196,7 @@ For the second test, a function was written (see Figure~\ref{fig:jni:params}) th
 
 In the third test seen in Figure~\ref{fig:jni:conversion}, the \texttt{GetPrimitiveArrayCritical} function was called to be able to access the elements stored in \texttt{arr}. When all the calculations were done, the function would return \texttt{arr}. To overwrite the changes made on \texttt{elements}, a function called \texttt{ReleasePrimitiveArrayCritical} had to be called.
 
-\begin{figure}
+\begin{figure}[H]
 \begin{lstlisting}[
         language={C++},
         basicstyle=\ttfamily\footnotesize,
@@ -215,7 +216,7 @@ jdoubleArray jniVectorConversion(JNIEnv* env, jobject, jdoubleArray arr) {
 
 The fourth and final test evaluated the performance of passing three arrays through \gls{jni} as well as the cost of getting and releasing the arrays. This test was included because the Columbia algorithm requires the precomputed trigonometric tables. This test is presented in Figure~\ref{fig:jni:columbia}.
 
-\begin{figure}
+\begin{figure}[H]
 \begin{lstlisting}[
         language={C++},
         basicstyle=\ttfamily\footnotesize,

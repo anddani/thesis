@@ -1,11 +1,7 @@
 #include "FFTColumbiaConverted.h"
-#define LOGTAG "FFTLIB"
-#include "android/log.h"
 
-
-
-long fftCI(double* x, double* y, int n, double* cos_v, double* sin_v) {
-     int m = (int)(log(n) / log(2));
+void fftCI(double* x, double* y, int n, double* cos_v, double* sin_v) {
+    int m = (int)(log(n) / log(2));
     int i,j,k,n1,n2,a;
     double c,s,e,t1,t2;
 
@@ -26,9 +22,7 @@ long fftCI(double* x, double* y, int n, double* cos_v, double* sin_v) {
     // FFT
     n1 = 0;
     n2 = 1;
-    long long counter = 0L;
 
-    clock_t time1 = clock();
     for (i=0; i < m; i++) {
         n1 = n2;
         n2 = n2 + n2;
@@ -46,14 +40,9 @@ long fftCI(double* x, double* y, int n, double* cos_v, double* sin_v) {
                 y[k+n1] = y[k] - t2;
                 x[k] = x[k] + t1;
                 y[k] = y[k] + t2;
-                counter++;
             }
         }
     }
-
-
-    double total_time = double(clock() - time1);
-    return (long)total_time;
 }
 
 void floatFftCI(float* x, float* y, int n, float* cos_v, float* sin_v) {
@@ -85,7 +74,6 @@ void floatFftCI(float* x, float* y, int n, float* cos_v, float* sin_v) {
     // FFT
     n1 = 0;
     n2 = 1;
-    long long counter = 0L;
 
     for (i=0; i < m; i++) {
         n1 = n2;
@@ -104,7 +92,6 @@ void floatFftCI(float* x, float* y, int n, float* cos_v, float* sin_v) {
                 y[k+n1] = y[k] - t2;
                 x[k] = x[k] + t1;
                 y[k] = y[k] + t2;
-                counter++;
             }
         }
     }

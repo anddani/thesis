@@ -1,49 +1,6 @@
 #include "FFTPrincetonConverted.h"
-#include <android/log.h>
-#include <ctime>
-#include <chrono>
-#define LOGTAG "FFTLIB"
 
 using namespace std;
-using namespace std::chrono;
-
-long fftPrincetonIterative(vector<complex<double> >& x) {
-    int N = x.size();
-
-    // N not power of 2
-    if ((N & (N - 1)) != 0) {
-        return -1;
-    }
-
-
-    // Bit reversal permutation
-    int shift = 1 + __builtin_clz(N);
-    for (unsigned int k = 0; k < N; k++) {
-        int j = reverseInt(k) >> shift;
-        if (j > k) {
-            complex<double> temp = x[j];
-            x[j] = x[k];
-            x[k] = temp;
-        }
-    }
-    clock_t time1 = clock();
-
-    // butterfly updates
-    for (int L = 2; L <= N; L = L+L) {
-        for (int k = 0; k < L/2; k++) {
-            double kth = -2 * k * M_PI / L;
-            complex<double> w(cos(kth), sin(kth));
-            for (int j = 0; j < N/L; j++) {
-                complex<double> tao = w * (x[j*L + k + L/2]);
-                x[j*L + k + L/2] = x[j*L + k] - tao;
-                x[j*L + k]       = x[j*L + k] + tao;
-            }
-        }
-    }
-    double total_time = double(clock() - time1);
-
-    return (long)total_time;
-}
 
 vector<complex<double> > fftPrincetonRecursive(vector<complex<double> > &x) {
     int n = x.size();
@@ -79,7 +36,7 @@ vector<complex<double> > fftPrincetonRecursive(vector<complex<double> > &x) {
     return y;
 }
 
-int floatFftPrincetonIterative(vector<complex<float> >& x) {
+int fftPrincetonIterative(vector<complex<double> >& x) {
     int N = x.size();
 
     // N not power of 2
@@ -87,12 +44,13 @@ int floatFftPrincetonIterative(vector<complex<float> >& x) {
         return -1;
     }
 
+
     // Bit reversal permutation
     int shift = 1 + __builtin_clz(N);
     for (unsigned int k = 0; k < N; k++) {
         int j = reverseInt(k) >> shift;
         if (j > k) {
-            complex<float> temp = x[j];
+            complex<double> temp = x[j];
             x[j] = x[k];
             x[k] = temp;
         }
@@ -101,10 +59,10 @@ int floatFftPrincetonIterative(vector<complex<float> >& x) {
     // butterfly updates
     for (int L = 2; L <= N; L = L+L) {
         for (int k = 0; k < L/2; k++) {
-            float kth = -2 * k * M_PI / L;
-            complex<float> w(cos(kth), sin(kth));
+            double kth = -2 * k * M_PI / L;
+            complex<double> w(cos(kth), sin(kth));
             for (int j = 0; j < N/L; j++) {
-                complex<float> tao = w * (x[j*L + k + L/2]);
+                complex<double> tao = w * (x[j*L + k + L/2]);
                 x[j*L + k + L/2] = x[j*L + k] - tao;
                 x[j*L + k]       = x[j*L + k] + tao;
             }
@@ -145,6 +103,40 @@ vector<complex<float> > floatFftPrincetonRecursive(vector<complex<float> > &x) {
         y[k + n/2] = q[k] - (wk*r[k]);
     }
     return y;
+}
+
+int floatFftPrincetonIterative(vector<complex<float> >& x) {
+    int N = x.size();
+
+    // N not power of 2
+    if ((N & (N - 1)) != 0) {
+        return -1;
+    }
+
+    // Bit reversal permutation
+    int shift = 1 + __builtin_clz(N);
+    for (unsigned int k = 0; k < N; k++) {
+        int j = reverseInt(k) >> shift;
+        if (j > k) {
+            complex<float> temp = x[j];
+            x[j] = x[k];
+            x[k] = temp;
+        }
+    }
+
+    // butterfly updates
+    for (int L = 2; L <= N; L = L+L) {
+        for (int k = 0; k < L/2; k++) {
+            float kth = -2 * k * M_PI / L;
+            complex<float> w(cos(kth), sin(kth));
+            for (int j = 0; j < N/L; j++) {
+                complex<float> tao = w * (x[j*L + k + L/2]);
+                x[j*L + k + L/2] = x[j*L + k] - tao;
+                x[j*L + k]       = x[j*L + k] + tao;
+            }
+        }
+    }
+    return 0;
 }
 
 uint32_t reverseInt(uint32_t x)

@@ -8,7 +8,7 @@
 const double M_PI = 3.14159265358979323846;
 #endif
 
-long fftPrincetonIterative(std::vector<std::complex<double> >& x);
+int fftPrincetonIterative(std::vector<std::complex<double> >& x);
 std::vector<std::complex<double> > fftPrincetonRecursive(std::vector<std::complex<double> > &x);
 
 int floatFftPrincetonIterative(std::vector<std::complex<float> >& x);
