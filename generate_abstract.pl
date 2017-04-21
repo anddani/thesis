@@ -24,16 +24,18 @@ while (<>) {
         open my $file, '<', $1; 
         $abstract = <$file>; 
         close $file;
+        $abstract =~ s/\r\n//g;
         $abstract =~ s/\\texttt\{(.*?)\}/<b>$1<\/b>/g;
     } elsif (m/\\def\\thesweabstract\{\\input\{(.*)\}\}/) {
         open my $file, '<', $1; 
         $sammanfattning = <$file>; 
         close $file;
+        $sammanfattning =~ s/\r\n//g;
         $sammanfattning =~ s/\\texttt\{(.*?)\}/<b>$1<\/b>/g;
     }
 }
 
-open (my $eng_abstract, '>', "abstract_eng.html") || die $!;
+open (my $eng_abstract, '>', "abstract.html") || die $!;
 my $eng_html = "<html>
   <head>
     <meta charset=\"UTF-8\" />
@@ -50,7 +52,7 @@ my $eng_html = "<html>
 print $eng_abstract $eng_html;
 close $eng_abstract;
 
-open (my $swe_abstract, '>', "abstract_swe.html") || die $!;
+open (my $swe_abstract, '>', "sammanfattning.html") || die $!;
 my $swe_html = "<html>
   <head>
     <meta charset=\"UTF-8\" />
