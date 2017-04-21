@@ -3,6 +3,7 @@
 %%==================================================================
 %% PACKAGES
 %%==================================================================
+\usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc} 
 \usepackage{fancybox}                          % tools for boxes
 \usepackage{verbatim}                          % Verbatim environments
@@ -89,7 +90,7 @@
 
 \begin{document}
 
-\pagenumbering{gobble} % Turn off page numbering
+\pagenumbering{gobble} % Disable page numbering
 
 %%==================================================================
 %% PREAMBLES
@@ -116,6 +117,7 @@
 %%==================================================================
 %% Abstracts
 %%==================================================================
+\thispagestyle{empty}
 \begin{abstract}
     \input{Abstract/abstract.tex}
 \end{abstract}
@@ -131,6 +133,7 @@
 %% Glossary
 %%==================================================================
 \newpage
+\thispagestyle{empty}
 \section*{Glossary}
 \input{glossary-table}
 
@@ -138,6 +141,7 @@
 %% TABLE OF CONTENTS/FIGURES/TABLES
 %%==================================================================
 \tableofcontents
+\thispagestyle{empty}
 
 \listoffigures
 
@@ -147,7 +151,7 @@
 %% REPORT
 %%==================================================================
 \chapter{Introduction}\label{ch:introduction}
-\pagenumbering{arabic} % Turn on page numbering
+\pagenumbering{arabic} % Enable page numbering
 \input{Chapters/introduction.tex}
 \cleardoublepage
 
