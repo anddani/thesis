@@ -25,6 +25,7 @@
 \usepackage[export]{adjustbox}                 % \resizebox
 \usepackage[acronym]{glossaries}               % Glossary
 \usepackage[linesnumbered, ruled]{algorithm2e} % Pseudo-code
+\usepackage{enumitem}                          % custom itemize label
 
 \usepackage{subcaption}
 \usepackage{textcomp} % Text Companion Fonts
@@ -125,6 +126,13 @@
 \begin{abstract}
     \input{SweAbstract/sweabstract.tex}
 \end{abstract}
+
+%%==================================================================
+%% Glossary
+%%==================================================================
+\newpage
+\section*{Glossary}
+\input{glossary-table}
 
 %%==================================================================
 %% TABLE OF CONTENTS/FIGURES/TABLES
