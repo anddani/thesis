@@ -37,7 +37,7 @@ jdoubleArray jniColumbia(JNIEnv* env, jobject obj, jdoubleArray arr, jdoubleArra
     return arr;
 }
 
-jlong fftPI(JNIEnv* env, jobject obj, jdoubleArray arr, jint arrTest) {
+jdoubleArray fftPI(JNIEnv* env, jobject obj, jdoubleArray arr, jint arrTest) {
     jsize size = (*env).GetArrayLength(arr);
     jdouble* elements;
     if (arrTest) {
@@ -51,7 +51,7 @@ jlong fftPI(JNIEnv* env, jobject obj, jdoubleArray arr, jint arrTest) {
         x.push_back(std::complex<double>(elements[i], elements[i+1]));
     }
 
-    long ret = fftPrincetonIterative(x); // Run FFT
+    int ret = fftPrincetonIterative(x); // Run FFT
     if (ret == -1) {
         __android_log_print(ANDROID_LOG_INFO, LOGTAG, "-- Size not power of 2");
     }
@@ -68,7 +68,7 @@ jlong fftPI(JNIEnv* env, jobject obj, jdoubleArray arr, jint arrTest) {
     } else {
         (*env).ReleasePrimitiveArrayCritical(arr, elements, 0);
     }
-    return ret;
+    return arr;
 }
 
 jdoubleArray fftPR(JNIEnv* env, jobject obj, jdoubleArray arr, jint arrTest) {
@@ -199,7 +199,7 @@ jfloatArray floatFftColumbiaIterative(JNIEnv* env, jobject obj, jfloatArray arr,
     return arr;
 }
 
-jlong fftColumbiaIterative(JNIEnv* env, jobject obj, jdoubleArray arr, jdoubleArray cos, jdoubleArray sin, jint arrTest) {
+jdoubleArray fftColumbiaIterative(JNIEnv* env, jobject obj, jdoubleArray arr, jdoubleArray cos, jdoubleArray sin, jint arrTest) {
     jsize size = (*env).GetArrayLength(arr);
     jdouble* elements;
     jdouble* sin_v;
@@ -217,7 +217,7 @@ jlong fftColumbiaIterative(JNIEnv* env, jobject obj, jdoubleArray arr, jdoubleAr
 
     int N = size/2;
 
-    long ret = fftCI(elements, elements+N, N, cos_v, sin_v);
+    fftCI(elements, elements+N, N, cos_v, sin_v);
 
     if (arrTest) {
         (*env).ReleaseDoubleArrayElements(arr, elements, 0);
@@ -228,7 +228,7 @@ jlong fftColumbiaIterative(JNIEnv* env, jobject obj, jdoubleArray arr, jdoubleAr
         (*env).ReleasePrimitiveArrayCritical(sin, sin_v, 0);
         (*env).ReleasePrimitiveArrayCritical(cos, cos_v, 0);
     }
-    return ret;
+    return arr;
 }
 
 void fftKissInit(JNIEnv* env, jobject, jint half) {
@@ -366,9 +366,9 @@ static JNINativeMethod s_methods[] {
         {"jni_columbia",                      "([D[D[D)[D", (void*)jniColumbia},
 
         // Converted FFTs
-        {"fft_princeton_iterative",           "([DI)J",     (void*)fftPI},
+        {"fft_princeton_iterative",           "([DI)[D",     (void*)fftPI},
         {"fft_princeton_recursive",           "([DI)[D",     (void*)fftPR},
-        {"fft_columbia_iterative",            "([D[D[DI)J", (void*)fftColumbiaIterative},
+        {"fft_columbia_iterative",            "([D[D[DI)[D", (void*)fftColumbiaIterative},
         // Kiss FFT
         {"fft_kiss_init",                     "(I)V",       (void*)fftKissInit},
         {"fft_kiss",                          "([DI)[D",    (void*)fftKiss},

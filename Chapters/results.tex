@@ -318,7 +318,7 @@ Table~\ref{tab:result:gc:trigger} shows how many garbage collections that were t
     \resizebox{\columnwidth}{!}{%
         \rowcolors{1}{}{lightgray}
         \begin{tabular}{|l|rr|rr|}\toprule
-            \textbf{Block size} & \textbf{\# partial} & \textbf{tot. time (ms)} & \textbf{\# sticky} & \textbf{tot. time (ms)}\\\midrule
+            \textbf{Algorithm} & \textbf{\# partial} & \textbf{tot. time (ms)} & \textbf{\# sticky} & \textbf{tot. time (ms)}\\\midrule
             \textbf{Java Columbia Iterative}        & 0 & 0 & 0 & 0\\
             \textbf{Java Princeton Iterative}       & 336 & 2,016.48 & 349 & 2,046.88\\
             \textbf{Java Princeton Recursive}       & 360 & 645.88 & 85 & 486.97\\
@@ -341,3 +341,15 @@ Table~\ref{tab:result:gc:trigger} shows how many garbage collections that were t
 \fi
 
 % NEW TESTS, FIND WHEN GC IS TRIGGERED 
+
+\begin{table}
+    \rowcolors{1}{}{lightgray}
+    \begin{tabular}{lr}\toprule
+        \textbf{Algorithm} & \textbf{Block Size}\\\midrule
+        \textbf{Princeton Iterative} & \\
+        \textbf{Princeton Recursive} & \\
+        \textbf{Float Princeton Iterative} & \\
+        \textbf{Float Princeton Recursive} & \\
+        \bottomrule
+    \end{tabular}
+\end{table}

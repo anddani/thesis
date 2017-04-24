@@ -53,7 +53,7 @@ public class MyBenchmarkHandler extends Handler {
         sb.append(" executionTime: ");
 
         Benchmark bm = benchmarks[sizeId];
-
+        Log.d(LOG_TAG, Constants.ALGORITHM_NAMES[algorithm] + " blockSize " + size);
         while (iterations-- > 0) {
             long time = 0L;
             switch (Constants.ALGORITHMS.values()[algorithm]) {

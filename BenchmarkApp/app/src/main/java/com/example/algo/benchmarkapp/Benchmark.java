@@ -318,7 +318,7 @@ public class Benchmark {
 
         long start = SystemClock.elapsedRealtimeNanos();
 
-        long nativeResult = fft_princeton_iterative(z, arrTest);
+        fft_princeton_iterative(z, arrTest);
 
         long stop = SystemClock.elapsedRealtimeNanos() - start;
 
@@ -332,7 +332,7 @@ public class Benchmark {
 
             checkCorrectness(x, "FFT JAVA ITER PRINCETON GIVES INCORRECT OUTPUT");
         }
-        return nativeResult;
+        return stop;
     }
 
     public long FFTCppRecursivePrinceton(int arrTest) {
@@ -398,7 +398,7 @@ public class Benchmark {
 
         long start = SystemClock.elapsedRealtimeNanos();
 
-        long nativeResult = fft_columbia_iterative(z, dTableCos, dTableSin, arrTest);
+        fft_columbia_iterative(z, dTableCos, dTableSin, arrTest);
 
         long stop = SystemClock.elapsedRealtimeNanos() - start;
 
@@ -417,7 +417,7 @@ public class Benchmark {
 
             checkCorrectness(x, "FFT JAVA ITER COLUMBIA GIVES INCORRECT OUTPUT");
         }
-        return nativeResult;
+        return stop;
     }
 
     public long FFTCppKiss(int arrTest) {
@@ -662,9 +662,9 @@ public class Benchmark {
     public native double[] jni_vector_conversion(double[] arr);
     public native double[] jni_columbia(double[] arr, double[] cos, double[] sin);
 
-    public native long     fft_princeton_iterative(double[] arr, int arrTest);
+    public native double[] fft_princeton_iterative(double[] arr, int arrTest);
     public native double[] fft_princeton_recursive(double[] arr, int arrTest);
-    public native long     fft_columbia_iterative(double[] arr, double[] cos, double[] sin, int arrTest);
+    public native double[] fft_columbia_iterative(double[] arr, double[] cos, double[] sin, int arrTest);
 
     public native void     fft_kiss_init(int N);
     public native double[] fft_kiss(double[] arr, int arrTest);

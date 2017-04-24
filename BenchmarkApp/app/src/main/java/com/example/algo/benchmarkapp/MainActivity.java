@@ -32,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String DEFAULT_N = "44000";
 
+    private static final String LOG_TAG = "BenchmarkApp";
+
     private MyBenchmarkHandler mTaskHandler;
 
     // Run this handler on UI thread. Updates log

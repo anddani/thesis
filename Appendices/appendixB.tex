@@ -1,47 +1,82 @@
 \section{Data}
 
 \begin{table}[H]
-    \centering
-    \caption{Data for Java Columbia Iterative, Time (ms)}
-    \label{tab:appendix:raw:java:columbia:iterative}
-    \input{Data/results/FFT/raw_Java_Columbia_Iterative.tex}
+    \captionsetup{font=scriptsize}
+    \begin{minipage}{0.48\textwidth}
+        % \centering
+        \caption{Data for Java Princeton Iterative, Time (ms)}
+        \label{tab:appendix:raw:java:princeton:iterative}
+        \resizebox{\columnwidth}{!}{%
+            \input{Data/results/FFT/raw_Java_Princeton_Iterative.tex}
+        }
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.48\textwidth}
+        % \centering
+        \caption{Data for Java Princeton Recursive, Time (ms)}
+        \label{tab:appendix:raw:java:princeton:recursive}
+        \resizebox{\columnwidth}{!}{%
+            \input{Data/results/FFT/raw_Java_Princeton_Recursive.tex}
+        }
+    \end{minipage}
 \end{table}
 
 \begin{table}[H]
-    \centering
-    \caption{Data for Java Princeton Iterative, Time (ms)}
-    \label{tab:appendix:raw:java:princeton:iterative}
-    \input{Data/results/FFT/raw_Java_Princeton_Iterative.tex}
+    \captionsetup{font=scriptsize}
+    \begin{minipage}{0.48\textwidth}
+        \caption{Data for C++ Princeton Iterative, Time (ms)}
+        \label{tab:appendix:raw:cpp:princeton:iterative}
+        \resizebox{\columnwidth}{!}{%
+            \input{Data/results/FFT/raw_CPP_Princeton_Iterative.tex}
+        }
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.48\textwidth}
+        \caption{Data for C++ Princeton Recursive, Time (ms)}
+        \label{tab:appendix:raw:cpp:princeton:recursive}
+        \resizebox{\columnwidth}{!}{%
+            \input{Data/results/FFT/raw_CPP_Princeton_Recursive.tex}
+        }
+    \end{minipage}
 \end{table}
 
 \begin{table}[H]
-    \centering
-    \caption{Data for Java Princeton Recursive, Time (ms)}
-    \label{tab:appendix:raw:java:princeton:recursive}
-    \input{Data/results/FFT/raw_Java_Princeton_Recursive.tex}
+    \captionsetup{font=scriptsize}
+    \begin{minipage}{0.48\textwidth}
+        \caption{Data for Java Columbia Iterative, Time (ms)}
+        \label{tab:appendix:raw:java:columbia:iterative}
+        \resizebox{\columnwidth}{!}{%
+            \input{Data/results/FFT/raw_Java_Columbia_Iterative.tex}
+        }
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.48\textwidth}
+        \caption{Data for C++ Columbia Iterative, Time (ms)}
+        \label{tab:appendix:raw:cpp:columbia:iterative}
+        \resizebox{\columnwidth}{!}{%
+            \input{Data/results/FFT/raw_CPP_Columbia_Iterative.tex}
+        }
+    \end{minipage}
 \end{table}
 
 \begin{table}[H]
-    \centering
-    \caption{Data for C++ Columbia Iterative, Time (ms)}
-    \label{tab:appendix:raw:cpp:columbia:iterative}
-    \input{Data/results/FFT/raw_CPP_Columbia_Iterative.tex}
+    \captionsetup{font=scriptsize}
+    \begin{minipage}{0.48\textwidth}
+        \caption{Data for C++ NEON Iterative, Time (ms)}
+        \label{tab:appendix:raw:cpp:neon:iterative}
+        \resizebox{\columnwidth}{!}{%
+            \input{Data/results/NEON/raw_CPP_Iterative.tex}
+        }
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.48\textwidth}
+        \caption{Data for C++ NEON Recursive, Time (ms)}
+        \label{tab:appendix:raw:cpp:neon:recursive}
+        \resizebox{\columnwidth}{!}{%
+            \input{Data/results/NEON/raw_CPP_Recursive.tex}
+        }
+    \end{minipage}
 \end{table}
-
-\begin{table}[H]
-    \centering
-    \caption{Data for C++ Princeton Iterative, Time (ms)}
-    \label{tab:appendix:raw:cpp:princeton:iterative}
-    \input{Data/results/FFT/raw_CPP_Princeton_Iterative.tex}
-\end{table}
-
-\begin{table}[H]
-    \centering
-    \caption{Data for C++ Princeton Recursive, Time (ms)}
-    \label{tab:appendix:raw:cpp:princeton:recursive}
-    \input{Data/results/FFT/raw_CPP_Princeton_Recursive.tex}
-\end{table}
-
 
 \begin{table}[H]
     \centering
@@ -50,14 +85,42 @@
     \input{Data/results/FFT/raw_CPP_KISS.tex}
 \end{table}
 
-\subsection{JNI}
-
+\begin{table}[H]
+    \captionsetup{font=scriptsize}
+    \begin{minipage}{0.48\textwidth}
+        \caption{Data for JNI No Params, Time (\textmu s)}
+        \label{tab:appendix:raw:jni:noparams}
+        \resizebox{\columnwidth}{!}{%
+            \input{Data/results/JNI/raw_Benchmark_no_params.tex}
+        }
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.48\textwidth}
+        \caption{Data for JNI Vector, Time (\textmu s)}
+        \label{tab:appendix:raw:jni:vector}
+        \resizebox{\columnwidth}{!}{%
+            \input{Data/results/JNI/raw_Benchmark_vector.tex}
+        }
+    \end{minipage}
+\end{table}
 
 \begin{table}[H]
-    \centering
-    \caption{Data for JNI Vector, Time (ms)}
-    \label{tab:appendix:raw:jni:vector}
-    \input{Data/results/JNI/raw_Benchmark_vector.tex}
+    \captionsetup{font=scriptsize}
+    \begin{minipage}{0.48\textwidth}
+        \caption{Data for JNI Convert, Time (\textmu s)}
+        \label{tab:appendix:raw:jni:convert}
+        \resizebox{\columnwidth}{!}{%
+            \input{Data/results/JNI/raw_Benchmark_convert.tex}
+        }
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.48\textwidth}
+        \caption{Data for JNI Columbia, Time (\textmu s)}
+        \label{tab:appendix:raw:jni:columbia}
+        \resizebox{\columnwidth}{!}{%
+            \input{Data/results/JNI/raw_Benchmark_Columbia.tex}
+        }
+    \end{minipage}
 \end{table}
 
 \begin{table}[H]
@@ -364,7 +427,8 @@
 %     \label{fig:appendix:arr:line}
 % \end{table}
 
-\begin{figure}
+\section{Raw}
+\begin{figure}[H]
     \begin{verbatim}
 2.448 1.875 2.343 1.927 2.343 2.188 1.875 4.114 1.927 1.927 1.927 2.24
 1.927 2.187 2.032 1.927 1.875 2.344 1.928 1.927 1.979 2.032 1.979 2.188
