@@ -110,8 +110,6 @@ public class MainActivity extends AppCompatActivity {
                 // Clear screen between tests
                 logTextView.setText("");
 
-//                BenchmarkMessage message = new BenchmarkMessage(Constants.BENCHMARK_ITER, alg, Constants.BLOCK_SIZES.length-1);
-//                mTaskHandler.obtainMessage(0, message).sendToTarget();
                 for (int sizeId = 0; sizeId < Constants.BLOCK_SIZES.length; sizeId++) {
                     BenchmarkMessage message = new BenchmarkMessage(Constants.BENCHMARK_ITER, alg, sizeId);
                     mTaskHandler.obtainMessage(0, message).sendToTarget();
