@@ -41,7 +41,7 @@ When the block sizes are large, a bigger difference is found between the algorit
 
 KISS FFT was the fastest of all the native implementations. This was because of the optimizations done to improve its performance. Using multiple radix implementations of the FFT, it is possible to get more performance at the cost of higher code complexity. It shows the potential in doing small optimizations that does not rely on multi-core or other architecture dependent optimization techniques.
 
-How memory is used differs between algorithms. As seen in Chapter~\ref{ch:gc}, only four tests caused the garbage collector to be run. Java Princeton Iterative and Recursive with both \texttt{float} and \texttt{double} as primary data types were the algorithms causing this. This is because they create new arrays each time they are called. The garbage collector needed to remove each array that was allocated each call, thus increasing the total work the garbage collector must achieve.
+How memory is used differs between algorithms. As seen in Chapter~\ref{ch:gc}, only four tests caused the garbage collector to be run. Java Princeton Iterative and Recursive with both \texttt{float} and \texttt{double} as primary data types were the algorithms causing this. This is because they create new arrays each time they are called. The garbage collector needed to remove each array that was allocated each call, thus increasing the total work the garbage collector must achieve. It is also possible to see that for the \texttt{double} data type, garbage collection are caused earlier than for \texttt{float} during the tests.
 
 \section{Vectorization as Optimization}
 
