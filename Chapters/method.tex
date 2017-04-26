@@ -4,7 +4,7 @@
 
 % http://lessthanoptimal.github.io/Java-Matrix-Benchmark/manual/MethodologyRuntimeBenchmark/
 
-In this thesis, different aspects that can affect execution time for an \gls{fft} implementation on Android were tested. To get an overview of how much of an impact they have, the following subjects were investigated:
+In this thesis, different aspects that can affect execution time for an \gls{fft} implementation on Android were tested. A link to a repository where the benchmark program, data and algorithms can be found in Appendix~\ref{appendix:code}. To get an overview of how much of an impact they have, the following subjects were investigated:
 
 \begin{enumerate}
     \item Cost of using the \gls{jni}
@@ -271,4 +271,4 @@ Kiss \gls{fft} is a small library that consists of one source file. It is availa
 
 Two libraries were chosen to test how vectorization of the loops can improve performance. Both libraries were written in Intel SSE intrinsics and were converted to ARM NEON intrinsics. \texttt{float} was used so that the vector registers could hold 4 elements. It is possible to have the register hold two double precision variables although this would increase the number of instructions needed to calculate the \gls{fft}. For memory locality, this is also inefficient.
 
-The first \gls{fft} algorithm was a recursive implementation written by Anthony Blake~\cite{neon:recursive}. This algorithm has an initializer function that allocates space for the twiddle factors and calculates them. They are placed in a two dimensional array that utilizes memory locality to waste less memory bandwidth \cite{neon:recursive:details}. The converted program is listed in Appendix~\ref{lst:recursive:neon}. The second algorithm was an iterative implementation. This library is a straightforward implementation of \gls{fft} with SSE \cite{code:manyears} and was written for a sound source localization system \cite{manyears:site}. The code that was converted from SSE to NEON is presented in Appendix~\ref{lst:iterative:neon}.
+The first \gls{fft} algorithm was a recursive implementation written by Anthony Blake~\cite{neon:recursive}. This algorithm has an initializer function that allocates space for the twiddle factors and calculates them. They are placed in a two dimensional array that utilizes memory locality to waste less memory bandwidth \cite{neon:recursive:details}. The converted program is located in the project repo with the following link\footnote{\url{https://github.com/anddani/thesis/blob/master/BenchmarkApp/app/src/main/cpp/FFTRecursiveNeon.cpp}}. The second algorithm was an iterative implementation. This library is a straightforward implementation of \gls{fft} with SSE \cite{code:manyears} and was written for a sound source localization system \cite{manyears:site}. The code that was converted from SSE to NEON is located at this URL\footnote{\url{https://github.com/anddani/thesis/blob/master/BenchmarkApp/app/src/main/cpp/FFTIterativeNeon.cpp}}.

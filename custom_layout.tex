@@ -31,6 +31,9 @@
 \usepackage{subcaption}
 \usepackage{textcomp} % Text Companion Fonts
 
+\usepackage{etoolbox}
+\apptocmd{\sloppy}{\hbadness 10000\relax}{}{}
+
 % Formating
 \usepackage[margin=2.5cm]{geometry} % sets margin around text to 2.5
 
@@ -83,9 +86,10 @@
 \usepackage{fancyhdr}
 \pagestyle{fancy}
 \fancyhf{}
-\fancyhead[LE,RO]{\theauthor}
-\fancyhead[RE,LO]{\leftmark}
-\fancyfoot[CE,CO]{\thepage}
+\setlength{\headheight}{14.5pt}
+\fancyhead[L]{\theauthor}
+\fancyhead[R]{\leftmark}
+\fancyfoot[C]{\thepage}
 % \fancyfoot[LE,RO]{\thepage}
 
 \begin{document}
