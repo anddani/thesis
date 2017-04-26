@@ -1,0 +1,1071 @@
+numTests 5
+JNI Benchmark_no_params blockSize: 10 executionTime: 9.531 3.75 2.969 2.708 2.76 
+
+JNI Benchmark_no_params blockSize: 20 executionTime: 3.385 2.552 2.656 2.812 3.49 
+
+JNI Benchmark_no_params blockSize: 30 executionTime: 2.604 2.552 2.5 2.5 2.5 
+
+JNI Benchmark_no_params blockSize: 40 executionTime: 3.073 2.761 2.5 2.552 2.552 
+
+JNI Benchmark_no_params blockSize: 50 executionTime: 3.437 2.552 2.552 2.552 2.708 
+
+JNI Benchmark_no_params blockSize: 60 executionTime: 2.708 2.604 2.656 2.656 2.552 
+
+JNI Benchmark_no_params blockSize: 70 executionTime: 2.812 2.604 2.605 2.552 2.552 
+
+JNI Benchmark_no_params blockSize: 80 executionTime: 2.916 2.447 2.5 2.5 2.605 
+
+JNI Benchmark_no_params blockSize: 90 executionTime: 2.604 2.5 2.604 2.448 2.5 
+
+JNI Benchmark_no_params blockSize: 100 executionTime: 2.552 2.448 2.5 2.5 2.553 
+
+JNI Benchmark_no_params blockSize: 110 executionTime: 2.604 64.532 3.698 2.761 2.552 
+
+JNI Benchmark_no_params blockSize: 120 executionTime: 3.229 2.604 2.656 2.604 2.552 
+
+JNI Benchmark_no_params blockSize: 130 executionTime: 3.594 2.656 2.552 2.604 2.604 
+
+JNI Benchmark_no_params blockSize: 140 executionTime: 2.865 2.552 2.5 2.604 2.552 
+
+JNI Benchmark_no_params blockSize: 150 executionTime: 3.489 2.552 2.657 2.708 2.552 
+
+JNI Benchmark_no_params blockSize: 160 executionTime: 3.229 2.448 2.553 5.781 2.5 
+
+JNI Benchmark_no_params blockSize: 170 executionTime: 3.281 2.553 2.5 2.76 2.604 
+
+JNI Benchmark_no_params blockSize: 180 executionTime: 2.813 2.604 2.552 2.552 3.854 
+
+JNI Benchmark_no_params blockSize: 190 executionTime: 2.969 2.605 2.5 2.813 2.5 
+
+JNI Benchmark_no_params blockSize: 200 executionTime: 3.594 2.604 2.5 2.552 2.604 
+
+JNI Benchmark_no_params blockSize: 210 executionTime: 3.021 2.552 2.708 3.177 2.552 
+
+JNI Benchmark_no_params blockSize: 220 executionTime: 2.813 2.448 2.657 2.605 2.552 
+
+JNI Benchmark_no_params blockSize: 230 executionTime: 2.76 2.552 2.604 2.552 2.656 
+
+JNI Benchmark_no_params blockSize: 240 executionTime: 2.969 2.552 2.604 2.553 2.552 
+
+JNI Benchmark_no_params blockSize: 250 executionTime: 2.812 2.604 2.552 2.604 2.656 
+
+JNI Benchmark_no_params blockSize: 260 executionTime: 2.812 2.5 2.604 2.656 2.604 
+
+JNI Benchmark_no_params blockSize: 270 executionTime: 2.917 2.552 2.552 2.656 2.552 
+
+JNI Benchmark_no_params blockSize: 280 executionTime: 2.969 2.604 2.657 2.604 2.708 
+
+JNI Benchmark_no_params blockSize: 290 executionTime: 2.708 2.604 2.552 2.604 2.5 
+
+JNI Benchmark_no_params blockSize: 300 executionTime: 2.708 2.708 2.865 2.709 2.552 
+
+JNI Benchmark_no_params blockSize: 310 executionTime: 2.761 2.604 2.709 2.656 2.604 
+
+JNI Benchmark_no_params blockSize: 320 executionTime: 2.76 2.604 2.552 2.812 2.656 
+
+JNI Benchmark_no_params blockSize: 330 executionTime: 2.969 2.552 2.708 2.604 2.552 
+
+JNI Benchmark_no_params blockSize: 340 executionTime: 2.969 2.656 2.552 2.605 2.604 
+
+JNI Benchmark_no_params blockSize: 350 executionTime: 3.229 2.604 2.76 2.76 2.604 
+
+JNI Benchmark_no_params blockSize: 360 executionTime: 3.177 2.604 2.552 2.604 2.709 
+
+JNI Benchmark_no_params blockSize: 370 executionTime: 2.76 2.604 2.5 2.552 2.552 
+
+JNI Benchmark_no_params blockSize: 380 executionTime: 2.708 2.552 2.552 2.656 2.552 
+
+JNI Benchmark_no_params blockSize: 390 executionTime: 3.438 2.656 2.708 2.917 2.657 
+
+JNI Benchmark_no_params blockSize: 400 executionTime: 3.073 2.709 2.552 2.709 2.552 
+
+JNI Benchmark_no_params blockSize: 410 executionTime: 3.177 2.656 2.604 2.761 2.552 
+
+JNI Benchmark_no_params blockSize: 420 executionTime: 3.541 2.604 2.604 2.552 2.656 
+
+JNI Benchmark_no_params blockSize: 430 executionTime: 2.917 2.604 2.656 3.177 2.604 
+
+JNI Benchmark_no_params blockSize: 440 executionTime: 2.916 2.605 2.605 2.708 2.552 
+
+JNI Benchmark_no_params blockSize: 450 executionTime: 2.865 2.657 2.604 2.552 2.604 
+
+JNI Benchmark_no_params blockSize: 460 executionTime: 2.969 2.552 2.552 2.761 2.708 
+
+JNI Benchmark_no_params blockSize: 470 executionTime: 3.02 2.604 2.708 2.76 2.709 
+
+JNI Benchmark_no_params blockSize: 480 executionTime: 2.813 2.605 2.657 2.656 2.656 
+
+JNI Benchmark_no_params blockSize: 490 executionTime: 3.334 2.552 2.656 2.709 2.708 
+
+JNI Benchmark_no_params blockSize: 500 executionTime: 2.812 2.656 2.552 2.76 2.604 
+
+JNI Benchmark_no_params blockSize: 510 executionTime: 3.177 2.708 2.656 2.656 2.812 
+
+JNI Benchmark_no_params blockSize: 520 executionTime: 3.073 2.657 2.708 2.604 2.813 
+
+JNI Benchmark_no_params blockSize: 530 executionTime: 2.761 2.552 2.552 2.657 2.605 
+
+JNI Benchmark_no_params blockSize: 540 executionTime: 2.656 2.968 2.604 2.708 2.604 
+
+JNI Benchmark_no_params blockSize: 550 executionTime: 3.542 2.604 2.552 2.604 2.604 
+
+JNI Benchmark_no_params blockSize: 560 executionTime: 3.125 2.812 2.812 2.604 2.552 
+
+JNI Benchmark_no_params blockSize: 570 executionTime: 3.229 2.604 2.656 2.76 2.76 
+
+JNI Benchmark_no_params blockSize: 580 executionTime: 3.125 2.604 2.552 2.604 2.552 
+
+JNI Benchmark_no_params blockSize: 590 executionTime: 3.073 2.552 2.552 2.656 2.812 
+
+JNI Benchmark_no_params blockSize: 600 executionTime: 3.125 2.761 2.656 2.761 2.604 
+
+JNI Benchmark_no_params blockSize: 610 executionTime: 2.813 3.021 2.604 2.656 2.604 
+
+JNI Benchmark_no_params blockSize: 620 executionTime: 3.073 2.605 2.708 2.604 2.604 
+
+JNI Benchmark_no_params blockSize: 630 executionTime: 2.969 2.553 2.604 2.553 2.864 
+
+JNI Benchmark_no_params blockSize: 640 executionTime: 2.865 2.656 2.604 2.761 2.864 
+
+JNI Benchmark_no_params blockSize: 650 executionTime: 3.177 2.552 2.552 2.604 2.552 
+
+JNI Benchmark_no_params blockSize: 660 executionTime: 2.917 2.657 2.604 2.812 2.552 
+
+JNI Benchmark_no_params blockSize: 670 executionTime: 2.761 2.604 2.813 2.604 2.604 
+
+JNI Benchmark_no_params blockSize: 680 executionTime: 2.708 2.604 2.552 2.656 4.48 
+
+JNI Benchmark_no_params blockSize: 690 executionTime: 2.291 1.98 1.875 1.875 1.823 
+
+JNI Benchmark_no_params blockSize: 700 executionTime: 2.031 1.771 1.771 1.875 1.823 
+
+JNI Benchmark_no_params blockSize: 710 executionTime: 1.98 1.771 1.823 2.084 1.875 
+
+JNI Benchmark_no_params blockSize: 720 executionTime: 2.24 1.875 1.823 1.823 1.823 
+
+JNI Benchmark_no_params blockSize: 730 executionTime: 2.344 1.823 1.771 1.822 1.823 
+
+JNI Benchmark_no_params blockSize: 740 executionTime: 2.032 1.823 1.823 1.823 1.927 
+
+JNI Benchmark_no_params blockSize: 750 executionTime: 2.968 1.823 1.823 1.875 1.823 
+
+JNI Benchmark_no_params blockSize: 760 executionTime: 2.083 2.188 1.771 1.823 1.823 
+
+JNI Benchmark_no_params blockSize: 770 executionTime: 2.136 1.875 1.823 1.823 1.771 
+
+JNI Benchmark_no_params blockSize: 780 executionTime: 1.979 1.823 1.771 1.823 1.771 
+
+JNI Benchmark_no_params blockSize: 790 executionTime: 2.031 2.084 1.979 1.823 1.823 
+
+JNI Benchmark_no_params blockSize: 800 executionTime: 2.083 1.823 1.823 1.979 1.979 
+
+JNI Benchmark_no_params blockSize: 810 executionTime: 2.031 1.979 1.771 1.771 1.823 
+
+JNI Benchmark_no_params blockSize: 820 executionTime: 2.084 1.823 1.822 1.823 1.823 
+
+JNI Benchmark_no_params blockSize: 830 executionTime: 2.187 1.771 1.771 1.823 1.823 
+
+JNI Benchmark_no_params blockSize: 840 executionTime: 2.031 1.823 1.77 1.823 1.771 
+
+JNI Benchmark_no_params blockSize: 850 executionTime: 2.396 1.927 1.823 1.823 1.823 
+
+JNI Benchmark_no_params blockSize: 860 executionTime: 2.083 1.823 1.771 1.771 1.822 
+
+JNI Benchmark_no_params blockSize: 870 executionTime: 2.187 1.771 1.771 1.771 1.771 
+
+JNI Benchmark_no_params blockSize: 880 executionTime: 2.187 1.823 1.823 1.822 1.771 
+
+JNI Benchmark_no_params blockSize: 890 executionTime: 2.083 1.823 1.823 1.719 1.771 
+
+JNI Benchmark_no_params blockSize: 900 executionTime: 2.24 1.771 1.771 1.823 1.823 
+
+JNI Benchmark_no_params blockSize: 910 executionTime: 2.083 1.771 1.823 1.823 1.823 
+
+JNI Benchmark_no_params blockSize: 920 executionTime: 2.084 1.823 1.771 1.823 1.823 
+
+JNI Benchmark_no_params blockSize: 930 executionTime: 2.084 1.823 1.771 1.771 1.77 
+
+JNI Benchmark_no_params blockSize: 940 executionTime: 2.292 1.771 1.875 1.823 1.771 
+
+JNI Benchmark_no_params blockSize: 950 executionTime: 2.084 1.771 1.771 1.771 1.822 
+
+JNI Benchmark_no_params blockSize: 960 executionTime: 2.135 1.823 1.77 1.77 1.823 
+
+JNI Benchmark_no_params blockSize: 970 executionTime: 2.083 1.822 1.771 1.823 1.823 
+
+JNI Benchmark_no_params blockSize: 980 executionTime: 2.084 1.771 1.823 1.771 1.823 
+
+JNI Benchmark_no_params blockSize: 990 executionTime: 2.083 1.823 1.771 1.823 1.823 
+
+JNI Benchmark_no_params blockSize: 1000 executionTime: 2.083 1.823 1.823 1.771 1.823 
+
+JNI Benchmark_vector blockSize: 10 executionTime: 5.469 3.542 3.385 3.334 3.542 
+
+JNI Benchmark_vector blockSize: 20 executionTime: 3.646 3.438 3.385 3.437 3.489 
+
+JNI Benchmark_vector blockSize: 30 executionTime: 3.645 3.438 3.385 3.437 3.489 
+
+JNI Benchmark_vector blockSize: 40 executionTime: 3.594 3.542 3.437 3.646 3.542 
+
+JNI Benchmark_vector blockSize: 50 executionTime: 3.646 3.489 3.438 3.489 3.541 
+
+JNI Benchmark_vector blockSize: 60 executionTime: 3.541 3.385 3.542 3.594 3.438 
+
+JNI Benchmark_vector blockSize: 70 executionTime: 3.542 3.542 3.594 3.333 3.49 
+
+JNI Benchmark_vector blockSize: 80 executionTime: 3.542 3.49 3.489 3.386 3.437 
+
+JNI Benchmark_vector blockSize: 90 executionTime: 3.75 3.49 3.437 3.541 3.385 
+
+JNI Benchmark_vector blockSize: 100 executionTime: 3.75 3.437 3.385 3.698 3.542 
+
+JNI Benchmark_vector blockSize: 110 executionTime: 3.698 3.437 3.541 3.541 3.594 
+
+JNI Benchmark_vector blockSize: 120 executionTime: 3.594 3.594 3.594 3.489 3.75 
+
+JNI Benchmark_vector blockSize: 130 executionTime: 3.646 3.906 3.386 3.49 3.438 
+
+JNI Benchmark_vector blockSize: 140 executionTime: 4.115 3.541 3.489 3.542 3.333 
+
+JNI Benchmark_vector blockSize: 150 executionTime: 3.594 3.594 3.75 3.333 3.542 
+
+JNI Benchmark_vector blockSize: 160 executionTime: 3.907 3.489 3.489 3.385 3.594 
+
+JNI Benchmark_vector blockSize: 170 executionTime: 3.541 3.386 3.906 3.646 3.437 
+
+JNI Benchmark_vector blockSize: 180 executionTime: 3.802 3.697 5.885 3.698 4.948 
+
+JNI Benchmark_vector blockSize: 190 executionTime: 4.219 3.645 3.438 3.646 3.386 
+
+JNI Benchmark_vector blockSize: 200 executionTime: 3.958 4.271 3.646 3.854 3.386 
+
+JNI Benchmark_vector blockSize: 210 executionTime: 4.635 3.854 3.594 3.75 3.594 
+
+JNI Benchmark_vector blockSize: 220 executionTime: 4.427 3.75 5.989 3.49 3.594 
+
+JNI Benchmark_vector blockSize: 230 executionTime: 4.323 3.958 3.438 3.854 3.698 
+
+JNI Benchmark_vector blockSize: 240 executionTime: 3.698 4.011 4.531 3.906 3.75 
+
+JNI Benchmark_vector blockSize: 250 executionTime: 4.167 3.958 4.011 3.958 3.698 
+
+JNI Benchmark_vector blockSize: 260 executionTime: 5.157 3.959 4.375 3.646 4.375 
+
+JNI Benchmark_vector blockSize: 270 executionTime: 3.959 3.907 4.011 4.323 3.75 
+
+JNI Benchmark_vector blockSize: 280 executionTime: 5.312 5.469 4.792 4.584 4.739 
+
+JNI Benchmark_vector blockSize: 290 executionTime: 5.521 4.479 4.74 4.166 3.854 
+
+JNI Benchmark_vector blockSize: 300 executionTime: 6.146 4.531 4.427 4.114 5.834 
+
+JNI Benchmark_vector blockSize: 310 executionTime: 9.896 10.573 4.479 4.271 37.916 
+
+JNI Benchmark_vector blockSize: 320 executionTime: 5.26 7.083 4.844 4.636 4.427 
+
+JNI Benchmark_vector blockSize: 330 executionTime: 12.656 8.698 4.843 5.208 4.114 
+
+JNI Benchmark_vector blockSize: 340 executionTime: 5.521 7.031 6.354 4.427 3.959 
+
+JNI Benchmark_vector blockSize: 350 executionTime: 4.323 4.427 4.323 4.479 4.167 
+
+JNI Benchmark_vector blockSize: 360 executionTime: 36.927 4.375 5.26 4.375 4.583 
+
+JNI Benchmark_vector blockSize: 370 executionTime: 6.875 4.271 3.802 4.063 6.302 
+
+JNI Benchmark_vector blockSize: 380 executionTime: 5.26 4.427 4.531 4.948 4.531 
+
+JNI Benchmark_vector blockSize: 390 executionTime: 5.104 4.635 3.907 3.854 4.011 
+
+JNI Benchmark_vector blockSize: 400 executionTime: 9.531 5.417 3.75 3.281 3.386 
+
+JNI Benchmark_vector blockSize: 410 executionTime: 3.386 48.75 2.812 2.864 2.864 
+
+JNI Benchmark_vector blockSize: 420 executionTime: 4.062 2.969 3.021 3.073 2.76 
+
+JNI Benchmark_vector blockSize: 430 executionTime: 4.948 2.812 3.073 2.708 3.125 
+
+JNI Benchmark_vector blockSize: 440 executionTime: 3.593 2.76 2.812 2.708 3.855 
+
+JNI Benchmark_vector blockSize: 450 executionTime: 3.177 2.76 4.011 2.812 3.281 
+
+JNI Benchmark_vector blockSize: 460 executionTime: 3.386 3.178 4.584 2.865 2.916 
+
+JNI Benchmark_vector blockSize: 470 executionTime: 3.542 2.968 5.677 2.969 2.864 
+
+JNI Benchmark_vector blockSize: 480 executionTime: 3.177 2.969 2.968 2.864 3.23 
+
+JNI Benchmark_vector blockSize: 490 executionTime: 3.125 3.229 2.76 2.917 2.865 
+
+JNI Benchmark_vector blockSize: 500 executionTime: 2.864 2.865 2.917 2.864 2.812 
+
+JNI Benchmark_vector blockSize: 510 executionTime: 3.333 2.864 3.385 2.812 3.125 
+
+JNI Benchmark_vector blockSize: 520 executionTime: 3.073 2.917 2.813 3.281 2.865 
+
+JNI Benchmark_vector blockSize: 530 executionTime: 4.583 2.812 2.969 2.864 2.865 
+
+JNI Benchmark_vector blockSize: 540 executionTime: 3.125 2.917 3.073 2.969 3.073 
+
+JNI Benchmark_vector blockSize: 550 executionTime: 3.282 2.812 3.073 2.812 3.073 
+
+JNI Benchmark_vector blockSize: 560 executionTime: 3.802 3.177 2.917 3.281 2.969 
+
+JNI Benchmark_vector blockSize: 570 executionTime: 3.073 3.385 2.865 2.76 3.594 
+
+JNI Benchmark_vector blockSize: 580 executionTime: 3.021 2.969 3.177 2.969 2.969 
+
+JNI Benchmark_vector blockSize: 590 executionTime: 3.645 3.177 2.916 3.125 2.969 
+
+JNI Benchmark_vector blockSize: 600 executionTime: 2.969 2.864 2.968 3.072 2.917 
+
+JNI Benchmark_vector blockSize: 610 executionTime: 3.021 3.02 2.864 2.812 2.864 
+
+JNI Benchmark_vector blockSize: 620 executionTime: 3.385 2.969 3.386 3.073 3.073 
+
+JNI Benchmark_vector blockSize: 630 executionTime: 3.177 3.125 2.969 5.104 3.386 
+
+JNI Benchmark_vector blockSize: 640 executionTime: 3.073 3.073 2.916 3.073 3.073 
+
+JNI Benchmark_vector blockSize: 650 executionTime: 3.333 3.021 2.917 3.021 3.021 
+
+JNI Benchmark_vector blockSize: 660 executionTime: 3.125 3.385 3.021 2.813 3.542 
+
+JNI Benchmark_vector blockSize: 670 executionTime: 3.333 3.125 3.073 3.073 4.01 
+
+JNI Benchmark_vector blockSize: 680 executionTime: 3.073 3.073 3.542 2.968 3.23 
+
+JNI Benchmark_vector blockSize: 690 executionTime: 3.385 3.021 3.698 3.229 3.385 
+
+JNI Benchmark_vector blockSize: 700 executionTime: 3.125 2.917 2.917 2.969 3.177 
+
+JNI Benchmark_vector blockSize: 710 executionTime: 3.021 3.021 2.969 2.969 2.969 
+
+JNI Benchmark_vector blockSize: 720 executionTime: 4.011 2.969 2.968 2.969 3.021 
+
+JNI Benchmark_vector blockSize: 730 executionTime: 3.594 3.281 2.968 2.968 3.333 
+
+JNI Benchmark_vector blockSize: 740 executionTime: 3.437 3.021 2.917 2.917 2.865 
+
+JNI Benchmark_vector blockSize: 750 executionTime: 3.281 3.334 3.177 2.969 2.969 
+
+JNI Benchmark_vector blockSize: 760 executionTime: 3.333 2.865 2.916 3.177 3.073 
+
+JNI Benchmark_vector blockSize: 770 executionTime: 3.125 3.073 3.177 2.865 3.542 
+
+JNI Benchmark_vector blockSize: 780 executionTime: 3.177 3.125 2.812 2.865 4.062 
+
+JNI Benchmark_vector blockSize: 790 executionTime: 3.49 3.437 4.167 3.282 3.333 
+
+JNI Benchmark_vector blockSize: 800 executionTime: 4.323 3.594 3.281 3.594 3.334 
+
+JNI Benchmark_vector blockSize: 810 executionTime: 4.011 3.125 6.354 3.385 3.125 
+
+JNI Benchmark_vector blockSize: 820 executionTime: 3.802 3.281 3.385 5.937 3.802 
+
+JNI Benchmark_vector blockSize: 830 executionTime: 4.375 3.802 4.323 4.219 3.125 
+
+JNI Benchmark_vector blockSize: 840 executionTime: 4.323 2.864 2.969 2.969 3.386 
+
+JNI Benchmark_vector blockSize: 850 executionTime: 3.125 2.968 2.917 3.542 3.021 
+
+JNI Benchmark_vector blockSize: 860 executionTime: 3.75 3.073 5.469 2.969 3.125 
+
+JNI Benchmark_vector blockSize: 870 executionTime: 3.281 3.855 2.969 3.489 3.75 
+
+JNI Benchmark_vector blockSize: 880 executionTime: 3.437 3.229 3.489 3.437 5.417 
+
+JNI Benchmark_vector blockSize: 890 executionTime: 8.75 2.917 3.802 5.052 2.969 
+
+JNI Benchmark_vector blockSize: 900 executionTime: 4.948 3.281 3.282 2.917 3.229 
+
+JNI Benchmark_vector blockSize: 910 executionTime: 4.01 3.021 2.916 2.917 3.177 
+
+JNI Benchmark_vector blockSize: 920 executionTime: 3.855 3.854 2.968 5.312 2.968 
+
+JNI Benchmark_vector blockSize: 930 executionTime: 3.385 3.229 2.969 2.917 3.073 
+
+JNI Benchmark_vector blockSize: 940 executionTime: 3.489 3.229 3.75 3.334 3.073 
+
+JNI Benchmark_vector blockSize: 950 executionTime: 3.49 3.229 3.073 4.114 3.229 
+
+JNI Benchmark_vector blockSize: 960 executionTime: 3.177 3.906 3.177 2.969 3.125 
+
+JNI Benchmark_vector blockSize: 970 executionTime: 3.334 3.334 3.177 3.282 3.178 
+
+JNI Benchmark_vector blockSize: 980 executionTime: 3.438 3.125 2.968 2.969 3.23 
+
+JNI Benchmark_vector blockSize: 990 executionTime: 3.282 3.49 3.438 3.333 3.49 
+
+JNI Benchmark_vector blockSize: 1000 executionTime: 3.646 3.593 3.073 3.073 3.125 
+
+JNI Benchmark_convert blockSize: 10 executionTime: 12.708 6.25 5.573 5.833 5.521 
+
+JNI Benchmark_convert blockSize: 20 executionTime: 6.198 5.364 5.573 5.313 5.885 
+
+JNI Benchmark_convert blockSize: 30 executionTime: 6.406 5.521 5.156 5.156 5.313 
+
+JNI Benchmark_convert blockSize: 40 executionTime: 6.302 6.406 5.364 6.771 6.094 
+
+JNI Benchmark_convert blockSize: 50 executionTime: 6.979 5.521 5.26 5.573 5.208 
+
+JNI Benchmark_convert blockSize: 60 executionTime: 6.562 5.625 6.407 5.156 5.157 
+
+JNI Benchmark_convert blockSize: 70 executionTime: 6.25 5.469 5.312 6.093 5.365 
+
+JNI Benchmark_convert blockSize: 80 executionTime: 6.563 5.885 6.302 5.208 5.312 
+
+JNI Benchmark_convert blockSize: 90 executionTime: 6.042 5.313 6.198 7.344 5.573 
+
+JNI Benchmark_convert blockSize: 100 executionTime: 5.886 6.042 5.573 5.312 6.459 
+
+JNI Benchmark_convert blockSize: 110 executionTime: 6.094 5.469 6.407 5.417 5.208 
+
+JNI Benchmark_convert blockSize: 120 executionTime: 5.573 6.458 5.781 5.781 5.313 
+
+JNI Benchmark_convert blockSize: 130 executionTime: 6.041 7.865 5.573 5.416 5.261 
+
+JNI Benchmark_convert blockSize: 140 executionTime: 6.459 5.417 5.312 6.354 5.469 
+
+JNI Benchmark_convert blockSize: 150 executionTime: 5.781 5.26 6.094 5.469 5.469 
+
+JNI Benchmark_convert blockSize: 160 executionTime: 10.053 5.833 5.416 5.885 6.875 
+
+JNI Benchmark_convert blockSize: 170 executionTime: 6.197 5.833 7.031 5.312 5.573 
+
+JNI Benchmark_convert blockSize: 180 executionTime: 5.834 6.198 5.312 5.26 6.979 
+
+JNI Benchmark_convert blockSize: 190 executionTime: 5.885 5.417 5.26 6.406 5.625 
+
+JNI Benchmark_convert blockSize: 200 executionTime: 6.042 6.302 5.312 5.365 5.573 
+
+JNI Benchmark_convert blockSize: 210 executionTime: 7.5 5.417 5.417 7.031 5.782 
+
+JNI Benchmark_convert blockSize: 220 executionTime: 5.989 5.521 6.302 5.312 5.364 
+
+JNI Benchmark_convert blockSize: 230 executionTime: 6.615 5.729 5.313 5.365 6.146 
+
+JNI Benchmark_convert blockSize: 240 executionTime: 6.406 5.677 6.51 5.313 5.521 
+
+JNI Benchmark_convert blockSize: 250 executionTime: 5.885 6.198 5.312 5.313 7.292 
+
+JNI Benchmark_convert blockSize: 260 executionTime: 6.823 6.354 6.406 6.198 6.042 
+
+JNI Benchmark_convert blockSize: 270 executionTime: 6.145 8.594 6.511 6.511 6.459 
+
+JNI Benchmark_convert blockSize: 280 executionTime: 8.49 7.344 6.823 7.552 7.969 
+
+JNI Benchmark_convert blockSize: 290 executionTime: 8.281 7.084 6.146 5.938 6.666 
+
+JNI Benchmark_convert blockSize: 300 executionTime: 7.447 6.719 6.145 6.354 6.666 
+
+JNI Benchmark_convert blockSize: 310 executionTime: 7.865 6.51 6.875 7.396 7.084 
+
+JNI Benchmark_convert blockSize: 320 executionTime: 8.542 13.125 6.667 7.916 7.812 
+
+JNI Benchmark_convert blockSize: 330 executionTime: 9.948 7.031 6.771 6.979 6.615 
+
+JNI Benchmark_convert blockSize: 340 executionTime: 8.021 9.115 6.771 7.135 8.594 
+
+JNI Benchmark_convert blockSize: 350 executionTime: 9.011 8.594 7.5 8.698 9.584 
+
+JNI Benchmark_convert blockSize: 360 executionTime: 6.51 4.843 5.312 5.104 5.677 
+
+JNI Benchmark_convert blockSize: 370 executionTime: 6.041 4.844 4.948 5.365 5.469 
+
+JNI Benchmark_convert blockSize: 380 executionTime: 6.042 7.188 5.156 4.688 4.843 
+
+JNI Benchmark_convert blockSize: 390 executionTime: 6.198 4.74 4.792 5.104 5.052 
+
+JNI Benchmark_convert blockSize: 400 executionTime: 5.989 4.74 5.572 4.948 4.635 
+
+JNI Benchmark_convert blockSize: 410 executionTime: 6.354 4.583 5.521 5.625 4.896 
+
+JNI Benchmark_convert blockSize: 420 executionTime: 5.677 5.416 4.844 5.0 5.417 
+
+JNI Benchmark_convert blockSize: 430 executionTime: 5.573 4.583 5.468 4.323 4.635 
+
+JNI Benchmark_convert blockSize: 440 executionTime: 5.157 4.532 4.635 5.0 4.531 
+
+JNI Benchmark_convert blockSize: 450 executionTime: 5.938 4.739 4.583 5.0 4.688 
+
+JNI Benchmark_convert blockSize: 460 executionTime: 5.468 9.635 6.458 7.24 8.021 
+
+JNI Benchmark_convert blockSize: 470 executionTime: 5.782 5.052 10.052 7.084 5.625 
+
+JNI Benchmark_convert blockSize: 480 executionTime: 8.698 6.615 5.73 5.729 5.365 
+
+JNI Benchmark_convert blockSize: 490 executionTime: 6.562 5.104 4.948 5.572 9.011 
+
+JNI Benchmark_convert blockSize: 500 executionTime: 6.719 5.521 5.729 5.781 7.292 
+
+JNI Benchmark_convert blockSize: 510 executionTime: 7.188 5.886 6.093 5.573 5.677 
+
+JNI Benchmark_convert blockSize: 520 executionTime: 6.458 5.833 5.469 5.156 7.343 
+
+JNI Benchmark_convert blockSize: 530 executionTime: 6.719 6.042 14.427 6.719 7.344 
+
+JNI Benchmark_convert blockSize: 540 executionTime: 8.438 5.781 8.386 5.677 5.833 
+
+JNI Benchmark_convert blockSize: 550 executionTime: 13.021 8.438 6.771 11.25 9.635 
+
+JNI Benchmark_convert blockSize: 560 executionTime: 10.677 11.198 9.688 7.708 8.073 
+
+JNI Benchmark_convert blockSize: 570 executionTime: 7.552 7.917 12.865 20.469 10.052 
+
+JNI Benchmark_convert blockSize: 580 executionTime: 8.385 13.438 5.886 9.271 9.323 
+
+JNI Benchmark_convert blockSize: 590 executionTime: 6.198 14.167 9.219 8.907 11.407 
+
+JNI Benchmark_convert blockSize: 600 executionTime: 9.739 11.719 9.948 8.073 5.521 
+
+JNI Benchmark_convert blockSize: 610 executionTime: 16.51 8.855 10.0 9.218 10.0 
+
+JNI Benchmark_convert blockSize: 620 executionTime: 8.333 5.417 8.23 9.843 8.959 
+
+JNI Benchmark_convert blockSize: 630 executionTime: 9.792 11.719 5.834 5.417 6.719 
+
+JNI Benchmark_convert blockSize: 640 executionTime: 9.635 6.094 6.563 5.729 6.458 
+
+JNI Benchmark_convert blockSize: 650 executionTime: 8.906 16.927 6.303 9.896 6.25 
+
+JNI Benchmark_convert blockSize: 660 executionTime: 9.531 5.0 5.313 5.156 4.844 
+
+JNI Benchmark_convert blockSize: 670 executionTime: 6.719 4.531 4.479 4.062 4.322 
+
+JNI Benchmark_convert blockSize: 680 executionTime: 6.458 4.531 4.27 4.687 4.74 
+
+JNI Benchmark_convert blockSize: 690 executionTime: 5.26 9.011 4.792 4.375 4.427 
+
+JNI Benchmark_convert blockSize: 700 executionTime: 5.573 4.375 4.532 4.427 4.479 
+
+JNI Benchmark_convert blockSize: 710 executionTime: 5.157 4.166 4.115 4.219 4.375 
+
+JNI Benchmark_convert blockSize: 720 executionTime: 5.625 4.219 4.844 4.583 4.375 
+
+JNI Benchmark_convert blockSize: 730 executionTime: 4.947 4.375 4.27 4.218 4.271 
+
+JNI Benchmark_convert blockSize: 740 executionTime: 5.261 4.271 4.166 4.375 4.531 
+
+JNI Benchmark_convert blockSize: 750 executionTime: 5.052 4.74 4.427 4.271 4.843 
+
+JNI Benchmark_convert blockSize: 760 executionTime: 4.844 4.375 4.583 4.584 4.791 
+
+JNI Benchmark_convert blockSize: 770 executionTime: 5.521 5.0 4.74 4.635 4.792 
+
+JNI Benchmark_convert blockSize: 780 executionTime: 5.989 5.521 4.948 4.896 4.895 
+
+JNI Benchmark_convert blockSize: 790 executionTime: 5.937 4.739 4.844 7.813 5.208 
+
+JNI Benchmark_convert blockSize: 800 executionTime: 5.521 5.052 4.74 5.312 5.937 
+
+JNI Benchmark_convert blockSize: 810 executionTime: 5.781 4.323 5.052 4.791 4.635 
+
+JNI Benchmark_convert blockSize: 820 executionTime: 6.25 5.104 4.792 4.375 4.375 
+
+JNI Benchmark_convert blockSize: 830 executionTime: 4.844 4.531 5.208 4.531 5.99 
+
+JNI Benchmark_convert blockSize: 840 executionTime: 6.145 4.74 4.74 5.0 4.584 
+
+JNI Benchmark_convert blockSize: 850 executionTime: 5.052 4.531 4.791 4.427 5.052 
+
+JNI Benchmark_convert blockSize: 860 executionTime: 5.209 4.271 4.115 4.531 4.896 
+
+JNI Benchmark_convert blockSize: 870 executionTime: 4.947 4.479 4.479 4.271 4.271 
+
+JNI Benchmark_convert blockSize: 880 executionTime: 5.26 4.688 4.427 4.167 4.532 
+
+JNI Benchmark_convert blockSize: 890 executionTime: 8.073 4.74 4.375 4.271 4.688 
+
+JNI Benchmark_convert blockSize: 900 executionTime: 5.677 4.427 4.584 4.271 4.479 
+
+JNI Benchmark_convert blockSize: 910 executionTime: 4.948 4.218 4.688 4.323 4.584 
+
+JNI Benchmark_convert blockSize: 920 executionTime: 4.531 4.792 4.427 4.115 4.584 
+
+JNI Benchmark_convert blockSize: 930 executionTime: 4.792 4.01 4.271 4.166 4.688 
+
+JNI Benchmark_convert blockSize: 940 executionTime: 4.896 4.375 4.167 4.271 5.0 
+
+JNI Benchmark_convert blockSize: 950 executionTime: 5.052 4.219 4.375 4.688 5.99 
+
+JNI Benchmark_convert blockSize: 960 executionTime: 6.406 5.0 5.104 5.0 10.625 
+
+JNI Benchmark_convert blockSize: 970 executionTime: 5.885 4.895 4.844 4.635 7.031 
+
+JNI Benchmark_convert blockSize: 980 executionTime: 5.312 4.687 4.427 4.844 4.791 
+
+JNI Benchmark_convert blockSize: 990 executionTime: 5.208 4.583 4.948 4.271 4.532 
+
+JNI Benchmark_convert blockSize: 1000 executionTime: 5.73 4.323 4.375 4.896 4.479 
+
+JNI Benchmark_Columbia blockSize: 10 executionTime: 14.115 9.01 8.49 8.958 7.969 
+
+JNI Benchmark_Columbia blockSize: 20 executionTime: 8.906 8.646 8.021 8.333 8.02 
+
+JNI Benchmark_Columbia blockSize: 30 executionTime: 8.854 8.542 8.489 8.073 7.969 
+
+JNI Benchmark_Columbia blockSize: 40 executionTime: 8.49 8.282 8.489 7.969 7.969 
+
+JNI Benchmark_Columbia blockSize: 50 executionTime: 9.844 8.594 10.364 10.0 9.635 
+
+JNI Benchmark_Columbia blockSize: 60 executionTime: 10.312 8.437 11.927 8.593 8.021 
+
+JNI Benchmark_Columbia blockSize: 70 executionTime: 9.167 9.115 9.219 9.531 9.27 
+
+JNI Benchmark_Columbia blockSize: 80 executionTime: 10.365 9.635 9.635 8.594 8.49 
+
+JNI Benchmark_Columbia blockSize: 90 executionTime: 10.364 14.167 10.625 10.156 8.906 
+
+JNI Benchmark_Columbia blockSize: 100 executionTime: 9.375 8.698 8.594 8.958 8.437 
+
+JNI Benchmark_Columbia blockSize: 110 executionTime: 8.75 9.219 8.021 8.697 8.593 
+
+JNI Benchmark_Columbia blockSize: 120 executionTime: 8.542 8.854 8.698 8.75 8.646 
+
+JNI Benchmark_Columbia blockSize: 130 executionTime: 9.479 8.646 8.594 8.854 8.594 
+
+JNI Benchmark_Columbia blockSize: 140 executionTime: 9.27 8.959 9.479 8.698 9.115 
+
+JNI Benchmark_Columbia blockSize: 150 executionTime: 10.313 45.416 8.906 8.906 8.802 
+
+JNI Benchmark_Columbia blockSize: 160 executionTime: 8.854 8.854 8.854 8.698 8.646 
+
+JNI Benchmark_Columbia blockSize: 170 executionTime: 9.219 9.219 8.803 8.698 8.958 
+
+JNI Benchmark_Columbia blockSize: 180 executionTime: 8.646 8.75 8.645 8.906 8.541 
+
+JNI Benchmark_Columbia blockSize: 190 executionTime: 9.219 10.261 9.166 9.844 10.0 
+
+JNI Benchmark_Columbia blockSize: 200 executionTime: 10.625 9.479 8.906 9.636 9.427 
+
+JNI Benchmark_Columbia blockSize: 210 executionTime: 11.562 9.531 9.479 9.323 9.636 
+
+JNI Benchmark_Columbia blockSize: 220 executionTime: 10.104 12.5 7.969 7.292 7.032 
+
+JNI Benchmark_Columbia blockSize: 230 executionTime: 8.177 7.656 7.553 7.032 7.344 
+
+JNI Benchmark_Columbia blockSize: 240 executionTime: 8.386 7.552 7.135 8.23 7.5 
+
+JNI Benchmark_Columbia blockSize: 250 executionTime: 8.021 8.229 7.24 7.76 6.667 
+
+JNI Benchmark_Columbia blockSize: 260 executionTime: 9.063 36.354 9.323 7.448 8.281 
+
+JNI Benchmark_Columbia blockSize: 270 executionTime: 7.968 7.864 7.812 7.448 7.448 
+
+JNI Benchmark_Columbia blockSize: 280 executionTime: 10.573 8.698 8.907 8.49 7.916 
+
+JNI Benchmark_Columbia blockSize: 290 executionTime: 9.479 7.656 7.343 7.916 7.239 
+
+JNI Benchmark_Columbia blockSize: 300 executionTime: 10.26 7.343 6.927 7.24 6.771 
+
+JNI Benchmark_Columbia blockSize: 310 executionTime: 7.656 7.135 7.032 7.5 7.292 
+
+JNI Benchmark_Columbia blockSize: 320 executionTime: 7.813 7.448 6.979 7.708 7.656 
+
+JNI Benchmark_Columbia blockSize: 330 executionTime: 7.448 6.771 6.979 6.875 6.718 
+
+JNI Benchmark_Columbia blockSize: 340 executionTime: 7.187 6.614 7.292 7.083 9.219 
+
+JNI Benchmark_Columbia blockSize: 350 executionTime: 7.865 7.187 7.083 7.188 6.98 
+
+JNI Benchmark_Columbia blockSize: 360 executionTime: 8.073 7.239 7.188 7.187 8.177 
+
+JNI Benchmark_Columbia blockSize: 370 executionTime: 7.396 6.77 6.771 7.031 7.031 
+
+JNI Benchmark_Columbia blockSize: 380 executionTime: 7.708 6.927 6.667 7.553 6.511 
+
+JNI Benchmark_Columbia blockSize: 390 executionTime: 7.291 7.604 7.083 7.187 7.032 
+
+JNI Benchmark_Columbia blockSize: 400 executionTime: 7.656 8.49 6.771 7.344 6.51 
+
+JNI Benchmark_Columbia blockSize: 410 executionTime: 7.188 7.657 6.927 7.083 6.667 
+
+JNI Benchmark_Columbia blockSize: 420 executionTime: 7.032 6.823 6.614 6.718 7.135 
+
+JNI Benchmark_Columbia blockSize: 430 executionTime: 8.177 9.011 6.979 7.031 7.188 
+
+JNI Benchmark_Columbia blockSize: 440 executionTime: 7.656 7.812 6.771 7.291 7.239 
+
+JNI Benchmark_Columbia blockSize: 450 executionTime: 7.448 7.969 6.927 7.083 6.875 
+
+JNI Benchmark_Columbia blockSize: 460 executionTime: 7.344 7.553 7.292 6.719 6.718 
+
+JNI Benchmark_Columbia blockSize: 470 executionTime: 7.292 6.927 6.823 7.239 7.135 
+
+JNI Benchmark_Columbia blockSize: 480 executionTime: 7.5 7.395 6.823 6.77 7.084 
+
+JNI Benchmark_Columbia blockSize: 490 executionTime: 7.917 6.979 7.031 7.032 7.031 
+
+JNI Benchmark_Columbia blockSize: 500 executionTime: 7.761 7.031 7.396 7.396 6.667 
+
+JNI Benchmark_Columbia blockSize: 510 executionTime: 8.75 9.48 7.448 6.98 6.979 
+
+JNI Benchmark_Columbia blockSize: 520 executionTime: 8.594 7.448 7.031 8.802 7.083 
+
+JNI Benchmark_Columbia blockSize: 530 executionTime: 7.656 6.823 7.032 6.927 6.771 
+
+JNI Benchmark_Columbia blockSize: 540 executionTime: 7.448 7.813 7.656 7.448 7.917 
+
+JNI Benchmark_Columbia blockSize: 550 executionTime: 10.781 8.281 10.989 8.698 8.281 
+
+JNI Benchmark_Columbia blockSize: 560 executionTime: 9.375 8.854 7.917 9.427 8.073 
+
+JNI Benchmark_Columbia blockSize: 570 executionTime: 9.635 7.604 7.604 8.073 8.334 
+
+JNI Benchmark_Columbia blockSize: 580 executionTime: 9.531 8.959 10.209 8.75 16.25 
+
+JNI Benchmark_Columbia blockSize: 590 executionTime: 13.802 14.532 14.948 14.219 18.23 
+
+JNI Benchmark_Columbia blockSize: 600 executionTime: 14.687 14.687 19.375 12.396 10.625 
+
+JNI Benchmark_Columbia blockSize: 610 executionTime: 20.886 15.261 15.156 13.802 24.063 
+
+JNI Benchmark_Columbia blockSize: 620 executionTime: 16.094 12.136 14.062 12.239 14.739 
+
+JNI Benchmark_Columbia blockSize: 630 executionTime: 13.542 14.271 8.855 9.427 9.01 
+
+JNI Benchmark_Columbia blockSize: 640 executionTime: 9.322 7.708 7.761 7.917 8.125 
+
+JNI Benchmark_Columbia blockSize: 650 executionTime: 8.177 7.239 6.979 7.448 7.968 
+
+JNI Benchmark_Columbia blockSize: 660 executionTime: 8.281 7.448 7.396 7.292 9.219 
+
+JNI Benchmark_Columbia blockSize: 670 executionTime: 8.698 7.396 6.979 8.073 7.136 
+
+JNI Benchmark_Columbia blockSize: 680 executionTime: 7.448 9.114 7.136 7.448 7.24 
+
+JNI Benchmark_Columbia blockSize: 690 executionTime: 8.021 7.24 7.864 6.98 7.031 
+
+JNI Benchmark_Columbia blockSize: 700 executionTime: 7.916 7.396 7.24 7.5 7.656 
+
+JNI Benchmark_Columbia blockSize: 710 executionTime: 7.917 7.135 7.031 7.291 7.604 
+
+JNI Benchmark_Columbia blockSize: 720 executionTime: 7.813 6.979 6.771 7.24 7.032 
+
+JNI Benchmark_Columbia blockSize: 730 executionTime: 7.5 8.698 7.5 6.979 7.813 
+
+JNI Benchmark_Columbia blockSize: 740 executionTime: 8.49 7.135 7.344 7.5 7.5 
+
+JNI Benchmark_Columbia blockSize: 750 executionTime: 7.604 7.865 7.136 7.813 6.927 
+
+JNI Benchmark_Columbia blockSize: 760 executionTime: 7.552 8.542 7.76 7.239 7.188 
+
+JNI Benchmark_Columbia blockSize: 770 executionTime: 8.021 6.979 7.604 6.823 6.979 
+
+JNI Benchmark_Columbia blockSize: 780 executionTime: 7.709 8.855 7.24 7.239 7.084 
+
+JNI Benchmark_Columbia blockSize: 790 executionTime: 7.917 6.979 7.239 7.084 7.031 
+
+JNI Benchmark_Columbia blockSize: 800 executionTime: 7.344 7.24 7.448 7.709 7.396 
+
+JNI Benchmark_Columbia blockSize: 810 executionTime: 7.5 7.135 7.291 7.812 8.854 
+
+JNI Benchmark_Columbia blockSize: 820 executionTime: 8.541 7.604 10.729 9.218 9.739 
+
+JNI Benchmark_Columbia blockSize: 830 executionTime: 12.187 8.803 8.959 7.916 8.646 
+
+JNI Benchmark_Columbia blockSize: 840 executionTime: 11.563 8.281 9.271 8.593 7.656 
+
+JNI Benchmark_Columbia blockSize: 850 executionTime: 9.063 7.187 7.604 7.083 7.916 
+
+JNI Benchmark_Columbia blockSize: 860 executionTime: 8.282 7.032 7.136 7.552 6.615 
+
+JNI Benchmark_Columbia blockSize: 870 executionTime: 7.916 7.187 7.344 9.479 9.063 
+
+JNI Benchmark_Columbia blockSize: 880 executionTime: 8.229 7.448 7.344 6.979 7.136 
+
+JNI Benchmark_Columbia blockSize: 890 executionTime: 8.281 7.292 6.927 7.917 7.396 
+
+JNI Benchmark_Columbia blockSize: 900 executionTime: 8.334 7.031 7.031 7.135 6.823 
+
+JNI Benchmark_Columbia blockSize: 910 executionTime: 7.708 7.76 7.5 7.344 7.656 
+
+JNI Benchmark_Columbia blockSize: 920 executionTime: 7.76 9.739 7.292 6.823 7.084 
+
+JNI Benchmark_Columbia blockSize: 930 executionTime: 7.969 7.813 7.708 7.656 6.927 
+
+JNI Benchmark_Columbia blockSize: 940 executionTime: 9.01 7.969 6.823 7.605 7.188 
+
+JNI Benchmark_Columbia blockSize: 950 executionTime: 8.23 7.292 7.396 6.927 8.02 
+
+JNI Benchmark_Columbia blockSize: 960 executionTime: 9.062 8.281 8.177 7.917 9.427 
+
+JNI Benchmark_Columbia blockSize: 970 executionTime: 7.604 7.5 7.344 7.396 7.291 
+
+JNI Benchmark_Columbia blockSize: 980 executionTime: 7.865 7.917 7.031 7.083 7.448 
+
+JNI Benchmark_Columbia blockSize: 990 executionTime: 7.552 7.031 7.5 7.24 7.084 
+
+JNI Benchmark_Columbia blockSize: 1000 executionTime: 8.594 7.135 6.98 8.229 7.5 
+
+FFT Java_Princeton_Iterative blockSize: 16 executionTime: 0.263021 0.188489 0.167812 0.182344 0.174114 
+
+FFT Java_Princeton_Iterative blockSize: 32 executionTime: 0.448698 0.340937 0.309062 0.365625 0.352135 
+
+FFT Java_Princeton_Iterative blockSize: 64 executionTime: 0.731511 0.709688 0.077292 0.065469 0.067812 
+
+FFT Java_Princeton_Iterative blockSize: 128 executionTime: 0.153438 0.148334 0.152396 0.159843 0.154583 
+
+FFT Java_Princeton_Iterative blockSize: 256 executionTime: 0.363073 0.364271 0.358803 0.428177 0.347657 
+
+FFT Java_Princeton_Iterative blockSize: 512 executionTime: 0.779323 1.140625 1.265261 1.41849 1.077188 
+
+FFT Java_Princeton_Iterative blockSize: 1024 executionTime: 1.955625 1.911198 1.91099 1.826407 1.830937 
+
+FFT Java_Princeton_Iterative blockSize: 2048 executionTime: 4.026302 4.303282 4.630261 4.09849 5.285938 
+
+FFT Java_Princeton_Iterative blockSize: 4096 executionTime: 13.947189 11.008699 9.68573 15.69547 9.864167 
+
+FFT Java_Princeton_Iterative blockSize: 8192 executionTime: 30.40193 24.310836 28.881253 30.408805 30.593857 
+
+FFT Java_Princeton_Iterative blockSize: 16384 executionTime: 81.988914 74.610216 69.848965 60.527714 66.541621 
+
+FFT Java_Princeton_Iterative blockSize: 32768 executionTime: 161.243193 174.356996 176.080643 157.037463 165.563506 
+
+FFT Java_Princeton_Iterative blockSize: 65536 executionTime: 364.763838 372.112537 382.242538 386.317799 380.84035 
+
+FFT Java_Princeton_Iterative blockSize: 131072 executionTime: 818.459769 828.006593 838.595813 849.258991 847.881387 
+
+FFT Java_Princeton_Iterative blockSize: 262144 executionTime: 1863.975394 1912.184617 1893.777533 1866.11279 1917.46092 
+
+FFT Java_Princeton_Recursive blockSize: 16 executionTime: 0.3725 0.319427 0.287292 0.254011 0.241875 
+
+FFT Java_Princeton_Recursive blockSize: 32 executionTime: 0.563594 0.610156 0.489792 0.553334 0.689219 
+
+FFT Java_Princeton_Recursive blockSize: 64 executionTime: 1.108229 1.471719 1.007917 0.886562 0.97026 
+
+FFT Java_Princeton_Recursive blockSize: 128 executionTime: 2.10375 2.073229 2.399636 1.237969 0.323958 
+
+FFT Java_Princeton_Recursive blockSize: 256 executionTime: 0.708333 0.678854 0.662083 0.631667 0.645885 
+
+FFT Java_Princeton_Recursive blockSize: 512 executionTime: 2.827813 2.149167 1.325833 1.375 1.360625 
+
+FFT Java_Princeton_Recursive blockSize: 1024 executionTime: 3.524688 4.158646 4.373542 4.380157 4.083542 
+
+FFT Java_Princeton_Recursive blockSize: 2048 executionTime: 7.747657 11.83297 8.667032 7.883125 7.537657 
+
+FFT Java_Princeton_Recursive blockSize: 4096 executionTime: 16.17547 24.537763 20.894481 17.317397 15.753178 
+
+FFT Java_Princeton_Recursive blockSize: 8192 executionTime: 43.90516 44.930942 39.767035 40.607817 36.445993 
+
+FFT Java_Princeton_Recursive blockSize: 16384 executionTime: 95.286208 90.614124 96.978812 96.243968 101.501208 
+
+FFT Java_Princeton_Recursive blockSize: 32768 executionTime: 226.294397 213.885542 193.799186 181.407883 191.427207 
+
+FFT Java_Princeton_Recursive blockSize: 65536 executionTime: 438.340356 430.333168 434.000564 501.11005 418.992906 
+
+FFT Java_Princeton_Recursive blockSize: 131072 executionTime: 912.053789 944.499417 963.571502 999.029318 967.605878 
+
+FFT Java_Princeton_Recursive blockSize: 262144 executionTime: 2157.840267 2149.944433 2162.588548 2144.064224 2152.382194 
+
+FFT Java_Columbia_Iterative blockSize: 16 executionTime: 0.022448 0.018855 0.018229 0.018385 0.018021 
+
+FFT Java_Columbia_Iterative blockSize: 32 executionTime: 0.038698 0.038177 0.038333 0.038125 0.038281 
+
+FFT Java_Columbia_Iterative blockSize: 64 executionTime: 0.083802 0.083177 0.083281 0.083333 0.083594 
+
+FFT Java_Columbia_Iterative blockSize: 128 executionTime: 0.18276 0.18224 0.188385 0.183282 0.182917 
+
+FFT Java_Columbia_Iterative blockSize: 256 executionTime: 0.403281 0.485208 0.40625 0.406667 0.407187 
+
+FFT Java_Columbia_Iterative blockSize: 512 executionTime: 0.9 1.282344 1.198594 1.224011 1.205574 
+
+FFT Java_Columbia_Iterative blockSize: 1024 executionTime: 4.999896 0.111771 0.067656 0.067344 0.083907 
+
+FFT Java_Columbia_Iterative blockSize: 2048 executionTime: 0.240104 0.240885 0.249844 0.223906 0.161041 
+
+FFT Java_Columbia_Iterative blockSize: 4096 executionTime: 0.567344 0.771146 0.623646 0.623594 0.633386 
+
+FFT Java_Columbia_Iterative blockSize: 8192 executionTime: 1.519896 2.552291 2.383334 2.065364 1.992136 
+
+FFT Java_Columbia_Iterative blockSize: 16384 executionTime: 5.175261 6.175209 5.283959 4.883959 4.621094 
+
+FFT Java_Columbia_Iterative blockSize: 32768 executionTime: 9.449324 7.975052 8.101928 7.393177 7.301251 
+
+FFT Java_Columbia_Iterative blockSize: 65536 executionTime: 18.660418 17.871356 22.716565 18.114898 18.14771 
+
+FFT Java_Columbia_Iterative blockSize: 131072 executionTime: 80.814226 66.62959 91.390634 66.804538 66.0236 
+
+FFT Java_Columbia_Iterative blockSize: 262144 executionTime: 275.143257 314.398677 252.039296 347.721077 239.90768 
+
+FFT CPP_Princeton_Iterative blockSize: 16 executionTime: 0.065208 0.024271 0.020938 0.02 0.019844 
+
+FFT CPP_Princeton_Iterative blockSize: 32 executionTime: 0.037865 0.03125 0.030364 0.029896 0.030312 
+
+FFT CPP_Princeton_Iterative blockSize: 64 executionTime: 0.061302 0.053542 0.053906 0.054167 0.053438 
+
+FFT CPP_Princeton_Iterative blockSize: 128 executionTime: 0.122448 0.105521 0.10625 0.144427 0.10625 
+
+FFT CPP_Princeton_Iterative blockSize: 256 executionTime: 0.225052 0.213229 0.212448 0.213021 0.214062 
+
+FFT CPP_Princeton_Iterative blockSize: 512 executionTime: 0.459635 0.470677 0.44224 0.449115 0.447864 
+
+FFT CPP_Princeton_Iterative blockSize: 1024 executionTime: 0.932136 0.957709 0.945625 0.930521 0.981823 
+
+FFT CPP_Princeton_Iterative blockSize: 2048 executionTime: 2.133073 2.109635 2.126147 2.134271 2.099323 
+
+FFT CPP_Princeton_Iterative blockSize: 4096 executionTime: 4.964531 5.311459 5.014636 5.054636 5.042552 
+
+FFT CPP_Princeton_Iterative blockSize: 8192 executionTime: 11.706356 12.106095 13.797397 13.358595 12.231148 
+
+FFT CPP_Princeton_Iterative blockSize: 16384 executionTime: 26.036513 25.250783 22.217294 23.50594 22.7362 
+
+FFT CPP_Princeton_Iterative blockSize: 32768 executionTime: 50.531933 51.09464 49.706933 49.614328 50.295422 
+
+FFT CPP_Princeton_Iterative blockSize: 65536 executionTime: 106.239281 125.907043 114.209074 112.134594 114.889178 
+
+FFT CPP_Princeton_Iterative blockSize: 131072 executionTime: 296.933935 269.600183 275.867944 274.011173 292.725133 
+
+FFT CPP_Princeton_Iterative blockSize: 262144 executionTime: 812.179404 745.872001 806.796383 779.410129 711.2983 
+
+FFT CPP_Princeton_Recursive blockSize: 16 executionTime: 0.107969 0.062448 0.056511 0.055886 0.056145 
+
+FFT CPP_Princeton_Recursive blockSize: 32 executionTime: 0.110364 0.108021 0.108385 0.107291 0.107344 
+
+FFT CPP_Princeton_Recursive blockSize: 64 executionTime: 0.26349 0.214688 0.213073 0.209688 0.213594 
+
+FFT CPP_Princeton_Recursive blockSize: 128 executionTime: 0.454063 0.42974 0.426355 0.426354 0.471355 
+
+FFT CPP_Princeton_Recursive blockSize: 256 executionTime: 0.934219 0.897864 0.896041 0.951927 0.909583 
+
+FFT CPP_Princeton_Recursive blockSize: 512 executionTime: 1.994428 1.880313 1.954844 2.129427 1.980417 
+
+FFT CPP_Princeton_Recursive blockSize: 1024 executionTime: 4.313126 4.271875 4.329688 4.352032 4.15573 
+
+FFT CPP_Princeton_Recursive blockSize: 2048 executionTime: 8.829949 8.650678 8.70198 8.639636 8.685522 
+
+FFT CPP_Princeton_Recursive blockSize: 4096 executionTime: 17.389168 18.471617 17.188387 17.217033 17.278856 
+
+FFT CPP_Princeton_Recursive blockSize: 8192 executionTime: 36.074171 36.176983 36.155993 36.345368 36.200628 
+
+FFT CPP_Princeton_Recursive blockSize: 16384 executionTime: 76.965164 76.756882 76.229331 75.556883 75.637715 
+
+FFT CPP_Princeton_Recursive blockSize: 32768 executionTime: 157.74611 158.988141 161.362412 158.465797 162.036995 
+
+FFT CPP_Princeton_Recursive blockSize: 65536 executionTime: 340.248784 346.916649 330.713679 340.547846 346.802222 
+
+FFT CPP_Princeton_Recursive blockSize: 131072 executionTime: 706.089133 693.783454 714.570852 706.475591 711.987102 
+
+FFT CPP_Princeton_Recursive blockSize: 262144 executionTime: 1444.685509 1468.348688 1481.303793 1490.51744 1507.925254 
+
+FFT CPP_Columbia_Iterative blockSize: 16 executionTime: 0.033489 0.011979 0.011459 0.011718 0.010782 
+
+FFT CPP_Columbia_Iterative blockSize: 32 executionTime: 0.017552 0.014896 0.014844 0.013281 0.01375 
+
+FFT CPP_Columbia_Iterative blockSize: 64 executionTime: 0.021875 0.019791 0.019948 0.021563 0.022657 
+
+FFT CPP_Columbia_Iterative blockSize: 128 executionTime: 0.034531 0.033802 0.035677 0.033021 0.033334 
+
+FFT CPP_Columbia_Iterative blockSize: 256 executionTime: 0.062396 0.063281 0.105 0.061927 0.062969 
+
+FFT CPP_Columbia_Iterative blockSize: 512 executionTime: 0.12125 0.125834 0.124167 0.124479 0.125937 
+
+FFT CPP_Columbia_Iterative blockSize: 1024 executionTime: 0.258438 0.308021 0.266875 0.248855 0.321667 
+
+FFT CPP_Columbia_Iterative blockSize: 2048 executionTime: 0.509792 0.536718 0.606823 0.538959 0.549687 
+
+FFT CPP_Columbia_Iterative blockSize: 4096 executionTime: 1.224219 1.257865 1.270365 1.210677 1.227917 
+
+FFT CPP_Columbia_Iterative blockSize: 8192 executionTime: 2.743751 2.73375 2.809427 2.769271 3.152292 
+
+FFT CPP_Columbia_Iterative blockSize: 16384 executionTime: 8.140469 8.562396 8.248647 9.482553 6.957188 
+
+FFT CPP_Columbia_Iterative blockSize: 32768 executionTime: 15.187241 15.086877 13.69448 14.693804 14.399377 
+
+FFT CPP_Columbia_Iterative blockSize: 65536 executionTime: 31.413909 37.866826 33.541514 33.986461 33.58193 
+
+FFT CPP_Columbia_Iterative blockSize: 131072 executionTime: 114.435063 117.682095 111.373761 121.337616 136.808451 
+
+FFT CPP_Columbia_Iterative blockSize: 262144 executionTime: 340.918732 344.480451 343.064514 352.457171 335.859148 
+
+FFT CPP_KISS blockSize: 16 executionTime: 0.029896 0.013281 0.011459 0.010833 0.010937 
+
+FFT CPP_KISS blockSize: 32 executionTime: 0.01823 0.01401 0.013959 0.013542 0.013646 
+
+FFT CPP_KISS blockSize: 64 executionTime: 0.02276 0.019479 0.018125 0.018021 0.018333 
+
+FFT CPP_KISS blockSize: 128 executionTime: 0.039167 0.030625 0.030989 0.030833 0.030209 
+
+FFT CPP_KISS blockSize: 256 executionTime: 0.064948 0.053437 0.052031 0.052031 0.052135 
+
+FFT CPP_KISS blockSize: 512 executionTime: 0.167188 0.107761 0.106615 0.104531 0.10625 
+
+FFT CPP_KISS blockSize: 1024 executionTime: 0.232135 0.204583 0.203073 0.204375 0.204427 
+
+FFT CPP_KISS blockSize: 2048 executionTime: 0.483229 0.439896 0.442084 0.506354 0.46375 
+
+FFT CPP_KISS blockSize: 4096 executionTime: 1.027135 0.944011 1.205573 1.140625 1.101146 
+
+FFT CPP_KISS blockSize: 8192 executionTime: 2.635886 2.491198 2.749063 2.720677 3.034896 
+
+FFT CPP_KISS blockSize: 16384 executionTime: 6.889741 7.176459 6.964323 8.19422 5.452657 
+
+FFT CPP_KISS blockSize: 32768 executionTime: 30.037191 16.148335 12.169793 11.368803 11.234741 
+
+FFT CPP_KISS blockSize: 65536 executionTime: 26.555263 25.334638 26.337503 29.853649 25.978023 
+
+FFT CPP_KISS blockSize: 131072 executionTime: 68.982924 64.295111 65.960996 64.620787 65.613184 
+
+FFT CPP_KISS blockSize: 262144 executionTime: 157.368089 148.711994 150.016004 163.577881 148.26689 
+
+NEON CPP_Recursive blockSize: 16 executionTime: 0.064011 0.023593 0.021563 0.01901 0.018959 
+
+NEON CPP_Recursive blockSize: 32 executionTime: 0.031666 0.025365 0.024947 0.025209 0.028594 
+
+NEON CPP_Recursive blockSize: 64 executionTime: 0.044636 0.040886 0.042968 0.042344 0.049532 
+
+NEON CPP_Recursive blockSize: 128 executionTime: 0.084166 0.073021 0.084532 0.070208 0.069948 
+
+NEON CPP_Recursive blockSize: 256 executionTime: 0.146771 0.169063 0.15151 0.12776 0.128698 
+
+NEON CPP_Recursive blockSize: 512 executionTime: 0.247292 0.248386 0.249584 0.261094 0.248646 
+
+NEON CPP_Recursive blockSize: 1024 executionTime: 0.478177 0.472031 0.505157 0.480365 0.461302 
+
+NEON CPP_Recursive blockSize: 2048 executionTime: 0.945625 0.981042 0.94375 0.941563 0.976876 
+
+NEON CPP_Recursive blockSize: 4096 executionTime: 2.056562 2.050521 2.085365 2.083802 2.080573 
+
+NEON CPP_Recursive blockSize: 8192 executionTime: 4.241824 4.260469 4.241511 4.28948 4.222657 
+
+NEON CPP_Recursive blockSize: 16384 executionTime: 8.978959 8.350314 8.580522 9.12922 9.371564 
+
+NEON CPP_Recursive blockSize: 32768 executionTime: 21.535054 22.97568 19.941356 19.447606 17.389637 
+
+NEON CPP_Recursive blockSize: 65536 executionTime: 35.374691 35.465108 35.673181 35.746982 36.605108 
+
+NEON CPP_Recursive blockSize: 131072 executionTime: 81.218081 77.802351 80.607196 79.87782 82.809071 
+
+NEON CPP_Recursive blockSize: 262144 executionTime: 175.75382 181.439497 185.546216 168.180121 175.827361 
+
+NEON CPP_Iterative blockSize: 16 executionTime: 0.022031 0.013021 0.009843 0.010104 0.009115 
+
+NEON CPP_Iterative blockSize: 32 executionTime: 0.015156 0.012187 0.061146 0.013281 0.012448 
+
+NEON CPP_Iterative blockSize: 64 executionTime: 0.022812 0.016979 0.017604 0.016823 0.016042 
+
+NEON CPP_Iterative blockSize: 128 executionTime: 0.030365 0.031563 0.030052 0.027917 0.026875 
+
+NEON CPP_Iterative blockSize: 256 executionTime: 0.065625 0.051563 0.05151 0.050364 0.048698 
+
+NEON CPP_Iterative blockSize: 512 executionTime: 0.122136 0.125208 0.113073 0.122813 0.113281 
+
+NEON CPP_Iterative blockSize: 1024 executionTime: 0.272083 0.261771 0.252188 0.246145 0.238854 
+
+NEON CPP_Iterative blockSize: 2048 executionTime: 0.525417 0.515521 0.488959 0.51974 0.510469 
+
+NEON CPP_Iterative blockSize: 4096 executionTime: 1.249896 1.179427 1.246354 1.310156 1.216354 
+
+NEON CPP_Iterative blockSize: 8192 executionTime: 2.883386 3.298646 2.82823 2.675157 2.81224 
+
+NEON CPP_Iterative blockSize: 16384 executionTime: 5.737136 5.812344 4.974427 5.266615 5.328021 
+
+NEON CPP_Iterative blockSize: 32768 executionTime: 10.79146 10.945678 11.461876 11.482813 10.696095 
+
+NEON CPP_Iterative blockSize: 65536 executionTime: 24.897919 26.189429 24.419325 27.138388 23.547763 
+
+NEON CPP_Iterative blockSize: 131072 executionTime: 57.537923 74.779799 71.07558 69.68308 70.092143 
+
+NEON CPP_Iterative blockSize: 262144 executionTime: 150.251838 139.557201 141.814181 152.815849 154.16288 
+

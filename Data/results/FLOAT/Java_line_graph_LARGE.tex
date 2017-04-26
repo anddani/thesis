@@ -1,0 +1,23 @@
+\begin{tikzpicture}
+\begin{axis}[xlabel={Block size},ylabel={Time (ms)},width=0.65\linewidth,legend pos=north west,scaled y ticks = false,legend cell align=left,legend style={font=\scriptsize}]
+\addplot+[error bars/.cd, y dir=both,y explicit] coordinates {
+(8192, 2.1766) +- (0.3256, 0.3256)
+(16384, 3.9995) +- (0.4596, 0.4596)
+(32768, 8.9846) +- (1.3089, 1.3089)
+(65536, 20.2833) +- (2.4423, 2.4423)
+};
+\addplot+[error bars/.cd, y dir=both,y explicit] coordinates {
+(8192, 21.1757) +- (4.9079, 4.9079)
+(16384, 46.8150) +- (9.6619, 9.6619)
+(32768, 113.1953) +- (11.0218, 11.0218)
+(65536, 261.9954) +- (13.8293, 13.8293)
+};
+\addplot+[error bars/.cd, y dir=both,y explicit] coordinates {
+(8192, 50.0776) +- (7.5896, 7.5896)
+(16384, 103.9682) +- (15.7929, 15.7929)
+(32768, 219.0208) +- (28.3890, 28.3890)
+(65536, 485.1020) +- (68.2330, 68.2330)
+};
+\legend{Java Columbia Iterative , Java Princeton Iterative , Java Princeton Recursive}
+\end{axis}
+\end{tikzpicture}

@@ -1,0 +1,12 @@
+\begin{tikzpicture}
+\begin{axis}[xlabel={Block size},ylabel={Time (ms)},width=0.65\linewidth,legend pos=north west,scaled y ticks = false,legend cell align=left,legend style={font=\scriptsize}]
+\addplot coordinates {
+(256, 0.3547)
+(512, 0.7740)
+(1024, 1.7228)
+(2048, 3.8546)
+(4096, 8.8053)
+};
+\legend{Java Princeton Iterative}
+\end{axis}
+\end{tikzpicture}

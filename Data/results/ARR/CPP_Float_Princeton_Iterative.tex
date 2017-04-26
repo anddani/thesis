@@ -1,0 +1,39 @@
+\begin{tikzpicture}
+\begin{axis}[xlabel={Block size},ylabel={Time (ms)},width=0.65\linewidth,legend pos=north west,scaled y ticks = false,legend cell align=left,legend style={font=\scriptsize}]
+\addplot coordinates {
+(16, 0.0073)
+(32, 0.0110)
+(64, 0.0169)
+(128, 0.0310)
+(256, 0.0572)
+(512, 0.1138)
+(1024, 0.2180)
+(2048, 0.4184)
+(4096, 0.8859)
+(8192, 2.0668)
+(16384, 4.4843)
+(32768, 9.6815)
+(65536, 20.5733)
+(131072, 45.3676)
+(262144, 128.3593)
+};
+\addplot coordinates {
+(16, 0.0090)
+(32, 0.0128)
+(64, 0.0188)
+(128, 0.0292)
+(256, 0.0541)
+(512, 0.1038)
+(1024, 0.2082)
+(2048, 0.4536)
+(4096, 0.9690)
+(8192, 2.0605)
+(16384, 4.5027)
+(32768, 9.6797)
+(65536, 20.3049)
+(131072, 44.5770)
+(262144, 129.5150)
+};
+\legend{GetFloatArrayCritical, GetPrimitiveArrayCritical}
+\end{axis}
+\end{tikzpicture}

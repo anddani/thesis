@@ -1,0 +1,17 @@
+\begin{tikzpicture}
+\begin{axis}[xlabel={Block size},ylabel={Time (ms)},width=0.65\linewidth,legend pos=north west,scaled y ticks = false,legend cell align=left,legend style={font=\scriptsize}]
+\addplot+[error bars/.cd, y dir=both,y explicit] coordinates {
+(8192, 1.0051) +- (0.0657, 0.0657)
+(16384, 2.1559) +- (0.2562, 0.2562)
+(32768, 4.7898) +- (0.7872, 0.7872)
+(65536, 9.8807) +- (1.2509, 1.2509)
+};
+\addplot+[error bars/.cd, y dir=both,y explicit] coordinates {
+(8192, 1.6133) +- (0.1416, 0.1416)
+(16384, 3.5690) +- (0.4367, 0.4367)
+(32768, 7.6009) +- (0.9583, 0.9583)
+(65536, 16.1129) +- (1.8936, 1.8936)
+};
+\legend{C++ Iterative , C++ Recursive}
+\end{axis}
+\end{tikzpicture}

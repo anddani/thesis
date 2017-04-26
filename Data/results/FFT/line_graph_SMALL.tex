@@ -1,0 +1,47 @@
+\begin{tikzpicture}
+\begin{axis}[xlabel={Block size},ylabel={Time (ms)},width=0.65\linewidth,legend pos=north west,scaled y ticks = false,legend cell align=left,legend style={font=\scriptsize}]
+\addplot coordinates {
+(16, 0.0072)
+(32, 0.0086)
+(64, 0.0083)
+(128, 0.0115)
+};
+\addplot coordinates {
+(16, 0.0056)
+(32, 0.0069)
+(64, 0.0079)
+(128, 0.0131)
+};
+\addplot coordinates {
+(16, 0.0097)
+(32, 0.0132)
+(64, 0.0214)
+(128, 0.0342)
+};
+\addplot coordinates {
+(16, 0.0202)
+(32, 0.0368)
+(64, 0.0705)
+(128, 0.1434)
+};
+\addplot coordinates {
+(16, 0.0370)
+(32, 0.0899)
+(64, 0.0244)
+(128, 0.0134)
+};
+\addplot coordinates {
+(16, 0.1227)
+(32, 0.1392)
+(64, 0.0905)
+(128, 0.1431)
+};
+\addplot coordinates {
+(16, 0.1304)
+(32, 0.0670)
+(64, 0.1352)
+(128, 0.4913)
+};
+\legend{C++ Columbia Iterative,C++ KISS,C++ Princeton Iterative,C++ Princeton Recursive,Java Columbia Iterative,Java Princeton Iterative,Java Princeton Recursive}
+\end{axis}
+\end{tikzpicture}

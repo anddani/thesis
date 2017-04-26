@@ -1,0 +1,29 @@
+\begin{tikzpicture}
+\begin{axis}[xlabel={Block size},ylabel={Time (ms)},width=0.65\linewidth,legend pos=north west,scaled y ticks = false,legend cell align=left,legend style={font=\scriptsize}]
+\addplot+[error bars/.cd, y dir=both,y explicit] coordinates {
+(8192, 1.8030) +- (0.9841, 0.9841)
+(16384, 2.9629) +- (0.6687, 0.6687)
+(32768, 8.2847) +- (1.2061, 1.2061)
+(65536, 18.8158) +- (2.8032, 2.8032)
+(131072, 43.7807) +- (6.4454, 6.4454)
+(262144, 134.8093) +- (10.2633, 10.2633)
+};
+\addplot+[error bars/.cd, y dir=both,y explicit] coordinates {
+(8192, 2.0605) +- (0.0561, 0.0561)
+(16384, 4.5027) +- (0.1737, 0.1737)
+(32768, 9.6797) +- (0.6568, 0.6568)
+(65536, 20.3049) +- (1.7691, 1.7691)
+(131072, 44.5770) +- (4.8859, 4.8859)
+(262144, 129.5150) +- (9.2859, 9.2859)
+};
+\addplot+[error bars/.cd, y dir=both,y explicit] coordinates {
+(8192, 10.7496) +- (0.2605, 0.2605)
+(16384, 22.8640) +- (0.8917, 0.8917)
+(32768, 48.0022) +- (1.2536, 1.2536)
+(65536, 96.9572) +- (1.3564, 1.3564)
+(131072, 192.4607) +- (30.4597, 30.4597)
+(262144, 398.9698) +- (65.9217, 65.9217)
+};
+\legend{C++ Columbia Iterative , C++ Princeton Iterative , C++ Princeton Recursive}
+\end{axis}
+\end{tikzpicture}

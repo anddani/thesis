@@ -8,8 +8,7 @@ auto
 
 Data/backup*
 
-# Ignore for now
-Data
+# Data
 
 # Vim
 *.swp

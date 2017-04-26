@@ -1,0 +1,11 @@
+\begin{tikzpicture}
+\begin{axis}[xlabel={Block size},ylabel={Time (ms)},width=0.65\linewidth,legend pos=north west,scaled y ticks = false,legend cell align=left,legend style={font=\scriptsize}]
+\addplot+[error bars/.cd, y dir=both,y explicit] coordinates {
+(8192, 21.1757) +- (4.9079, 4.9079)
+(16384, 46.8150) +- (9.6619, 9.6619)
+(32768, 113.1953) +- (11.0218, 11.0218)
+(65536, 261.9954) +- (13.8293, 13.8293)
+};
+\legend{Java Princeton Iterative}
+\end{axis}
+\end{tikzpicture}

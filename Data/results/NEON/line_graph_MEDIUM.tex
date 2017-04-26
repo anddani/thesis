@@ -1,0 +1,19 @@
+\begin{tikzpicture}
+\begin{axis}[xlabel={Block size},ylabel={Time (ms)},width=0.65\linewidth,legend pos=north west,scaled y ticks = false,legend cell align=left,legend style={font=\scriptsize}]
+\addplot coordinates {
+(256, 0.0134)
+(512, 0.0348)
+(1024, 0.0608)
+(2048, 0.1925)
+(4096, 0.3656)
+};
+\addplot coordinates {
+(256, 0.0544)
+(512, 0.0961)
+(1024, 0.1868)
+(2048, 0.3659)
+(4096, 0.8086)
+};
+\legend{C++ Iterative,C++ Recursive}
+\end{axis}
+\end{tikzpicture}
