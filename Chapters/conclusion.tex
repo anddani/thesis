@@ -2,26 +2,26 @@
 
 %%%
 % JNI Conclusion
-JNI overhead is very small, at around 1-10 \textmu s for a Qualcomm MSM8994 Snapdragon 810 chip. If a program were to call native code in a loop, it could add up to some overhead. It is only for very small block sizes around $2^4 - 2^6$ where this overhead becomes a substantial part of the total execution time. For larger and more common block sizes, the overhead from JNI is not significant.
+JNI overhead is very small, around 1-10 \textmu s for a Qualcomm MSM8994 Snapdragon 810 chip. If a program were to call native code in a loop, it could add up to some overhead. It is only for very small block sizes around $2^4 - 2^6$ where this overhead becomes a substantial part of the total execution time. For larger and more common block sizes, the overhead from JNI is not significant.
 
 %%%
 % FFT Conclusion
-One of the conclusions to draw from the results is that when choosing Java, the best algorithm was the Columbia Iterative. This algorithm neither allocated any memory nor did it re-calculate the trigonometric values needed in the algorithm. It was also the easiest to convert to C++ because it did not include any Java specific constructs (except for method definitions). It was also the fastest between it, Princeton Iterative and Princeton Recursive for both Java and C++.
-
-%% Optimization Conclusion
-Native optimization is architecture dependent. This means that an application will only work on a subset of Android devices running some architectures the program is compiled for. Further, some optimizations are only possible on a few architectures. This makes some optimizations better than other. An example of a more portable optimization is parallelization.
-
-%%%
-% Float and Doubles Conclusion
-Operations between elements of the \texttt{float} data structure resulted in faster execution time than between \texttt{double}s on the Nexus 6P. It is therefore important to know if \texttt{float} gives sufficient precision for the given application. If high precision is important, \texttt{double} is the primary data type to choose. \texttt{float} is useful for architectures where it is faster to compute between floats or when memory efficiency is important.
+One of the conclusions to draw from the results is that when choosing Java, the best algorithm was the Columbia Iterative. It was the easiest to convert to C++ because it did not include any Java specific constructs (except for method definitions). It was also the fastest between it, Princeton Iterative and Princeton Recursive for both Java and C++. In Columbia Iterative, after the initial setup of calculating the trigonometric tables and allocating space for the input/output array, no memory allocation is done during the actual transform.
 
 %%%
 % Garbage Collection Conclusion
 To prevent garbage collection pauses throughout the program, it is necessary to pre-allocate data structures that should be used in a function that is called multiple times instead of allocating new memory for each call. By doing this, it reduces the work for the garbage collector. Less allocated memory will go out of scope, making garbage collection pauses shorter and less frequent.
 
+% Optimization Conclusion
+Vectorization was a very efficient optimization which performed much better than their corresponding algorithms in C++. Native optimization is architecture dependent. This means that an application will only work on a subset of Android devices running some architectures the program is compiled for. Further, some optimizations are only possible on a few architectures. This makes some optimizations better than other. An example of a more portable optimization is parallelization.
+
+%%%
+% Float and Doubles Conclusion
+Operations between elements of the \texttt{float} data structure resulted in faster execution time than between \texttt{double}s on the Nexus 6P. It is therefore important to know if \texttt{float} gives sufficient precision for the given application. If high precision is important, you should use a \texttt{double} as primary data type. \texttt{float} is useful for architectures where it is faster to compute between floats or when memory efficiency is important.
+
 %%%
 % Answer research question
-Based on the results from the experiments, we can see that, of the chosen algorithms, there is not a significant performance difference between the fastest FFT library for Java with its corresponding implementation in native code. Optimization in native code does make native code significantly faster than the fastest Java implementation. This does increase the complexity of the code and decrease the compatibility between devices.
+To answer the research question, based on the results from the experiments, we can see that, of the chosen algorithms, there is not a significant performance difference between the fastest FFT library for Java with its corresponding implementation in native code. Optimization in native code does make native code significantly faster than the fastest Java implementation. This does increase the complexity of the code and decrease the compatibility between devices.
 
 %%%
 % Future work
