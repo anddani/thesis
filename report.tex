@@ -1,9 +1,10 @@
-\documentclass[12pt,a4paper,openright,parskip,final,twoside,en]{csee_msc_thesis} % English, twosided
+\documentclass[a4paper, 12pt, notitlepage]{report}
 
 %%==================================================================
 %% PACKAGES
 %%==================================================================
 \usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc} 
 \usepackage{fancybox}                          % tools for boxes
 \usepackage{verbatim}                          % Verbatim environments
 \usepackage{multirow}                          % Fancy tables
@@ -25,9 +26,16 @@
 \usepackage[export]{adjustbox}                 % \resizebox
 \usepackage[acronym]{glossaries}               % Glossary
 \usepackage[linesnumbered, ruled]{algorithm2e} % Pseudo-code
+\usepackage{enumitem}                          % custom itemize label
 
 \usepackage{subcaption}
 \usepackage{textcomp} % Text Companion Fonts
+
+\usepackage{etoolbox}
+\apptocmd{\sloppy}{\hbadness 10000\relax}{}{}
+
+% Formating
+\usepackage[margin=2.5cm]{geometry} % sets margin around text to 2.5
 
 \newif\ifrelease
 \newif\ifdebug
@@ -49,30 +57,24 @@
     morecomment=[l]{;}
 }
 
-% DEBUG
 \ifdebug
 \sloppy
 \fi
 
 \loadglsentries{glossaries}
 
-\begin{document}
-
 %%==================================================================
 %% VARIABLES
 %%==================================================================
-\def\thesistitle{\Large Comparing Android Runtime with native:\\ Fast Fourier Transform on Android}
-\def\swethesistitle{\Large Jämförelse av Android Runtime och native: Fast Fourier Transform på Android}
-\def\theauthor{\large André Danielsson}
-\def\theaddress{
-    KTH -- Royal Institute of Technology\\
-    \vspace{3mm}
-    Master's Thesis in Computer Science\\
-    \vspace{3cm}
-    \begin{tabular}{rl}
-        KTH Supervisor: & Erik Isaksson\\
-        Bontouch Supervisor: & Erik Westenius\\
-        Examiner: & Olle Bälter
+\def\thesistitle{\LARGE Comparing Android Runtime with native:\\ Fast Fourier Transform on Android}
+\def\theauthor{André Danielsson}
+\def\theschool{KTH -- Royal Institute of Technology}
+\def\thedegree{Master's Thesis in Computer Science}
+\def\thesupervisors{%
+    \begin{tabular}{ll}
+        \textbf{KTH Supervisor:} & Erik Isaksson\\
+        \textbf{Bontouch Supervisor:} & Erik Westenius\\
+        \textbf{Examiner:} & Olle Bälter
     \end{tabular}
 }
 \def\theabstract{\input{Abstract/abstract.tex}}
@@ -80,48 +82,107 @@
 \def\thepreface{\input{Preface/preface.tex}}
 \def\thesweabstract{\input{SweAbstract/sweabstract.tex}}
 
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\setlength{\headheight}{14.5pt}
+\fancyhead[L]{\theauthor}
+\fancyhead[R]{\leftmark}
+\fancyfoot[C]{\thepage}
+% \fancyfoot[LE,RO]{\thepage}
+
+\begin{document}
+
+\pagenumbering{gobble} % Disable page numbering
+
 %%==================================================================
 %% PREAMBLES
 %%==================================================================
-\startpreamble
-  {\thesistitle}
-  {\theauthor}
-  {\thedate}
-  {\theabstract}
-  {\thepreface}
-  {\theaddress}
-  {\thesweabstract}
+% \maketitle
+\begin{titlepage}
+    \centering
+    {\scshape\large\theschool\par}
+    \vspace{1cm}
+    {\scshape\normalsize\thedegree\par}
+    \vspace{1.5cm}
+    {\Large\bfseries\thesistitle\par}
+    \vspace{1.5cm}
+    {\large\itshape\theauthor\par}
+    \vspace{1cm}
+    {\large \today\par}
+
+    \vfill
+
+    {\large\thesupervisors\par}
+    \vspace{1cm}
+\end{titlepage}
+
+%%==================================================================
+%% Abstracts
+%%==================================================================
+\thispagestyle{empty}
+\begin{abstract}
+    \input{Abstract/abstract.tex}
+\end{abstract}
+
+\vspace{1cm}
+
+\renewcommand{\abstractname}{Sammanfattning}
+\begin{abstract}
+    \input{SweAbstract/sweabstract.tex}
+\end{abstract}
+
+%%==================================================================
+%% Glossary
+%%==================================================================
+\newpage
+\thispagestyle{empty}
+\section*{Glossary}
+\input{glossary-table}
+
+%%==================================================================
+%% TABLE OF CONTENTS/FIGURES/TABLES
+%%==================================================================
+\tableofcontents
+\thispagestyle{empty}
+
+\listoffigures
+
+\listoftables
 
 %%==================================================================
 %% REPORT
 %%==================================================================
-\makechapter{Introduction}{Introduction\label{ch:introduction}}
+\chapter{Introduction}\label{ch:introduction}
+\pagenumbering{arabic} % Enable page numbering
 \input{Chapters/introduction.tex}
+\cleardoublepage
 
-\makechapter{Background}{Background\label{ch:background}}
+\chapter{Background}\label{ch:background}
 \input{Chapters/background.tex}
+\cleardoublepage
 
-\makechapter{Method}{Method\label{ch:method}}
+\chapter{Method}\label{ch:method}
 \input{Chapters/method.tex}
+\cleardoublepage
 
-\makechapter{Results}{Results\label{ch:results}}
+\chapter{Results}\label{ch:results}
 \input{Chapters/results.tex}
+\cleardoublepage
 
-\makechapter{Discussion}{Discussion\label{ch:discussion}}
+\chapter{Discussion}\label{ch:discussion}
 \input{Chapters/discussion.tex}
+\cleardoublepage
 
-\makechapter{Conclusion}{Conclusion\label{ch:conclusion}}
+\chapter{Conclusion}\label{ch:conclusion}
 \input{Chapters/conclusion.tex}
+\cleardoublepage
 
 %%==================================================================
 %% BIBLIOGRAPHY
 %%==================================================================
 \bibliographystyle{ieeetr}
-
-\fancyhead[LO]{}%
-\fancyhead[RE]{}%
-\fancyhead[LE]{\thepage}%
-\fancyhead[RO]{\thepage}
 
 \bibliography{references}
 
@@ -133,11 +194,13 @@
 \ifrelease
 \appendix
 
-\makeappendix{Appendix A}{Source code\label{appendix:code}}
+\chapter{Source code}\label{appendix:code}
 \input{Appendices/appendixA.tex}
+\cleardoublepage
 
-\makeappendix{Appendix B}{Results\label{appendix:results}}
+\chapter{Results}\label{appendix:results}
 \input{Appendices/appendixB.tex}
+\cleardoublepage
 \fi
 
 \end{document}
