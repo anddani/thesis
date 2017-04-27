@@ -501,7 +501,7 @@ C and C++ arrays have predefined sizes and are located on the program stack. Thi
 % http://wanderingcoder.net/2010/06/02/intro-neon/
 Android \gls{ndk} includes a tool called \gls{neon} that contains functions which enables Single Instruction Multiple Data (\gls{simd}). SIMD is an efficient way of executing the same type of operation on multiple operands at the same time. Figure~\ref{fig:simd} describes this concept where instead of operating on one piece of data at a time, a larger set of data that uses the same operation can be processed with one operation.
 
-\gls{neon} provides a set of functions compatible with the ARM architecture. These functions can perform operations on double word and quad word registers. The reason you would want to use SIMD is because you can have instructions that load blocks of multiple values and operates on these blocks.  The process of SIMD starts by reading the data into larger vector registers, operate on these registers and storing the results as blocks \cite{simd:expl}. This way you will have less instructions than if you loaded one element at a time and operated on only that value.
+\gls{neon} provides a set of functions compatible with the ARM architecture. These functions can perform operations on double word and quad word registers. The reason you would want to use SIMD is because you can have instructions that load blocks of multiple values and operates on these blocks.  SIMD starts by reading the data into larger vector registers, operate on these registers and storing the results as blocks \cite{simd:expl}. This way you will have less instructions than if you loaded one element at a time and operated on only that value.
 
 \gls{simd} has some prerequisites on the data that is being processed. First, the data blocks must line up meaning that you cannot operate between two operands that are not in the same area of the block. Secondly, all the operands of a block must be of the same type.
 
@@ -556,9 +556,10 @@ Android \gls{ndk} includes a tool called \gls{neon} that contains functions whic
 \fi
 
 \section{Discrete Fourier Transform}\label{ch:dft}
-The Discrete Fourier Transform (\gls{dft}) is a method of converting a sampled signal from the time domain to the frequency domain. In other words, the \gls{dft} takes an observed signal and dissects each component that would form the observed signal. Every component of a signal can each be described as a sinusoidal wave with a frequency, amplitude and phase.
+The Discrete Fourier Transform (\gls{dft}) is a method of converting a sampled signal from the time domain to the frequency domain. In other words, the \gls{dft} takes an observed signal and dissects each component that would form the observed signal. Every component of a signal can be described as a sinusoidal wave with a frequency, amplitude and phase.
 
-If we observe Figure~\ref{fig:dft:ex1}, we can see how a signal in time domain looks like in frequency domain. The function displayed in the time domain consists of three sine components, each with its own amplitude and frequency. What the graph of the frequency domain shows, is the amplitude of each frequency. This can then be used to analyze the input signal.
+If we observe Figure~\ref{fig:dft:ex1}, we can see how the same signal looks in time domain and frequency domain. The function displayed in the time domain consists of three sine components, each with its own amplitude and frequency. What the graph of the frequency domain shows, is the amplitude of each frequency. This can then be used to analyze the input signal.
+% a signal in time domain looks like in frequency domain.
 
 One important thing to note is that you must sample at twice the frequency you want to analyze. The Nyquist sampling theorem states that \cite{signal:aliasing}:
 \begin{center}
