@@ -10,7 +10,7 @@
 % CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\documentclass{beamer}
+\documentclass[xcolor={table}]{beamer}
 \usepackage[utf8]{inputenc}
 
 \mode<presentation> {%
@@ -75,6 +75,37 @@
 \usepackage{graphicx} % Allows including images
 \usepackage{booktabs} % Allows the use of \toprule, \midrule and \bottomrule in tables
 \usepackage{lmodern}%
+\usepackage{multicol} % multicols environment
+\usepackage{tikz}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{pgfplots}
+\usepackage{csquotes}
+\usepackage{booktabs}                          % Fancy tables
+\usepackage[export]{adjustbox}                 % \resizebox
+\usepackage{multirow}                          % Fancy tables
+\usepackage[table]{xcolor}                     % table option for fancy tables
+
+\definecolor{lightgray}{gray}{0.9}
+\definecolor{myeggshell}{RGB}{240,234,214}
+\definecolor{mylightgreen}{RGB}{178,255,140}
+\definecolor{mylightred}{RGB}{255,161,99}
+\usepackage{caption,subcaption} % for tables and figures
+\usepgfplotslibrary{groupplots}
+\pgfplotsset{compat=1.14}
+
+\pgfdeclarelayer{background}
+\pgfsetlayers{background,main}
+
+\usetikzlibrary{arrows,matrix,positioning}
+\tikzset{>=latex}
+\usetikzlibrary{positioning,calc,fit,chains,arrows}
+
+\usetikzlibrary{positioning,calc,fit,chains,arrows}
+\newcommand{\tikzmark}[1]{\tikz[overlay,remember picture] \node (#1) {};}
+
+\usepackage{tikz,overpic}
+\usetikzlibrary{fit,shapes.misc}
 
 
 \newcommand{\thetitle}{Comparing Android Runtime with native:\\Fast Fourier Transform on Android}
@@ -92,11 +123,19 @@ Computer Science and Communication\\ % Your institution for the title page
 
 \AtBeginSection[]
 {%
-    \begin{scriptsize}
-        \begin{frame}<beamer>{Outline}
-            \tableofcontents[currentsection]
-        \end{frame}
-    \end{scriptsize}
+  \begin{frame}{~}
+    \makebox[\linewidth][c]{%
+      \begin{minipage}[t][4cm][t]{\textwidth}
+        \begin{multicols}{2}
+          \tableofcontents[currentsection,
+            currentsubsection,
+            subsectionstyle=show/show/shaded,
+          sectionstyle=show/shaded]
+        \end{multicols}
+
+      \end{minipage}%
+    }%
+\end{frame}
 }
 
 \begin{document}
@@ -139,9 +178,13 @@ Computer Science and Communication\\ % Your institution for the title page
 %%% Presentation outline
 %%%------------------------------------------------
 \begin{frame}{Outline}
-    \begin{scriptsize}
-        \tableofcontents
-    \end{scriptsize}
+    \makebox[\linewidth][c]{%
+      \begin{minipage}[t][4cm][t]{\textwidth}
+        \begin{multicols}{2}
+          \tableofcontents
+        \end{multicols}
+      \end{minipage}%
+    }%
 \end{frame}
 
 %%%------------------------------------------------
@@ -151,12 +194,12 @@ Computer Science and Communication\\ % Your institution for the title page
 %------------------------------------------------
 % Purpose of work
 %------------------------------------------------
-\subsection{Purpose of Work}
-\begin{frame}{Purpose of Work}
+\subsection{Purpose of Thesis}
+\begin{frame}{Purpose of Thesis}
     \begin{itemize}
-        \item<1-> Why is this important?
-        \item<2-> Where is it used?
-        \item<3-> Who can benefit from it?
+        \item<1-> Why is this work important?
+        \item<2-> Where can it be used?
+        \item<3-> Who will benefit from it?
     \end{itemize}
 \end{frame}
 
@@ -175,10 +218,31 @@ Computer Science and Communication\\ % Your institution for the title page
 \section{Background}
 
 %------------------------------------------------
-% ART
+% Android
 %------------------------------------------------
-\subsection{Android Platform}
-\begin{frame}{Android Platform}
+\subsection{Android Development}
+\begin{frame}{Android SDK}
+    \begin{itemize}
+        \item Framework for developing applications
+        \item Java
+        \item Dalvik Virtual Machine
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Android Runtime}
+    \begin{itemize}
+        \item Replaced Dalvik Virtual Machine % as default runtime
+        \item Ahead-Of-Time instead of Just-In-Time
+        \item This allows for heavier optimizations
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Android NDK}
+    \begin{itemize}
+        \item Tools for building native applications
+        \item Uses Clang and LLVM (as of 2017)
+        \item Uses JNI to communicate between Java and Native
+    \end{itemize}
 \end{frame}
 
 %------------------------------------------------
@@ -186,6 +250,59 @@ Computer Science and Communication\\ % Your institution for the title page
 %------------------------------------------------
 \subsection{Java Native Interface (JNI)}
 \begin{frame}{Java Native Interface (JNI)}
+    \begin{itemize}
+        \item Bridge between JVM and binaries
+        \item Run code compiled for a specific architecture from Java
+        \item JVM communication
+    \end{itemize}
+\end{frame}
+
+
+%------------------------------------------------
+% Vectorization
+%------------------------------------------------
+\begin{frame}[t]{Vectorization}
+    \begin{center}
+    \scalebox{0.7}{%
+        \begin{figure}
+            \begin{subfigure}{.50\textwidth}
+                \centering
+                \begin{tikzpicture}[node distance = 0mm, start chain=1 going {below=of \tikzchainprevious.south west}, box/.style = {draw, semithick, minimum size=1cm, every on chain/.style={anchor=north west}, outer sep = 0mm, on chain}]
+                    \foreach \i in {1,...,4}
+                    {%
+                        \pgfmathtruncatemacro{\y}{\i - 1};
+                        \pgfmathtruncatemacro{\lab}{(\i - 4) * -1};
+                        \node[fill=myeggshell,box] (A\lab) at (0, 1.5*\y) {A$_\lab$};
+                        \node[fill=mylightgreen,box] (B\lab) at (1.6, 1.5*\y) {B$_\lab$};
+                        \node[fill=mylightred,box] (C\lab) at (4, 1.5*\y) {C$_\lab$};
+                        \node[fill=none,right of=A\lab,node distance=0.8cm] (plus\i) {+};
+                        \node[fill=none,right of=B\lab,node distance=1.15cm] (equals\i) {=};
+                    };
+            \end{tikzpicture}%
+            \caption{Four separate instructions}
+        \end{subfigure}%
+        \begin{subfigure}{.50\textwidth}
+            \centering
+            \begin{tikzpicture}[node distance = 0mm, start chain=1 going {below=of \tikzchainprevious.south west}, box/.style = {draw, semithick, minimum size=1cm, every on chain/.style={anchor=north west}, outer sep = 0mm, on chain}]
+                \foreach \i in {1,...,4}
+                {%
+                    \pgfmathtruncatemacro{\y}{\i - 1};
+                    \pgfmathtruncatemacro{\lab}{(\i - 4) * -1};
+                    \node[fill=myeggshell,box] (A\lab) at (0, 1*\y) {A$_\lab$};
+                    \node[fill=mylightgreen,box] (B\lab) at (1.6, 1*\y) {B$_\lab$};
+                    \node[fill=mylightred,box] (C\lab) at (4, 1*\y) {C$_\lab$};
+                };
+            \node[fill=none] (plus) at (1.3, 0.95) {+};
+            \node[fill=none] (equals) at (3.3, 0.95) {=};
+        \end{tikzpicture}%
+        \caption{One instruction with SIMD}
+    \end{subfigure}%
+    \end{figure}}
+    \end{center}
+    \begin{itemize}
+        \item SSE
+        \item NEON
+    \end{itemize}
 \end{frame}
 
 %------------------------------------------------
@@ -193,6 +310,25 @@ Computer Science and Communication\\ % Your institution for the title page
 %------------------------------------------------
 \subsection{Discrete Fourier Transform (DFT)}
 \begin{frame}{Discrete Fourier Transform (DFT)}
+    \begin{itemize}
+        \item DFT: \textit{Time} $\Rightarrow$ \textit{Frequency}
+        \item Decomposition of a signal
+        \item Example uses:
+            \begin{itemize}
+                \item Audio visualization
+                \item Speech recognition
+                \item Compression
+                \item Polynomial multiplication
+            \end{itemize}
+    \end{itemize}
+
+    \begin{align*}
+        X\left(k\right) = \sum\limits_{n=0}^{N-1}x\left(n\right)\cdot e^{-j\frac{2\pi}{N}kn},\ \ k = 0,1,2,\dots,N-1
+    \end{align*}
+\end{frame}
+
+\begin{frame}{Discrete Fourier Transform (DFT)}
+    \input{resources/dftgraph.tex}
 \end{frame}
 
 %------------------------------------------------
@@ -200,13 +336,26 @@ Computer Science and Communication\\ % Your institution for the title page
 %------------------------------------------------
 \subsection{Fast Fourier Transform (FFT)}
 \begin{frame}{Fast Fourier Transform (FFT)}
+    \begin{itemize}
+        \item Naive DFT, $O(N^2)$
+        \item Cooley-Tukey FFT\footnote{B. J. W. Cooley and J. W. Tukey, \enquote{An Algorithm for the Machine Calculation Complex Fourier Series}, pp. 297–301, 1964.}, $O(N\log{}N)$
+        \item Trigonometric constants (twiddle factors)
+    \end{itemize}
 \end{frame}
+% \begin{frame}{FFT Butterfly updates}
+%     \input{resources/fft.tex}
+% \end{frame}
 
 %------------------------------------------------
 % Related Work
 %------------------------------------------------
 \subsection{Related Work}
 \begin{frame}{Related Work}
+    \begin{itemize}
+        \item<1-> S. Lee and J. W. Jeon, \enquote{Evaluating Performance of Android Platform Using Native C for Embedded Systems}, \emph{International Conference on Control, Automation and Systems}, pp. 1160–1163, 2010.
+        \item<2-> A. D. D. C. Jr, M. Rosan, and M. Queiroz, \enquote{FFT benchmark on Android devices: Java versus JNI}, pp. 4–7, 2013.
+        \item<3-> X. Chen and Z. Zong, \enquote{Android App Energy Efficiency: The Impact of Language, Runtime, Compiler, and Implementation}, \emph{2016 IEEE International Conferences on Big Data and Cloud Computing (BDCloud), Social Computing and Networking (SocialCom), Sustainable Computing and Communications (SustainCom)}, pp. 485–492, 2016.
+    \end{itemize}
 \end{frame}
 
 %%%------------------------------------------------
@@ -219,6 +368,12 @@ Computer Science and Communication\\ % Your institution for the title page
 %------------------------------------------------
 \subsection{Experiments}
 \begin{frame}{Experiments}
+    \begin{enumerate}
+        \item Cost of using JNI
+        \item Comparison of smaller FFT libraries
+        \item Native optimization with NEON
+        \item Using \texttt{float} and \texttt{double} data types
+    \end{enumerate}
 \end{frame}
 
 %------------------------------------------------
@@ -226,13 +381,45 @@ Computer Science and Communication\\ % Your institution for the title page
 %------------------------------------------------
 \subsection{Measurements}
 \begin{frame}{Measurements}
+    \begin{itemize}
+        \item Nexus 6P used in all tests
+        \item Time was measured in Java using \texttt{SystemClock.elapsedRealtimeNanos()}
+        \item Data sizes varied between $2^4 - 2^{18}$
+        \item 100 executions for each test, 95\% confidence interval
+        % \item Garbage collection is a source of error
+    \end{itemize}
 \end{frame}
 
 %------------------------------------------------
 % Implementation
 %------------------------------------------------
 \subsection{Implementation}
+
 \begin{frame}{Implementation}
+    \begin{itemize}[<+->]
+        \item \textbf{Java}
+            \begin{itemize}[<.->]
+                \item Princeton Recursive
+                \item Princeton Iterative
+                \item Columbia Iterative
+            \end{itemize}
+        \item \textbf{C++}
+            \begin{itemize}[<.->]
+                \item KISS (Keep It Simple Stupid) FFT
+                \item SSE Recursive FFT
+                \item SSE Iterative FFT
+            \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Implementation}
+    \begin{itemize}
+        \item Benchmark application
+        \item Java algorithms translated to C++
+        \item Separate thread, one algorithm at a time
+        \item Time measurements executed on a release build
+        \item Memory measurements executed with an attached debugger
+    \end{itemize}
 \end{frame}
 
 %%%------------------------------------------------
@@ -241,16 +428,71 @@ Computer Science and Communication\\ % Your institution for the title page
 \section{Results and Discussion}
 \subsection{JNI}
 \begin{frame}{JNI}
+    \resizebox{\columnwidth}{!}{%
+        \rowcolors{1}{}{lightgray}
+        \begin{tabular}{lcccc}\toprule
+            \textbf{Block size}  & \textbf{No params} & \textbf{Vector} & \textbf{Convert} & \textbf{Columbia}\\\midrule
+            \textbf{16}  & 1.7922 $\pm$ 0.1392 & 1.9333 $\pm$ 0.1223 & 2.6052 $\pm$ 0.1004 & 4.1058 $\pm$ 0.3042\\
+            \textbf{32}  & 1.6983 $\pm$ 0.0220 & 2.8130 $\pm$ 1.7924 & 2.6006 $\pm$ 0.0370 & 3.9109 $\pm$ 0.0535\\
+            \textbf{64}  & 1.6755 $\pm$ 0.0149 & 1.6344 $\pm$ 0.1809 & 2.6630 $\pm$ 0.0425 & 3.9296 $\pm$ 0.0566\\
+            \textbf{128}  & 1.9604 $\pm$ 0.4978 & 1.2349 $\pm$ 0.1262 & 1.9375 $\pm$ 0.0843 & 3.0823 $\pm$ 0.0892\\
+            \textbf{256}  & 1.7292 $\pm$ 0.0694 & 1.3276 $\pm$ 0.2589 & 1.8141 $\pm$ 0.0276 & 3.0958 $\pm$ 0.0441\\
+            \textbf{512}  & 1.6916 $\pm$ 0.0110 & 1.2567 $\pm$ 0.1227 & 2.2818 $\pm$ 0.7011 & 3.1656 $\pm$ 0.0457\\
+            \textbf{1024}  & 2.0228 $\pm$ 0.5684 & 1.3167 $\pm$ 0.1341 & \tikzmark{jni1}{6.3756 $\pm$ 8.4676} & 3.2896 $\pm$ 0.1396\\
+            \textbf{2048}  & 1.7218 $\pm$ 0.0288 & 1.5416 $\pm$ 0.1405 & 1.9099 $\pm$ 0.0898 & 3.4844 $\pm$ 0.1113\\
+            \textbf{4096}  & 1.1411 $\pm$ 0.0404 & 1.4010 $\pm$ 0.0788 & 2.0062 $\pm$ 0.1562 & 3.8562 $\pm$ 0.3197\\
+            \textbf{8192}  & 1.1105 $\pm$ 0.0078 & 1.4818 $\pm$ 0.0759 & 2.3671 $\pm$ 0.1897 & 3.8474 $\pm$ 0.4784\\
+            \textbf{16384}  & 1.1183 $\pm$ 0.0280 & 1.7308 $\pm$ 0.1043 & 2.5833 $\pm$ 0.1737 & 4.9724 $\pm$ 0.8955\\
+            \textbf{32768}  & 1.1162 $\pm$ 0.0084 & 2.2099 $\pm$ 0.1880 & 3.2062 $\pm$ 0.2029 & 5.3719 $\pm$ 0.2875\\
+            \textbf{65536}  & 1.7463 $\pm$ 1.2217 & \tikzmark{jni2}{4.7474 $\pm$ 3.1960} & 4.3198 $\pm$ 0.2926 & 6.8136 $\pm$ 0.2499\\
+            \textbf{131072}  & 1.1027 $\pm$ 0.0141 & 2.6375 $\pm$ 0.1531 & 5.7004 $\pm$ 0.2681 & 9.6912 $\pm$ 1.4337\\
+            \textbf{262144} & 1.1006 $\pm$ 0.0118 & 3.3172 $\pm$ 0.1164 & 7.4630 $\pm$ 0.2309 & 10.2781 $\pm$ 0.2278\\
+            \bottomrule
+        \end{tabular}
+    }
+    \pause\tikz[overlay,remember picture]{\draw[draw=red,thick,double,fill opacity=0.2] ($(jni1)+(-1.8,0.3)$) rectangle ($(jni1)+(0.6,-0.1)$);}
+    \pause\tikz[overlay,remember picture]{\draw[draw=red,thick,double,fill opacity=0.2] ($(jni2)+(-1.2,0.5)$) rectangle ($(jni2)+(1.2,0.1)$);}
 \end{frame}
+
+\begin{frame}{JNI}
+    \resizebox{\columnwidth}{!}{%
+        \rowcolors{1}{}{lightgray}
+        \begin{tabular}{lcccc}\toprule
+            \textbf{Block size}  & \textbf{No params} & \textbf{Vector} & \textbf{Convert} & \textbf{Columbia}\\\midrule
+            \textbf{16}  & 1.7922 $\pm$ 0.1392 & 1.9333 $\pm$ 0.1223 & 2.6052 $\pm$ 0.1004 & 4.1058 $\pm$ 0.3042\\
+            \textbf{32}  & 1.6983 $\pm$ 0.0220 & 2.8130 $\pm$ 1.7924 & 2.6006 $\pm$ 0.0370 & 3.9109 $\pm$ 0.0535\\
+            \textbf{64}  & 1.6755 $\pm$ 0.0149 & 1.6344 $\pm$ 0.1809 & 2.6630 $\pm$ 0.0425 & 3.9296 $\pm$ 0.0566\\
+            \textbf{128}  & 1.9604 $\pm$ 0.4978 & 1.2349 $\pm$ 0.1262 & 1.9375 $\pm$ 0.0843 & 3.0823 $\pm$ 0.0892\\
+            \textbf{256}  & 1.7292 $\pm$ 0.0694 & 1.3276 $\pm$ 0.2589 & 1.8141 $\pm$ 0.0276 & 3.0958 $\pm$ 0.0441\\
+            \textbf{512}  & 1.6916 $\pm$ 0.0110 & 1.2567 $\pm$ 0.1227 & 2.2818 $\pm$ 0.7011 & 3.1656 $\pm$ 0.0457\\
+            \textbf{1024}  & 2.0228 $\pm$ 0.5684 & 1.3167 $\pm$ 0.1341 & 6.3756 $\pm$ 8.4676 & 3.2896 $\pm$ 0.1396\\
+            \textbf{2048}  & 1.7218 $\pm$ 0.0288 & 1.5416 $\pm$ 0.1405 & 1.9099 $\pm$ 0.0898 & 3.4844 $\pm$ 0.1113\\
+            \textbf{4096}  & 1.1411 $\pm$ 0.0404 & 1.4010 $\pm$ 0.0788 & 2.0062 $\pm$ 0.1562 & 3.8562 $\pm$ 0.3197\\
+            \textbf{8192}  & 1.1105 $\pm$ 0.0078 & 1.4818 $\pm$ 0.0759 & 2.3671 $\pm$ 0.1897 & \tikzmark{jni3}{3.8474 $\pm$ 0.4784}\\
+            \textbf{16384}  & 1.1183 $\pm$ 0.0280 & 1.7308 $\pm$ 0.1043 & 2.5833 $\pm$ 0.1737 & 4.9724 $\pm$ 0.8955\\
+            \textbf{32768}  & 1.1162 $\pm$ 0.0084 & 2.2099 $\pm$ 0.1880 & 3.2062 $\pm$ 0.2029 & 5.3719 $\pm$ 0.2875\\
+            \textbf{65536}  & 1.7463 $\pm$ 1.2217 & 4.7474 $\pm$ 3.1960 & 4.3198 $\pm$ 0.2926 & 6.8136 $\pm$ 0.2499\\
+            \textbf{131072}  & 1.1027 $\pm$ 0.0141 & 2.6375 $\pm$ 0.1531 & 5.7004 $\pm$ 0.2681 & 9.6912 $\pm$ 1.4337\\
+            \textbf{262144} & 1.1006 $\pm$ 0.0118 & 3.3172 $\pm$ 0.1164 & 7.4630 $\pm$ 0.2309 & 10.2781 $\pm$ 0.2278\\
+            \bottomrule
+        \end{tabular}
+    }
+    \tikz[overlay,remember picture]{\draw[draw=red,thick,double,fill opacity=0.2] ($(jni3)+(-2.5,0.6)$) rectangle ($(jni3)+(0.0,-1.8)$);}
+\end{frame}
+
 \subsection{Libraries}
 \begin{frame}{Libraries}
+    \textbf{problems:} Translating Java $\rightarrow$ C++ may not yield in comparable code. Compilers do different optimizations leading to different execution efficiency. This report is delimited to the chosen compilers and compiler versions.
 \end{frame}
+
 \subsection{NEON}
 \begin{frame}{NEON}
 \end{frame}
+
 \subsection{\texttt{float} vs \texttt{double}}
 \begin{frame}{\texttt{float} vs \texttt{double}}
 \end{frame}
+
 \subsection{Garbage Collection}
 \begin{frame}{Garbage Collection}
 \end{frame}
@@ -261,38 +503,21 @@ Computer Science and Communication\\ % Your institution for the title page
 \section{Conclusions}
 \begin{frame}{Conclusions}
     \begin{block}{Conclusion 1}
-        
+        \emph{The overhead from JNI does not have a significant effect on performance.}
     \end{block}
     \begin{block}{Conclusion 2}
-
+        \emph{Of the tested algorithms, choose Columbia Iterative.}
     \end{block}
     \begin{block}{Conclusion 3}
-
+        \emph{Avoid allocating memory in the run-loop of a recurring task.}
+    \end{block}
+    \begin{block}{Conclusion 4}
+        \emph{NEON optimization is significantly faster than non-optimized code for larger block sizes.} % Mention image processing, more data
     \end{block}
 \end{frame}
 
-% %------------------------------------------------
-%
-% \begin{frame}
-% \frametitle{Native Development Kit}
-% \begin{columns}[c] % The "c" option specifies centered vertical alignment while the "t" option is used for top vertical alignment
-%
-% \column{.45\textwidth} % Left column and width
-% \textbf{Heading}
-% \begin{enumerate}
-% \item Statement
-% \item Explanation
-% \item Example
-% \end{enumerate}
-%
-% \column{.5\textwidth} % Right column and width
-% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer lectus nisl, ultricies in feugiat rutrum, porttitor sit amet augue. Aliquam ut tortor mauris. Sed volutpat ante purus, quis accumsan dolor.
-%
-% \end{columns}
-% \end{frame}
-
 \begin{frame}
-\Huge{\centerline{Questions?}}
+    \Huge{\centerline{Questions?}}
 \end{frame}
 
 \end{document}

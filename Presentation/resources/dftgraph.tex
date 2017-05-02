@@ -1,0 +1,47 @@
+\begin{figure}
+    \renewcommand\thesubfigure{(\alph{subfigure})}
+    % \centering
+    \scalebox{0.7}{%
+    \begin{tikzpicture}
+        \begin{groupplot}[group style={group name=my plots,group size= 1 by 2,horizontal sep =1.5cm,vertical sep =2cm},width=6cm]
+            \nextgroupplot[
+                legend pos=north east,
+                trig format plots=rad,
+                scaled ticks=false,
+                tick label style={/pgf/number format/fixed},
+                ymin=-4,
+                ymax=4,
+                xmin=0,
+                xmax=1,
+                ylabel={Amplitude},
+                xlabel={Time $\left[s\right]$},
+                width=14cm,
+                height=5cm,
+            ]
+            \addlegendentry{$f(x) = 0.5\sin(10x) + \sin(20x) + 1.5\sin(30x)$}
+            \addplot[domain=-0.5*pi:2*pi,samples=800,red] {0.5*sin(10*x) + sin(20*x) + 1.5*sin(30*x)};
+            \nextgroupplot[
+                legend pos=north east,
+                trig format plots=rad,
+                ymin=0,
+                ymax=2.0,
+                xmin=0,
+                xmax=50,
+                ylabel={Amplitude},
+                xlabel={Frequency $\left[Hz\right]$},
+                width=14cm,
+                height=5cm,
+                yshift=-0.5cm,
+            ]
+            \addplot[fill=blue,ybar] coordinates {%
+                    (10,0.5)
+                    (20,1.0)
+                    (30,1.5)
+                };
+            % \addplot[color=blue,mark=none] file {Data/frequencydomain.dat};
+        \end{groupplot}
+        \node[text width=12cm,align=center,anchor=north] at ([yshift=10mm]my plots c1r1.north) (cap1) {Time domain};
+        \node[text width=12cm,align=center,anchor=north] at ([yshift=10mm]my plots c1r2.north) (cap2) {Frequency domain};
+    \end{tikzpicture}
+    }
+\end{figure}
