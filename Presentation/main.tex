@@ -1,0 +1,298 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Beamer Presentation
+% LaTeX Template
+% Version 1.0 (10/11/12)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+
+\mode<presentation> {%
+
+% The Beamer class comes with a number of default slide themes
+% which change the colors and layouts of slides. Below this is a list
+% of all the themes, uncomment each in turn to see what they look like.
+
+% \usetheme{default}
+% \usetheme{AnnArbor}
+% \usetheme{Antibes}
+% \usetheme{Bergen}
+% \usetheme{Berkeley}
+% \usetheme{Berlin}
+\usetheme{Boadilla}
+% \usetheme{CambridgeUS}
+% \usetheme{Copenhagen}
+% \usetheme{Darmstadt}
+% \usetheme{Dresden}
+% \usetheme{Frankfurt}
+% \usetheme{Goettingen}
+% \usetheme{Hannover}
+% \usetheme{Ilmenau}
+% \usetheme{JuanLesPins}
+% \usetheme{Luebeck}
+% \usetheme{Madrid}
+% \usetheme{Malmoe}
+% \usetheme{Marburg}
+% \usetheme{Montpellier}
+% \usetheme{PaloAlto}
+% \usetheme{Pittsburgh}
+% \usetheme{Rochester}
+% \usetheme{Singapore}
+% \usetheme{Szeged}
+% \usetheme{Warsaw}
+
+% As well as themes, the Beamer class has a number of color themes
+% for any slide theme. Uncomment each of these in turn to see how it
+% changes the colors of your current slide theme.
+
+%\usecolortheme{albatross}
+%\usecolortheme{beaver}
+%\usecolortheme{beetle}
+%\usecolortheme{crane}
+%\usecolortheme{dolphin}
+%\usecolortheme{dove}
+%\usecolortheme{fly}
+%\usecolortheme{lily}
+%\usecolortheme{orchid}
+%\usecolortheme{rose}
+%\usecolortheme{seagull}
+%\usecolortheme{seahorse}
+%\usecolortheme{whale}
+%\usecolortheme{wolverine}
+
+%\setbeamertemplate{footline} % To remove the footer line in all slides uncomment this line
+%\setbeamertemplate{footline}[page number] % To replace the footer line in all slides with a simple slide count uncomment this line
+
+%\setbeamertemplate{navigation symbols}{} % To remove the navigation symbols from the bottom of all slides uncomment this line
+}
+
+\usepackage{graphicx} % Allows including images
+\usepackage{booktabs} % Allows the use of \toprule, \midrule and \bottomrule in tables
+\usepackage{lmodern}%
+
+
+\newcommand{\thetitle}{Comparing Android Runtime with native:\\Fast Fourier Transform on Android}
+\title[Thesis presentation]{\thetitle} % The short title appears at the bottom of every slide, the full title is only on the title page
+
+\author{André Danielsson} % Your name
+\institute[KTH] % Your institution as it will appear on the bottom of every slide, may be shorthand to save space
+{%
+\textit{anddani@kth.se}\\ % Your email address
+\medskip
+Royal Institute of Technology\\
+Computer Science and Communication\\ % Your institution for the title page
+}
+\date{\today} % Date, can be changed to a custom date
+
+\AtBeginSection[]
+{%
+    \begin{scriptsize}
+        \begin{frame}<beamer>{Outline}
+            \tableofcontents[currentsection]
+        \end{frame}
+    \end{scriptsize}
+}
+
+\begin{document}
+
+%------------------------------------------------
+%	PRESENTATION SLIDES
+%------------------------------------------------
+
+% 1.  Present the subject. Describe the work in 1-2 sentences (Intro)
+% 2.  Outline
+% 3.  Why is this important?
+%     Where is it used?
+%     Who can benefit from it?
+% 4.  Research question
+% 5.  Present the necessary knowledge.
+%     ART
+%     JNI
+%     DFT/FFT
+%     Previous studies
+% 6.  Method
+%     Present a list of tests (JNI, libs, opts, float vs double, gc)
+%     What is measured?
+%     How is it measured?
+%     Why is it relevant?
+% 7.  Implementation
+%     Discuss why the algorithms were chosen
+%     NEON
+% 8.  Results/Discussion
+% 9.  Conclusions
+% 10. Questions
+
+%%%------------------------------------------------
+%%% Title page, present the work
+%%%------------------------------------------------
+\begin{frame}
+\titlepage%
+\end{frame}
+
+%%%------------------------------------------------
+%%% Presentation outline
+%%%------------------------------------------------
+\begin{frame}{Outline}
+    \begin{scriptsize}
+        \tableofcontents
+    \end{scriptsize}
+\end{frame}
+
+%%%------------------------------------------------
+%%% Introduction
+%%%------------------------------------------------
+\section{Introduction}
+%------------------------------------------------
+% Purpose of work
+%------------------------------------------------
+\subsection{Purpose of Work}
+\begin{frame}{Purpose of Work}
+    \begin{itemize}
+        \item<1-> Why is this important?
+        \item<2-> Where is it used?
+        \item<3-> Who can benefit from it?
+    \end{itemize}
+\end{frame}
+
+%------------------------------------------------
+% Research Question
+%------------------------------------------------
+\subsection{Research Question}
+\begin{frame}{Research Question}
+\centering
+\emph{Is there a significant performance difference between implementations of a Fast Fourier Transform (FFT) in native code, compiled by Clang, and Dalvik bytecode, compiled by Android Runtime, on Android?}
+\end{frame}
+
+%%%------------------------------------------------
+%%% Background
+%%%------------------------------------------------
+\section{Background}
+
+%------------------------------------------------
+% ART
+%------------------------------------------------
+\subsection{Android Platform}
+\begin{frame}{Android Platform}
+\end{frame}
+
+%------------------------------------------------
+% JNI
+%------------------------------------------------
+\subsection{Java Native Interface (JNI)}
+\begin{frame}{Java Native Interface (JNI)}
+\end{frame}
+
+%------------------------------------------------
+% DFT
+%------------------------------------------------
+\subsection{Discrete Fourier Transform (DFT)}
+\begin{frame}{Discrete Fourier Transform (DFT)}
+\end{frame}
+
+%------------------------------------------------
+% FFT
+%------------------------------------------------
+\subsection{Fast Fourier Transform (FFT)}
+\begin{frame}{Fast Fourier Transform (FFT)}
+\end{frame}
+
+%------------------------------------------------
+% Related Work
+%------------------------------------------------
+\subsection{Related Work}
+\begin{frame}{Related Work}
+\end{frame}
+
+%%%------------------------------------------------
+%%% Method
+%%%------------------------------------------------
+\section{Method}
+
+%------------------------------------------------
+% Experiments
+%------------------------------------------------
+\subsection{Experiments}
+\begin{frame}{Experiments}
+\end{frame}
+
+%------------------------------------------------
+% Measurements
+%------------------------------------------------
+\subsection{Measurements}
+\begin{frame}{Measurements}
+\end{frame}
+
+%------------------------------------------------
+% Implementation
+%------------------------------------------------
+\subsection{Implementation}
+\begin{frame}{Implementation}
+\end{frame}
+
+%%%------------------------------------------------
+%%% Results and Discussion
+%%%------------------------------------------------
+\section{Results and Discussion}
+\subsection{JNI}
+\begin{frame}{JNI}
+\end{frame}
+\subsection{Libraries}
+\begin{frame}{Libraries}
+\end{frame}
+\subsection{NEON}
+\begin{frame}{NEON}
+\end{frame}
+\subsection{\texttt{float} vs \texttt{double}}
+\begin{frame}{\texttt{float} vs \texttt{double}}
+\end{frame}
+\subsection{Garbage Collection}
+\begin{frame}{Garbage Collection}
+\end{frame}
+
+%%%------------------------------------------------
+%%% Conclusions
+%%%------------------------------------------------
+\section{Conclusions}
+\begin{frame}{Conclusions}
+    \begin{block}{Conclusion 1}
+        
+    \end{block}
+    \begin{block}{Conclusion 2}
+
+    \end{block}
+    \begin{block}{Conclusion 3}
+
+    \end{block}
+\end{frame}
+
+% %------------------------------------------------
+%
+% \begin{frame}
+% \frametitle{Native Development Kit}
+% \begin{columns}[c] % The "c" option specifies centered vertical alignment while the "t" option is used for top vertical alignment
+%
+% \column{.45\textwidth} % Left column and width
+% \textbf{Heading}
+% \begin{enumerate}
+% \item Statement
+% \item Explanation
+% \item Example
+% \end{enumerate}
+%
+% \column{.5\textwidth} % Right column and width
+% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer lectus nisl, ultricies in feugiat rutrum, porttitor sit amet augue. Aliquam ut tortor mauris. Sed volutpat ante purus, quis accumsan dolor.
+%
+% \end{columns}
+% \end{frame}
+
+\begin{frame}
+\Huge{\centerline{Questions?}}
+\end{frame}
+
+\end{document}

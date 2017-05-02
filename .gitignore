@@ -1,7 +1,6 @@
 Proposal
 Specification/*
 BackgroundPresentation
-Presentation
 notes.txt
 Figures
 auto
@@ -35,5 +34,9 @@ Data/backup*
 *.lof
 *.lot
 *.run.xml
+*.nav
+*.out
+*.snm
+
 
 !Specification/specification.pdf
