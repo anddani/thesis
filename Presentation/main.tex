@@ -122,22 +122,22 @@ Computer Science and Communication\\ % Your institution for the title page
 }
 \date{\today} % Date, can be changed to a custom date
 
-\AtBeginSection[]
-{%
-  \begin{frame}{~}
-    \makebox[\linewidth][c]{%
-      \begin{minipage}[t][4cm][t]{\textwidth}
-        \begin{multicols}{2}
-          \tableofcontents[currentsection,
-            currentsubsection,
-            subsectionstyle=show/show/shaded,
-          sectionstyle=show/shaded]
-        \end{multicols}
-
-      \end{minipage}%
-    }%
-\end{frame}
-}
+% \AtBeginSection[]
+% {%
+%   \begin{frame}{~}
+%     \makebox[\linewidth][c]{%
+%       \begin{minipage}[t][4cm][t]{\textwidth}
+%         \begin{multicols}{2}
+%           \tableofcontents[currentsection,
+%             currentsubsection,
+%             subsectionstyle=show/show/shaded,
+%           sectionstyle=show/shaded]
+%         \end{multicols}
+%
+%       \end{minipage}%
+%     }%
+% \end{frame}
+% }
 
 \begin{document}
 
@@ -146,27 +146,35 @@ Computer Science and Communication\\ % Your institution for the title page
 %------------------------------------------------
 
 % 1.  Present the subject. Describe the work in 1-2 sentences (Intro)
-% 2.  Outline
+%     (2m)
+% 2.  Outline (1m)
 % 3.  Why is this important?
 %     Where is it used?
-%     Who can benefit from it?
+%     (1m)
 % 4.  Research question
+%     (1m)
 % 5.  Present the necessary knowledge.
-%     ART
-%     JNI
-%     DFT/FFT
-%     Previous studies
+%     Android dev (3m)
+%     Vectorization (1m)
+%     DFT/FFT (1m)
+%     Previous studies (1m)
 % 6.  Method
-%     Present a list of tests (JNI, libs, opts, float vs double, gc)
-%     What is measured?
-%     How is it measured?
-%     Why is it relevant?
-% 7.  Implementation
-%     Discuss why the algorithms were chosen
-%     NEON
+%     Experiments (2m)
+%     Measurements (2m)
+% 7.  Implementation (2m)
 % 8.  Results/Discussion
-% 9.  Conclusions
+%     JNI (1m)
+%     Libs (1m)
+%     NEON (1m)
+%     GC (1m)
+%     float vs double (1m)
+% 9.  Conclusions (1m)
 % 10. Questions
+
+% 23
+
+% 262144 256 kB
+% 524288 512 kB
 
 %%%------------------------------------------------
 %%% Title page, present the work
@@ -180,7 +188,7 @@ Computer Science and Communication\\ % Your institution for the title page
 %%%------------------------------------------------
 \begin{frame}{Outline}
     \makebox[\linewidth][c]{%
-      \begin{minipage}[t][4cm][t]{\textwidth}
+      \begin{minipage}[t][5cm][t]{\textwidth}
         \begin{multicols}{2}
           \tableofcontents
         \end{multicols}
@@ -198,9 +206,8 @@ Computer Science and Communication\\ % Your institution for the title page
 \subsection{Purpose of Thesis}
 \begin{frame}{Purpose of Thesis}
     \begin{itemize}
-        \item<1-> Why is this work important?
-        \item<2-> Where can it be used?
-        \item<3-> Who will benefit from it?
+        \item Why is this work important?
+        \item Who will benefit from it?
     \end{itemize}
 \end{frame}
 
@@ -222,41 +229,49 @@ Computer Science and Communication\\ % Your institution for the title page
 % Android
 %------------------------------------------------
 \subsection{Android Development}
-\begin{frame}{Android SDK}
+\begin{frame}{Android development}
     \begin{itemize}
-        \item Framework for developing applications
-        \item Java
-        \item Dalvik Virtual Machine
+        \item<1-> Android Software Development Kit (SDK)
+        \item<2-> Android Runtime
+        \item<3-> Android Native Development Kit (NDK)
+        \item<4-> Java Native Interface (JNI)
     \end{itemize}
 \end{frame}
-
-\begin{frame}{Android Runtime}
-    \begin{itemize}
-        \item Replaced Dalvik Virtual Machine % as default runtime
-        \item Ahead-Of-Time instead of Just-In-Time
-        \item This allows for heavier optimizations
-    \end{itemize}
-\end{frame}
-
-\begin{frame}{Android NDK}
-    \begin{itemize}
-        \item Tools for building native applications
-        \item Uses Clang and LLVM (as of 2017)
-        \item Uses JNI to communicate between Java and Native
-    \end{itemize}
-\end{frame}
+% \begin{frame}{Android SDK}
+%     \begin{itemize}
+%         \item Framework for developing applications
+%         \item Java
+%         \item Dalvik Virtual Machine
+%     \end{itemize}
+% \end{frame}
+%
+% \begin{frame}{Android Runtime}
+%     \begin{itemize}
+%         \item Replaced Dalvik Virtual Machine % as default runtime
+%         \item Ahead-Of-Time instead of Just-In-Time
+%         \item This allows for heavier optimizations
+%     \end{itemize}
+% \end{frame}
+%
+% \begin{frame}{Android NDK}
+%     \begin{itemize}
+%         \item Tools for building native applications
+%         \item Uses Clang and LLVM (as of 2017)
+%         \item Uses JNI to communicate between Java and Native
+%     \end{itemize}
+% \end{frame}
 
 %------------------------------------------------
 % JNI
 %------------------------------------------------
-\subsection{Java Native Interface (JNI)}
-\begin{frame}{Java Native Interface (JNI)}
-    \begin{itemize}
-        \item Bridge between JVM and binaries
-        \item Run code compiled for a specific architecture from Java
-        \item JVM communication
-    \end{itemize}
-\end{frame}
+% \subsection{Java Native Interface (JNI)}
+% \begin{frame}{Java Native Interface (JNI)}
+%     \begin{itemize}
+%         \item Bridge between JVM and binaries
+%         \item Run code compiled for a specific architecture from Java
+%         \item JVM communication
+%     \end{itemize}
+% \end{frame}
 
 
 %------------------------------------------------
@@ -309,7 +324,7 @@ Computer Science and Communication\\ % Your institution for the title page
 %------------------------------------------------
 % DFT
 %------------------------------------------------
-\subsection{Discrete Fourier Transform (DFT)}
+\subsection{Discrete Fourier Transform}
 \begin{frame}{Discrete Fourier Transform (DFT)}
     \begin{itemize}
         \item DFT: \textit{Time} $\Rightarrow$ \textit{Frequency}
@@ -335,7 +350,6 @@ Computer Science and Communication\\ % Your institution for the title page
 %------------------------------------------------
 % FFT
 %------------------------------------------------
-\subsection{Fast Fourier Transform (FFT)}
 \begin{frame}{Fast Fourier Transform (FFT)}
     \begin{itemize}
         \item Naive DFT, $O(N^2)$
@@ -373,14 +387,15 @@ Computer Science and Communication\\ % Your institution for the title page
         \item Cost of using JNI
         \item Comparison of smaller FFT libraries
         \item Native optimization with NEON
-        \item Using \texttt{float} and \texttt{double} data types
+        % \item Impact of Garbage Collection
+        % \item Using \texttt{float} and \texttt{double} data types
     \end{enumerate}
 \end{frame}
 
 %------------------------------------------------
 % Measurements
 %------------------------------------------------
-\subsection{Measurements}
+% \subsection{Measurements}
 \begin{frame}{Measurements}
     \begin{itemize}
         \item Nexus 6P used in all tests
@@ -416,7 +431,6 @@ Computer Science and Communication\\ % Your institution for the title page
 \begin{frame}{Implementation}
     \begin{itemize}
         \item Benchmark application
-        \item Java algorithms translated to C++
         \item Separate thread, one algorithm at a time
         \item Time measurements executed on a release build
         \item Memory measurements executed with an attached debugger
@@ -452,7 +466,7 @@ Computer Science and Communication\\ % Your institution for the title page
         \end{tabular}
     }
     \pause\tikz[overlay,remember picture]{\draw[draw=red,thick,double,fill opacity=0.2] ($(jni1)+(-1.8,0.3)$) rectangle ($(jni1)+(0.6,-0.1)$);}
-    \pause\tikz[overlay,remember picture]{\draw[draw=red,thick,double,fill opacity=0.2] ($(jni2)+(-1.2,0.5)$) rectangle ($(jni2)+(1.2,0.1)$);}
+    \pause\tikz[overlay,remember picture]{\draw[draw=red,thick,double,fill opacity=0.2] ($(jni2)+(-1.2,0.45)$) rectangle ($(jni2)+(1.2,0.85)$);}
 \end{frame}
 
 \begin{frame}{JNI (Time \textmu s)}
@@ -508,6 +522,7 @@ Computer Science and Communication\\ % Your institution for the title page
 \begin{frame}{Libraries}
     \begin{itemize}
         \item Recursive algorithm worst
+        \item Princeton algorithms allocates during run loop
         \item Java Columbia Iterative comparable with C++
         \item Translating Java $\rightarrow$ C++
     \end{itemize}
@@ -531,175 +546,175 @@ Computer Science and Communication\\ % Your institution for the title page
     \end{itemize}
 \end{frame}
 
-\subsection{Garbage Collection}
-\begin{frame}{Garbage Collection}
-    \begin{table}
-        \centering
-        \caption{Pauses due to garbage collection}
-        \resizebox{\columnwidth}{!}{%
-            \rowcolors{1}{}{lightgray}
-            \begin{tabular}{|l|rr|rr|}\toprule
-                \textbf{Algorithm} & \textbf{\# partial} & \textbf{tot. time (ms)} & \textbf{\# sticky} & \textbf{tot. time (ms)}\\\midrule
-                \textbf{Java Columbia Iterative}        & 0 & 0 & 0 & 0\\
-                \tikzmark{gc1}{\textbf{Java Princeton Iterative}} & 477 & 2,825.52 & 406 & 2,959.24\\
-                \textbf{Java Princeton Recursive}       & 240 & 602.10 & 397 & 887.39\\
-                \textbf{Java Float Columbia Iterative}  & 0 & 0 & 0 & 0\\
-                \tikzmark{gc2}{\textbf{Java Float Princeton Iterative}} & 269 & 1,541.97 & 334 & 2,316.53\\
-                \textbf{Java Float Princeton Recursive} & 167 & 313.05 & 27 & 71.39\\
-                \textbf{C++ Columbia Iterative}         & 0 & 0 & 0 & 0\\
-                \textbf{C++ Princeton Iterative}        & 0 & 0 & 0 & 0\\
-                \textbf{C++ Princeton Recursive}        & 0 & 0 & 0 & 0\\
-                \textbf{C++ Float Columbia Iterative}   & 0 & 0 & 0 & 0\\
-                \textbf{C++ Float Princeton Iterative}  & 0 & 0 & 0 & 0\\
-                \textbf{C++ Float Princeton Recursive}  & 0 & 0 & 0 & 0\\
-                \textbf{KISS}                           & 0 & 0 & 0 & 0\\
-                \textbf{NEON Iterative}                 & 0 & 0 & 0 & 0\\
-                \textbf{NEON Recursive}                 & 0 & 0 & 0 & 0\\
-            \bottomrule
-            \end{tabular}
-        }
-    \end{table}
-    \pause\tikz[overlay,remember picture]{\draw[draw=red,thick,double,fill opacity=0.2] ($(gc1)+(-0.2,-0.4)$) rectangle ($(gc1)+(11.7,-1.1)$);}
-    \tikz[overlay,remember picture]{\draw[draw=red,thick,double,fill opacity=0.2] ($(gc2)+(-0.2,0.0)$) rectangle ($(gc2)+(11.7,-0.7)$);}
-\end{frame}
-
-\begin{frame}[t]{Garbage Collection}
-    % \begin{table}
-        \centering
-        % \caption{Block size where each algorithm started to trigger garbage collection}
-        \resizebox{6cm}{!}{%
-        \rowcolors{1}{}{lightgray}
-        \begin{tabular}{lr}\toprule
-            \textbf{Algorithm} & \textbf{Block Size}\\\midrule
-            \textbf{Princeton Iterative} & 8192\\
-            \textbf{Princeton Recursive} & 4096\\
-            \textbf{Float Princeton Iterative} & 16384\\
-            \textbf{Float Princeton Recursive} & 8192\\
-            \bottomrule
-        \end{tabular}
-        }
-        \vspace{1cm}
-    % \end{table}
-        \begin{itemize}
-            \item Immutable Complex Class
-            \item 
-            \item Pre-allocate Arrays to minimize GC
-        \end{itemize}
-\end{frame}
-
-\subsection{\texttt{float} vs \texttt{double}}
-\begin{frame}{\texttt{float} vs \texttt{double}}
-    \begin{table}
-        \centering
-        \caption{Java \texttt{float} results table for \emph{extra large} block sizes, Time (ms)}
-        \resizebox{\columnwidth}{!}{%
-            \rowcolors{1}{}{lightgray}
-            \begin{tabular}{lccc}\toprule
-            \textbf{Block size}  & \textbf{Columbia Iterative} & \textbf{Princeton Iterative} & \textbf{Princeton Recursive}\\\midrule
-            \textbf{32768}  & 8.9846 $\pm$ 0.2566 & 113.1953 $\pm$ 3.9572 & 219.0208 $\pm$ 5.5642\\
-            \textbf{65536}  & 20.2833 $\pm$ 0.4786 & 261.9954 $\pm$ 9.1987 & 485.1020 $\pm$ 13.3737\\
-            \textbf{131072}  & 47.2950 $\pm$ 1.3073 & 622.4328 $\pm$ 24.9022 & 1039.4937 $\pm$ 26.9767\\
-            \tikzmark{ci1}{\textbf{262144}} & 156.7135 $\pm$ 1.1934 & 1728.4640 $\pm$ 53.8042 & 2297.8011 $\pm$ 58.2951\\
-            \bottomrule
-            \end{tabular}
-        }
-    \end{table}
-    \begin{table}
-        \centering
-        \caption{Java \texttt{double} results table for \emph{extra large} block sizes, Time (ms)}
-        \resizebox{\columnwidth}{!}{%
-            \rowcolors{1}{}{lightgray}
-            \begin{tabular}{lccc}\toprule
-            \textbf{Block size}  & \textbf{Columbia Iterative} & \textbf{Princeton Iterative} & \textbf{Princeton Recursive}\\\midrule
-            \textbf{32768}  & 12.2634 $\pm$ 0.5700 & 150.7299 $\pm$ 1.0864 & 239.0777 $\pm$ 2.5276\\
-            \textbf{65536}  & 24.9874 $\pm$ 0.9069 & 356.9871 $\pm$ 1.5864 & 522.7409 $\pm$ 6.1660\\
-            \textbf{131072}  & 85.9483 $\pm$ 1.6097 & 815.8607 $\pm$ 3.4304 & 1144.8802 $\pm$ 17.8736\\
-            \tikzmark{ci2}{\textbf{262144}} & 274.5134 $\pm$ 5.1129 & 2108.0771 $\pm$ 27.5366 & 2638.0547 $\pm$ 40.5424\\
-            \bottomrule
-            \end{tabular}
-        }
-    \end{table}
-    \pause\tikz[overlay,remember picture]{\draw[draw=red,thick,double,fill opacity=0.2] ($(ci1)+(1.9,0.5)$) rectangle ($(ci1)+(4.8,0.0)$);}
-    \tikz[overlay,remember picture]{\draw[draw=red,thick,double,fill opacity=0.2] ($(ci2)+(1.9,0.5)$) rectangle ($(ci2)+(4.8,0.0)$);}
-\end{frame}
-
-\begin{frame}{\texttt{float} vs \texttt{double}}
-    \begin{table}
-        \centering
-        \caption{Java \texttt{float} results table for \emph{extra large} block sizes, Time (ms)}
-        \resizebox{\columnwidth}{!}{%
-            \rowcolors{1}{}{lightgray}
-            \begin{tabular}{lccc}\toprule
-            \textbf{Block size}  & \textbf{Columbia Iterative} & \textbf{Princeton Iterative} & \textbf{Princeton Recursive}\\\midrule
-            \textbf{32768}  & 8.9846 $\pm$ 0.2566 & 113.1953 $\pm$ 3.9572 & 219.0208 $\pm$ 5.5642\\
-            \textbf{65536}  & 20.2833 $\pm$ 0.4786 & 261.9954 $\pm$ 9.1987 & 485.1020 $\pm$ 13.3737\\
-            \textbf{131072}  & 47.2950 $\pm$ 1.3073 & 622.4328 $\pm$ 24.9022 & 1039.4937 $\pm$ 26.9767\\
-            \textbf{262144} & 156.7135 $\pm$ 1.1934 & \tikzmark{pi1}{1728.4640 $\pm$ 53.8042} & 2297.8011 $\pm$ 58.2951\\
-            \bottomrule
-            \end{tabular}
-        }
-    \end{table}
-    \begin{table}
-        \centering
-        \caption{Java \texttt{double} results table for \emph{extra large} block sizes, Time (ms)}
-        \resizebox{\columnwidth}{!}{%
-            \rowcolors{1}{}{lightgray}
-            \begin{tabular}{lccc}\toprule
-            \textbf{Block size}  & \textbf{Columbia Iterative} & \textbf{Princeton Iterative} & \textbf{Princeton Recursive}\\\midrule
-            \textbf{32768}  & 12.2634 $\pm$ 0.5700 & 150.7299 $\pm$ 1.0864 & 239.0777 $\pm$ 2.5276\\
-            \textbf{65536}  & 24.9874 $\pm$ 0.9069 & 356.9871 $\pm$ 1.5864 & 522.7409 $\pm$ 6.1660\\
-            \textbf{131072}  & 85.9483 $\pm$ 1.6097 & 815.8607 $\pm$ 3.4304 & 1144.8802 $\pm$ 17.8736\\
-            \textbf{262144} & 274.5134 $\pm$ 5.1129 & \tikzmark{pi2}{2108.0771 $\pm$ 27.5366} & 2638.0547 $\pm$ 40.5424\\
-            \bottomrule
-            \end{tabular}
-        }
-    \end{table}
-    \tikz[overlay,remember picture]{\draw[draw=red,thick,double,fill opacity=0.2] ($(pi1)+(-0.9,0.5)$) rectangle ($(pi1)+(2.3,0.0)$);}
-    \tikz[overlay,remember picture]{\draw[draw=red,thick,double,fill opacity=0.2] ($(pi2)+(-0.9,0.5)$) rectangle ($(pi2)+(2.3,0.0)$);}
-\end{frame}
-
-\begin{frame}{\texttt{float} vs \texttt{double}}
-    \begin{table}
-        \centering
-        \caption{Java \texttt{float} results table for \emph{extra large} block sizes, Time (ms)}
-        \resizebox{\columnwidth}{!}{%
-            \rowcolors{1}{}{lightgray}
-            \begin{tabular}{lccc}\toprule
-            \textbf{Block size}  & \textbf{Columbia Iterative} & \textbf{Princeton Iterative} & \textbf{Princeton Recursive}\\\midrule
-            \textbf{32768}  & 8.9846 $\pm$ 0.2566 & 113.1953 $\pm$ 3.9572 & 219.0208 $\pm$ 5.5642\\
-            \textbf{65536}  & 20.2833 $\pm$ 0.4786 & 261.9954 $\pm$ 9.1987 & 485.1020 $\pm$ 13.3737\\
-            \textbf{131072}  & 47.2950 $\pm$ 1.3073 & 622.4328 $\pm$ 24.9022 & 1039.4937 $\pm$ 26.9767\\
-            \textbf{262144} & 156.7135 $\pm$ 1.1934 & 1728.4640 $\pm$ 53.8042 & \tikzmark{pr1}{2297.8011 $\pm$ 58.2951}\\
-            \bottomrule
-            \end{tabular}
-        }
-    \end{table}
-    \begin{table}
-        \centering
-        \caption{Java \texttt{double} results table for \emph{extra large} block sizes, Time (ms)}
-        \resizebox{\columnwidth}{!}{%
-            \rowcolors{1}{}{lightgray}
-            \begin{tabular}{lccc}\toprule
-            \textbf{Block size}  & \textbf{Columbia Iterative} & \textbf{Princeton Iterative} & \textbf{Princeton Recursive}\\\midrule
-            \textbf{32768}  & 12.2634 $\pm$ 0.5700 & 150.7299 $\pm$ 1.0864 & 239.0777 $\pm$ 2.5276\\
-            \textbf{65536}  & 24.9874 $\pm$ 0.9069 & 356.9871 $\pm$ 1.5864 & 522.7409 $\pm$ 6.1660\\
-            \textbf{131072}  & 85.9483 $\pm$ 1.6097 & 815.8607 $\pm$ 3.4304 & 1144.8802 $\pm$ 17.8736\\
-            \textbf{262144} & 274.5134 $\pm$ 5.1129 & 2108.0771 $\pm$ 27.5366 & \tikzmark{pr2}{2638.0547 $\pm$ 40.5424}\\
-            \bottomrule
-            \end{tabular}
-        }
-    \end{table}
-    \tikz[overlay,remember picture]{\draw[draw=red,thick,double,fill opacity=0.2] ($(pr1)+(-1.4,0.5)$) rectangle ($(pr1)+(2.0,0.0)$);}
-    \tikz[overlay,remember picture]{\draw[draw=red,thick,double,fill opacity=0.2] ($(pr2)+(-1.4,0.5)$) rectangle ($(pr2)+(2.0,0.0)$);}
-\end{frame}
-
-\begin{frame}{\texttt{float} vs \texttt{double}}
-    \begin{itemize}
-        \item Likely due to caching
-        \item \texttt{float} $\rightarrow$ 32-bit
-        \item \texttt{double} $\rightarrow$ 64-bit
-    \end{itemize}
-\end{frame}
+% \subsection{Garbage Collection}
+% \begin{frame}{Garbage Collection}
+%     \begin{table}
+%         \centering
+%         \caption{Pauses due to garbage collection}
+%         \resizebox{\columnwidth}{!}{%
+%             \rowcolors{1}{}{lightgray}
+%             \begin{tabular}{|l|rr|rr|}\toprule
+%                 \textbf{Algorithm} & \textbf{\# partial} & \textbf{tot. time (ms)} & \textbf{\# sticky} & \textbf{tot. time (ms)}\\\midrule
+%                 \textbf{Java Columbia Iterative}        & 0 & 0 & 0 & 0\\
+%                 \tikzmark{gc1}{\textbf{Java Princeton Iterative}} & 477 & 2,825.52 & 406 & 2,959.24\\
+%                 \textbf{Java Princeton Recursive}       & 240 & 602.10 & 397 & 887.39\\
+%                 \textbf{Java Float Columbia Iterative}  & 0 & 0 & 0 & 0\\
+%                 \tikzmark{gc2}{\textbf{Java Float Princeton Iterative}} & 269 & 1,541.97 & 334 & 2,316.53\\
+%                 \textbf{Java Float Princeton Recursive} & 167 & 313.05 & 27 & 71.39\\
+%                 \textbf{C++ Columbia Iterative}         & 0 & 0 & 0 & 0\\
+%                 \textbf{C++ Princeton Iterative}        & 0 & 0 & 0 & 0\\
+%                 \textbf{C++ Princeton Recursive}        & 0 & 0 & 0 & 0\\
+%                 \textbf{C++ Float Columbia Iterative}   & 0 & 0 & 0 & 0\\
+%                 \textbf{C++ Float Princeton Iterative}  & 0 & 0 & 0 & 0\\
+%                 \textbf{C++ Float Princeton Recursive}  & 0 & 0 & 0 & 0\\
+%                 \textbf{KISS}                           & 0 & 0 & 0 & 0\\
+%                 \textbf{NEON Iterative}                 & 0 & 0 & 0 & 0\\
+%                 \textbf{NEON Recursive}                 & 0 & 0 & 0 & 0\\
+%             \bottomrule
+%             \end{tabular}
+%         }
+%     \end{table}
+%     \pause\tikz[overlay,remember picture]{\draw[draw=red,thick,double,fill opacity=0.2] ($(gc1)+(-0.2,-0.4)$) rectangle ($(gc1)+(11.7,-1.1)$);}
+%     \tikz[overlay,remember picture]{\draw[draw=red,thick,double,fill opacity=0.2] ($(gc2)+(-0.2,0.0)$) rectangle ($(gc2)+(11.7,-0.7)$);}
+% \end{frame}
+%
+% \begin{frame}[t]{Garbage Collection}
+%     % \begin{table}
+%         \centering
+%         % \caption{Block size where each algorithm started to trigger garbage collection}
+%         \resizebox{6cm}{!}{%
+%         \rowcolors{1}{}{lightgray}
+%         \begin{tabular}{lr}\toprule
+%             \textbf{Algorithm} & \textbf{Block Size}\\\midrule
+%             \textbf{Princeton Iterative} & 8192\\
+%             \textbf{Princeton Recursive} & 4096\\
+%             \textbf{Float Princeton Iterative} & 16384\\
+%             \textbf{Float Princeton Recursive} & 8192\\
+%             \bottomrule
+%         \end{tabular}
+%         }
+%         \vspace{1cm}
+%     % \end{table}
+%         \begin{itemize}
+%             \item Immutable Complex Class
+%             \item Many allocations in run loop
+%             \item Pre-allocate Arrays to minimize GC
+%         \end{itemize}
+% \end{frame}
+%
+% \subsection{\texttt{float} vs \texttt{double}}
+% \begin{frame}{\texttt{float} vs \texttt{double}}
+%     \begin{table}
+%         \centering
+%         \caption{Java \texttt{float} results table for \emph{extra large} block sizes, Time (ms)}
+%         \resizebox{\columnwidth}{!}{%
+%             \rowcolors{1}{}{lightgray}
+%             \begin{tabular}{lccc}\toprule
+%             \textbf{Block size}  & \textbf{Columbia Iterative} & \textbf{Princeton Iterative} & \textbf{Princeton Recursive}\\\midrule
+%             \textbf{32768}  & 8.9846 $\pm$ 0.2566 & 113.1953 $\pm$ 3.9572 & 219.0208 $\pm$ 5.5642\\
+%             \textbf{65536}  & 20.2833 $\pm$ 0.4786 & 261.9954 $\pm$ 9.1987 & 485.1020 $\pm$ 13.3737\\
+%             \textbf{131072}  & 47.2950 $\pm$ 1.3073 & 622.4328 $\pm$ 24.9022 & 1039.4937 $\pm$ 26.9767\\
+%             \tikzmark{ci1}{\textbf{262144}} & 156.7135 $\pm$ 1.1934 & 1728.4640 $\pm$ 53.8042 & 2297.8011 $\pm$ 58.2951\\
+%             \bottomrule
+%             \end{tabular}
+%         }
+%     \end{table}
+%     \begin{table}
+%         \centering
+%         \caption{Java \texttt{double} results table for \emph{extra large} block sizes, Time (ms)}
+%         \resizebox{\columnwidth}{!}{%
+%             \rowcolors{1}{}{lightgray}
+%             \begin{tabular}{lccc}\toprule
+%             \textbf{Block size}  & \textbf{Columbia Iterative} & \textbf{Princeton Iterative} & \textbf{Princeton Recursive}\\\midrule
+%             \textbf{32768}  & 12.2634 $\pm$ 0.5700 & 150.7299 $\pm$ 1.0864 & 239.0777 $\pm$ 2.5276\\
+%             \textbf{65536}  & 24.9874 $\pm$ 0.9069 & 356.9871 $\pm$ 1.5864 & 522.7409 $\pm$ 6.1660\\
+%             \textbf{131072}  & 85.9483 $\pm$ 1.6097 & 815.8607 $\pm$ 3.4304 & 1144.8802 $\pm$ 17.8736\\
+%             \tikzmark{ci2}{\textbf{262144}} & 274.5134 $\pm$ 5.1129 & 2108.0771 $\pm$ 27.5366 & 2638.0547 $\pm$ 40.5424\\
+%             \bottomrule
+%             \end{tabular}
+%         }
+%     \end{table}
+%     \pause\tikz[overlay,remember picture]{\draw[draw=red,thick,double,fill opacity=0.2] ($(ci1)+(1.9,0.5)$) rectangle ($(ci1)+(4.8,0.0)$);}
+%     \tikz[overlay,remember picture]{\draw[draw=red,thick,double,fill opacity=0.2] ($(ci2)+(1.9,0.5)$) rectangle ($(ci2)+(4.8,0.0)$);}
+% \end{frame}
+%
+% \begin{frame}{\texttt{float} vs \texttt{double}}
+%     \begin{table}
+%         \centering
+%         \caption{Java \texttt{float} results table for \emph{extra large} block sizes, Time (ms)}
+%         \resizebox{\columnwidth}{!}{%
+%             \rowcolors{1}{}{lightgray}
+%             \begin{tabular}{lccc}\toprule
+%             \textbf{Block size}  & \textbf{Columbia Iterative} & \textbf{Princeton Iterative} & \textbf{Princeton Recursive}\\\midrule
+%             \textbf{32768}  & 8.9846 $\pm$ 0.2566 & 113.1953 $\pm$ 3.9572 & 219.0208 $\pm$ 5.5642\\
+%             \textbf{65536}  & 20.2833 $\pm$ 0.4786 & 261.9954 $\pm$ 9.1987 & 485.1020 $\pm$ 13.3737\\
+%             \textbf{131072}  & 47.2950 $\pm$ 1.3073 & 622.4328 $\pm$ 24.9022 & 1039.4937 $\pm$ 26.9767\\
+%             \textbf{262144} & 156.7135 $\pm$ 1.1934 & \tikzmark{pi1}{1728.4640 $\pm$ 53.8042} & 2297.8011 $\pm$ 58.2951\\
+%             \bottomrule
+%             \end{tabular}
+%         }
+%     \end{table}
+%     \begin{table}
+%         \centering
+%         \caption{Java \texttt{double} results table for \emph{extra large} block sizes, Time (ms)}
+%         \resizebox{\columnwidth}{!}{%
+%             \rowcolors{1}{}{lightgray}
+%             \begin{tabular}{lccc}\toprule
+%             \textbf{Block size}  & \textbf{Columbia Iterative} & \textbf{Princeton Iterative} & \textbf{Princeton Recursive}\\\midrule
+%             \textbf{32768}  & 12.2634 $\pm$ 0.5700 & 150.7299 $\pm$ 1.0864 & 239.0777 $\pm$ 2.5276\\
+%             \textbf{65536}  & 24.9874 $\pm$ 0.9069 & 356.9871 $\pm$ 1.5864 & 522.7409 $\pm$ 6.1660\\
+%             \textbf{131072}  & 85.9483 $\pm$ 1.6097 & 815.8607 $\pm$ 3.4304 & 1144.8802 $\pm$ 17.8736\\
+%             \textbf{262144} & 274.5134 $\pm$ 5.1129 & \tikzmark{pi2}{2108.0771 $\pm$ 27.5366} & 2638.0547 $\pm$ 40.5424\\
+%             \bottomrule
+%             \end{tabular}
+%         }
+%     \end{table}
+%     \tikz[overlay,remember picture]{\draw[draw=red,thick,double,fill opacity=0.2] ($(pi1)+(-0.9,0.5)$) rectangle ($(pi1)+(2.3,0.0)$);}
+%     \tikz[overlay,remember picture]{\draw[draw=red,thick,double,fill opacity=0.2] ($(pi2)+(-0.9,0.5)$) rectangle ($(pi2)+(2.3,0.0)$);}
+% \end{frame}
+%
+% \begin{frame}{\texttt{float} vs \texttt{double}}
+%     \begin{table}
+%         \centering
+%         \caption{Java \texttt{float} results table for \emph{extra large} block sizes, Time (ms)}
+%         \resizebox{\columnwidth}{!}{%
+%             \rowcolors{1}{}{lightgray}
+%             \begin{tabular}{lccc}\toprule
+%             \textbf{Block size}  & \textbf{Columbia Iterative} & \textbf{Princeton Iterative} & \textbf{Princeton Recursive}\\\midrule
+%             \textbf{32768}  & 8.9846 $\pm$ 0.2566 & 113.1953 $\pm$ 3.9572 & 219.0208 $\pm$ 5.5642\\
+%             \textbf{65536}  & 20.2833 $\pm$ 0.4786 & 261.9954 $\pm$ 9.1987 & 485.1020 $\pm$ 13.3737\\
+%             \textbf{131072}  & 47.2950 $\pm$ 1.3073 & 622.4328 $\pm$ 24.9022 & 1039.4937 $\pm$ 26.9767\\
+%             \textbf{262144} & 156.7135 $\pm$ 1.1934 & 1728.4640 $\pm$ 53.8042 & \tikzmark{pr1}{2297.8011 $\pm$ 58.2951}\\
+%             \bottomrule
+%             \end{tabular}
+%         }
+%     \end{table}
+%     \begin{table}
+%         \centering
+%         \caption{Java \texttt{double} results table for \emph{extra large} block sizes, Time (ms)}
+%         \resizebox{\columnwidth}{!}{%
+%             \rowcolors{1}{}{lightgray}
+%             \begin{tabular}{lccc}\toprule
+%             \textbf{Block size}  & \textbf{Columbia Iterative} & \textbf{Princeton Iterative} & \textbf{Princeton Recursive}\\\midrule
+%             \textbf{32768}  & 12.2634 $\pm$ 0.5700 & 150.7299 $\pm$ 1.0864 & 239.0777 $\pm$ 2.5276\\
+%             \textbf{65536}  & 24.9874 $\pm$ 0.9069 & 356.9871 $\pm$ 1.5864 & 522.7409 $\pm$ 6.1660\\
+%             \textbf{131072}  & 85.9483 $\pm$ 1.6097 & 815.8607 $\pm$ 3.4304 & 1144.8802 $\pm$ 17.8736\\
+%             \textbf{262144} & 274.5134 $\pm$ 5.1129 & 2108.0771 $\pm$ 27.5366 & \tikzmark{pr2}{2638.0547 $\pm$ 40.5424}\\
+%             \bottomrule
+%             \end{tabular}
+%         }
+%     \end{table}
+%     \tikz[overlay,remember picture]{\draw[draw=red,thick,double,fill opacity=0.2] ($(pr1)+(-1.4,0.5)$) rectangle ($(pr1)+(2.0,0.0)$);}
+%     \tikz[overlay,remember picture]{\draw[draw=red,thick,double,fill opacity=0.2] ($(pr2)+(-1.4,0.5)$) rectangle ($(pr2)+(2.0,0.0)$);}
+% \end{frame}
+%
+% \begin{frame}{\texttt{float} vs \texttt{double}}
+%     \begin{itemize}
+%         \item Likely due to caching
+%         \item \texttt{float} $\rightarrow$ 32-bit
+%         \item \texttt{double} $\rightarrow$ 64-bit
+%     \end{itemize}
+% \end{frame}
 
 
 %%%------------------------------------------------
