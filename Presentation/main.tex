@@ -338,9 +338,6 @@ Computer Science and Communication\\ % Your institution for the title page
             \end{itemize}
     \end{itemize}
 
-    \begin{align*}
-        X\left(k\right) = \sum\limits_{n=0}^{N-1}x\left(n\right)\cdot e^{-j\frac{2\pi}{N}kn},\ \ k = 0,1,2,\dots,N-1
-    \end{align*}
 \end{frame}
 
 \begin{frame}{Discrete Fourier Transform (DFT)}
@@ -352,7 +349,10 @@ Computer Science and Communication\\ % Your institution for the title page
 %------------------------------------------------
 \begin{frame}{Fast Fourier Transform (FFT)}
     \begin{itemize}
-        \item Naive DFT, $O(N^2)$
+        \item Naive DFT, $O(N^2)$:
+            \begin{align*}
+                X\left(k\right) = \sum\limits_{n=0}^{N-1}x\left(n\right)\cdot e^{-j\frac{2\pi}{N}kn},\ \ k = 0,1,2,\dots,N-1
+            \end{align*}
         \item Cooley-Tukey FFT\footnote{B. J. W. Cooley and J. W. Tukey, \enquote{An Algorithm for the Machine Calculation Complex Fourier Series}, pp. 297–301, 1964.}, $O(N\log{}N)$
         \item Trigonometric constants (twiddle factors)
     \end{itemize}
