@@ -9,7 +9,7 @@ Regarding the spike in mean for some JNI results, this can be a cause of one lar
 
 \section{Simplicity and Efficiency}
 
-The slowest algorithm was the Java Princeton Recursive. The reason for this is because it executes many method calls. For each method call, registers must be saved by pushing them onto a stack, function arguments must them be moved to appropriate registers and a jump instruction to the new code must be executed. When the function has finished executing, the registers are popped from the stack. This causes a lot of overhead.
+The slowest algorithm was the Java Princeton Recursive. The reason for this is because it executes many method calls. For each method call, registers must be saved by pushing them onto a stack, function arguments must then be moved to appropriate registers and a jump instruction to the new code must be executed. When the function has finished executing, the registers are popped from the stack. This causes a lot of overhead.
 
 Additionally, each call creates new \texttt{Complex} arrays when splitting up the array in odd and even indices. Lastly, when combining the arrays, new \texttt{Complex} objects are created each time an operation is done between two complex numbers. The reason for the is because the \texttt{Complex} class creates immutable objects. This slows down the process and increases memory consumption, increasing work for the garbage collector.
 
@@ -19,7 +19,7 @@ Additionally, this will increase the work for the garbage collector, increasing 
 
 Of the algorithms tested in the FFT library tests, KISS FFT was the fastest. It is more optimized than the \enquote{basic} implementations found in the Columbia and Princeton algorithms. In C++, Princeton Iterative and Columbia Iterative were the fastest and in Java, Columbia Iterative was the fastest. The reason for Princeton Iterative being faster in C++ is, as for Java Princeton Recursive, because it uses the \texttt{Complex} class to represent complex numbers. Because Java Columbia Iterative used double arrays to represent real and imaginary numbers, no new objects needed to be created.
 
-The results from Chapter~\ref{ch:gc} - Garbage Collection show that the Java Princeton algorithms caused the GC to run. This behaviour was as expected because they called new during their execution. Java Columbia did not cause any garbage collection and neither did any of the C++ algorithms.
+The results from Chapter~\ref{ch:gc} - Garbage Collection show that the Java Princeton algorithms caused the GC to run. This behaviour was as expected because they called \texttt{new} during their execution. Java Columbia did not cause any garbage collection and neither did any of the C++ algorithms.
 
 One thing that is clear is that the Columbia Iterative algorithm is the best one to choose from of the Java versions. It performs better than both Princeton Iterative and Princeton Recursive. It also allows simple modifications such as changing between using \texttt{float}s or  \texttt{double}s to represent the data.
 
@@ -41,7 +41,7 @@ When the block sizes are large, a bigger difference is found between the algorit
 
 KISS FFT was the fastest of all the native implementations. This was because of the optimizations done to improve its performance. Using multiple radix implementations of the FFT, it is possible to get more performance at the cost of higher code complexity. It shows the potential in doing small optimizations that does not rely on multi-core or other architecture dependent optimization techniques.
 
-How memory is used differs between algorithms. As seen in Chapter~\ref{ch:gc}, only four tests caused the garbage collector to be run. Java Princeton Iterative and Recursive with both \texttt{float} and \texttt{double} as primary data types were the algorithms causing this. This is because they create new arrays each time they are called. The garbage collector needed to remove each array that was allocated each call, thus increasing the total work the garbage collector must achieve. It is also possible to see that for the \texttt{double} data type, garbage collection are caused earlier than for \texttt{float} during the tests.
+How memory is used differs between algorithms. As seen in Chapter~\ref{ch:gc}, only four tests caused the garbage collector to be run. Java Princeton Iterative and Recursive with both \texttt{float} and \texttt{double} as primary data types were the algorithms causing this. This is because they create new arrays each time they are called. The garbage collector needed to remove each array that was allocated each call, thus increasing the total work the garbage collector must achieve. It is also possible to see that for the \texttt{double} data type, garbage collection is caused earlier than for \texttt{float} during the tests.
 
 \section{Vectorization as Optimization}
 
