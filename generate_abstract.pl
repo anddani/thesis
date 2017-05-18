@@ -20,6 +20,8 @@ while (<>) {
         $swetitle = $_;
     } elsif (m/\\def\\theauthor\{\\.*? (.*)\}/) {
         $author = $1;
+    } elsif (m/\\def\\theauthor\{(.*)\}/) {
+        $author = $1;
     } elsif (m/\\def\\theabstract\{\\input\{(.*)\}\}/) {
         open my $file, '<', $1; 
         $abstract = <$file>; 
