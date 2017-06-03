@@ -6,14 +6,14 @@ JNI overhead is very small, around 1-10 \textmu s for a Qualcomm MSM8994 Snapdra
 
 %%%
 % FFT Conclusion
-One of the conclusions to draw from the results is that when choosing Java, the best algorithm was the Columbia Iterative. It was the easiest to convert to C++ because it did not include any Java specific constructs (except for method definitions). It was also the fastest between it, Princeton Iterative and Princeton Recursive for both Java and C++. In Columbia Iterative, after the initial setup of calculating the trigonometric tables and allocating space for the input/output array, no memory allocation is done during the actual transform.
+One of the conclusions to draw from the results is that when choosing Java, the best algorithm was the Columbia Iterative. It was the easiest to convert to C++ because it did not include any Java specific constructs (except for method definitions). It was also the fastest compared to Princeton Iterative and Princeton Recursive for both Java and C++. In Columbia Iterative, after the initial setup of calculating the trigonometric tables and allocating space for the input/output array, no memory allocation is done during the actual transform.
 
 %%%
 % Garbage Collection Conclusion
 To prevent garbage collection pauses throughout the program, it is necessary to pre-allocate data structures that should be used in a function that is called multiple times instead of allocating new memory for each call. By doing this, it reduces the work for the garbage collector. Less allocated memory will go out of scope, making garbage collection pauses shorter and less frequent.
 
 % Optimization Conclusion
-Vectorization was a very efficient optimization which performed much better than their corresponding algorithms in C++. Native optimization is architecture dependent. This means that an application will only work on a subset of Android devices running some architectures the program is compiled for. Further, some optimizations are only possible on a few architectures. This makes some optimizations better than other. An example of a more portable optimization is parallelization.
+Vectorization was a very efficient optimization which performed much better than their corresponding algorithms in C++. Native optimization is architecture dependent. This means that an application will only work on a subset of Android devices running some architectures the program is compiled for. Further, some optimizations are only possible on a few architectures. This makes some optimizations better than others. An example of a more portable optimization is parallelization.
 
 %%%
 % Float and Doubles Conclusion
@@ -25,4 +25,4 @@ To answer the research question, based on the results from the experiments, we c
 
 %%%
 % Future work
-One interesting aspect that could be examined for future work is parallelization. This optimization has more compatibility than the optimization in NEON because it can be used in Java. There are different libraries to compare a possible implementation with such as JTransforms~\cite{jtransforms:benchmark}.
+One interesting aspect that could be examined for future work is parallelization. This optimization has more compatibility than the optimization in NEON because it can be used in Java. There are different libraries to compare a possible implementation with such as JTransforms~\cite{jtransforms:benchmark}. Another is to see if we get different results when executing the tests on a previous version, such as Android version 4.4, on the same device. This means that it is possible to compare the performance differences between DVM and ART.

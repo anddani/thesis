@@ -1,5 +1,5 @@
 \begin{tikzpicture}
-\begin{axis}[xlabel={Block size},ylabel={Time (ms)},width=0.70\linewidth,legend pos=north west,scaled y ticks = false,legend cell align=left,legend style={font=\scriptsize}]
+\begin{axis}[xlabel={Block size},ylabel={Time (ms)},width=0.70\linewidth,legend pos=north west,scaled x ticks={base 10:-3},legend cell align=left,legend style={font=\scriptsize}]
 \addplot+[error bars/.cd, y dir=both,y explicit] coordinates {
 (256, 0.0293) +- (0.0042, 0.0042)
 (512, 0.0615) +- (0.0047, 0.0047)

@@ -4,7 +4,7 @@
 %% JNI-Tests
 %%==================================================================
 \section{JNI}
-The results from the tests that measure the JNI overhead can be found in Table~\ref{tab:jni:common}. These tests are presented with block sizes defined in Chapter~\ref{ch:method} - Method. Execution time and confidence intervals are given in microseconds and are rounded to four decimal points. The number before the $\pm$ sign is the sample mean and the number after $\pm$ is a two sided confidence interval with a confidence level of $95\%$. Each test was executed 100 times to ensure that we get reliable sample means.
+The results from the tests that measure the JNI overhead can be found in Table~\ref{tab:jni:common}. These tests are presented with block sizes defined in Chapter~\ref{ch:method} - Method. Execution time and confidence intervals are given in microseconds and are rounded to four decimal points. The number before the $\pm$ sign is the sample mean and the number after $\pm$ is a two sided confidence interval with a confidence level of $95\%$. Each test was executed 100 times to ensure that we get reliable sample means. As well as having tests that run in reasonable time.
 
 The test labeled \textbf{No params} is the test where a native void function with no parameters that returns immediately was called. \textbf{Vector} takes a \texttt{jdoubleArray} and returns a \texttt{jdoubleArray} immediately. \textbf{Convert} takes a \texttt{jdoubleArray}, converts it to a native array using \texttt{GetPrimitiveArrayCritical()}, converts it back to a \texttt{jdoubleArray} using \texttt{ReleasePrimitiveArrayCritical()} and returns a \texttt{jdoubleArray}. \textbf{Columbia} takes three \texttt{jdoubleArray}s, converts them and returns them the same way as \textbf{Convert} does.
 
@@ -88,7 +88,7 @@ As for the C++ tests, the results were less scattered and had a more apparent in
 %= MEDIUM =%
 %==========%
 \subsection{Medium block sizes}
-The medium block sizes continues the trend where Java Princeton Recursive performs the worst followed by Java Princeton Iterative and C++ Princeton Recursive. As for the small block sizes, Java Columbia Iterative, C++ Princeton Iterative, C++ Columbia Iterative and KISS have the smallest execution time and perform similarly.
+The medium block sizes (Figure~\ref{fig:all:line:medium}) continues the trend where Java Princeton Recursive performs the worst followed by Java Princeton Iterative and C++ Princeton Recursive. As for the small block sizes, Java Columbia Iterative, C++ Princeton Iterative, C++ Columbia Iterative and KISS have the smallest execution time and perform similarly.
 
 \ifrelease
 \begin{figure}
@@ -133,7 +133,7 @@ In Table~\ref{tab:cpp:medium} we can see that the confidence intervals are relat
 \fi
 
 \ifrelease
-\begin{table}
+\begin{table}[H]
     \centering
     \caption{C++ results table for \emph{medium} block sizes, Time (ms)}
     \label{tab:cpp:medium}
@@ -204,16 +204,17 @@ Results for tests with \emph{large} block sizes in C++ produced some interesting
 \section{Optimizations}
 The NEON optimizations proved to be very efficient for \emph{extra large} block sizes. These results can be found in Table~\ref{tab:neon:extra}. Comparing these figures with the results, for the same block sizes in Java (Table~\ref{tab:java:float:extra}), we can see that the results from the NEON tests are more than double the speed of the fastest Java implementation. Note that the data type for all of the optimization tests (as well as the C++ and Java tests) were \texttt{float}. Because we get faster execution time by lining up more elements, the \texttt{float} data type was used in the NEON optimizations. When comparing this with non-NEON tests, \texttt{float}s were used in Java and C++ to make the results more comparable.
 
-Table~\ref{tab:java:float:extra} also show that for very large block sizes, Princeton Iterative and Princeton Recursive are very inefficient compared to Columbia Iterative. This also holds true for the C++ implementation. For these block sizes, however, the differences in execution time is smaller than for Java (as seen in Table~\ref{tab:cpp:float:extra}).
-
 \ifrelease
-\begin{table}
+\begin{table}[H]
     \centering
     \caption{NEON \texttt{float} results table for \emph{extra large} block sizes, Time (ms)}
     \label{tab:neon:extra}
     \input{Data/results/NEON/CPP_common_table_EXTRA.tex}
 \end{table}
 \fi
+
+
+Table~\ref{tab:java:float:extra} also show that for very large block sizes, Princeton Iterative and Princeton Recursive are very inefficient compared to Columbia Iterative. This also holds true for the C++ implementation. For these block sizes, however, the differences in execution time is smaller than for Java (as seen in Table~\ref{tab:cpp:float:extra}).
 
 When comparing the NEON results from Table~\ref{tab:neon:extra} with the results from the C++ tests found in Table~\ref{tab:cpp:float:extra}, it is clear that vectorization as an optimization is beneficial. NEON intrinsics resulted in almost twice as fast execution time in comparison with the normal C++ tests. It was also much faster than Java, especially compared to Java Princeton Iterative/Recursive.
 

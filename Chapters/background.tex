@@ -3,14 +3,8 @@
 \section{Android SDK}
 To allow developers to build Android apps, Google developed a Software Development Kit (\gls{sdk}) to facilitate the process of writing Android applications. The Android \gls{sdk} software stack is described in Figure~\ref{fig:sdk}. The Linux kernel is at the base of the stack, handling the core functionality of the device. Detecting hardware interaction, process scheduling and memory allocation are examples of services provided by the kernel. The Hardware Abstraction Layer (\gls{hal}) is an abstraction layer above the device drivers. This allows the developer to interact with hardware independent on the type of device \cite{android:hal}.
 
-The native libraries are low level libraries, written in C or C++, that handle functionality such as the Secure Sockets Layer (\gls{ssl}) and Open GL \cite{komatineni2012pro}. Android Runtime (\gls{art}) features Ahead-Of-Time (\gls{aot}) compilation and Just-In-Time (\gls{jit}) compilation, garbage collection and debugging support \cite{android:sdk:stack}. This is where the Java code is being run and because of the debugging and garbage collection support, it is also beneficial for the developer to write applications against this layer.
-
-The Java \gls{api} Framework is the Java library you use when controlling the Android UI. It is the reusable code for managing activities, implementing data structures and designing the application. The System Application layer represents the functionality that allows a third-party app to communicate with other apps. Example of usable applications are email, calendar and contacts \cite{android:sdk:stack}.
-
-All applications for Android are packaged in so called Android Packages (\gls{apk}). These APKs are zipped archives that contain all the necessary resources required to run the app. Such resources are the AndroidManifest.xml file, Dalvik executables (.dex files), native libraries and other files the application depends on.
-
 \ifrelease
-\begin{figure}
+\begin{figure}[H]
     \centering
 
     \begin{tikzpicture}[node distance=3pt,outer sep=0pt,
@@ -54,6 +48,13 @@ All applications for Android are packaged in so called Android Packages (\gls{ap
 \fi
 
 
+
+The native libraries are low level libraries, written in C or C++, that handle functionality such as the Secure Sockets Layer (\gls{ssl}) and Open GL \cite{komatineni2012pro}. Android Runtime (\gls{art}) features Ahead-Of-Time (\gls{aot}) compilation and Just-In-Time (\gls{jit}) compilation, garbage collection and debugging support \cite{android:sdk:stack}. This is where the Java code is being run and because of the debugging and garbage collection support, it is also beneficial for the developer to write applications against this layer.
+
+The Java \gls{api} Framework is the Java library you use when controlling the Android UI. It is the reusable code for managing activities, implementing data structures and designing the application. The System Application layer represents the functionality that allows a third-party app to communicate with other apps. Example of usable applications are email, calendar and contacts \cite{android:sdk:stack}.
+
+All applications for Android are packaged in so called Android Packages (\gls{apk}). These APKs are zipped archives that contain all the necessary resources required to run the app. Such resources are the AndroidManifest.xml file, Dalvik executables (.dex files), native libraries and other files the application depends on.
+
 \section{Dalvik Virtual Machine}
 % Why is Dalvik Virtual Machine used?
 Compiled Java code is executed on a virtual machine called the Java Virtual Machine (\gls{jvm}). The reason for this is to allow portable compiled code. This way, every device, independent on architecture, with a \gls{jvm} installed will be able to run the same code. The Android operating system is designed to be installed on many different devices \cite{android:os:devices}. Compiling to machine code for the targeted devices could become impractical because a program must be compiled against all possible platforms it should work on. For this reason, Java bytecode is a sensible choice when wanting to distribute compiled applications.
@@ -70,16 +71,16 @@ The \gls{dvm} is a virtual machine optimized for devices where resources are lim
 Dalvik executables, or \gls{dex} files, are the files where Dalvik bytecode is stored. They are created by converting a Java .class file to the \gls{dex} format. They are of a different structure than the Java .class files. One difference is the header types that describes the data. Another difference is the string constant fields that are present in the \gls{dex}-file. % FIND REFERENCE FROM GOOGLE IO ABOUT DALVIK??
 
 \section{Android Runtime}
-Android Runtime is the new default runtime for Android as of version 5.0 \cite{android:dalvik}. The big improvement over Dalvik is the fact that applications are compiled to native machine code when they are installed on the device, rather than during runtime of the app. This results in faster start-up \cite{li2016advanced} and lets the compiler use more heavy optimization that is not otherwise possible during runtime. However, if the whole application is compiled ahead of time it is no longer possible to do any runtime optimizations. An example of a runtime optimization is to inline methods or functions that are called frequently.
+Android Runtime is the new default runtime for Android as of version 5.0 \cite{android:dalvik}. The big improvement over Dalvik is the fact that applications are compiled to native machine code when they are installed on the device, rather than during runtime of the app. This results in faster start-up \cite{li2016advanced} and lets the compiler use more heavy optimization that is not otherwise possible during runtime. However, if the whole application is compiled ahead of time it is no longer possible to do any runtime optimizations. Examples of runtime optimizations are to inline methods or functions that are called frequently.
 
-When an app is installed on the device, a program called \textbf{dex2oat} converts a \gls{dex}-file to an executable file called an oat-file \cite{android:art:dalvik}. This oat-file is in the Executable and Linkable Format (ELF) and can be seen as a wrapper of multiple \gls{dex}-files \cite{Dresel2016}. An improvement made in Android Runtime is the optimized garbage collector. Changes include a decrease from two to one GC pause, reduced memory fragmentation (reduces calls to \texttt{GC\_FOR\_ALLOC}) and parallelization techniques to lower the time it takes to collect garbage~\cite{android:art:dalvik}. There are two common garbage collects plans, Sticky Concurrent Mark Sweep (Sticky CMS) and Partial Concurrent Mark Sweep (Partial CMS). Sticky CMS does not move data and does only reclaim data that has been allocated since the last garbage collect \cite{android:art:gc}. Partial CMS frees from the active heap of the process \cite[p.~122]{sillars2015high}.
+When an app is installed on the device, a program called \textbf{dex2oat} converts a \gls{dex}-file to an executable file called an oat-file \cite{android:art:dalvik}. This oat-file is in the Executable and Linkable Format (ELF) and can be seen as a wrapper of multiple \gls{dex}-files \cite{Dresel2016}. An improvement made in Android Runtime is the optimized garbage collector. Changes include a decrease from two to one Garbage Collector (GC) pause, reduced memory fragmentation (reduces calls to \texttt{GC\_FOR\_ALLOC}) and parallelization techniques to lower the time it takes to collect garbage~\cite{android:art:dalvik}. There are two common garbage collects plans, Sticky Concurrent Mark Sweep (Sticky CMS) and Partial Concurrent Mark Sweep (Partial CMS). Sticky CMS does not move data and does only reclaim data that has been allocated since the last garbage collect \cite{android:art:gc}. Partial CMS frees from the active heap of the process \cite[p.~122]{sillars2015high}.
 
 \section{Native Development Kit}
-Native Development Kit (\gls{ndk}) is a set of tools to help write native apps for Android. It contains the necessary libraries, compilers, build tools and debugger for developing low level libraries. Google recommends using the \gls{ndk} for two reasons: run computationally intensive tasks and usage of already written libraries \cite{android:ndk:guides}. Because Java is the supported language on Android, due to security and stability, native development is not recommended to use when building full apps, with an exception of when developing games.
+Native Development Kit (\gls{ndk}) is a set of tools to help write native apps for Android. It contains the necessary libraries, compilers, build tools and debugger for developing low level libraries. Google recommends using the \gls{ndk} for two reasons: run computationally intensive tasks and usage of already written libraries \cite{android:ndk:guides}. Because Java is the supported language on Android due to security and stability, native development is not recommended to use when building full apps.
 
 Historically, native libraries have been built using Make. Make is a tool used to coordinate compilation of source files. Android makefiles, \texttt{Android.mk} and \texttt{Application.mk}, are used to set compiler flags, choose which architectures that a project should be compiled for, location of source files and more. With Android Studio 2.2 \gls{cmake} was introduced as the default build tool \cite{android:studio:cmake}. CMake is a more advanced tool for generating and running build scripts.
 
-At each compilation, the architectures the source files will be built against must be specified. The source file(s) generated will be placed in a folder structure (shown below) where the compiled source file is located in a folder that determines the architecture. Each architecture-folder is located in a folder called \texttt{lib}. This folder will be placed at the root of the \gls{apk}.
+At each compilation, the architectures which the source files will be built against must be specified. The source file(s) generated will be placed in a folder structure (shown below) where the compiled source file is located in a folder that determines the architecture. Each architecture-folder is located in a folder called \texttt{lib}. This folder will be placed at the root of the \gls{apk}.
 
 \begin{verbatim}
 lib/
@@ -114,10 +115,10 @@ The \gls{jni} also provides a library for C and C++ for handling the special \gl
 
 The second parameter to a \gls{jni} function is of the \texttt{jobject} type. This is the current Java object that has called this specific \gls{jni} function. It can be seen as an equivalent to the \texttt{this} keyword in Java and C++ \cite[p.~23]{liang1999java}. There is a function-pair available in the \texttt{JNIEnv} pointer called \texttt{GetDoubleArrayElements()} and \texttt{ReleaseDoubleArrayElements()}. There are also functions for other primitive types such as \texttt{GetIntArrayElements()}, \texttt{GetShortAr\-rayElements()} and others. \texttt{GetDoubleArrayElements()} is used to convert a Java array to a native memory buffer \cite[p.~159]{liang1999java}. This call also tries to \enquote{pin} the elements of the array.
 
-\emph{Pinning} allows \gls{jni} to provide the reference to an array directly instead of allocating new memory and copying the whole array. This is used to make the call more efficient although it is not always possible. Some implementations of the virtual machine does not allow this because it requires that the behaviour of the garbage collector must be changed to support this \cite[p.~158]{liang1999java}. There are two other functions, \texttt{GetPrimitiveArrayCritical()} and \texttt{ReleasePrimitiveArrayCritical()}, that can be used to avoid garbage collection in native code. Between these function calls, the native code should not run forever, no calls to any of the \gls{jni} functions are allowed and it is prohibited to block a thread that depends on a VM thread to continue.
+\emph{Pinning} allows \gls{jni} to provide the reference to an array directly instead of allocating new memory and copying the whole array. This is used to make the call more efficient although it is not always possible. Some implementations of the virtual machine do not allow this because it requires that the behaviour of the garbage collector must be changed to support this \cite[p.~158]{liang1999java}. There are two other functions, \texttt{GetPrimitiveArrayCritical()} and \texttt{ReleasePrimitiveArrayCritical()}, that can be used to avoid garbage collection in native code. Between these function calls, the native code should not run forever, no calls to any of the \gls{jni} functions are allowed and it is prohibited to block a thread that depends on a VM thread to continue.
 
 \subsection{LLVM and Clang}
-\gls{llvm} (Low Level Virtual Machine) is a suite that contains a set of compiler optimizers and backends. It is used as a foundation for compiler frontends and supports many architectures. An example of a frontend tool that uses \gls{llvm} is \gls{clang}. Clang is used compile C, C++ and Objective-C source code \cite{clang:comp}.
+\gls{llvm} (Low Level Virtual Machine) is a suite that contains a set of compiler optimizers and backends. It is used as a foundation for compiler frontends and supports many architectures. An example of a frontend tool that uses \gls{llvm} is \gls{clang}. Clang is used to compile C, C++ and Objective-C source code \cite{clang:comp}.
 
 Clang is as of March 2016 (\gls{ndk} version 11) \cite{android:ndk:revision}, the only supported compiler in the \gls{ndk}. Google has chosen to focus on supporting the Clang compiler instead of the GNU GCC compiler. This means that there is a bigger chance that a specific architecture used on an Android device is supported by the \gls{ndk}. This also allows Google to focus on developing optimizations for these architectures with only one supported compiler.
 
@@ -125,11 +126,11 @@ Clang is as of March 2016 (\gls{ndk} version 11) \cite{android:ndk:revision}, th
 
 There are many ways your compiler can optimize your code during compilation. This chapter will first present some general optimization measures taken by the optimizer and will then describe some language specific methods for optimization.
 
-\subsubsection{Loop unrolling}
+\subsection{Loop unrolling}
 Loop unrolling is a technique used to optimize loops. By explicitly having multiple iterations in the body of the loop, it is possible to lower the amount of jump instructions in the produced code. Figure~\ref{fig:c:unroll} demonstrates how unrolling works by decreasing the number of iterations while adding lines in the loop body. The loop unroll executes two iterations of the first code per iteration. It is therefore necessary to update the \texttt{i} variable accordingly. Figure~\ref{fig:assembly:unroll} describes how the change could be represented in assembly language.
 
 \ifrelease
-\begin{figure}
+\begin{figure}[H]
     \centering
     \begin{subfigure}{.5\textwidth}
         \centering
@@ -226,7 +227,7 @@ loop: lw $s4, 0($s1)
 \fi
 
 
-\subsubsection{Inlining}
+\subsection{Inlining}
 Inlining allows the compiler to swap all the calls to an inline function with the content of the function. This removes the need to do all the preparations for a function call such as saving values in registers and preparing parameters and return values. This comes at a cost of a larger program if there are many calls to this function in the code and if the function is large. It is very useful to use inline functions in loops that are run many times. This is an optimization that can be requested in C and C++ by using the \texttt{inline} keyword and can also be optimized by the compiler automatically.
 
 \ifrelease
@@ -300,7 +301,7 @@ loop: lw $s4, 0($s1)
 \fi
 
 
-\subsubsection{Constant folding}
+\subsection{Constant folding}
 \emph{Constant folding} is a technique used to reduce the time it takes to evaluate an expression during runtime \cite[p.~329]{muchnick1997advanced}. By finding which variables that already have a value, the compiler can calculate and assign constants in compile time instead of during runtime. This method of analyzing the code to find expressions consisting of variables that are possible to calculate is called \emph{Constant Propagation} as seen in Figure~\ref{fig:constant:propagation}.
 
 \ifrelease
@@ -337,7 +338,7 @@ loop: lw $s4, 0($s1)
 \end{figure}
 \fi
 
-\subsubsection{Loop Tiling}
+\subsection{Loop Tiling}
 When processing elements in a large array multiple times it is beneficial to utilize as many reads from cache as possible. If the array is larger than the cache, it will kick out earlier elements for the next pass through the array. By processing partitions of the array multiple times before going on to next partition, temporal cache locality can help the program run faster. Temporal locality means that you can find a previously referenced value in the cache if you are trying to access it again. As Figure~\ref{fig:loop:tiling} shows, by introducing a new loop that operate over a small enough partition of the array such that every element is in cache, we will reduce the number of cache misses.
 
 \ifrelease
@@ -491,10 +492,10 @@ In Java, an array is created during runtime and cannot change its size after it 
 % http://stackoverflow.com/questions/9546392/what-triggers-a-full-garbage-collection-in-java
 % https://www.itu.dk/people/sestoft/papers/benchmarking.pdf
 
-\subsection{C++}
-C and C++ arrays have predefined sizes and are located on the program stack. This makes the program run faster because it does not need to call malloc or new and ask for more memory on the heap. This require that the programmer knows the required size of the array in advance although this is not always possible or memory efficient.
+\subsection{C and C++}
+C and C++ arrays have predefined sizes and are located on the program stack. This makes the program run faster because it does not need to call malloc or new and ask for more memory on the heap. This requires that the programmer knows the required size of the array in advance although this is not always possible or memory efficient.
 
-\subsubsection{NEON}
+\subsection{NEON}
 % TODO: Explain what intrinsics are
 % http://www.crickettechnology.com/blog/?p=691
 % http://wanderingcoder.net/2010/07/19/ought-arm/
@@ -561,11 +562,7 @@ The Discrete Fourier Transform (\gls{dft}) is a method of converting a sampled s
 If we observe Figure~\ref{fig:dft:ex1}, we can see how the same signal looks in time domain and frequency domain. The function displayed in the time domain consists of three sine components, each with its own amplitude and frequency. What the graph of the frequency domain shows, is the amplitude of each frequency. This can then be used to analyze the input signal.
 % a signal in time domain looks like in frequency domain.
 
-One important thing to note is that you must sample at twice the frequency you want to analyze. The Nyquist sampling theorem states that \cite{signal:aliasing}:
-\begin{center}
-    \textit{The sampling frequency should be at least twice the highest frequency contained in the signal.}
-\end{center}
-In other words, you have to be able to reconstruct the signal given the samples \cite[Ch~3]{smith1997scientist}. If you are given a signal that is constructed of frequencies that are at most 500~Hz, your sample frequency must be at least 1000 samples per second to be able to find the amplitude for each frequency.
+One important thing to note is that you must sample at twice the frequency you want to analyze. The Nyquist sampling theorem states that \textit{The sampling frequency should be at least twice the highest frequency contained in the signal} \cite{signal:aliasing}. In other words, you have to be able to reconstruct the signal given the samples \cite[Ch~3]{smith1997scientist}. If you are given a signal that is constructed of frequencies that are at most 500~Hz, your sample frequency must be at least 1000 samples per second to be able to find the amplitude for each frequency.
 
 \ifrelease
 \begin{figure}[h]
@@ -624,7 +621,7 @@ Equation~\ref{eq:1} \cite[p.~92]{tan2013digital} describes the mathematical proc
 \end{align}
 
 \section{Fast Fourier Transform}
-The Fast Fourier Transform algorithm composed by Cooley and Tukey is a recursive algorithm that runs in $O(N\log{}N)$ time. The following derivation is based on one found in this article from librow \cite{fft:derivation}. The notation for the imaginary number ($\sqrt{-1}$) was chosen to be $j$ instead of $i$ for consistency. If we expand the expression in Equation~\ref{eq:1}, presented in Chapter~\ref{ch:dft}, for $N = 8$ we get:
+The Fast Fourier Transform algorithm composed by Cooley and Tukey is a recursive algorithm that runs in $O(N\log{}N)$ time. The following derivation is based on one found in this article \cite{fft:derivation}. The notation for the imaginary number ($\sqrt{-1}$) was chosen to be $j$ instead of $i$ for consistency. If we expand the expression in Equation~\ref{eq:1}, presented in Chapter~\ref{ch:dft}, for $N = 8$ we get:
 
 \begin{equation}
     X_{k} = x_0 + x_1e^{-j\frac{2\pi}{8}k} + x_2e^{-j\frac{2\pi}{8}2k} + x_3e^{-j\frac{2\pi}{8}3k} + x_4e^{-j\frac{2\pi}{8}4k} + x_5e^{-j\frac{2\pi}{8}5k} + x_6e^{-j\frac{2\pi}{8}6k} + x_7e^{-j\frac{2\pi}{8}7k}
@@ -797,7 +794,7 @@ An iterative version of this algorithm would mimic the behaviour of the recursiv
 \end{figure}
 \fi
 
-When we have achieved this, the operation order must be established. For the first iteration, the size of the gap between the operands is one. The next gap size is two and the third is four. It is now possible to construct an iterative algorithm. This process is shown in pseudocode in Algorithm~\ref{alg:fft}. The fist part of the algorithm is the Bit reversal. This has clearly $O(N)$ time complexity assuming the time complexity of bit\_reverse is bounded by the number of bits in an integer. For the butterfly updates, the outer while loop will run for $\log{}N$ iterations and the two inner loops will run a total of $\frac{step}{2} \frac{N}{step} = \frac{N}{2}$ times. It is now clear that the time complexity of this algorithm is $O(N\log{}N)$.
+When we have achieved this, the operation order must be established. For the first iteration, the size of the gap between the operands is one. The next gap size is two and the third is four. It is now possible to construct an iterative algorithm. This process is shown in pseudocode in Algorithm~\ref{alg:fft}. The first part of the algorithm is the Bit reversal. This clearly has $O(N)$ time complexity assuming the time complexity of bit\_reverse is bounded by the number of bits in an integer. For the butterfly updates, the outer while loop will run for $\log{}N$ iterations and the two inner loops will run a total of $\frac{step}{2} \frac{N}{step} = \frac{N}{2}$ times. It is now clear that the time complexity of this algorithm is $O(N\log{}N)$.
 
 
 \ifrelease
@@ -837,7 +834,7 @@ When we have achieved this, the operation order must be established. For the fir
 
 \newpage
 \section{Related work}
-A study called \emph{FFT benchmark on Android devices: Java versus JNI} \cite{Jr2013} was published in 2013 and investigated how two implementations of \gls{fft} performed on different Android devices. The main point of the study was to compare how a pure Java implementation would perform compared to a library written in C called \gls{fftw}. The FFTW library supports multi-threaded computation and this aspect is also covered in the study. Their benchmark application was run on 35 different devices with different Android versions to get a wide picture of how the algorithms ran on different phones.
+A study called \emph{FFT benchmark on Android devices: Java versus JNI} \cite{Jr2013} was published in 2013 and investigated how two implementations of \gls{fft} performed on different Android devices. The main point of the study was to compare how a pure Java implementation would perform compared to a library written in C called \gls{fftw}. The FFTW library supports multi-threaded computation and this aspect is also covered in the present study. Their benchmark application was run on 35 different devices with different Android versions to get a wide picture of how the algorithms ran on different phones.
 
 \emph{Evaluating Performance of Android Platform Using Native C for Embedded Systems} \cite{Lee2010} explored how \gls{jni} overhead, arithmetic operations, memory access and heap allocation affected an application written in Java and native C. This study was written in 2010 when the Android \gls{ndk} was relatively new. Since then, many patches has been released, improving performance of code written in native C/C++. In this study, Dalvik VM was the virtual machine that executed the Dalvik bytecode. This study found that the \gls{jni} overhead was insignificant and took 0.15 ms to run in their testing environment. Their test results indicated that C was faster than Java in every case. The performance difference was largest in the memory access test and smallest in floating point calculations.
 

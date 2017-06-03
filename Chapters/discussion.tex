@@ -29,7 +29,7 @@ As we have seen in the tests, choosing an iterative implementation is preferable
 
 Comparing the Java and C++ implementations of the Columbia Iterative FFT, for \emph{small}-\emph{large} block sizes, the Java version is almost as fast as the C++ version. For the block sizes added in the \emph{extra large} group, the C++ version perform better. If you were to choose between the C++ and the Java variant of Columbia, it is better to choose the Java version if the performance requirement allows it. Avoiding having to implement a JNI bridge between Java and native is more preferable than the small increase in performance.
 
-Another argument why it is sensible to choose the Java version is that is has enough performance for processing to allow graphical rendering in 60 \gls{fps}. Let's say we have an application that visualizes sound with a sampling frequency of 44100 Hz and updates the screen at 60 frames per second. It has 16.66 ms to do all the processing needed between the screen updates. If we want to have double precision numbers and use Java it is possible to do an FFT with a size of \textbf{32768}.
+Another argument why it is sensible to choose the Java version is that is has enough performance for processing to allow graphical rendering in 60 \gls{fps}. Say we have an application that visualizes sound with a sampling frequency of 44100 Hz and updates the screen at 60 frames per second. It has 16.66 ms to do all the processing needed between the screen updates. If we want to have double precision numbers and use Java it is possible to do an FFT with a size of \textbf{32768}.
 
 % => More common to use sliding window, minimize latency <=
 
@@ -45,7 +45,7 @@ How memory is used differs between algorithms. As seen in Chapter~\ref{ch:gc}, o
 
 \section{Vectorization as Optimization}
 
-As the results show, vectorization was an improvement in regards to efficiency. This was as expected because it is possible to process more elements for each instruction. The optimizations implicitly implemented loop unrolling because more operations were covered in the body of the loop, resulting in less jump instructions, leading to less instructions in total.
+As the results show, vectorization was an improvement in regards to efficiency. This was expected because it is possible to process more elements for each instruction. The optimizations implicitly implemented loop unrolling because more operations were covered in the body of the loop, resulting in less jump instructions, leading to less instructions in total.
 
 The Recursive NEON implementation did not perform much worse than the Iterative version. The difference between the implementations were of a smaller factor than between Princeton Iterative and Recursive. One reason for this could be that because the twiddle factors are moved so that they are closer in cache in a two dimensional array for the recursive version. They are placed in order of access to reduce the number of cache misses. This could be the reason for the performance increase.
 
