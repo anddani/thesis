@@ -163,7 +163,7 @@ The gain in using loop unrolling is that you \enquote{save} the same amount of j
 
 % https://www.cs.umd.edu/class/fall2001/cmsc411/proj01/proja/why.html
 \ifrelease
-\begin{figure}
+\begin{figure}[H]
     \centering
     \begin{adjustbox}{minipage=\linewidth,scale=0.8}
         \begin{verbatim}
@@ -226,12 +226,8 @@ loop: lw $s4, 0($s1)
 \end{figure}
 \fi
 
-
-\subsection{Inlining}
-Inlining allows the compiler to swap all the calls to an inline function with the content of the function. This removes the need to do all the preparations for a function call such as saving values in registers and preparing parameters and return values. This comes at a cost of a larger program if there are many calls to this function in the code and if the function is large. It is very useful to use inline functions in loops that are run many times. This is an optimization that can be requested in C and C++ by using the \texttt{inline} keyword and can also be optimized by the compiler automatically.
-
 \ifrelease
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
     \begin{adjustbox}{minipage=\linewidth,scale=0.8}
         \centering
@@ -300,6 +296,10 @@ loop: lw $s4, 0($s1)
 \end{figure}
 \fi
 
+
+
+\subsection{Inlining}
+Inlining allows the compiler to swap all the calls to an inline function with the content of the function. This removes the need to do all the preparations for a function call such as saving values in registers and preparing parameters and return values. This comes at a cost of a larger program if there are many calls to this function in the code and if the function is large. It is very useful to use inline functions in loops that are run many times. This is an optimization that can be requested in C and C++ by using the \texttt{inline} keyword and can also be optimized by the compiler automatically.
 
 \subsection{Constant folding}
 \emph{Constant folding} is a technique used to reduce the time it takes to evaluate an expression during runtime \cite[p.~329]{muchnick1997advanced}. By finding which variables that already have a value, the compiler can calculate and assign constants in compile time instead of during runtime. This method of analyzing the code to find expressions consisting of variables that are possible to calculate is called \emph{Constant Propagation} as seen in Figure~\ref{fig:constant:propagation}.
